@@ -1,0 +1,16 @@
+.form-group label{
+    color: grey;
+}
+
+.form-group input{
+    font-weight: 500;
+}
+button
+{
+    margin-top: 10px;
+    width: 100%;
+}
+
+input.invalid{
+    border-color: red;
+}
