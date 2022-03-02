@@ -9,18 +9,11 @@ import { TasksListService } from '../tasks-list.service';
 })
 export class TasksListComponent implements OnInit {
 
-  @Output() public state: TasksList = defval;
+  @Input() public state: TasksList = defval;
 
-  constructor(private tls: TasksListService) { }
+  constructor() { }
 
-  ngOnInit(): void {
-    this.tls.getTasksList().subscribe(
-      (response) => {
-        console.log(response.body);
-        if (response.body != null)
-          this.state = response.body;
-      }
-    );
+  ngOnInit(): void {    
   }
 
 }

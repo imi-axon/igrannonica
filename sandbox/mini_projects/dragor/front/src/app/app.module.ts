@@ -9,13 +9,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { TasksListComponent } from './tasks-list/tasks-list.component';
 import { TaskComponent } from './task/task.component';
+import { TasksListsListComponent } from './tasks-lists-list/tasks-lists-list.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     TasksListComponent,
-    TaskComponent
+    TaskComponent,
+    TasksListsListComponent
   ],
   imports: [
     BrowserModule,

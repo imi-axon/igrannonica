@@ -10,10 +10,20 @@ export class TasksListService {
 
   constructor(private http: HttpClient) { }
 
-  getTasksList(): Observable<HttpResponse<TasksList>> {
-    console.log('Service');
+  getTasksList(id: number): Observable<HttpResponse<TasksList>> {
+    console.log('Service GET{id}');
     return this.http.get<TasksList>(
-      'https://localhost:7239/api/task/get/2',
+      'https://localhost:7239/api/task/get/' + id,
+      {
+        observe: 'response'
+      }
+    );
+  }
+
+  getTasksLists(): Observable<HttpResponse<TasksList[]>> {
+    console.log('Service GET');
+    return this.http.get<TasksList[]>(
+      'https://localhost:7239/api/task/get',
       {
         observe: 'response'
       }

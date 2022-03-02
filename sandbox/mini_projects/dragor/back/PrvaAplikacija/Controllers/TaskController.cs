@@ -39,7 +39,7 @@ namespace PrvaAplikacija.Controllers
             return lists[id];
         }
 
-        [HttpPost("get")]
+        [HttpGet("get")]
         public List<TasksList> GetAllTasksLists()
         {
             return lists;

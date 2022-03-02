@@ -31,3 +31,7 @@ Porjekat se kreira komandom `ng new naziv-projekta`. Da bi se izbeglo kreiranje 
 ### Events
 `<div (event)="pozivnaFunkcija()"> </div>`
 
+
+
+
+
