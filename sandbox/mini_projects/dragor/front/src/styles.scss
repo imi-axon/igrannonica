@@ -1,1 +1,49 @@
-/* You can add global styles to this file, and also import other style files */
+$bg_default: rgb(218, 218, 218);
+$radius_l: 8px;
+$radius_m: 4px;
+$radius_s: 0px;
+
+.task {
+    max-width: fit-content;
+
+    margin: 4px;
+    
+    background-color: $bg_default;
+    border: 1px solid rgb(168, 168, 168);
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.329);
+    
+    border-radius: $radius_l;
+
+    * {
+        display: inline-block;
+        padding: 5px;
+        border-radius: $radius_l;
+    }
+
+    .id {
+        max-width: fit-content;
+        background-color: rgb(240, 240, 240);
+    }
+
+    .content {
+
+    }
+}
+
+.tasks-list {
+    max-width: fit-content;
+
+    margin: 4px;
+    
+    background-color: $bg_default;
+    border: 1px solid rgb(168, 168, 168);
+    box-shadow: 0 0 10 10 black;
+    
+    border-radius: $radius_l;
+
+    .name {
+        text-align: center;
+        margin: 4px;
+        font-weight: bold;
+    }
+}

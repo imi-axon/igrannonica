@@ -1,0 +1,4 @@
+<div class="tasks-list">
+    <div class="name">{{ state.name }}</div>
+    <app-task *ngFor="let x of state.tasks" [state]="x"></app-task>
+</div>
