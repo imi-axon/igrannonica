@@ -1,0 +1,32 @@
+<router-outlet></router-outlet>
+
+<div>
+  <label>Unesi ime korisnika:</label>
+  <br><br>
+  <input type="text" [(ngModel)]="name" name="name">
+</div>
+
+<br><br>
+<div>
+  <label>Unesi email korisnika:</label>
+  <br><br>
+  <input type="text" [(ngModel)]="email" name="email">
+</div>
+
+<br><br>
+
+<button type="button" (click)="dodajKorisnika()">
+Dodaj korisnika
+</button>
+
+
+<br><br>
+
+<div>
+  Korisnici: <br>
+  <ul>
+    <li *ngFor="let name of names">
+        <span>{{name.substr(2,name.length-4)}}</span>
+    </li>
+  </ul>  
+</div>
