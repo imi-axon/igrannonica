@@ -1,0 +1,72 @@
+$bg_default: rgb(218, 218, 218);
+$bg_green: rgb(58, 160, 71);
+$task_shadow: 0 0 4px 0 rgba(0, 0, 0, 0.329);
+
+$radius_l: 8px;
+$radius_m: 4px;
+$radius_s: 0px;
+
+.task {
+    max-width: fit-content;
+
+    margin: 4px;
+    
+    background-color: $bg_default;
+    border: 1px solid rgb(168, 168, 168);
+    box-shadow: $task_shadow;
+    
+    border-radius: $radius_l;
+
+    * {
+        display: inline-block;
+        padding: 5px;
+        border-radius: $radius_l;
+    }
+
+    .id {
+        max-width: fit-content;
+        background-color: rgb(240, 240, 240);
+    }
+}
+
+.tasks-list {
+    display: inline-table;
+    max-width: fit-content;
+
+    margin: 4px;
+    
+    background-color: $bg_default;
+    border: 1px solid rgb(168, 168, 168);
+    box-shadow: 0 0 10 10 black;
+    
+    border-radius: $radius_l;
+
+    .name {
+        text-align: center;
+        margin: 4px;
+        font-weight: bold;
+    }
+
+    input {
+        display: block;
+        margin: 4px;
+        border-radius: $radius_l;
+        border: 1px solid grey;
+        width: 100%;
+        height: 1.2em;
+    }
+
+    a {
+        display: block;
+        margin: 4px;
+        
+        background-color: $bg_green;
+        box-shadow: $task_shadow;
+        
+        border-radius: $radius_l;
+    
+        color: white;
+        text-decoration: none;
+        text-align: center;
+    }
+}
