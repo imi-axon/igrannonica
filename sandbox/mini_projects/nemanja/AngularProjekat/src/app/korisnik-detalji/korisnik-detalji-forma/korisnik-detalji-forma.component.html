@@ -1,0 +1,22 @@
+<form novalidate autocomplete="off" #form="ngForm" (submit)="onSubmit(form)">
+    <input type="hidden" name="IDkorisnika" [value]="service.formData.iDkorisnika" />
+    
+    <div class="form-group">
+        <label>Ime i prezime</label>
+        <input class="form-control form-lg" placeholder="Petar Petrovic" name="imeiprezime" 
+        #imeiprezime="ngModel" [(ngModel)]="service.formData.imeiprezime" required [class.invalid]="imeiprezime.invalid && imeiprezime.touched">
+    </div>
+    <div class="form-group">
+        <label>Broj licne karte</label>
+        <input class="form-control form-lg" placeholder="123456789" name="brojlicnekarte" 
+        #brojlicnekarte="ngModel" [(ngModel)]="service.formData.brojlicnekarte" required maxlength="9" minlength="9" [class.invalid]="brojlicnekarte.invalid && brojlicnekarte.touched">
+    </div>
+    <div class="form-group">
+        <label>Tribina</label>
+        <input class="form-control form-lg" placeholder="Sever" name="tribina" 
+        #tribina="ngModel" [(ngModel)]="service.formData.tribina" required [class.invalid]="tribina.invalid && tribina.touched">
+    </div>
+    <div class="form-group">
+        <button class="btn btn-info btn-lg btn-block" type="submit" [disabled]="form.invalid">POTVRDI</button>
+    </div>
+</form>
