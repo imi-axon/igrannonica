@@ -1,0 +1,2 @@
+<app-forma (dodajNovi)="dodaj($event)"></app-forma><br><br>
+<app-lista *ngFor="let zad of zadaci" [zad]="zad" (obrisiZad)="brisi(zad)" (namesti8)="xd8(zad)"></app-lista>

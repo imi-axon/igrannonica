@@ -1,0 +1,15 @@
+<form (ngSubmit)="onSubmit()">
+    <input type="text"  name="vreme" [(ngModel)]="vreme" id="vreme" maxlength="5" minlength="5" placeholder="hh:mm"/><br>
+    <select name="dan"  [(ngModel)]="dan" id="dan" style="width:100px;" required><script>console.log(service.podaci.dan)</script>
+        <option value="Ponedeljak" selected>Ponedeljak</option>
+        <option value="Utorak">Utorak</option>
+        <option value="Sreda">Sreda</option>
+        <option value="Cetvrtak">Cetvrtak</option>
+        <option value="Petak">Petak</option>
+        <option value="Subota">Subota</option>
+        <option value="Nedelja">Nedelja</option>
+    </select><br>
+    <input type="text"  name="naziv" [(ngModel)]="naziv" id="naziv" maxlength="5" minlength="5" placeholder="Naziv Zadatka" maxlength="64"/><br>
+    <input type="text"  name="opis" [(ngModel)]="opis" id="opis" maxlength="5" minlength="5" placeholder="Kratak Opis Zadatka" maxlength="256"/><br>
+    <input type="submit" value="SACUVAJ"/>
+</form>
