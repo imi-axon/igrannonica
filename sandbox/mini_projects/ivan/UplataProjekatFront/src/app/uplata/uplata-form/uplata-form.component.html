@@ -1,0 +1,34 @@
+<form novalidate #form="ngForm" (submit)="onUplataSubmit(form)">
+    
+    <input type="hidden" name="id" [value]="service.formData.id" />
+    
+    <div class="form-group py-2">
+        <label>Iznos uplate</label>
+        <input type="number" class="form-control form-control-lg" placeholder="Celobrojni iznos"
+         name="iznos" #iznos="ngModel" [(ngModel)]="service.formData.iznos" 
+         required min="1" max="100000"
+         [class.invalid]="iznos.invalid && iznos.touched">
+    </div>
+    
+    <div class="form-group py-2">
+        <label>Valuta uplate</label>
+        <input class="form-control form-control-lg" placeholder="rsd/eur/usd/rub"
+         name="valuta" #valuta="ngModel" [(ngModel)]="service.formData.valuta" required
+         minlength="3" maxlength="3"
+         [class.invalid]="valuta.invalid && valuta.touched">
+    </div>
+    
+    <div class="form-group py-2">
+        <label>Datum uplate</label>
+        <input class="form-control form-control-lg" placeholder="DD/MM/YYYY"
+         name="datum" #datum="ngModel" [(ngModel)]="service.formData.datum" required
+         min-length="10" max-length="10"
+         [class.invalid]="datum.invalid && datum.touched">
+    </div>
+    
+    <br>
+    <div class="form-group">
+        <button class="btn btn-info btn-lg btn-block w-100" type="submit" [disabled]="form.invalid">Unesi</button>
+    </div>
+    
+</form>

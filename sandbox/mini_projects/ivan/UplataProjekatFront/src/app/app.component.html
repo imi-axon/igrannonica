@@ -1,0 +1,47 @@
+<div class="container">
+  
+  <div class="jumbotron displayText">
+    <h1 class="display-4 text-center py-5"> Aplikacija za pregled i unos transakcija </h1>
+  </div>
+  
+  <div class="row">
+    
+    <div class="col-md-6">
+      <h2 class="h2 text-center py-4"> Unos nove uplate </h2>
+      
+      <app-uplata></app-uplata>
+      
+    </div>
+    
+    <div class="col-md-6">
+      <h2 class="h2 text-center py-4"> Pregled svih uplata </h2>
+      
+      <table class="table">
+        
+        <thead class="thead-light">
+          <tr>
+            <th>Iznos uplate</th>
+            <th>Valuta uplate</th>
+            <th>Datum uplate</th>
+            <th></th>
+          </tr>
+        </thead>
+        
+        <tbody>
+          <tr *ngFor="let up of service.list">
+            <td>{{up.iznos}}</td>
+            <td>{{up.valuta}}</td>
+            <td>{{up.datum}}</td>
+            <td>
+              <i class="far fa-trash-alt fa-lg text-danger trashBtn" (click)="onUplataDelete(up.id)"></i>
+            </td>
+          </tr>
+        </tbody>
+        
+      </table>
+      
+    </div>
+    
+  </div>
+  
+</div>

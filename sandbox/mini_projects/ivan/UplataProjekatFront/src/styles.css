@@ -1,0 +1,16 @@
+.h1{
+    color: rgb(0, 89, 255);
+}
+
+.displayText{
+    background-color: #EAEAEA;
+}
+
+input.invalid{
+    border-color: red;
+    background-color: rgb(255, 208, 208);
+}
+
+.trashBtn{
+    cursor: pointer;
+}
