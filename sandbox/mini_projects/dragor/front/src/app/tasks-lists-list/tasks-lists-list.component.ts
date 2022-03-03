@@ -8,7 +8,7 @@ import { TasksListService } from '../tasks-list.service';
 })
 export class TasksListsListComponent implements OnInit {
 
-  @Output() public state: TasksList[] = [];
+  public state: TasksList[] = [];
 
   constructor(private tasksListService: TasksListService) { }
 

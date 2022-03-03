@@ -29,4 +29,11 @@ export class TasksListService {
       }
     );
   }
+
+  addTaskToList(text: string, list: number): Observable<any> {
+    console.log('Service POST');
+    return this.http.post(
+      'https://localhost:7239/api/task/post/?task=' + text + '&listId=' + list, {}
+    )
+  }
 }

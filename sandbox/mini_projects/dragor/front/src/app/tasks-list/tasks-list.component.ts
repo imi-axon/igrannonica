@@ -10,10 +10,35 @@ import { TasksListService } from '../tasks-list.service';
 export class TasksListComponent implements OnInit {
 
   @Input() public state: TasksList = defval;
+   public newTask: string = '';
 
-  constructor() { }
+  public addingTask: boolean = false;
+
+  constructor(private taskListService: TasksListService) { }
 
   ngOnInit(): void {    
+  }
+
+  onAddTaskClick() {
+    if (!this.addingTask)
+      this.addingTask = true;
+    else
+      this.addTask()
+  }
+
+  addTask() {
+    console.log('add task ' + this.newTask);
+    this.taskListService.addTaskToList(this.newTask, this.state.id).subscribe(
+      () => {
+        this.addingTask = false;
+        this.taskListService.getTasksList(this.state.id).subscribe(
+          (response) => {
+            if (response.body != null)
+              this.state = response.body;
+          }
+        );
+      }
+    );
   }
 
 }

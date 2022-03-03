@@ -1,4 +1,6 @@
 <div class="tasks-list">
     <div class="name">{{ state.name }}</div>
     <app-task *ngFor="let x of state.tasks" [state]="x"></app-task>
+    <a (click)="onAddTaskClick()">+</a>
+    <input *ngIf="addingTask" [(ngModel)]="newTask" type="text">
 </div>
