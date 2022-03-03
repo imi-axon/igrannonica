@@ -1,0 +1,8 @@
+<div class="kontejner">
+    <div  class="elem" [id]="zad.zadId" style="border:3px solid green;height:50px;width:400px;">
+        <input type="hidden" [value]="zad.zadId"/>
+        <div style="float:right;"><app-dugme boja="yellow" tekst="8:00" (klik)="set8(zad)" ></app-dugme><app-dugme boja="red" tekst="Obrisi" (klik)="obrisi(zad)"></app-dugme></div>
+        <div>{{zad.dan}}--{{zad.vreme}}--{{zad.naziv}}</div>        
+        <div>{{zad.opis}}</div>
+    </div>
+</div>

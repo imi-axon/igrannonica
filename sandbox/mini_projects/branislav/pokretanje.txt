@@ -1,0 +1,22 @@
+.NET 5 DEO
+
+Kreirati ASP.Net Core web API project template u zeljenom folderu (koristeci .net 5.0)
+u njega pastovati sve foldere/fajlove iz commita "testcommit1"
+instalirati nuget package dependency-e:
+Microsoft.EntityFrameworkCore 5.0.14
+Microsoft.EntityFrameworkCore.SqlServer 5.0.12
+Microsoft.EntityFrameworkCore.Tools 5.0.12
+Microsoft.VisualStudio.Web.CodeGeneration.Design 5.0.2(opciono)
+
+u appsettings.json podesiti konekncioni string za bazu;
+Buildovati projekat
+u PMC pokrenuti komandu Update-Database jednom
+run without debugging
+
+ANGULAR DEO
+
+u zeljenom folderu pokrenuti terminal komandu "ng new NoviRaspored"
+u taj folder pastovati sve iz commita  "testcommit2"
+u fajlu src/app/servis.service.ts promeniti apiUrl da odgovara portu na kom je hostovan .net api projekat
+pokrenuti angular projekat sa "ng serve"
+
