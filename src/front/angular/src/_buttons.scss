@@ -1,0 +1,35 @@
+button{
+    @extend .disabled;
+    
+    background-color: $mid_color;
+    color: $clear_color;
+    border: none;
+    width: 120px;
+    height: 32px;
+    
+    
+    &:hover{
+        cursor: pointer;
+        background-color: $light_color;
+    }
+}
+
+.primary_button{
+    @extend button;
+}
+
+.secondary_button{
+    @extend .disabled;
+    
+    background-color: transparent;
+    color: $clear_color;
+    border: solid 1px $clear_color;
+    width: 120px;
+    height: 32px;
+    
+    &:hover{
+        cursor: pointer;
+        color: $mid_color;
+        background-color: $clear_color;
+    }
+}

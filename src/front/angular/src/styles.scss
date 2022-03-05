@@ -1,1 +1,44 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,400;0,700;1,400&display=swap');
+
+@import "./variables";
+@import "./buttons";
+@import "./forms";
+
+*{
+    font-family: 'Montserrat', sans-serif;
+    display: block;
+}
+
+
+p{
+    color: $clear_color;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+a{
+    @extend p;
+    
+    font-size: 18px;
+    padding: 10px;
+    
+    &:hover{
+        color: $mid_color;
+    }
+}
+
+.disabled{
+    &:disabled{
+        border: solid 1px $disabled_color;
+        background: none;
+        color: $disabled_color;
+        cursor: default;
+        
+        &:hover{
+            border: solid 1px $disabled_color;
+            background: none;
+            color: $disabled_color;
+            cursor: default;
+        }
+    }
+}
