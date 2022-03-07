@@ -1,11 +1,6 @@
 .landing_page_theme{
-
-    label{
-        @extend p;
-        font-size: 14px;
-    }
-
-    input[type=text]{
+    
+    .inputStyle{
         @extend .disabled;
         
         box-sizing: border-box;
@@ -35,22 +30,28 @@
             font-family: 'Montserrat', sans-serif;
             color: $light_color;
         }
+    }
+    
+    label{
+        @extend p;
+        font-size: 14px;
+    }
+
+    input[type=text]{
+        @extend .inputStyle;
         
     }
 
     input[type=date]{
-        @extend input[type=text];
-        @extend .disabled;
+        @extend .inputStyle;
     }
 
     input[type=datetime]{
-        @extend input[type=text];
-        @extend .disabled;
+        @extend .inputStyle;
     }
             
     input[type=datetime-local]{
-        @extend input[type=text];
-        @extend .disabled;
+        @extend .inputStyle;
     }
 
     // Kasnije doraditi
@@ -62,28 +63,23 @@
     }
 
     input[type=email]{
-        @extend input[type=text];
-        @extend .disabled;
+        @extend .inputStyle;
     }
 
     input[type=month]{
-        @extend input[type=text];
-        @extend .disabled;
+        @extend .inputStyle;
     }
 
     input[type=week]{
-        @extend input[type=text];
-        @extend .disabled;
+        @extend .inputStyle;
     }
 
     input[type=number]{
-        @extend input[type=text];
-        @extend .disabled;
+        @extend .inputStyle;
     }
 
     input[type=password]{
-        @extend input[type=text];
-        @extend .disabled;
+        @extend .inputStyle;
     }
 
     input[type=radio]{
@@ -111,24 +107,20 @@
 
 
     input[type=search]{
-        @extend .disabled;
-        @extend input[type=text];
+        @extend .inputStyle;
     }
 
     input[type=tel]{
-        @extend .disabled;
-        @extend input[type=text];
+        @extend .inputStyle;
     }
 
     input[type=time]{
-        @extend input[type=text];
-        @extend .disabled;
+        @extend .inputStyle;
         width: 80px;
     }
 
     input[type=url]{
-        @extend input[type=text];
-        @extend .disabled;
+        @extend .inputStyle;
     }
     
     
@@ -181,18 +173,15 @@
     }
 
     input[type=date]{
-        @extend input[type=text];
-        @extend .disabled;
+        @extend .inputStyle;
     }
 
     input[type=datetime]{
-        @extend input[type=text];
-        @extend .disabled;
+        @extend .inputStyle;
     }
             
     input[type=datetime-local]{
-        @extend input[type=text];
-        @extend .disabled;
+        @extend .inputStyle;
     }
 
     // Kasnije doraditi
@@ -204,28 +193,23 @@
     }
 
     input[type=email]{
-        @extend input[type=text];
-        @extend .disabled;
+        @extend .inputStyle;
     }
 
     input[type=month]{
-        @extend input[type=text];
-        @extend .disabled;
+        @extend .inputStyle;
     }
 
     input[type=week]{
-        @extend input[type=text];
-        @extend .disabled;
+        @extend .inputStyle;
     }
 
     input[type=number]{
-        @extend input[type=text];
-        @extend .disabled;
+        @extend .inputStyle;
     }
 
     input[type=password]{
-        @extend input[type=text];
-        @extend .disabled;
+        @extend .inputStyle;
     }
 
     input[type=radio]{
@@ -253,24 +237,20 @@
 
 
     input[type=search]{
-        @extend .disabled;
-        @extend input[type=text];
+        @extend .inputStyle;
     }
 
     input[type=tel]{
-        @extend .disabled;
-        @extend input[type=text];
+        @extend .inputStyle;
     }
 
     input[type=time]{
-        @extend input[type=text];
-        @extend .disabled;
+        @extend .inputStyle;
         width: 80px;
     }
 
     input[type=url]{
-        @extend input[type=text];
-        @extend .disabled;
+        @extend .inputStyle;
     }
     
     
