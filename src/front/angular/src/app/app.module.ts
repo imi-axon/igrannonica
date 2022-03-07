@@ -6,6 +6,8 @@ import { BrowserModule } from '@angular/platform-browser';
 //Svaki put kada se doda nova putanja, spakovati je u routingComponents niz i ona ce se naci i u @NgModule unutar routingComponents
 import { AppRoutingModule , routingComponents} from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HttpClientModule } from '@angular/common/http';
+import { CsvServiceService } from './services/csv-service.service';
 
 
 @NgModule({
@@ -15,9 +17,10 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [CsvServiceService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
