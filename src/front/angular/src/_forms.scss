@@ -1,128 +1,277 @@
-label{
-    @extend p;
-    font-size: 14px;
-}
+.landing_page_theme{
 
-input[type=text]{
-    @extend .disabled;
-    
-    box-sizing: border-box;
-    
-    width: 200px;
-    height: 32px;
-    padding-left: 10px;
-    
-    color:$clear_color;
-    background-color: $mid_color;
-    border: 1px solid $light_color;
-    
-    &:hover{
-        background-color: $dark_color;
-        border-color: $highlight_color;
+    label{
+        @extend p;
+        font-size: 14px;
     }
-    
-    &:focus{
-        background-color: $dark_color;
-        border-color: $highlight_color;
-        outline: none;
-    }
-    
-    &::placeholder{
-        font-family: 'Montserrat', sans-serif;
-        color: $light_color;
-    }
-    
-}
 
-input[type=date]{
-    @extend input[type=text];
-    @extend .disabled;
-}
-
-input[type=datetime]{
-    @extend input[type=text];
-    @extend .disabled;
-}
+    input[type=text]{
+        @extend .disabled;
         
-input[type=datetime-local]{
-    @extend input[type=text];
-    @extend .disabled;
-}
+        box-sizing: border-box;
+        
+        width: 200px;
+        height: 32px;
+        padding-left: 10px;
+        
+        color:$clear_color;
+        background-color: $mid_color;
+        border: 1px solid $light_color;
+        
+        transition: ease-in 0.2s;
+        
+        &:hover{
+            background-color: $dark_color;
+            border-color: $highlight_color;
+        }
+        
+        &:focus{
+            background-color: $dark_color;
+            border-color: $highlight_color;
+            outline: none;
+        }
+        
+        &::placeholder{
+            font-family: 'Montserrat', sans-serif;
+            color: $light_color;
+        }
+        
+    }
 
-// Kasnije doraditi
-// Ili slika ili css podesavanje
-input[type=checkbox]{
-    @extend .disabled;
-    width: 15px;
-    height: 15px; 
-}
+    input[type=date]{
+        @extend input[type=text];
+        @extend .disabled;
+    }
 
-input[type=email]{
-    @extend input[type=text];
-    @extend .disabled;
-}
+    input[type=datetime]{
+        @extend input[type=text];
+        @extend .disabled;
+    }
+            
+    input[type=datetime-local]{
+        @extend input[type=text];
+        @extend .disabled;
+    }
 
-input[type=month]{
-    @extend input[type=text];
-    @extend .disabled;
-}
+    // Kasnije doraditi
+    // Ili slika ili css podesavanje
+    input[type=checkbox]{
+        @extend .disabled;
+        width: 15px;
+        height: 15px; 
+    }
 
-input[type=week]{
-    @extend input[type=text];
-    @extend .disabled;
-}
+    input[type=email]{
+        @extend input[type=text];
+        @extend .disabled;
+    }
 
-input[type=number]{
-    @extend input[type=text];
-    @extend .disabled;
-}
+    input[type=month]{
+        @extend input[type=text];
+        @extend .disabled;
+    }
 
-input[type=password]{
-    @extend input[type=text];
-    @extend .disabled;
-}
+    input[type=week]{
+        @extend input[type=text];
+        @extend .disabled;
+    }
 
-input[type=radio]{
-    @extend .disabled;
-    width: 15px;
-    height: 15px;
-}
+    input[type=number]{
+        @extend input[type=text];
+        @extend .disabled;
+    }
 
-/*
-input[type=range]{
+    input[type=password]{
+        @extend input[type=text];
+        @extend .disabled;
+    }
+
+    input[type=radio]{
+        @extend .disabled;
+        width: 15px;
+        height: 15px;
+    }
+
+    /*
+    input[type=range]{
+        
+    }
+    */
+
+    input[type=submit]{
+        @extend .disabled;
+        @extend button;
+    }
+
+    input[type=reset]{
+        @extend .disabled;
+        @extend button;
+    }
+
+
+
+    input[type=search]{
+        @extend .disabled;
+        @extend input[type=text];
+    }
+
+    input[type=tel]{
+        @extend .disabled;
+        @extend input[type=text];
+    }
+
+    input[type=time]{
+        @extend input[type=text];
+        @extend .disabled;
+        width: 80px;
+    }
+
+    input[type=url]{
+        @extend input[type=text];
+        @extend .disabled;
+    }
+    
     
 }
-*/
-
-input[type=submit]{
-    @extend .disabled;
-    @extend button;
-}
-
-input[type=reset]{
-    @extend .disabled;
-    @extend button;
-}
 
 
 
-input[type=search]{
-    @extend .disabled;
-    @extend input[type=text];
-}
 
-input[type=tel]{
-    @extend .disabled;
-    @extend input[type=text];
-}
 
-input[type=time]{
-    @extend input[type=text];
-    @extend .disabled;
-    width: 80px;
-}
 
-input[type=url]{
-    @extend input[type=text];
-    @extend .disabled;
+.light_theme{
+
+    label{
+        @extend p;
+        font-size: 14px;
+    }
+
+    input[type=text]{
+        @extend .disabled;
+        
+        box-sizing: border-box;
+        
+        width: 200px;
+        height: 32px;
+        padding-left: 10px;
+        
+        color: $clear_color_L;
+        background-color: #FFFFFF;
+        border: 1px solid $light_color_L;
+        
+        transition: ease-in 0.2s;
+        
+        &:hover{
+            background-color: $mid_color_L;
+            border-color: $highlight_color_L;
+            color: #FFFFFF;
+        }
+        
+        &:focus{
+            border-color: $highlight_color_L;
+            color: #FFFFFF;
+            outline: none;
+        }
+        
+        &::placeholder{
+            font-family: 'Montserrat', sans-serif;
+            color: $highlight_color_L;
+        }
+        
+    }
+
+    input[type=date]{
+        @extend input[type=text];
+        @extend .disabled;
+    }
+
+    input[type=datetime]{
+        @extend input[type=text];
+        @extend .disabled;
+    }
+            
+    input[type=datetime-local]{
+        @extend input[type=text];
+        @extend .disabled;
+    }
+
+    // Kasnije doraditi
+    // Ili slika ili css podesavanje
+    input[type=checkbox]{
+        @extend .disabled;
+        width: 15px;
+        height: 15px; 
+    }
+
+    input[type=email]{
+        @extend input[type=text];
+        @extend .disabled;
+    }
+
+    input[type=month]{
+        @extend input[type=text];
+        @extend .disabled;
+    }
+
+    input[type=week]{
+        @extend input[type=text];
+        @extend .disabled;
+    }
+
+    input[type=number]{
+        @extend input[type=text];
+        @extend .disabled;
+    }
+
+    input[type=password]{
+        @extend input[type=text];
+        @extend .disabled;
+    }
+
+    input[type=radio]{
+        @extend .disabled;
+        width: 15px;
+        height: 15px;
+    }
+
+    /*
+    input[type=range]{
+        
+    }
+    */
+
+    input[type=submit]{
+        @extend .disabled;
+        @extend button;
+    }
+
+    input[type=reset]{
+        @extend .disabled;
+        @extend button;
+    }
+
+
+
+    input[type=search]{
+        @extend .disabled;
+        @extend input[type=text];
+    }
+
+    input[type=tel]{
+        @extend .disabled;
+        @extend input[type=text];
+    }
+
+    input[type=time]{
+        @extend input[type=text];
+        @extend .disabled;
+        width: 80px;
+    }
+
+    input[type=url]{
+        @extend input[type=text];
+        @extend .disabled;
+    }
+    
+    
 }

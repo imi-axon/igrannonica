@@ -1,35 +1,100 @@
-button{
-    @extend .disabled;
-    
-    background-color: $mid_color;
-    color: $clear_color;
-    border: none;
-    width: 120px;
-    height: 32px;
-    
-    
-    &:hover{
-        cursor: pointer;
-        background-color: $light_color;
+.landing_page_theme{
+
+    button{
+        @extend .disabled;
+        
+        background-color: $mid_color;
+        
+        color: $clear_color;
+        border: none;
+        width: 120px;
+        height: 35px;
+        
+        transition: ease-in 0.15s;
+        
+        &:hover{
+            cursor: pointer;
+            background-color: $dark_color;
+            border: solid 1px $mid_color;
+        }
     }
+
+    .primary_button{
+        @extend button;
+    }
+
+    .secondary_button{
+        @extend .disabled;
+        
+        background-color: transparent;
+        color: $clear_color;
+        border: solid 1px $clear_color;
+        width: 120px;
+        height: 35px;
+        
+        transition: ease-in 0.15s;
+        
+        &:hover{
+            cursor: pointer;
+            border: solid 1px $clear_color;
+            color: $mid_color;
+            background-color: $clear_color;
+        }
+    }
+    
 }
 
-.primary_button{
-    @extend button;
-}
 
-.secondary_button{
-    @extend .disabled;
-    
-    background-color: transparent;
-    color: $clear_color;
-    border: solid 1px $clear_color;
-    width: 120px;
-    height: 32px;
-    
-    &:hover{
-        cursor: pointer;
-        color: $mid_color;
-        background-color: $clear_color;
+
+
+
+
+
+
+.light_theme{
+
+    button{
+        @extend .disabled;
+        
+        background-color: $mid_color_L;
+        
+        color: #FFFFFF;
+        
+        border: none;
+        width: 120px;
+        height: 35px;
+        
+        transition: ease-in 0.15s;
+        
+        &:hover{
+            cursor: pointer;
+            color: #FFFFFF;
+            background-color: $dark_color_L;
+            border: solid 1px $light_color_L;
+        }
     }
+
+    .primary_button{
+        @extend button;
+    }
+
+    .secondary_button{
+        @extend .disabled;
+        
+        background-color: transparent;
+        color: $dark_color_L;
+        border: solid 1px $dark_color_L;
+        width: 120px;
+        height: 35px;
+        
+        transition: ease-in 0.15s;
+        
+        &:hover{
+            cursor: pointer;
+            border: none;
+            color: #FFFFFF;
+            background-color: $dark_color_L;
+        }
+    }
+    
 }
