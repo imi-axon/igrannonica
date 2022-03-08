@@ -8,12 +8,16 @@ import { AppRoutingModule , routingComponents} from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CsvServiceService } from './services/csv-service.service';
+import { NavbarComponent } from './_components/_elements/navbar/navbar.component';
+import { SidebarComponent } from './_components/_elements/sidebar/sidebar.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    routingComponents //ovde se nalaze sve putanje dodate u routingComponents niz u app-routing.module.ts
+    routingComponents, //ovde se nalaze sve putanje dodate u routingComponents niz u app-routing.module.ts
+    NavbarComponent, 
+    SidebarComponent
   ],
   imports: [
     BrowserModule,

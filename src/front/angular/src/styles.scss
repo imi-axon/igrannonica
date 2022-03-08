@@ -9,20 +9,14 @@
     font-family: 'Montserrat', sans-serif;
 }
 
+
 html{
     height: 100%;
     margin: 0px;
+    box-sizing: border-box;
 }
 
 body{
-    box-sizing: border-box;
-    
-    padding: 100px;
-    
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-around;
     
     margin: 0px;
     width: 100%;
@@ -30,6 +24,7 @@ body{
     
     background: #ffffff;
 }
+
 
 .landing_page_theme{
     
