@@ -10,9 +10,9 @@ namespace BackApi
 {
     public static class CsvValidacija
     {
-            static string Validate(string csvString)
+            public static string Validate(string csvString)
             {
-                //string csvString = "n1;n2;n3;out\r1; 1; 0; 1\r1; 0; 0; 1\r0; 0; 1; 1\r1; 0; 1; 1\r0; 0; 0; 0\r";
+                //csvString = "n1;n2;n3;out\r1; 1; 0; 1\r1; 0; 0; 1\r0; 0; 1; 1\r1; 0; 1; 1\r0; 0; 0; 0\r";
                 StringReader csvStringReader = new StringReader(csvString);
 
                 //string csv_file_path = @"..\..\..\temp.csv"; privremeno testiranje sa fajlom umesto csv stringa

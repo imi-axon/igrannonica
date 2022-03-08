@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace BackApi.Controllers
 {
@@ -7,23 +8,22 @@ namespace BackApi.Controllers
     [ApiController]
     public class CSVstringController : ControllerBase
     {
-        private static List<CSVstring> tekstovi = new List<CSVstring>()
-        {
-            new CSVstring { csvtekst = "hello1" },
-            new CSVstring { csvtekst = "hello2" },
-            new CSVstring { csvtekst = "hello3" }
-        };
+        private string tekst;
+        private string tekst2;
         [HttpGet]
-        public async Task<ActionResult<List<CSVstring>>> Get()
+        public async Task<ActionResult<string>> Get(string csvstring)
         {
-            return Ok(tekstovi);
+            tekst = csvstring;
+            return tekst;
         }
-
         [HttpPost]
-        public async Task<ActionResult<List<CSVstring>>> Post(CSVstring csvstring)
+        public async Task<ActionResult<string>> Post(string csvstring)
         {
-            tekstovi.Add(csvstring);
-            return Ok(tekstovi);
+            tekst2 = csvstring;
+            Debug.WriteLine(tekst2);
+            tekst = CsvValidacija.Validate(csvstring);
+            Debug.WriteLine(tekst);
+            return tekst;
         }
     }
 }
