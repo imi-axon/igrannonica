@@ -1,1 +1,124 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,400;0,700;1,400&display=swap');
+
+@import "./variables";
+
+@import "./buttons";
+@import "./forms";
+
+*{
+    font-family: 'Montserrat', sans-serif;
+}
+
+html{
+    height: 100%;
+    margin: 0px;
+}
+
+body{
+    box-sizing: border-box;
+    
+    padding: 100px;
+    
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+    
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+    
+    background: #ffffff;
+}
+
+.landing_page_theme{
+    
+    p{
+        color: $text_color;
+        font-size: 13px;
+        text-decoration: none;
+    }
+    
+    h1,h2,h3,h4,h5,h6{
+        color: $text_color;
+        text-decoration: none;
+        letter-spacing: 2px;
+    }
+    
+    a{
+        @extend p;
+        
+        font-size: 16px;
+        padding: 10px;
+        transition: ease-in 0.2s;
+        
+        &:hover{
+            color: $light_color;
+            transition: ease-out 0.2s;
+        }
+    }
+    
+    .disabled{
+        &:disabled{
+            border: solid 1px $disabled_color;
+            background: none;
+            color: $disabled_color;
+            cursor: default;
+            
+            &:hover{
+                border: solid 1px $disabled_color;
+                background: none;
+                color: $disabled_color;
+                cursor: default;
+            }
+        }
+    }
+    
+}
+
+
+
+.light_theme{
+    
+    p{
+        color: $text_color_L;
+        font-size: 13px;
+        text-decoration: none;
+    }
+    
+    h1,h2,h3,h4,h5,h6{
+        color: $text_color_L;
+        text-decoration: none;
+        letter-spacing: 2px;
+    }
+    
+    a{
+        @extend p;
+        
+        font-size: 16px;
+        padding: 10px;
+        transition: ease-in 0.2s;
+        
+        &:hover{
+            color: $mid_color_L;
+            transition: ease-out 0.2s;
+        }
+    }
+    
+    .disabled{
+        &:disabled{
+            border: solid 1px $disabled_color_L;
+            background: none;
+            color: $disabled_color;
+            cursor: default;
+            
+            &:hover{
+                border: solid 1px $disabled_color_L;
+                background: none;
+                color: $disabled_color_L;
+                cursor: default;
+            }
+        }
+    }
+    
+}
