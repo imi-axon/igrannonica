@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\natal\\Desktop\\projekat\\axon\\src\\back\\BackApi\\BackApi\\BackApi.csproj": {}
+    "C:\\Users\\Nemanja\\Igrannonica\\axon\\src\\back\\BackApi\\BackApi\\BackApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\natal\\Desktop\\projekat\\axon\\src\\back\\BackApi\\BackApi\\BackApi.csproj": {
+    "C:\\Users\\Nemanja\\Igrannonica\\axon\\src\\back\\BackApi\\BackApi\\BackApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\natal\\Desktop\\projekat\\axon\\src\\back\\BackApi\\BackApi\\BackApi.csproj",
+        "projectUniqueName": "C:\\Users\\Nemanja\\Igrannonica\\axon\\src\\back\\BackApi\\BackApi\\BackApi.csproj",
         "projectName": "BackApi",
-        "projectPath": "C:\\Users\\natal\\Desktop\\projekat\\axon\\src\\back\\BackApi\\BackApi\\BackApi.csproj",
-        "packagesPath": "C:\\Users\\natal\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\natal\\Desktop\\projekat\\axon\\src\\back\\BackApi\\BackApi\\obj\\",
+        "projectPath": "C:\\Users\\Nemanja\\Igrannonica\\axon\\src\\back\\BackApi\\BackApi\\BackApi.csproj",
+        "packagesPath": "C:\\Users\\Nemanja\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Nemanja\\Igrannonica\\axon\\src\\back\\BackApi\\BackApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\natal\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Nemanja\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
