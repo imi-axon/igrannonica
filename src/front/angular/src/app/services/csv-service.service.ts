@@ -5,13 +5,15 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class CsvServiceService {
-  readonly APIUrl="";
+  readonly APIUrl="https://localhost:7057/api";
 
   constructor(private http:HttpClient) { }
 
   public prihvatiCsvString(csvStr:string)
   {
-    if(csvStr=="") console.log("PRAZAN");
-    else console.log(csvStr);
+    if(csvStr=="") {console.log("PRAZAN");return;}
+   // else console.log(csvStr);
+   else {console.log("Saljem string .NET-u");return this.http.post(this.APIUrl+'/CSVstring', csvStr);}
+    
   }
 }
