@@ -1,7 +1,7 @@
 ﻿namespace BackApi
 {
-    public class CSVstring
+    public static class CSVstring
     {
-        public string csvtekst { get; set; } = string.Empty;
+        public static string csvtekst { get; set; } = string.Empty;
     }
 }
