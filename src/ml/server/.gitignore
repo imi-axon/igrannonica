@@ -1,4 +1,2 @@
-/Include
-/Lib
-/Scripts
-*cfg
+/venv
+/__pychache__
