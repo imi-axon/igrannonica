@@ -9,7 +9,6 @@ namespace BackApi.Controllers
     public class CSVstringController : ControllerBase
     {
         private string tekst;
-        private string tekst2;
         [HttpGet]
         public async Task<ActionResult<string>> Get(string csvstring)
         {
@@ -17,12 +16,10 @@ namespace BackApi.Controllers
             return tekst;
         }
         [HttpPost]
-        public async Task<ActionResult<string>> Post( [FromBody] object  content)
+        public async Task<ActionResult<string>> Post( [FromBody] CSVstring content)
         {
             string csvstring;
-            csvstring = content.ToString();
-            tekst2 = csvstring;
-            Debug.WriteLine(tekst2);
+            csvstring = content.csvstring;
             tekst = CsvValidacija.Validate(csvstring);
             Debug.WriteLine(tekst);
             return tekst;

@@ -29,7 +29,7 @@ export class CsvServiceService {
    console.log("Saljem string .NET-u");
    console.log(typeof(csvStr));
    console.log(csvStr);
-   csvStr=csvStr.split('\r').join(' ').split('\n').join(' ');
+   //csvStr=csvStr.split('\r').join(' ').split('\n').join(' ');
    console.log(csvStr);
    return this.http.post(this.APIUrl+'/CSVstring', {csvstring:csvStr});
    //{csvstring:csvStr})
