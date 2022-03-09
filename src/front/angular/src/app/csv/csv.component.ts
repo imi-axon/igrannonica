@@ -1,6 +1,7 @@
 import { Target } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { CsvServiceService } from '../services/csv-service.service';
+import { observable } from 'rxjs';
 
 @Component({
   selector: 'app-csv',
@@ -37,9 +38,10 @@ export class CsvComponent implements OnInit {
          reader.readAsText(file);
          reader.onload = (e) => {
             this.csv = reader.result as string;
-           // console.log(this.csv);
+            //console.log(this.csv);
           //salje se csv fajl servisu u vidu stringa
-           this.service.prihvatiCsvString(this.csv);
+          if(this.csv!="")
+            this.service.prihvatiCsvString(this.csv).subscribe()
             
          }
         }

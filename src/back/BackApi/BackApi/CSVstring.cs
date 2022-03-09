@@ -2,6 +2,6 @@
 {
     public class CSVstring
     {
-        public string csvtekst { get; set; } = string.Empty;
+        public string csvstring { get; set; } = string.Empty;
     }
 }
