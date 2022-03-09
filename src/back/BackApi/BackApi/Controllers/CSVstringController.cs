@@ -17,8 +17,10 @@ namespace BackApi.Controllers
             return tekst;
         }
         [HttpPost]
-        public async Task<ActionResult<string>> Post(string csvstring)
+        public async Task<ActionResult<string>> Post( [FromBody] object  content)
         {
+            string csvstring;
+            csvstring = content.ToString();
             tekst2 = csvstring;
             Debug.WriteLine(tekst2);
             tekst = CsvValidacija.Validate(csvstring);
