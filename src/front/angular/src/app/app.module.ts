@@ -10,6 +10,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { CsvServiceService } from './services/csv-service.service';
 import { NavbarComponent } from './_components/_elements/navbar/navbar.component';
 import { SidebarComponent } from './_components/_elements/sidebar/sidebar.component';
+import { DataSetPageComponent } from './_components/_pages/data-set-page/data-set-page.component';
+import { DataSetTableComponent } from './_components/_elements/data-set-table/data-set-table.component';
 import { observable } from 'rxjs';
 
 
@@ -18,7 +20,7 @@ import { observable } from 'rxjs';
     AppComponent,
     routingComponents, //ovde se nalaze sve putanje dodate u routingComponents niz u app-routing.module.ts
     NavbarComponent, 
-    SidebarComponent
+    SidebarComponent, DataSetTableComponent,
   ],
   imports: [
     BrowserModule,

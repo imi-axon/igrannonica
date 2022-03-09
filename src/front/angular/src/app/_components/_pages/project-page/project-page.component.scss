@@ -2,8 +2,8 @@
     margin-top: 5vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly;
+    align-items:center;
+    justify-content: space-between;
     
     height: 80vh;
 }
@@ -38,9 +38,10 @@ h3{
 }
 
 .skupovi-col{
-    margin: 30px;
+    margin: auto;
     transition: ease 0.2s;
     border: 1px solid #ffffff00;
+    min-width: 250px;
     
     &:hover{
         transition: ease 0.2s;
@@ -51,9 +52,10 @@ h3{
 }
 
 .modeli-col{
-    margin: 30px;
+    margin: auto;
     transition: ease 0.2s;
     border: 1px solid #ffffff00;
+    min-width: 250px;
     
     &:hover{
         transition: ease 0.2s;
