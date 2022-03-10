@@ -28,11 +28,22 @@ export class CsvServiceService {
   public prihvatiCsvString(csvStr:String)  {
    console.log("Saljem string .NET-u");
    console.log(typeof(csvStr));
-   console.log(csvStr);
+   //console.log(csvStr);
    //csvStr=csvStr.split('\r').join(' ').split('\n').join(' ');
-   console.log(csvStr);
-   return this.http.post(this.APIUrl+'/CSVstring', {csvstring:csvStr});
+   //console.log(csvStr);
+   //return this.http.post(this.APIUrl+'/CSVstring', {csvstring:csvStr});
    //{csvstring:csvStr})
+    
+   //this.http.get().subscribe((data: any) => {});;
+   
+   return this.http.post<any>(
+    this.APIUrl+'/CSVstring',
+    {csvstring:csvStr},
+    {
+      observe: 'response'
+      
+    });
+    
     
   }
 }

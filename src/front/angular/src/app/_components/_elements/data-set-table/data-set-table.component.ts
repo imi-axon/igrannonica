@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { CsvServiceService } from 'src/app/services/csv-service.service';
 import { DataSetTableService } from 'src/app/_utilities/_services/data-set-table.service';
 
 @Component({
@@ -8,26 +9,25 @@ import { DataSetTableService } from 'src/app/_utilities/_services/data-set-table
 })
 export class DataSetTableComponent implements OnInit {
 
-  public dataJSON : any;
-  public keys : any;
+  dataJSON: any;
+  keys : any;
   
-  
-  constructor(private service:DataSetTableService) { 
-    console.log(this.dataJSON);
-    console.log(this.keys);
-    
+  constructor(private service:CsvServiceService) { 
   }
   
   ngOnInit(): void {
-    this.LoadDataSet();
+    
   }
   
-  public LoadDataSet() {
+  public LoadData(event:any){
     
-    this.dataJSON = this.service.GetDataSet();
+    //console.log(event);
+    
+    this.dataJSON = event;
     this.keys = Object.keys(this.dataJSON[0]);
-    
   }
+  
+  
   
 
 }
