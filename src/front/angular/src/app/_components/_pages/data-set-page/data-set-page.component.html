@@ -12,7 +12,12 @@
             
             <button class="dataset-title-button"> <h1>dataset1</h1> </button>
             
-            <data-set-table></data-set-table>
+            <div>
+                <app-csv (messageEvent)="dst.LoadData($event)"></app-csv>
+                <button> Prikazi tabelu </button>
+            </div>
+            
+            <data-set-table #dst></data-set-table>
             
             
         </div>
