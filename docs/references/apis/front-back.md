@@ -19,21 +19,16 @@ id : number
 > __BODY__
 
 ```ts
-interface SampleInterface {
-    attr1 : number
-    attr2 : {
-        xy : number
-        ab : string
+class
+{
+    attr1: number
+    attr2: string
+    attr3: number[]
+    attr4: {
+        xy: string
+        ab: number
     }
 }
 ```
 ---
 ---
-
-## # Fetch Data Sets of the Project
-## # Fetch Models of the Project
-## # Update Name of the Project
-## # Create new Data Set for the Project
-## # Create new Model for the Project
-
-## Back - ML
