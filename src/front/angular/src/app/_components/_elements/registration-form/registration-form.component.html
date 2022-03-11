@@ -1,0 +1,61 @@
+<div class="container-fluid">
+    
+    <div class="registration-form-container shadow">
+        
+        <h2 class="form-title">Registrujte se</h2>
+        
+        <form method="POST" novalidate #form="ngForm" (submit)="SubmitRegistracija(form)">
+            
+            
+            <div class="row">
+                
+                <div class="col form-group">
+                    <input type="text" class="form-input" placeholder="Ime" name="name" #name="ngModel" [(ngModel)]="registration.name"
+                        required [class.invalid]="name.touched && registrationCheck.invalidName" (blur)="checkName()" (input)="checkName()">
+                </div>
+                
+                <div class="col form-group">
+                    <input type="text" class="form-input" placeholder="Prezime" name="lastname" #lastName="ngModel" [(ngModel)]="registration.lastname"
+                    required [class.invalid]="lastName.touched && registrationCheck.invalidLastname" (blur)="checkLastname()" (input)="checkLastname()">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <input type="text" class="form-input" placeholder="Korisnicko ime" name="username" #username="ngModel" [(ngModel)]="registration.username"
+                required [class.invalid]="username.touched && registrationCheck.invalidUsername" (blur)="checkUsername()" (input)="checkUsername()">
+            </div>
+            
+            <div class="form-group">
+                <input type="email" class="form-input" placeholder="e-mail" name="email" #email="ngModel" [(ngModel)]="registration.email"
+                required [class.invalid]="email.touched && registrationCheck.invalidEmail" (blur)="checkEmail()" (input)="checkEmail()">
+            </div>
+            
+            <div class="form-group">
+                <input type="password" class="form-input" placeholder="Lozinka*" name="password" #password="ngModel" [(ngModel)]="registration.password"
+                required [class.invalid]="password.touched && registrationCheck.invalidPassword" (blur)="checkPassword()" (input)="checkPassword()">
+            </div>
+            
+            <div class="form-group">
+                <input type="password" class="form-input" placeholder="Ponovite lozinku" name="passwordAgain" [(ngModel)]="passwordAgain"
+                required [class.invalid]="password.touched && registrationCheck.invalidPasswordAgain" (blur)="checkPasswordAgain()" (input)="checkPasswordAgain()">
+            </div>
+            
+            <div class="form-group">
+                <p class="lozinka-info">
+                    * Lozinka mora biti duža od 8 karaktera <br> * Mora sadržati barem jedan broj, jedno veliko i jedno malo slovo <span style="letter-spacing:3px;"> & , / ( </span>
+                </p>
+            </div>
+            
+            
+            <div class="form-group">
+                <input type="submit" name="submit" class="form-submit" value="Registruj se" [disabled]="registrationCheck.invalidRegistration">
+            </div>
+        </form>
+        
+        <p>
+            Već imate nalog? <a href="#" class="login-here">Ulogujte se ovde</a>
+        </p>
+    
+    </div>
+    
+</div>
