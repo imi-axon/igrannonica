@@ -13,14 +13,16 @@ import { SidebarComponent } from './_components/_elements/sidebar/sidebar.compon
 import { DataSetPageComponent } from './_components/_pages/data-set-page/data-set-page.component';
 import { DataSetTableComponent } from './_components/_elements/data-set-table/data-set-table.component';
 import { observable } from 'rxjs';
-
+import { LoginFormComponent } from './_components/_elements/login-form/login-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     routingComponents, //ovde se nalaze sve putanje dodate u routingComponents niz u app-routing.module.ts
     NavbarComponent, 
-    SidebarComponent, DataSetTableComponent,
+    SidebarComponent,
+    DataSetTableComponent,
+    LoginFormComponent,
   ],
   imports: [
     BrowserModule,
