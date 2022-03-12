@@ -1,15 +1,23 @@
-<form>
+<form #f="ngForm" (ngSubmit)="onSubmit(f)">
     <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">Email address</label>
-      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+      <label for="exampleInputEmail1" class="form-label">Email adresa</label>
+      <input type="email" name="email" ngModel required #email="ngModel" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
     </div>
     <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label">Password</label>
-      <input type="password" class="form-control" id="exampleInputPassword1">
+      <label for="exampleInputPassword1" class="form-label">Lozinka</label>
+      <input type="password" name="pass" ngModel required #pass="ngModel" class="form-control" id="exampleInputPassword1">
     </div>
     <div class="mb-3 form-check">
       <input type="checkbox" class="form-check-input" id="exampleCheck1">
-      <label class="form-check-label" for="exampleCheck1">Remember me</label>
+      <label class="form-check-label" for="exampleCheck1">Zapamti me</label>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" [disabled]="f.invalid" class="btn btn-primary">Prijavite se</button>
+    <div class="text-center text-lg-start mt-4 pt-2">
+      <!-- Text - Pogresna lozinka -->
+      <p *ngIf="invalidEmail" class="small fw-bold mt-2 pt-1 mb-0 text-danger"> Pogresan email </p>
+      <p *ngIf="invalidPass" class="small fw-bold mt-2 pt-1 mb-0 text-danger"> Pogresna lozinka </p>
+      </div>
+    <div class="mb-3 mt-3">
+        <p>Nemate nalog? <a href="/register" class="link-danger">Registrujte se</a></p>
+    </div>
 </form>

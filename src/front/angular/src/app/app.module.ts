@@ -14,6 +14,7 @@ import { DataSetPageComponent } from './_components/_pages/data-set-page/data-se
 import { DataSetTableComponent } from './_components/_elements/data-set-table/data-set-table.component';
 import { observable } from 'rxjs';
 import { LoginFormComponent } from './_components/_elements/login-form/login-form.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { LoginFormComponent } from './_components/_elements/login-form/login-for
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [CsvServiceService],
   bootstrap: [AppComponent]
