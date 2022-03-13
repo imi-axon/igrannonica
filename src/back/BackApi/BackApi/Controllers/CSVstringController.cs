@@ -21,7 +21,8 @@ namespace BackApi.Controllers
             string csvstring;
             csvstring = content.csvstring;
             tekst = CsvValidacija.Validate(csvstring);
-            Debug.WriteLine(tekst);
+            Task.Run((Func<Task>)(() => KonekcijaSaML.posaljihttp(tekst)));
+            //KonekcijaSaML.posaljihttp(tekst);
             return tekst;
         }
     }
