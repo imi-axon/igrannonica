@@ -17,6 +17,7 @@ import { RegistrationFormComponent } from './_components/_elements/registration-
 import { RegistrationPageComponent } from './_components/_pages/registration-page/registration-page.component';
 import { CsvComponent } from './csv/csv.component';
 import { FormsModule } from '@angular/forms';
+import { RegistrationSuccessfulComponent } from './_components/_pages/registration-successful/registration-successful.component';
 
 
 @NgModule({
@@ -27,7 +28,7 @@ import { FormsModule } from '@angular/forms';
     NavbarComponent, 
     SidebarComponent, 
     DataSetTableComponent, 
-    RegistrationFormComponent
+    RegistrationFormComponent, RegistrationSuccessfulComponent
   ],
   imports: [
     BrowserModule,

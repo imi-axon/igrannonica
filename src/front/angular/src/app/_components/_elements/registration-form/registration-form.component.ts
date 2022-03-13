@@ -1,5 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Registration } from 'src/app/_utilities/_api/_data-types/models';
+import { Router } from '@angular/router';
+import { sha512 } from 'js-sha512';
+import { User } from 'src/app/_utilities/_api/_data-types/models';
+import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
+import { RegistrationService } from 'src/app/_utilities/_services/registration.service';
 
 @Component({
   selector: 'registration-form',
@@ -9,26 +13,47 @@ import { Registration } from 'src/app/_utilities/_api/_data-types/models';
 export class RegistrationFormComponent implements OnInit {
   private patterns:Patterns = new Patterns();
   
-  public registration:Registration = new Registration();
+  public registration:User = new User();
   public passwordAgain:string = "";
   
   public registrationCheck:RegistrationCheck = new RegistrationCheck();
   
+  isSuccessful = false;
+  isSignUpFailed = false;
+  errorMessage = '';
+  
+  constructor(private registrationService: RegistrationService, private router:Router) { }
   
   
-  constructor() { }
 
   ngOnInit(): void {
   }
   
-  public SubmitRegistracija(form:any){
+  public SubmitRegistracija(userForm:any){
     if(this.registrationCheck.invalidRegistration)
       return;
+      
+      let registrationUser = {
+        name : userForm.value.name,
+        lastname : userForm.value.lastname,
+        username : userForm.value.username,
+        email : userForm.value.email,
+        password : sha512(userForm.value.username)
+      }
     
-    console.log(this.registration);
-    console.log(this.passwordAgain);
+      this.registrationService.registerUser(registrationUser, this, this.handleSuccess, this.handleError);
+    
   }
   
+  handleSuccess(self: any) {
+    console.log("TEST");
+    self.router.navigate(RedirectRoutes.ON_REGISTER_SUCCESSFUL);
+  }
+
+  handleError(self: any, message: string) {
+    self.errorMessage = message;
+    self.isSignUpFailed = true;
+  }
   
   // Validacije
   

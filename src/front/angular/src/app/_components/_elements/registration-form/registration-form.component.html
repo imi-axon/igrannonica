@@ -42,14 +42,16 @@
             
             <div class="form-group">
                 <p class="lozinka-info">
-                    * Lozinka mora biti duža od 8 karaktera <br> * Mora sadržati barem jedan broj, jedno veliko i jedno malo slovo <span style="letter-spacing:3px;"> & , / ( </span>
+                    *Lozinka mora biti duža od 8 karaktera <br> *Lozinka mora sadržati jedan broj, jedno veliko i jedno malo slovo
                 </p>
+                <p *ngIf="isSignUpFailed" style="color: #FF0000; font-size: 12px;"> {{errorMessage}} </p>
             </div>
             
             
             <div class="form-group">
                 <input type="submit" name="submit" class="form-submit" value="Registruj se" [disabled]="registrationCheck.invalidRegistration">
             </div>
+            
         </form>
         
         <p>

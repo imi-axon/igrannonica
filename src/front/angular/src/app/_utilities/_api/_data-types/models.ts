@@ -1,6 +1,6 @@
 /*  REGISTRACIJA  */
 
-export class Registration
+export class User
 {
     public name:string = "";
     public lastname:string = "";
