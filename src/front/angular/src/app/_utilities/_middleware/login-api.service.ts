@@ -8,14 +8,14 @@ import { apiProperties } from '../_constants/api-properties';
 })
 export class LoginApiService {
 
-  private url: string = apiProperties.url+"/api/login";
+  private url: string = apiProperties.url+"/api/LogReg/login";
 
   constructor(private http:HttpClient) { }
 
-  login(formData:any)
+  login(formData:any) :Observable<HttpResponse<any>>
   {
     console.log("saljem")
-    return this.http.post(this.url,formData)
+    return this.http.post<any>(this.url,formData,{observe:"response"})
   }
 
 }

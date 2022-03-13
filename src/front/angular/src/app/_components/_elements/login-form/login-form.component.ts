@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { regExp } from 'src/app/_utilities/_constants/regExp';
-import { LoginApiService } from 'src/app/_utilities/_services/login-api.service';
 import { Router } from '@angular/router';
+import { User } from 'src/app/_utilities/_api/_data-types/models';
+import { sha512 } from 'js-sha512';
+import { LoginService } from 'src/app/_utilities/_services/login.service';
 
 
 @Component({
@@ -12,18 +14,20 @@ import { Router } from '@angular/router';
 })
 export class LoginFormComponent implements OnInit {
 
+  public loginUser:User = new User();
+
   constructor(
-    private service:LoginApiService,
+    private loginService:LoginService,
     private router:Router
   ) { }
 
-   private pattEmail = regExp.pattEmail;
+   private pattUsername = regExp.pattUsername;
    private pattPass = regExp.pattPass;
 
   ngOnInit(): void {
   }
 
-  public invalidEmail:boolean;
+  public invalidUsername:boolean;
   public invalidPass:boolean;
 
 
@@ -33,26 +37,36 @@ export class LoginFormComponent implements OnInit {
     console.log(f.valid);
 
 
-    this.invalidEmail=false;
+    this.invalidUsername=false;
     this.invalidPass=false;
 
-    if (this.pattEmail.test(f.value.email)) {
+    if (this.pattUsername.test(f.value.username)) {
       if(this.pattPass.test(f.value.pass)){
        console.log("tacno");
        //poslati back-u
+       let loginUser=
+       {
+         username:f.value.username,
+         password:sha512(f.value.pass)
+       }
     
-       this.service.login(f.value).subscribe(
-          {
-            next:(res:any)=>{localStorage.setItem('token',res.token);this.router.navigateByUrl('/csv')}, // umesto csv staviti home page kada bude napravljena
-            error:(err:any)=>{console.log(err)}
-          }
-
-       );
+       this.loginService.loginUser(loginUser,this,this.handleSuccess,this.handleError);
        
       } 
       else { console.log("Lozinka nije pravilna"); this.invalidPass=true;}
     }
-    else {console.log("Email nije pravilan"); this.invalidEmail=true}
+    else {console.log("Username nije pravilan"); this.invalidUsername=true}
+  }
+  
+
+  handleSuccess(self: any) {
+    console.log("Tacno");
+    
+  }
+
+  handleError(self: any, message: string) {
+    self.errorMessage = message;
+    self.isSignUpFailed = true;
   }
 
 }
