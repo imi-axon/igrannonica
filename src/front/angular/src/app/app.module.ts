@@ -20,16 +20,19 @@ import { FormsModule } from '@angular/forms';
 import { RegistrationSuccessfulComponent } from './_components/_pages/registration-successful/registration-successful.component';
 import { LoginFormComponent } from './_components/_elements/login-form/login-form.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
     routingComponents, //ovde se nalaze sve putanje dodate u routingComponents niz u app-routing.module.ts
     CsvComponent,
     NavbarComponent, 
-    SidebarComponent, 
-    DataSetTableComponent, 
-    RegistrationFormComponent, RegistrationSuccessfulComponent,LoginFormComponent
-
+    SidebarComponent,
+    DataSetTableComponent,
+    LoginFormComponent,
+    RegistrationFormComponent, 
+    RegistrationSuccessfulComponent,
+    LoginFormComponent
   ],
   imports: [
     BrowserModule,

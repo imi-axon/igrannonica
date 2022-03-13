@@ -10,10 +10,9 @@ import { RegistrationSuccessfulComponent } from './_components/_pages/registrati
 const routes: Routes = [
   {path:'project',component:ProjectPageComponent},
   {path:'dataset',component:DataSetPageComponent},
+  {path:'login',component:LoginPageComponent},
   {path:'registration',component:RegistrationPageComponent},
- {path:'registration-successful',component:RegistrationSuccessfulComponent},
- {path:'login',component:LoginPageComponent},
-
+  {path:'registration-successful',component:RegistrationSuccessfulComponent}
 ];
 
 @NgModule({
@@ -23,6 +22,4 @@ const routes: Routes = [
 export class AppRoutingModule { }
 
 //Kada se dodaje nova putanja, dodati je u niz
-
-export const routingComponents=[ProjectPageComponent, DataSetPageComponent, RegistrationPageComponent,LoginPageComponent];
-
+export const routingComponents=[CsvComponent, ProjectPageComponent, DataSetPageComponent,LoginPageComponent, RegistrationPageComponent];
