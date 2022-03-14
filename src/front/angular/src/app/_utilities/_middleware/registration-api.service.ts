@@ -15,7 +15,7 @@ export class RegistrationApiService {
   sendRegistration(applicantData: any): Observable<HttpResponse<any>> {
     
     return this.http.post<any>(
-      this.APIUrl + "/User",
+      this.APIUrl + "/LogReg/Register",
       applicantData,
       {
         observe: 'response'

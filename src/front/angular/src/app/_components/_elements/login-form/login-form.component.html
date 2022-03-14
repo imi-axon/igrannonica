@@ -1,7 +1,7 @@
 <form #f="ngForm" (ngSubmit)="onSubmit(f)">
     <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">Email adresa</label>
-      <input type="email" name="email" ngModel required #email="ngModel" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+      <label for="exampleInputEmail1" class="form-label">Username</label>
+      <input type="text" name="username" ngModel required #username="ngModel" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
     </div>
     <div class="mb-3">
       <label for="exampleInputPassword1" class="form-label">Lozinka</label>
@@ -14,7 +14,7 @@
     <button type="submit" [disabled]="f.invalid" class="btn btn-primary">Prijavite se</button>
     <div class="text-center text-lg-start mt-4 pt-2">
       <!-- Text - Pogresna lozinka -->
-      <p *ngIf="invalidEmail" class="small fw-bold mt-2 pt-1 mb-0 text-danger"> Pogresan email </p>
+      <p *ngIf="invalidUsername" class="small fw-bold mt-2 pt-1 mb-0 text-danger"> Pogresan username </p>
       <p *ngIf="invalidPass" class="small fw-bold mt-2 pt-1 mb-0 text-danger"> Pogresna lozinka </p>
       </div>
     <div class="mb-3 mt-3">
