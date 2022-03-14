@@ -2,6 +2,7 @@
 using BackApi.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace BackApi.Controllers
 {
@@ -30,7 +31,7 @@ namespace BackApi.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(KorisnikApi req)
+        public async Task<ActionResult<string>> Login(LoginKlasa req)
         {
             Boolean uspeh;
             var rez = korsrv.Login(req, out uspeh);

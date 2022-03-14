@@ -10,7 +10,7 @@ namespace BackApi.Services
     public interface IKorisnikServis
     {
         Boolean Register(KorisnikApi model);
-        string Login(KorisnikApi model,out Boolean uspeh);
+        string Login(LoginKlasa model,out Boolean uspeh);
     }
 
     public class KorisnikServis: IKorisnikServis
@@ -108,6 +108,11 @@ namespace BackApi.Services
                 return "Pogresan username ili password";
             }
  
+        }
+
+        public string Login(LoginKlasa model, out bool uspeh)
+        {
+            throw new NotImplementedException();
         }
     }
 }
