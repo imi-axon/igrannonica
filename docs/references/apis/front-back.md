@@ -6,7 +6,7 @@
 ---
 
 ## # Registracija API (POST)
-> __`/api/User/registration`__
+> __`/api/LogReg/register`__
 ---
 
 > __BODY__
@@ -14,8 +14,8 @@
 ```ts
 User
 {
-    name: string
-    lastname: string
+    firstName: string
+    lastName: string
     username: string
     email: string
     password: string
@@ -26,24 +26,21 @@ User
 > __RESPONSE__
 
 ```ts
-//Ako je korisnik uspesno registrovan vracamo poruku
-return "{\"message\":\"Success\"}";
+// Ako je korisnik uspesno registrovan vracamo poruku
+StatusCode(200, Success)
 
-//Inace vracamo
+// Ako je email vezan za postojeci nalog
+StatusCode(403, Forbidden)
 
-return "{\"message\":\"Email je vezan sa postojeci nalog!\"}";
-
-//Ili
-
-return "{\"message\":\"Korisnicko ime je zauzeto!\"}";
-
+// Ako je korisnicko ime zauzeto
+StatusCode(403, NotAcceptable)
 ```
 
 ---
 ---
 
 ## # Login API (POST)
-> __`/api/User/login`__
+> __`/api/LogReg/login`__
 ---
 
 > __BODY__
@@ -54,15 +51,19 @@ User
     username: string
     password: string
 }
-
 ```
 
 > __RESPONSE__
 
 ```ts
 
-// Poruka o neuspehu / JWT Tokeni
-// Doraditi
+// Losa kombinacija lozinke i username-a
+StatusCode(403, Unauthorized)
 
+// Korisnik vec ulogovan
+StatusCode(403, Forbidden)
+
+// Poruka o neuspehu / JWT Token neispravan
+StatusCode(403, BadRequest)
 
 ```
