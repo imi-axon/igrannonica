@@ -1,0 +1,96 @@
+
+.limiter {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.container-table100 {
+    width: 100%;
+    min-height: 100vh;
+    background: #d1d1d1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 33px 30px;
+}
+
+.wrap-table100 {
+    overflow-x: scroll;
+    width: 1000px;
+}
+
+table {
+    width: 100%;
+    background-color: #ffffff;
+}
+
+th, td {
+    font-weight: unset;
+    padding-right: 10px;
+}
+
+.column100 {
+    width: 130px;
+    padding-left: 25px;
+}
+
+.column100.column1 {
+    width: 265px;
+    padding-left: 42px;
+}
+
+.row100.head th {
+    padding-top: 24px;
+    padding-bottom: 20px;
+}
+
+.row100 td {
+    padding-top: 18px;
+    padding-bottom: 14px;
+}
+
+.row100.head th
+{
+    padding-top:24px;
+    padding-bottom:20px
+}
+  
+/*==================================================================*/
+
+.table100.ver1 td {
+    font-size: 14px;
+    color: #808080;
+    line-height: 1.4;
+}
+  
+.table100.ver1 th {
+    font-size: 12px;
+    color: #fff;
+    line-height: 1.4;
+    text-transform: uppercase;
+  
+    background-color: #003e80;
+    
+    &:hover{
+        background-color: #001f4f;
+    }
+}
+  
+.table100.ver1 .row100:hover {
+    background-color: #f2f2f2;
+}
+  
+.table100.ver1 .hov-column-ver1 {
+    background-color: #f2f2f2;
+}
+  
+.table100.ver1 .hov-column-head-ver1 {
+    background-color: #484848 !important;
+}
+  
+.table100.ver1 .row100 td:hover {
+    background-color: #1b5cd5;
+    color: #fff;
+}
