@@ -12,7 +12,7 @@
 > __BODY__
 
 ```ts
-User
+UserRegistration
 {
     firstName: string
     lastName: string
@@ -33,7 +33,7 @@ StatusCode(200, Success)
 StatusCode(403, Forbidden)
 
 // Ako je korisnicko ime zauzeto
-StatusCode(403, NotAcceptable)
+StatusCode(406, NotAcceptable)
 ```
 
 ---
@@ -46,7 +46,7 @@ StatusCode(403, NotAcceptable)
 > __BODY__
 
 ```ts
-User
+UserLogin
 {
     username: string
     password: string
@@ -58,12 +58,50 @@ User
 ```ts
 
 // Losa kombinacija lozinke i username-a
-StatusCode(403, Unauthorized)
+StatusCode(401, Unauthorized)
 
 // Korisnik vec ulogovan
 StatusCode(403, Forbidden)
 
 // Poruka o neuspehu / JWT Token neispravan
-StatusCode(403, BadRequest)
+StatusCode(400, BadRequest)
 
 ```
+
+## # Project API (POST)
+> __`/api/Project/create`__
+---
+
+> __HEADER__
+
+```ts
+{
+    jwt: string
+}
+
+```
+
+> __BODY__
+
+```ts
+NewProject
+{
+    name: string
+    description: string
+}
+
+```
+
+> __RESPONSE__
+
+```ts
+// Ako je uspesno kreiran projekat
+StatusCode(200, Success)
+
+// Ako nije ulogovan
+StatusCode(401, Unauthorized)
+
+// Ako postoji projekat sa istim imenom
+StatusCode(406, NotAcceptable)
+```
+
