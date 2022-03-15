@@ -19,6 +19,7 @@ import { CsvComponent } from './csv/csv.component';
 import { FormsModule } from '@angular/forms';
 import { RegistrationSuccessfulComponent } from './_components/_pages/registration-successful/registration-successful.component';
 import { LoginFormComponent } from './_components/_elements/login-form/login-form.component';
+import { NewProjectComponent } from './_components/_elements/new-project/new-project.component';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { LoginFormComponent } from './_components/_elements/login-form/login-for
     LoginFormComponent,
     RegistrationFormComponent, 
     RegistrationSuccessfulComponent,
-    LoginFormComponent
+    LoginFormComponent,
+    NewProjectComponent,
   ],
   imports: [
     BrowserModule,
