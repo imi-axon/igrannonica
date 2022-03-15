@@ -15,9 +15,15 @@ def get_csv_dialect(csv_str: str) -> csv.Dialect:
 
 
 # Konvertuje JSON string u objekat
-def json_to_object(json_str: str) -> object | list:
+def json_to_object(json_str: str):
 
     return json.JSONDecoder().decode(json_str)
+
+
+# Konvertuje objekat/listu u JSON string
+def object_to_json(obj):
+
+    return json.JSONEncoder().encode(obj)
 
 
 # Konvertuje CSV string u listu listi (uz detekciju formata CSV-a)
@@ -43,6 +49,7 @@ def csv_is_valid(csv_str):
 
 # Routes
 
+# Aktivnost: Add Data Set
 @app.route('/api/dataset/validate/csv', methods=['POST'])
 def validate_csv():
 
@@ -52,3 +59,22 @@ def validate_csv():
         return ('CSV je u ispravnom formatu', 201)
 
     return ('CSV nije u ispravnom formatu', 400)
+
+
+# Aktivnost: Get Data Set
+@app.route('/api/dataset/convert/json', methods=['POST'])
+def convert_csv_to_json():
+
+    csvstring = request.data.decode()
+    # print(csvstring)
+    resp = None
+
+    try:
+        obj = csv_to_list(csvstring)
+        # print(obj)
+        resp = object_to_json(obj)
+        # print(resp)
+    except:
+        return ('CSV nije u ispravnom formatu', 400)
+
+    return (resp, 201)
