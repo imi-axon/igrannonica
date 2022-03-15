@@ -23,11 +23,15 @@ namespace BackApi.Controllers
             Boolean tmp = korsrv.Register(req);
             string rez = "";
             if (tmp)
-            {rez = "Korisnik uspesno registrovan"; }
+            {   
+                rez = "Korisnik uspesno registrovan";
+                return Ok(rez);
+            }
             else
-            {rez = "Korisnik sa tim Username-om vec postoji!"; }
-
-            return Ok(rez);
+            {
+                rez = "Korisnik sa tim Username-om vec postoji!";
+                return BadRequest(rez);
+            }
         }
 
         [HttpPost("login")]
