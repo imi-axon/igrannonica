@@ -38,7 +38,7 @@ export class RegistrationFormComponent implements OnInit {
         lastname : userForm.value.lastname,
         username : userForm.value.username,
         email : userForm.value.email,
-        password : sha512(userForm.value.username)
+        password : userForm.value.password //sifra se hashira serverside-field promenjen sa username na password
       }
     
       this.registrationService.registerUser(registrationUser, this, this.handleSuccess, this.handleError);

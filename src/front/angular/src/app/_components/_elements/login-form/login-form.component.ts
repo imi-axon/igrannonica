@@ -46,8 +46,8 @@ export class LoginFormComponent implements OnInit {
        //poslati back-u
        let loginUser=
        {
-         username:f.value.username,
-         password:sha512(f.value.pass)
+         username: f.value.username,
+         password: f.value.pass //sifra se hashira serverside
        }
     
        this.loginService.loginUser(loginUser,this,this.handleSuccess,this.handleError);

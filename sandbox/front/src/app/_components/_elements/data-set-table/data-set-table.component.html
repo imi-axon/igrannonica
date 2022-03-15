@@ -1,0 +1,23 @@
+<div class="wrap-table100">
+    <div class="table100 ver1 m-b-110">
+        <table data-vertable="ver1">
+            <thead>
+                <tr class="row100 head"> 
+                    <th class="column100" *ngFor="let key of keys"> 
+                        {{key}} 
+                    </th> 
+                </tr>
+            </thead>
+            
+            <tbody>
+                
+                <tr class="row100" *ngFor="let row of dataJSON;">
+                    <td class="column100" *ngFor="let key of keys">
+                        {{ row[key] }}
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+</div>
