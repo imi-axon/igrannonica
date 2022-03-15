@@ -31,7 +31,7 @@ namespace BackApi.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(LoginKlasa req)
+        public async Task<ActionResult<string>> Login(KorisnikApi req)
         {
             Boolean uspeh;
             var rez = korsrv.Login(req, out uspeh);
