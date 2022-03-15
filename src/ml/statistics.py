@@ -10,12 +10,15 @@ from tensorflow import keras
 
 #print(tf.__version__)
 
+from util import read_str_to_df
 
-class Statistika:
 
-    # klasa Statistika kao argument u konstruktoru ima DataFrame (ucitani csv - skup podataka)
-    def __init__(self,df):
-        self.dataset = df
+class Statistics:
+
+    # klasa Statistika kao argument u konstruktoru ima string 
+    def __init__(self, csvString):
+        self.dataset = read_str_to_df(csvString)
+        
 
     #f-ja correlation_matrix - za izracunavanje korelacione matrice
     #povratna vrednost je DataFrame
@@ -78,3 +81,19 @@ class Statistika:
 #md
 #print(type(md))
 
+#x = """Tezina; Visina; Godine
+#    67;167;20
+#    79;180;35"""
+
+
+
+#dat = read_str_to_df(x)
+#dat.head()
+
+#dat.shape
+
+#stat1 = Statistics(x)
+
+#stat1.correlation_matrix()
+#stat1.stat_mean()
+#stat1.statistics()
