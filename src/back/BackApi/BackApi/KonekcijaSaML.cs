@@ -6,13 +6,15 @@ namespace BackApi
 {
     public static class KonekcijaSaML
     {
-        public static async Task posaljihttp(string tekst)
+        public static async Task<dynamic> posaljihttp(string tekst)
         {
             Debug.WriteLine(tekst);
             HttpClient client = new HttpClient();
             StringContent content = new StringContent(tekst);
 
-            await client.PostAsync("http://localhost:5000", content);
+            var result = await client.PostAsync("http://localhost:5000/api/dataset/convert/json", content);
+
+            return result;
         }
 
         /*public static async Task<dynamic> getRequest(string tekst)
