@@ -20,7 +20,7 @@
     "@angular/router": "~13.2.0",
     "crypto-js": "^4.1.1",
     "js-sha512": "^0.8.0",
-    "ngx-csv-parser": "0.0.7",
+    "ngx-csv-parser": "^0.0.7",
     "ngx-papaparse": "^5.0.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
