@@ -1,4 +1,3 @@
-import { HttpErrorResponse, HttpResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { RegistrationApiService } from '../_middleware/registration-api.service';
 

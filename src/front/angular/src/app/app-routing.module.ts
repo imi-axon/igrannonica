@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CsvComponent } from './csv/csv.component';
 import { DataSetPageComponent } from './_components/_pages/data-set-page/data-set-page.component';
 import { LoginPageComponent } from './_components/_pages/login-page/login-page.component';
 import { NewProjectPageComponent } from './_components/_pages/new-project-page/new-project-page.component';
@@ -11,12 +10,12 @@ import { StatisticsPageComponent } from './_components/_pages/statistics-page/st
 
 const routes: Routes = [
   {path:'project',component:ProjectPageComponent},
-  {path:'dataset',component:DataSetPageComponent},
-  {path:'login',component:LoginPageComponent},
-  {path:'registration',component:RegistrationPageComponent},
-  {path:'registration-successful',component:RegistrationSuccessfulComponent},
   {path:'new-project', component:NewProjectPageComponent},
-  {path:'statistics', component:StatisticsPageComponent}
+  {path:'dataset',component:DataSetPageComponent},
+  {path:'registration-successful',component:RegistrationSuccessfulComponent},
+  {path:'statistics', component:StatisticsPageComponent},
+  {path:'login',component:LoginPageComponent},
+  {path:'registration',component:RegistrationPageComponent}
 ];
 
 @NgModule({
@@ -26,4 +25,4 @@ const routes: Routes = [
 export class AppRoutingModule { }
 
 //Kada se dodaje nova putanja, dodati je u niz
-export const routingComponents=[CsvComponent, ProjectPageComponent, DataSetPageComponent,LoginPageComponent, RegistrationPageComponent, NewProjectPageComponent, StatisticsPageComponent];
+export const routingComponents=[ProjectPageComponent, NewProjectPageComponent, DataSetPageComponent, StatisticsPageComponent, LoginPageComponent, RegistrationPageComponent];
