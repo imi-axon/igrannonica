@@ -17,7 +17,7 @@ namespace BackApi
             return result;
         }
 
-        public static async Task<dynamic> validateCSVstring(string csvstring)
+        public static async Task<HttpResponseMessage> validateCSVstring(string csvstring)
         {
             Debug.WriteLine(csvstring);
             HttpClient client = new HttpClient();
