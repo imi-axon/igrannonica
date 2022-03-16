@@ -1,11 +1,13 @@
-<form #f="ngForm" (ngSubmit)="onSubmit(f)">
+<div class="container mt-md-5 p-5 bg-white rounded-3 shadow-sm border" style="max-width: 50em;">
+  <h2 class="text-center pb-5">Login </h2>
+  <form #f="ngForm" (ngSubmit)="onSubmit(f)">
     <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">Username</label>
-      <input type="text" name="username" ngModel required #username="ngModel" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+      <!-- <label for="exampleInputEmail1" class="form-label">Username</label> -->
+      <input type="text" placeholder="Korisnicko ime" name="username" ngModel required #username="ngModel" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
     </div>
     <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label">Lozinka</label>
-      <input type="password" name="pass" ngModel required #pass="ngModel" class="form-control" id="exampleInputPassword1">
+      <!-- <label for="exampleInputPassword1" class="form-label">Lozinka</label> -->
+      <input type="password" placeholder="Lozinka" name="pass" ngModel required #pass="ngModel" class="form-control" id="exampleInputPassword1">
     </div>
     <div class="mb-3 form-check">
       <input type="checkbox" class="form-check-input" id="exampleCheck1">
@@ -21,3 +23,4 @@
         <p>Nemate nalog? <a href="/registration" class="link-danger">Registrujte se</a></p>
     </div>
 </form>
+</div>

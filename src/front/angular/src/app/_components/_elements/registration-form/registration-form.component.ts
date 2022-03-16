@@ -117,21 +117,21 @@ class RegistrationCheck
 {
   public invalidRegistration = true;
   
-  public invalidName:boolean = false;
-  public invalidLastname:boolean = false;
-  public invalidUsername:boolean = false;
-  public invalidEmail:boolean = false;
-  public invalidPassword:boolean = false;
-  public invalidPasswordAgain:boolean = false;
+  public invalidName:boolean = true;
+  public invalidLastname:boolean = true;
+  public invalidUsername:boolean = true;
+  public invalidEmail:boolean = true;
+  public invalidPassword:boolean = true;
+  public invalidPasswordAgain:boolean = true;
   
   constructor() {
       this.invalidRegistration = true;
-      this.invalidName = false;
-      this.invalidLastname = false;
-      this.invalidUsername = false;
-      this.invalidEmail = false;
-      this.invalidPassword = false;
-      this.invalidPasswordAgain = false;
+      this.invalidName = true;
+      this.invalidLastname = true;
+      this.invalidUsername = true;
+      this.invalidEmail = true;
+      this.invalidPassword = true;
+      this.invalidPasswordAgain = true;
   }
   
   public checkForm(){
