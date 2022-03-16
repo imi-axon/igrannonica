@@ -1,46 +1,44 @@
-<div class="container-fluid">
-    
-    <div class="registration-form-container shadow">
-        
-        <h2 class="form-title">Registrujte se</h2>
+
+       <div class="container mt-5 p-5 bg-white rounded-3 shadow-sm border" style="max-width: 50em;">
+        <h2 class="text-center pb-5">Registruj se </h2>
         
         <form method="POST" novalidate #form="ngForm" (submit)="SubmitRegistracija(form)">
             
             
-            <div class="row">
+            <div class="row mb-3">
                 
                 <div class="col form-group">
-                    <input type="text" class="form-input" placeholder="Ime" name="name" #name="ngModel" [(ngModel)]="registration.name"
+                    <input type="text" class="form-control" placeholder="Ime" name="name" #name="ngModel" [(ngModel)]="registration.name"
                         required [class.invalid]="name.touched && registrationCheck.invalidName" (blur)="checkName()" (input)="checkName()">
                 </div>
                 
                 <div class="col form-group">
-                    <input type="text" class="form-input" placeholder="Prezime" name="lastname" #lastName="ngModel" [(ngModel)]="registration.lastname"
+                    <input type="text" class="form-control" placeholder="Prezime" name="lastname" #lastName="ngModel" [(ngModel)]="registration.lastname"
                     required [class.invalid]="lastName.touched && registrationCheck.invalidLastname" (blur)="checkLastname()" (input)="checkLastname()">
                 </div>
             </div>
             
-            <div class="form-group">
-                <input type="text" class="form-input" placeholder="Korisnicko ime" name="username" #username="ngModel" [(ngModel)]="registration.username"
+            <div class="form-group mb-3">
+                <input type="text" class="form-control" placeholder="Korisnicko ime" name="username" #username="ngModel" [(ngModel)]="registration.username"
                 required [class.invalid]="username.touched && registrationCheck.invalidUsername" (blur)="checkUsername()" (input)="checkUsername()">
             </div>
             
-            <div class="form-group">
-                <input type="email" class="form-input" placeholder="e-mail" name="email" #email="ngModel" [(ngModel)]="registration.email"
+            <div class="form-group mb-3">
+                <input type="email" class="form-control" placeholder="e-mail" name="email" #email="ngModel" [(ngModel)]="registration.email"
                 required [class.invalid]="email.touched && registrationCheck.invalidEmail" (blur)="checkEmail()" (input)="checkEmail()">
             </div>
             
-            <div class="form-group">
-                <input type="password" class="form-input" placeholder="Lozinka*" name="password" #password="ngModel" [(ngModel)]="registration.password"
+            <div class="form-group mb-3">
+                <input type="password" class="form-control" placeholder="Lozinka*" name="password" #password="ngModel" [(ngModel)]="registration.password"
                 required [class.invalid]="password.touched && registrationCheck.invalidPassword" (blur)="checkPassword()" (input)="checkPassword()">
             </div>
             
-            <div class="form-group">
-                <input type="password" class="form-input" placeholder="Ponovite lozinku" name="passwordAgain" [(ngModel)]="passwordAgain"
+            <div class="form-group mb-3">
+                <input type="password" class="form-control" placeholder="Ponovite lozinku" name="passwordAgain" [(ngModel)]="passwordAgain"
                 required [class.invalid]="password.touched && registrationCheck.invalidPasswordAgain" (blur)="checkPasswordAgain()" (input)="checkPasswordAgain()">
             </div>
             
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <p class="lozinka-info">
                     *Lozinka mora biti duža od 8 karaktera <br> *Lozinka mora sadržati jedan broj, jedno veliko i jedno malo slovo
                 </p>
@@ -48,8 +46,8 @@
             </div>
             
             
-            <div class="form-group">
-                <input type="submit" name="submit" class="form-submit" value="Registruj se" [disabled]="registrationCheck.invalidRegistration">
+            <div class="form-group mb-3">
+                <input type="submit" name="submit" class="btn btn-primary" value="Registruj se" [disabled]="registrationCheck.invalidRegistration">
             </div>
             
         </form>
@@ -57,7 +55,4 @@
         <p>
             Već imate nalog? <a href="/login" class="login-here">Ulogujte se ovde</a>
         </p>
-    
     </div>
-    
-</div>
