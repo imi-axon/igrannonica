@@ -33,7 +33,7 @@ def csv_to_list(csv_str: str) -> list[list]:
     lines = csv_str.splitlines()
     reader = csv.reader(lines, dialect) # !!! Ima problem kad se koriste navodnici, tada iako redovi imaju razlicit broj elemenata konvertuje u niz
     result = [x for x in reader]
-    print(result)
+    # print(result)
     return result
 
 
@@ -53,6 +53,8 @@ def csv_is_valid(csv_str):
 @app.route('/api/dataset/validate/csv', methods=['POST'])
 def validate_csv():
 
+    print('Pocetak kontrolera (za Add Dataset)')
+
     csvstring = request.data.decode()
 
     if csv_is_valid(csvstring):
@@ -64,6 +66,8 @@ def validate_csv():
 # Aktivnost: Get Data Set
 @app.route('/api/dataset/convert/json', methods=['POST'])
 def convert_csv_to_json():
+
+    print('Pocetak kontrolera (za Get Dataset)')
 
     csvstring = request.data.decode()
     # print(csvstring)
