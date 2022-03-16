@@ -1,5 +1,4 @@
 /*  REGISTRACIJA  */
-
 export class User
 {
     public name:string = "";
@@ -16,5 +15,6 @@ export class User
         this.password = "";
     }
 }
-
 /* REGISTRACIJA */
+
+

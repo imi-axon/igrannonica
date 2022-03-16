@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { regExp } from 'src/app/_utilities/_constants/regExp';
 import { Router } from '@angular/router';
-import { User } from 'src/app/_utilities/_api/_data-types/models';
-import { sha512 } from 'js-sha512';
 import { LoginService } from 'src/app/_utilities/_services/login.service';
+import { User } from 'src/app/_utilities/_data-types/models';
 
 
 @Component({
@@ -15,7 +14,7 @@ import { LoginService } from 'src/app/_utilities/_services/login.service';
 export class LoginFormComponent implements OnInit {
 
   public loginUser:User = new User();
-
+  
   constructor(
     private loginService:LoginService,
     private router:Router

@@ -1,19 +1,19 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { apiProperties } from '../_constants/api-properties';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DatasetApiService {
-  readonly APIUrl="https://localhost:7057/api";
   
   constructor(private http:HttpClient) { }
   
   // POST DATASET api/projects/{id}/dataset
   public postCSV(csvStr:String, project_id:number): Observable<HttpResponse<any>>{
     return this.http.post<any>(
-      this.APIUrl + '/projects/' + project_id + '/dataset',
+      apiProperties.url + '/api/projects/' + project_id + '/dataset',
       { 
         csvstring:csvStr 
       },
@@ -27,7 +27,7 @@ export class DatasetApiService {
   // GET DATASET api/projects/{id}/dataset
   public getCSV(project_id:number): Observable<HttpResponse<any>>{
     return this.http.get<any>(
-      this.APIUrl + '/projects/' + project_id + '/dataset',
+      apiProperties.url + '/api/projects/' + project_id + '/dataset',
       {
         observe: 'response'
       }
