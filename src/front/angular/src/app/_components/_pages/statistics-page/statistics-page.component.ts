@@ -1,17 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-statistics-page',
   templateUrl: './statistics-page.component.html',
   styleUrls: ['./statistics-page.component.scss']
 })
-export class StatisticsPageComponent implements OnInit {
+export class StatisticsPageComponent implements OnInit{
   
-  public correlationView : Boolean = false;
+  // Ovoj promenljivoj ne trebalo menjati vrednost
+  @Output() onBind: boolean = false;
+  
+  public correlationView: boolean = false;
+  
+  eventsSubject: Subject<void> = new Subject<void>();
   
   constructor() { }
+  
 
   ngOnInit(): void {
+    
   }
   
   switchTableView(){

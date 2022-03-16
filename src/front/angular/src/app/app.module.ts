@@ -7,7 +7,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule , routingComponents} from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
-import { CsvServiceService } from './services/csv-service.service';
 import { NavbarComponent } from './_components/_elements/navbar/navbar.component';
 import { SidebarComponent } from './_components/_elements/sidebar/sidebar.component';
 import { DataSetPageComponent } from './_components/_pages/data-set-page/data-set-page.component';
@@ -21,6 +20,8 @@ import { RegistrationSuccessfulComponent } from './_components/_pages/registrati
 import { LoginFormComponent } from './_components/_elements/login-form/login-form.component';
 import { NewProjectComponent } from './_components/_elements/new-project/new-project.component';
 import { StatisticsPageComponent } from './_components/_pages/statistics-page/statistics-page.component';
+import { DatasetService } from './_utilities/_services/dataset.service';
+import { NgxCsvParserModule } from 'ngx-csv-parser';
 
 
 @NgModule({
@@ -39,12 +40,13 @@ import { StatisticsPageComponent } from './_components/_pages/statistics-page/st
     StatisticsPageComponent
   ],
   imports: [
+    NgxCsvParserModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule
   ],
-  providers: [CsvServiceService],
+  providers: [DatasetService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

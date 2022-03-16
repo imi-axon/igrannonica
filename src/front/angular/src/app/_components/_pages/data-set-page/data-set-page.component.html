@@ -1,24 +1,25 @@
 
-<div class="container-fluid" style="height: 100%;">
+<div class="container-fluid">
     
     
-    <div class="row" style="height: 100%;">
+    <div class="row">
         
-        <div class="col-lg-2"style="height: 100%;" >
+        <div class="col-lg-2" >
             <sidebar></sidebar>
         </div>
         
         <div class="col-lg-10 project-container">
             
-            <button class="dataset-title-button"> <h1>dataset1</h1> </button>
+            <div class="inside-container">
+                <button class="dataset-title-button"> <h1>Dataset1</h1> </button>
+                <app-csv #csvInput (jsonLoaded)="datasetTable.LoadDataDirectlyFromInput($event); this.showDataset($event);"></app-csv>
+            </div> 
             
-            <div>
-                <app-csv (messageEvent)="dst.LoadData($event)"></app-csv>
-                <button> Prikazi tabelu </button>
+            <div class="dataset-container" [class.hidden]="datasetHidden">
+                <data-set-table #datasetTable></data-set-table>
             </div>
             
-            <data-set-table #dst></data-set-table>
-            
+            <button class="btn btn-primary" (click)="sendDataset(csvInput.csv);"> Potvrdi </button>
             
         </div>
         

@@ -1,7 +1,5 @@
-import { Target } from '@angular/compiler';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { CsvServiceService } from '../services/csv-service.service';
-import { observable } from 'rxjs';
+import { NgxCsvParser } from 'ngx-csv-parser';
 
 @Component({
   selector: 'app-csv',
@@ -9,55 +7,71 @@ import { observable } from 'rxjs';
   styleUrls: ['./csv.component.scss']
 })
 export class CsvComponent implements OnInit {
-
+  
+  public csvDelimiter:string = ';';
+  
+  public tableData:any;
   public poruka:string;
-  public csv:string;
+  @Output() public csv:string;
   
-  @Output() messageEvent = new EventEmitter<any>();
+  @Output() jsonLoaded = new EventEmitter<any>();
 
-  constructor(private service:CsvServiceService) { }
   
-  public data : any;
+  constructor(private ngxCsvParser: NgxCsvParser) { }
   
   ngOnInit(): void {
   }
   
-  public changeListener(event: Event){
+  
+  public izabranFajl(event: Event){
+    //console.log(event);
     this.poruka="";
-    console.log(event);
     const target = event.target as HTMLInputElement;
     const file:File = (target.files as FileList)[0];
     
-    if(file) {
-         //console.log(file.name);
-         //console.log(file.size);
-         //console.log(file.type);
-
-      //Provera da li je fajl .csv
-      if(file.type=="text/csv" || file.type=="application/vnd.ms-excel"){
-         let reader: FileReader = new FileReader();
-         reader.readAsText(file);
-         reader.onload = (e) => {
-            this.csv = reader.result as string;
-            //console.log(this.csv);
-          //salje se csv fajl servisu u vidu stringa
-          if(this.csv!="")
-            this.service.prihvatiCsvString(this.csv).subscribe(
-              (response) => {
-                this.data = response.body;
-                this.messageEvent.emit(this.data);
-              }
-            );
-         }
-        }
-        else
-        { 
-            this.poruka = "Fajl mora biti .csv";
-        }
+    if(!file){
+      console.log("Uneti fajl nije pronadjen u input komponenti!");
+      return;
+    }
+    
+    if(file.type != "text/csv" && file.type!="application/vnd.ms-excel"){
+      this.poruka = "Uneti fajl mora biti u .csv formatu!";
+      return;
+    }
+    
+    //console.log(file.name);
+    //console.log(file.size);
+    //console.log(file.type);
+    
+    let reader: FileReader = new FileReader();
+    reader.readAsText(file);
+    reader.onload = (e) => {
+      this.csv = reader.result as string;
+      //console.log(this.csv);
+      
+      if(this.csv.trim() === ""){
+        this.poruka = "Uneti fajl ne sme biti prazan!";
+        return;
       }
+      
+      this.parseToJSON(file);
+    }
   }
 
   //F-ja za pretvaranje ulaznog .csv fajla u string
   
-
+  //F-ja za parsovanje ulaznog .csv fajla u JSON radi prikaza u tabeli
+  private parseToJSON(file: File){
+    this.ngxCsvParser.parse(file, { header: true, delimiter: this.csvDelimiter } )
+    .subscribe(
+      (next: any) =>{
+        //console.log('Result', next);
+        this.tableData = next;
+        
+        this.jsonLoaded.emit(this.tableData);
+        
+      }
+    ); 
+  }
+  
 }

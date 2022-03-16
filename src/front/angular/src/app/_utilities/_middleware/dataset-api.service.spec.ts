@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { CsvServiceService } from './csv-service.service';
+import { DatasetApiService } from './dataset-api.service';
 
-describe('CsvServiceService', () => {
-  let service: CsvServiceService;
+describe('DatasetApiService', () => {
+  let service: DatasetApiService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(CsvServiceService);
+    service = TestBed.inject(DatasetApiService);
   });
 
   it('should be created', () => {
