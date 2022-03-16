@@ -20,6 +20,7 @@ import { FormsModule } from '@angular/forms';
 import { RegistrationSuccessfulComponent } from './_components/_pages/registration-successful/registration-successful.component';
 import { LoginFormComponent } from './_components/_elements/login-form/login-form.component';
 import { NewProjectComponent } from './_components/_elements/new-project/new-project.component';
+import { StatisticsPageComponent } from './_components/_pages/statistics-page/statistics-page.component';
 
 
 @NgModule({
@@ -35,6 +36,7 @@ import { NewProjectComponent } from './_components/_elements/new-project/new-pro
     RegistrationSuccessfulComponent,
     LoginFormComponent,
     NewProjectComponent,
+    StatisticsPageComponent
   ],
   imports: [
     BrowserModule,

@@ -1,8 +1,13 @@
 <div class="wrap-table100">
     <div class="table100 ver1 m-b-110">
-        <table data-vertable="ver1">
+        <table>
             <thead>
+                <!-- REZ NA NAZIVE KOLONA / SORTIRANJE -->
                 <tr class="row100 head"> 
+                    
+                    <!-- DODATNA KOLONA-->
+                    <th class="column-first"></th>
+                    
                     <th class="column100" *ngFor="let key of keys"> 
                         {{key}} 
                     </th> 
@@ -12,12 +17,32 @@
             <tbody>
                 
                 <tr class="row100" *ngFor="let row of dataJSON;">
-                    <td class="column100" *ngFor="let key of keys">
+                    
+                    <!-- CELIJE ZA PRVU KOLONU -->
+                    <td class="column-first">
+                        
+                    </td>
+                    
+                    <!-- CELIJE IZ SETA-->
+                    <td class="column100 data-cell" *ngFor="let key of keys">
                         {{ row[key] }}
                     </td>
+                    
                 </tr>
                 
             </tbody>
+            
+            <!-- RED ZA PRIKAZ STATISTIKE -->
+            <tr class="row100 statistics">
+                
+                <!-- CELIJA PRVE KOLONE -->
+                <th class="column-first"></th>
+                
+                <th *ngFor="let key of keys"> 
+                    1
+                </th> 
+            </tr>
+            
         </table>
     </div>
 </div>
