@@ -35,11 +35,12 @@ export class DataSetTableComponent implements OnInit, OnChanges{
   public LoadDataFromAPI(){
     this.datasetService.getCSV(1, this, this.successfulLoad);
   }
-  public successfulLoad(){
+  public successfulLoad(self:any, data: any){
     console.log("Ucitan datase. Obavestite u Discordu ako se ovo ispise vise puta.");
-    this.dataJSON = this.testJSON;
-    console.log("Local dataset: " + this.dataJSON);
-    this.keys = Object.keys(this.dataJSON[0]);
+    // self.dataJSON = self.testJSON;
+    self.dataJSON = data;
+    console.log("Local dataset: " + self.dataJSON);
+    self.keys = Object.keys(self.dataJSON[0]);
   }
   
   

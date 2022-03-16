@@ -28,9 +28,9 @@ export class DataSetPageComponent implements OnInit {
     this.datasetService.addCSV(csv, this.TEST_PROJECT_ID, this, this.postSuccess);
   }
   
-  private postSuccess(){
+  private postSuccess(self:any){
     console.log("Uspesan POST dataseta.");
-    this.router.navigate(['statistics']);
+    self.router.navigate(['statistics']);
   }
   
 
