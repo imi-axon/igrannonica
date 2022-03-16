@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BackApi.Entities;
+using BackApi.Models;
+using BackApi.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -8,6 +11,25 @@ namespace BackApi.Controllers
     [ApiController]
     public class CSVstringController : ControllerBase
     {
+        public KorisnikContext context;
+        public IProjectService service;
+        public CSVstringController(IProjectService service)
+        {
+            this.service = service;
+        }
+        [HttpPost]
+        public async Task<dynamic> Post([FromBody] ProjectAPI project)
+        {
+            Debug.WriteLine(project.Name+" "+project.Description);
+            Boolean response = service.CreateProject(project);
+            //Debug.WriteLine(token);
+            //var idClaim = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("id", StringComparison.InvariantCultureIgnoreCase));
+            if (response)
+                return "USPESNO KREIRAN PROJEKAT";
+            return "Projekat sa ovim imenom vec postoji";
+
+            //return project.Name + " " + project.Public + " " + project.Description;
+        }
         private string tekst;
         [HttpGet("{id}/dataset")]
         public async Task<ActionResult<dynamic>> Get(int id)
@@ -25,8 +47,7 @@ namespace BackApi.Controllers
         {
             string csvstring;
             csvstring = content.csvstring;
-            Debug.WriteLine(csvstring);
-            var response = Task.Run((Func<Task>)(() => KonekcijaSaML.validateCSVstring(tekst))); 
+            var response = Task.Run((Func<Task>)(() => KonekcijaSaML.validateCSVstring(csvstring))); 
             //AKO JE RESPONSE SUCCES, POTREBNO JE UPISATI GA U BAZU
             return response;
         }
