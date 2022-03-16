@@ -8,7 +8,7 @@ import { apiProperties } from '../_constants/api-properties';
 })
 export class LoginApiService {
 
-  private url: string = apiProperties.url+"/api/LogReg/login";
+  private url: string = apiProperties.url + "/api/login";
 
   constructor(private http:HttpClient) { }
 

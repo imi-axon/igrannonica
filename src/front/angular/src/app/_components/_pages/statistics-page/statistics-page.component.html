@@ -4,7 +4,7 @@
         <div class="col-md-8 data-table">
             
             <div id="dataset" [class.hidden]="correlationView">
-                <data-set-table #dataset></data-set-table>
+                <data-set-table #dataset [onBind]="this.onBind"></data-set-table>
             </div>
         
             <div id="korelaciona" [class.hidden]="!correlationView">
@@ -22,7 +22,7 @@
         
         <div class="button-group">
             <button (click)="switchTableView()"> Switch view </button>
-            <button (click)="dataset.LoadDummyData()"> DATA (DEBUG) </button>
+            <button (click)="dataset.LoadDummyData();"> Local Dataset (DEBUG) </button>
         </div>
         
         <div class="button-group">

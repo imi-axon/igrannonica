@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { sha512 } from 'js-sha512';
-import { User } from 'src/app/_utilities/_api/_data-types/models';
+import { regExp } from 'src/app/_utilities/_constants/regExp';
 import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
+import { User } from 'src/app/_utilities/_data-types/models';
 import { RegistrationService } from 'src/app/_utilities/_services/registration.service';
 
 @Component({
@@ -11,8 +11,6 @@ import { RegistrationService } from 'src/app/_utilities/_services/registration.s
   styleUrls: ['./registration-form.component.scss']
 })
 export class RegistrationFormComponent implements OnInit {
-  private patterns:Patterns = new Patterns();
-  
   public registration:User = new User();
   public passwordAgain:string = "";
   
@@ -60,7 +58,7 @@ export class RegistrationFormComponent implements OnInit {
   public checkName(){
     this.registrationCheck.invalidName = false;
     
-    if(!this.patterns.name.test(this.registration.name))
+    if(!regExp.pattName.test(this.registration.name))
       this.registrationCheck.invalidName = true;
     
     this.registrationCheck.checkForm();
@@ -69,7 +67,7 @@ export class RegistrationFormComponent implements OnInit {
   public checkLastname(){
     this.registrationCheck.invalidLastname = false;
     
-    if(!this.patterns.name.test(this.registration.lastname))
+    if(!regExp.pattName.test(this.registration.lastname))
       this.registrationCheck.invalidLastname = true;
       
     this.registrationCheck.checkForm();
@@ -78,7 +76,7 @@ export class RegistrationFormComponent implements OnInit {
   public checkUsername(){
     this.registrationCheck.invalidUsername = false;
     
-    if(!this.patterns.username.test(this.registration.username))
+    if(!regExp.pattUsername.test(this.registration.username))
       this.registrationCheck.invalidUsername = true;
       
     this.registrationCheck.checkForm();
@@ -87,7 +85,7 @@ export class RegistrationFormComponent implements OnInit {
   public checkEmail(){
     this.registrationCheck.invalidEmail = false;
     
-    if(!this.patterns.email.test(this.registration.email))
+    if(!regExp.pattEmail.test(this.registration.email))
       this.registrationCheck.invalidEmail = true;
       
     this.registrationCheck.checkForm();
@@ -96,7 +94,7 @@ export class RegistrationFormComponent implements OnInit {
   public checkPassword(){
     this.registrationCheck.invalidPassword = false;
     
-    if(!this.patterns.password.test(this.registration.password))
+    if(!regExp.pattPass.test(this.registration.password))
       this.registrationCheck.invalidPassword = true;
       
     this.checkPasswordAgain();
@@ -119,21 +117,21 @@ class RegistrationCheck
 {
   public invalidRegistration = true;
   
-  public invalidName:boolean = false;
-  public invalidLastname:boolean = false;
-  public invalidUsername:boolean = false;
-  public invalidEmail:boolean = false;
-  public invalidPassword:boolean = false;
-  public invalidPasswordAgain:boolean = false;
+  public invalidName:boolean = true;
+  public invalidLastname:boolean = true;
+  public invalidUsername:boolean = true;
+  public invalidEmail:boolean = true;
+  public invalidPassword:boolean = true;
+  public invalidPasswordAgain:boolean = true;
   
   constructor() {
       this.invalidRegistration = true;
-      this.invalidName = false;
-      this.invalidLastname = false;
-      this.invalidUsername = false;
-      this.invalidEmail = false;
-      this.invalidPassword = false;
-      this.invalidPasswordAgain = false;
+      this.invalidName = true;
+      this.invalidLastname = true;
+      this.invalidUsername = true;
+      this.invalidEmail = true;
+      this.invalidPassword = true;
+      this.invalidPasswordAgain = true;
   }
   
   public checkForm(){
@@ -142,15 +140,4 @@ class RegistrationCheck
       else
           this.invalidRegistration = false;
   }
-}
-
-// Paterni za regex
-class Patterns{
-  public readonly name: RegExp = /^[a-zA-ZšŠđĐčČćĆžŽ]+([ \-][a-zA-ZšŠđĐčČćĆžŽ]+)*$/;
-  public readonly username: RegExp = /^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/;
-  public readonly email: RegExp = /^[a-zA-Z0-9]+([\.\-\+][a-zA-Z0-9]+)*\@([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}$/;
-  public readonly password: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-  //public readonly pattTwoSpaces: RegExp = /  /;
-  //public readonly pattPhone: RegExp = /^(0|(\+[1-9][0-9]{0,2}))[1-9][0-9][0-9]{6,7}$/;
-  //public readonly pattAddr: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\/ \-\,\.\'\(\)\&]{1,80}$/;
 }
