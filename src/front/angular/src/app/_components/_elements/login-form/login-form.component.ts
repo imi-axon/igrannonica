@@ -13,7 +13,7 @@ import { User } from 'src/app/_utilities/_data-types/models';
 })
 export class LoginFormComponent implements OnInit {
 
-  public loginUser:User = new User();
+  public login:User = new User();
   
   constructor(
     private loginService:LoginService,
@@ -26,21 +26,16 @@ export class LoginFormComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public invalidUsername:boolean;
-  public invalidPass:boolean;
-
+  public invalidUsername:boolean=true;
+  public invalidPass:boolean=true;
 
   onSubmit(f:NgForm)
   {
     console.log(f.value);
     console.log(f.valid);
 
-
-    this.invalidUsername=false;
-    this.invalidPass=false;
-
-    if (this.pattUsername.test(f.value.username)) {
-      if(this.pattPass.test(f.value.pass)){
+    if (!this.invalidUsername) {
+      if(!this.invalidPass){
        console.log("tacno");
        //poslati back-u
        let loginUser=
@@ -48,15 +43,29 @@ export class LoginFormComponent implements OnInit {
          username: f.value.username,
          password: f.value.pass //sifra se hashira serverside
        }
-    
        this.loginService.loginUser(loginUser,this,this.handleSuccess,this.handleError);
        
       } 
-      else { console.log("Lozinka nije pravilna"); this.invalidPass=true;}
+      else { console.log("Lozinka nije pravilna");}
     }
-    else {console.log("Username nije pravilan"); this.invalidUsername=true}
+    else {console.log("Username nije pravilan"); }
   }
   
+  public checkUsername(){
+    this.invalidUsername=false;
+    console.log(this.login.username);
+    if(!this.pattUsername.test(this.login.username)){
+      this.invalidUsername = true;
+      console.log("netacan username")
+    }
+  }
+
+  public checkPass(){
+    this.invalidPass=false;
+    if(!this.pattPass.test(this.login.password)){
+      this.invalidPass = true;
+    }
+  }
 
   handleSuccess(self: any) {
     console.log("Tacno");
