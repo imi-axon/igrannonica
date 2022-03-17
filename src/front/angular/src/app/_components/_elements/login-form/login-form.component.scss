@@ -1,0 +1,17 @@
+.invalid{
+    border: solid 1px #8d0000 !important;
+    background-color: #ff9a9a;
+    
+    &:hover{
+        background-color: #ff6e6e !important;
+    }
+    
+    &:focus{
+        background-color: #ff6e6e !important;
+    }
+    
+    &::placeholder{
+        color: #EEEEEE;
+    }
+}
+

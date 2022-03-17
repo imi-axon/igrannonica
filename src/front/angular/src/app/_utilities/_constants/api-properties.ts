@@ -1,4 +1,4 @@
 export const apiProperties = 
 {
-    url: 'http://localhost:7057'
+    url: 'https://localhost:7057'
 }

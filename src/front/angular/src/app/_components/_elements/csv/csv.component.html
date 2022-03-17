@@ -1,0 +1,9 @@
+<!-- upload CSV fajl sa racunara -->
+<div class="csvUpload">
+    <label for="formFile" class="form-label">CSV fajl</label><br>
+    <input class="form-control" type="file" id="formFile" accept=".csv" required=".csv" (change)="izabranFajl($event)"><br>
+    <p id="greskaPoruka">{{poruka}}</p>
+    <!-- $event.target.files ne radi -->
+</div>
+
+

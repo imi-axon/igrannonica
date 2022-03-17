@@ -17,22 +17,31 @@
 }
 
 .wrap-table100 {
-    overflow-x: scroll;
-    width: 1000px;
+    overflow: auto;
+    scroll-behavior: smooth;
+    width: 100%;
+    height: 100%;
+    border: none;
 }
 
 table {
+    overflow: scroll;
     width: 100%;
     background-color: #ffffff;
 }
 
 th, td {
     font-weight: unset;
-    padding-right: 10px;
+}
+
+.data-cell{
+    border-left: solid 2px #00246d;
+    border-top: solid 2px #00246d;
+    border-bottom: solid 2px #00246d;
 }
 
 .column100 {
-    width: 130px;
+    min-width: 120px;
     padding-left: 25px;
 }
 
@@ -41,33 +50,59 @@ th, td {
     padding-left: 42px;
 }
 
-.row100.head th {
-    padding-top: 24px;
-    padding-bottom: 20px;
+.column-first{
+    position: sticky;
+    left: 0px;
+    min-width: 100px;
+    background-color: #002864 !important;
 }
 
 .row100 td {
-    padding-top: 18px;
-    padding-bottom: 14px;
+    height: 10px;
+    padding-top: 15px;
+    padding-bottom: 15px;
 }
 
-.row100.head th
+.head{
+    top: 0px;
+    position: sticky;
+    height: 20px;
+    padding: 0px;
+}
+.head th
 {
-    padding-top:24px;
-    padding-bottom:20px
+    padding: 15px;
+}
+
+.head .column100{
+    border-left: solid 2px #002864;
+}
+
+.statistics{
+    bottom: 0px;
+    position: sticky;
+    height: 20px;
+    padding: 0px;
+}
+.statistics th{
+    border-left: solid 2px #002864;
+    z-index: 1;
+    padding: 15px;
+    padding-left: 25px;
+    padding-right: 25px;
 }
   
 /*==================================================================*/
 
 .table100.ver1 td {
     font-size: 14px;
-    color: #808080;
+    color: #000000;
     line-height: 1.4;
 }
   
 .table100.ver1 th {
     font-size: 12px;
-    color: #fff;
+    color: #FFFFFF;
     line-height: 1.4;
     text-transform: uppercase;
   
@@ -79,7 +114,8 @@ th, td {
 }
   
 .table100.ver1 .row100:hover {
-    background-color: #f2f2f2;
+    background-color: #b4dbff;
+    
 }
   
 .table100.ver1 .hov-column-ver1 {
@@ -91,6 +127,6 @@ th, td {
 }
   
 .table100.ver1 .row100 td:hover {
-    background-color: #1b5cd5;
-    color: #fff;
+    background-color: #1a4d99;
+    color: #FFFFFF;
 }

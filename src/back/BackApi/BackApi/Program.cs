@@ -9,12 +9,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<KorisnikContext>();
+builder.Services.AddDbContext<ProjectContext>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IKorisnikServis,KorisnikServis>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
 
 builder.Services.AddCors(options =>
 {

@@ -1,29 +1,69 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BackApi.Entities;
+using BackApi.Models;
+using BackApi.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using System.Diagnostics;
 
 namespace BackApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/projects")]
     [ApiController]
     public class CSVstringController : ControllerBase
     {
-        private string tekst;
-        [HttpGet]
-        public async Task<ActionResult<string>> Get(string csvstring)
+
+        public KorisnikContext context;
+        public IProjectService service;
+        public CSVstringController(IProjectService service)
         {
-            tekst = csvstring;
-            return tekst;
+            this.service = service;
         }
         [HttpPost]
-        public async Task<ActionResult<string>> Post( [FromBody] CSVstring content)
+        public async Task<dynamic> Post([FromBody] ProjectAPI project)
         {
+            Debug.WriteLine(project.Name+" "+project.Description);
+            Boolean response = service.CreateProject(project);
+            //Debug.WriteLine(token);
+            //var idClaim = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("id", StringComparison.InvariantCultureIgnoreCase));
+            if (response)
+                return "USPESNO KREIRAN PROJEKAT";
+            return "Projekat sa ovim imenom vec postoji";
+
+            //return project.Name + " " + project.Public + " " + project.Description;
+        }
+
+        [HttpGet("{id}/dataset")]
+        public async Task<ActionResult<dynamic>> Get(int id)
+        {
+            Debug.WriteLine("Pocetak izvrsavanja kontrolera (za Get Dataset)");
+            //Debug.WriteLine(project_id);
+            //VADI SE IZ BAZE CSV STRING KOJI ODGOVARA DATOM ID-U
+            //UKOLIKO NEMA PROJKETA SA DATIM ID-EM VRACA VRACA NOT FOUND
+            //UKOLIKO KORISNIK NIJE ULOGOVAN VRACA UNAUTHORIZED
+
+            string tekst = "n1;n2;n3;out\r1; 1; 0; 1\r1; 0; 0; 1\r0; 0; 1; 1\r1; 0; 1; 1\r0; 0; 0; 0\r";
+            var response = await KonekcijaSaML.convertCSVstring(tekst);
+
+            return await response.Content.ReadAsStringAsync(); 
+        }
+
+        [HttpPost("{id}/dataset")]
+        public async Task<ActionResult<dynamic>> Post(int id, [FromBody] CSVstring content)
+        {
+            Debug.WriteLine("Pocetak izvrsavanja kontrolera (za Add Dataset)");
+
             string csvstring;
             csvstring = content.csvstring;
-            tekst = CsvValidacija.Validate(csvstring);
-            Task.Run((Func<Task>)(() => KonekcijaSaML.posaljihttp(tekst)));
-            //KonekcijaSaML.posaljihttp(tekst);
-            return tekst;
+
+            //Debug.WriteLine(csvstring);
+            var response = await KonekcijaSaML.validateCSVstring(csvstring);
+            //AKO JE RESPONSE SUCCES, POTREBNO JE UPISATI GA U BAZU
+
+            if (response.StatusCode == HttpStatusCode.Created)
+                return StatusCode(StatusCodes.Status200OK, new { message = "Sve je u redu." });
+
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Ne valja CSV." });
         }
     }
 }

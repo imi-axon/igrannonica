@@ -1,23 +1,28 @@
-<form #f="ngForm" (ngSubmit)="onSubmit(f)">
+<div class="container mt-md-5 p-5 bg-white rounded-3 shadow-sm border" style="max-width: 50em;">
+  <h2 class="text-center pb-5">Login </h2>
+  <form #f="ngForm" (ngSubmit)="onSubmit(f)" autocomplete="off">
     <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">Username</label>
-      <input type="text" name="username" ngModel required #username="ngModel" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+      <!-- <label for="exampleInputEmail1" class="form-label">Username</label> -->
+      <input  type="text" placeholder="Korisnicko ime" name="username" ngModel required #username="ngModel" [(ngModel)]="login.username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+      [class.invalid]="(username.touched || username.dirty ) && invalidUsername" (blur)="checkUsername()" (input)="checkUsername()">
     </div>
     <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label">Lozinka</label>
-      <input type="password" name="pass" ngModel required #pass="ngModel" class="form-control" id="exampleInputPassword1">
+      <!-- <label for="exampleInputPassword1" class="form-label">Lozinka</label> -->
+      <input type="password" placeholder="Lozinka" name="pass" ngModel required #pass="ngModel" [(ngModel)]="login.password" class="form-control" id="exampleInputPassword1"
+      [class.invalid]="pass.touched && invalidPass" (blur)="checkPass()" (input)="checkPass()">
     </div>
     <div class="mb-3 form-check">
       <input type="checkbox" class="form-check-input" id="exampleCheck1">
       <label class="form-check-label" for="exampleCheck1">Zapamti me</label>
     </div>
-    <button type="submit" [disabled]="f.invalid" class="btn btn-primary">Prijavite se</button>
+    <button type="submit" [disabled]="f.invalid || invalidPass || invalidUsername" class="btn btn-primary">Prijavite se</button>
     <div class="text-center text-lg-start mt-4 pt-2">
       <!-- Text - Pogresna lozinka -->
-      <p *ngIf="invalidUsername" class="small fw-bold mt-2 pt-1 mb-0 text-danger"> Pogresan username </p>
-      <p *ngIf="invalidPass" class="small fw-bold mt-2 pt-1 mb-0 text-danger"> Pogresna lozinka </p>
+      <!-- <p *ngIf="invalidUsername" class="small fw-bold mt-2 pt-1 mb-0 text-danger"> Pogresan username </p>
+      <p *ngIf="invalidPass" class="small fw-bold mt-2 pt-1 mb-0 text-danger"> Pogresna lozinka </p> -->
       </div>
     <div class="mb-3 mt-3">
-        <p>Nemate nalog? <a href="/register" class="link-danger">Registrujte se</a></p>
+        <p>Nemate nalog? <a href="/registration" class="link-danger">Registrujte se</a></p>
     </div>
 </form>
+</div>

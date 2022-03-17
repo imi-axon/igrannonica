@@ -33,7 +33,7 @@ namespace BackApi.Services
             }
         }
 
-        private bool ProveriPWHash(string password,byte[] pwHash,byte[] pwSalt)
+        private Boolean ProveriPWHash(string password,byte[] pwHash,byte[] pwSalt)
         {
             using (var hmac = new HMACSHA512(pwSalt))
             {
@@ -44,11 +44,11 @@ namespace BackApi.Services
 
         private string KreirajToken(Korisnik korisnik)
         {
-            var punoIme = korisnik.Ime + " " + korisnik.Prezime;
+            var punoIme = korisnik.Name + " " + korisnik.Lastname;
             List<Claim> claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name,korisnik.Username ),
-                new Claim(ClaimTypes.Email,korisnik.Mail ),
+                new Claim(ClaimTypes.Email,korisnik.Email ),
                 new Claim(ClaimTypes.GivenName,punoIme)
             };
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration.GetSection("AppSettings:Token").Value));
@@ -74,9 +74,9 @@ namespace BackApi.Services
 
             var korisnik= new Korisnik();
             korisnik.Username = model.Username;
-            korisnik.Prezime = model.Prezime;
-            korisnik.Ime=model.Ime;
-            korisnik.Mail=model.Mail;
+            korisnik.Lastname = model.Lastname;
+            korisnik.Name=model.Name;
+            korisnik.Email=model.Email;
 
             KreirajPWHash(model.Password, out byte[] pwHash, out byte[] pwSalt);
 
@@ -96,11 +96,11 @@ namespace BackApi.Services
             var jwtoken = "";
 
             if (kor != null && ProveriPWHash(model.Password, kor.PasswordHash, kor.PasswordSalt))
-                {
-                    
-                    jwtoken = KreirajToken(kor);
-                    uspeh = true;
-                    return jwtoken;
+                {            
+                        jwtoken = KreirajToken(kor);
+                        uspeh = true;
+                        return jwtoken;
+
                 }
             else
             {

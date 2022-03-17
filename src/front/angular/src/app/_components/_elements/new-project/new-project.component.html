@@ -1,0 +1,19 @@
+<form #npf="ngForm" style="max-width: 50em;"> 
+    <!-- npf-> new project form -->
+    <div class="mb-3">
+      <label for="projectName">Naziv projekta</label>
+      <input type="text" class="form-control" id="projectName" name="projectName" ngModel required #projectName="ngModel"  placeholder="Naziv projekta">
+    </div>
+    <div class="mb-3">
+      <label for="projectDescription">Opis projekta</label>
+      <!-- maksimalan broj karaktera je 250 -->
+      <textarea maxlength="250" class="form-control" id="projectDescription" name="projectDesc" ngModel #projectDesc="ngModel" placeholder="Opis projekta"></textarea>
+      <p class="textarea-info">*Maksimalan broj karaktera je 250</p>
+    </div>
+    <div class="form-check mb-3">
+      <input type="checkbox" class="form-check-input" id="public">
+      <label class="form-check-label" for="public">public</label>
+    </div>
+    <button type="submit" [disabled]="npf.invalid" class="btn btn-primary mt-3">Submit</button>
+</form>
+
