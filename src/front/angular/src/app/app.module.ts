@@ -24,7 +24,7 @@ import { DatasetService } from './_utilities/_services/dataset.service';
 import { NgxCsvParserModule } from 'ngx-csv-parser';
 import { HomeComponent } from './_components/_elements/home/home.component';
 import { HomePageComponent } from './_components/_pages/home-page/home-page.component';
-import { NavComponent } from './nav/nav/nav.component';
+
 
 
 @NgModule({
@@ -42,7 +42,7 @@ import { NavComponent } from './nav/nav/nav.component';
     NewProjectComponent,
     StatisticsPageComponent,
     HomeComponent,
-    NavComponent,
+
   ],
   imports: [
     NgxCsvParserModule,

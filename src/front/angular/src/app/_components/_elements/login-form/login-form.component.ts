@@ -53,7 +53,6 @@ export class LoginFormComponent implements OnInit {
   
   public checkUsername(){
     this.invalidUsername=false;
-    console.log(this.login.username);
     if(!this.pattUsername.test(this.login.username)){
       this.invalidUsername = true;
       console.log("netacan username")
@@ -69,10 +68,12 @@ export class LoginFormComponent implements OnInit {
 
   handleSuccess(self: any) {
     console.log("Tacno");
+    this.router.navigate([""]);
     
   }
 
   handleError(self: any, message: string) {
+    console.log("GRESKA")
     self.errorMessage = message;
     self.isSignUpFailed = true;
   }
