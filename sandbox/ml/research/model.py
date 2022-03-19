@@ -10,6 +10,7 @@ from tensorflow.keras import layers
 
 print(tf.__version__)
 
+from sklearn.preprocessing import StandardScaler
 
 from util import read_str_to_df
 
@@ -36,7 +37,22 @@ def train_test(dataset, outputs):
     return train_dataset, test_dataset, train_labels, test_labels
 
 
-#standardizacija podataka
+
+#standardizacija podataka -> skaliranje distribucija vrednosti tako da srednja vrednost bude 0, a standardna devijacija 1
+# f-ja vraca standardizovane podatke (dataframe) koji se kasnije koriste za pravljenje neuronske mreze
+def data_standardization(train_dataset, test_dataset):
+    scaler = StandardScaler()
+    normed_train_data = scaler.fit_transform(train_dataset)
+    #normed_train_data -> povratna vrednost je niz (array)
+    normed_test_data = scaler.fit_transform(test_dataset)
+    #normed_test_data1
+    normed_train_df = pd.DataFrame(data = normed_train_data, 
+                  index = train_dataset.index, 
+                  columns = train_dataset.columns) # od niza pravi dataframe
+    normed_test_df = df = pd.DataFrame(data = normed_test_data, 
+                  index = test_dataset.index, 
+                  columns = test_dataset.columns)
+    return normed_train_df, normed_test_df
 
 
 #proba
