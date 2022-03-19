@@ -16,18 +16,19 @@ export class LoginService {
 
       // Success
       (response) => {
-        if (response.status == 200) {
-          JWTUtil.store(response.headers.get(JWT_HEADER_NAME));
-          console.log(JWT_HEADER_NAME)
+        if (response.status== HttpStatusCode.Ok) { 
+          console.log("TACNO");
+          JWTUtil.store(response.body.v);
           if (self && successCallback) successCallback(self);
         }
         else {
+          console.log("NETACNO");
           JWTUtil.delete();
           if (self && errorCallback)
             errorCallback(self, response.body.message);
         }
       }
-
+    
     );
 
   }

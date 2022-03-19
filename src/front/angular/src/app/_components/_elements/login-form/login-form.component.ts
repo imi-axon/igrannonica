@@ -4,6 +4,7 @@ import { regExp } from 'src/app/_utilities/_constants/regExp';
 import { Router } from '@angular/router';
 import { LoginService } from 'src/app/_utilities/_services/login.service';
 import { User } from 'src/app/_utilities/_data-types/models';
+import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
 
 
 @Component({
@@ -67,8 +68,8 @@ export class LoginFormComponent implements OnInit {
   }
 
   handleSuccess(self: any) {
-    console.log("Tacno");
-    this.router.navigate([""]);
+   // console.log("Tacno jeeeeeee");
+    this.router.navigate(RedirectRoutes.ON_LOGIN);
     
   }
 

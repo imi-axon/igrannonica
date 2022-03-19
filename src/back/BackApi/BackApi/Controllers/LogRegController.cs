@@ -40,7 +40,11 @@ namespace BackApi.Controllers
             Boolean uspeh;
             var rez = korsrv.Login(req, out uspeh);
             if (uspeh)
-                return Ok(rez);
+                return Ok(new
+                {
+                     v = rez
+
+                });   
             else
                 return BadRequest(rez);
         }
