@@ -13,8 +13,6 @@ export class StatisticsPageComponent implements OnInit{
   
   public correlationView: boolean = false;
   
-  eventsSubject: Subject<void> = new Subject<void>();
-  
   constructor() { }
   
 

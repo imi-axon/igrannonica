@@ -22,6 +22,7 @@ import { NewProjectComponent } from './_components/_elements/new-project/new-pro
 import { StatisticsPageComponent } from './_components/_pages/statistics-page/statistics-page.component';
 import { DatasetService } from './_utilities/_services/dataset.service';
 import { NgxCsvParserModule } from 'ngx-csv-parser';
+import { LoaderComponent } from './_components/_elements/loader/loader.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
     RegistrationSuccessfulComponent,
     LoginFormComponent,
     NewProjectComponent,
-    StatisticsPageComponent
+    StatisticsPageComponent,
+    LoaderComponent
   ],
   imports: [
     NgxCsvParserModule,
