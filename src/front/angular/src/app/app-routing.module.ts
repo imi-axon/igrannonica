@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DataSetPageComponent } from './_components/_pages/data-set-page/data-set-page.component';
+import { HomePageComponent } from './_components/_pages/home-page/home-page.component';
 import { LoginPageComponent } from './_components/_pages/login-page/login-page.component';
 import { NewProjectPageComponent } from './_components/_pages/new-project-page/new-project-page.component';
 import { ProjectPageComponent } from './_components/_pages/project-page/project-page.component';
@@ -15,7 +16,8 @@ const routes: Routes = [
   {path:'registration-successful',component:RegistrationSuccessfulComponent},
   {path:'statistics', component:StatisticsPageComponent},
   {path:'login',component:LoginPageComponent},
-  {path:'registration',component:RegistrationPageComponent}
+  {path:'registration',component:RegistrationPageComponent},
+  {path:'',component:HomePageComponent}
 ];
 
 @NgModule({
@@ -25,4 +27,4 @@ const routes: Routes = [
 export class AppRoutingModule { }
 
 //Kada se dodaje nova putanja, dodati je u niz
-export const routingComponents=[ProjectPageComponent, NewProjectPageComponent, DataSetPageComponent, StatisticsPageComponent, LoginPageComponent, RegistrationPageComponent];
+export const routingComponents=[ProjectPageComponent, NewProjectPageComponent, DataSetPageComponent, StatisticsPageComponent, LoginPageComponent, RegistrationPageComponent,HomePageComponent];
