@@ -15,10 +15,10 @@ namespace BackApi.Services
 
     public class KorisnikServis: IKorisnikServis
     {
-        private KorisnikContext kontext;
+        private BazaContext kontext;
         private readonly IConfiguration configuration;
 
-        public KorisnikServis(KorisnikContext korisnikContext,IConfiguration configuration)
+        public KorisnikServis(BazaContext korisnikContext,IConfiguration configuration)
         {
             kontext = korisnikContext;
             this.configuration = configuration;
