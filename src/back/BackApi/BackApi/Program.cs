@@ -15,7 +15,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IKorisnikServis,KorisnikServis>();
-builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IProjectService,ProjectService>();
+builder.Services.AddScoped<IDatasetServis,DatasetServis>();
 
 builder.Services.AddCors(options =>
 {

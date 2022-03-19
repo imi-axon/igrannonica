@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BackApi.Models;
+using BackApi.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackApi.Controllers
@@ -7,10 +9,19 @@ namespace BackApi.Controllers
     [ApiController]
     public class DatasetController : ControllerBase
     {
-        [HttpPost]
-        public async Task<ActionResult<string>> NoviDataset()
+        private IDatasetServis datasrv;
+        public DatasetController(IDatasetServis datasetServis)
         {
-            return Ok("xd");
+            datasrv = datasetServis;
+        }
+
+        [HttpPost("{projid}/NoviDataset")]
+        public async Task<ActionResult<string>> NoviDataset(DatasetApi req,int projid)
+        {
+
+            var xd = datasrv.Novi(req,projid);
+
+            return Ok(xd);
         }
     }
 }
