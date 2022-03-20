@@ -1,15 +1,24 @@
+import sys
+
+# Putanje
+sys.path.append('../')
+
+# ML Service Adapter
+import mlservice.ml_adapter as ml
+from util.dataset import DatasetEditor
+
 from const import ROOT_ROUTE
 from util.csv import *
 from util.json import *
+
 from flask import Flask, request
 
 app = Flask(__name__)
-CROUTE = ROOT_ROUTE + 'dataset/'
 
 # ==== Routes ====
 
 # Aktivnost: Add Dataset
-@app.route(CROUTE+'validate/csv', methods=['POST'])
+@app.route(ROOT_ROUTE+'dataset/validate/csv', methods=['POST'])
 def validate_csv():
 
     print('Pocetak kontrolera (za Add Dataset)')
@@ -23,7 +32,7 @@ def validate_csv():
 
 
 # Aktivnost: Get Dataset
-@app.route(CROUTE+'convert/json', methods=['POST'])
+@app.route(ROOT_ROUTE+'dataset/convert/json', methods=['POST'])
 def convert_csv_to_json():
 
     print('Pocetak kontrolera (za Get Dataset)')
@@ -44,7 +53,17 @@ def convert_csv_to_json():
 
 
 # Aktivnost: Edit Dataset
-@app.route(CROUTE+'edit', methods=['POST'])
+@app.route(ROOT_ROUTE+'dataset/edit', methods=['POST'])
 def edit_dataset():
 
-    pass
+    payload = json_decode(request.data.decode())
+    
+    actions = [{'action':str.split(a['action']), 'column':a['column']} for a in payload['actions']]
+    dataset = payload['data']
+    # dataset = csv_decode(payload['data'])
+
+    DatasetEditor.execute(actions, dataset)
+
+    return ('Sve je u redu', 200)
+
+
