@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 # ==== Routes ====
 
-# Aktivnost: Add Data Set
+# Aktivnost: Add Dataset
 @app.route('/api/dataset/validate/csv', methods=['POST'])
 def validate_csv():
 
@@ -19,7 +19,7 @@ def validate_csv():
     return ('CSV nije u ispravnom formatu', 400)
 
 
-# Aktivnost: Get Data Set
+# Aktivnost: Get Dataset
 @app.route('/api/dataset/convert/json', methods=['POST'])
 def convert_csv_to_json():
 
@@ -40,3 +40,8 @@ def convert_csv_to_json():
     return (resp, 201)
 
 
+# Aktivnost: Edit Dataset
+@app.route('/api/dataset/edit', methods=['POST'])
+def edit_dataset():
+
+    pass
