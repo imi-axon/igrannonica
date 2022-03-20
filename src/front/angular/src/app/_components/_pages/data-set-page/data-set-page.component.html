@@ -12,10 +12,12 @@
             
             <div class="inside-container">
                 <button class="dataset-title-button"> <h1>Dataset1</h1> </button>
-                <app-csv #csvInput (jsonLoaded)="datasetTable.LoadDataDirectlyFromInput($event); this.showDataset($event);"></app-csv>
+                <app-csv #csvInput (fileChosen)="loader.start()" (jsonLoaded)="datasetTable.LoadDataDirectlyFromInput($event); this.showDataset(); loader.stop();" (fileError)="loader.stop();"></app-csv>
             </div> 
             
-            <div class="dataset-container" [class.hidden]="datasetHidden">
+            <loader #loader></loader>
+            
+            <div class="dataset-container" [class.hidden]="datasetHidden || loader.isLoading">
                 <data-set-table #datasetTable></data-set-table>
             </div>
             
