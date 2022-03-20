@@ -1,4 +1,4 @@
-from file_utils import *
+from utils.text import *
 from flask import Flask, request
 
 app = Flask(__name__)

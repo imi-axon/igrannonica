@@ -10,14 +10,14 @@ from tensorflow import keras
 
 #print(tf.__version__)
 
-from util import read_str_to_df
+from utils.ml import csv_to_df
 
 
 class Statistics:
 
     # klasa Statistika kao argument u konstruktoru ima string 
     def __init__(self, csvString):
-        self.dataset = read_str_to_df(csvString)
+        self.dataset = csv_to_df(csvString)
         
 
     #f-ja correlation_matrix - za izracunavanje korelacione matrice
