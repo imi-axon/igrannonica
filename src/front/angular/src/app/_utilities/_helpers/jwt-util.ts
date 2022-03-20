@@ -19,11 +19,40 @@ export class JWTUtil
         window.localStorage.removeItem(this.localStorageKey);
     }
 
+    static decodePayload(jwt: string | null): JWT | null {
+        if (jwt == null || jwt == '')
+            return null;
+            
+        const payload = jwt.split('.')[1];    
+        console.log(JSON.parse(atob(payload)));
+        return JSON.parse(atob(payload));
+    }
+
+    static getPayload(): JWT | null {
+        return this.decodePayload(this.get());
+    }
+
+    static getUsername(): string {
+        let g = this.getPayload();
+        return (g == null)? '' : g["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+    }
+    static getEmail(): string {
+        let g = this.getPayload();
+        return (g == null)? '' : g["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"];
+    }
+
+    static fullName(): string {
+        let g = this.getPayload();
+        return (g == null)? '' : g["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"];
+    }
+    
+
    
 }
-// interface JWT {
-//     exp: number;
-//     iss: string;
-//     rol: string;
-//     uid: number;
-// }
+interface JWT {
+    'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name' :string;
+    'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress':string;
+    'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname':string;
+   exp:number
+
+}

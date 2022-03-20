@@ -1,6 +1,5 @@
 import { HttpErrorResponse, HttpResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { JWT_HEADER_NAME } from '../_data-types/vars';
 import { JWTUtil } from '../_helpers/jwt-util';
 import { LoginApiService } from '../_middleware/login-api.service';
 
@@ -17,7 +16,7 @@ export class LoginService {
       // Success
       (response) => {
         if (response.status== HttpStatusCode.Ok) { 
-          console.log("TACNO");
+        //  console.log("TACNO");
           JWTUtil.store(response.body.v);
           if (self && successCallback) successCallback(self);
         }

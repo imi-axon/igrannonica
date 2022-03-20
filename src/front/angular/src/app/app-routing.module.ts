@@ -17,7 +17,8 @@ const routes: Routes = [
   {path:'statistics', component:StatisticsPageComponent},
   {path:'login',component:LoginPageComponent},
   {path:'registration',component:RegistrationPageComponent},
-  {path:'',component:HomePageComponent}
+  {path:'home',component:HomePageComponent},
+  {path: '', redirectTo:'/home', pathMatch: 'full'}
 ];
 
 @NgModule({
