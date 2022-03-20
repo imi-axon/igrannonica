@@ -34,25 +34,25 @@ export class JWTUtil
 
     static getUsername(): string {
         let g = this.getPayload();
-        return (g == null)? '' : g["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+        return (g == null)? '' : g["username"];
     }
     static getEmail(): string {
         let g = this.getPayload();
-        return (g == null)? '' : g["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"];
+        return (g == null)? '' : g["email"];
     }
 
     static fullName(): string {
         let g = this.getPayload();
-        return (g == null)? '' : g["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"];
+        return (g == null)? '' : g["imeprezime"];
     }
     
 
    
 }
 interface JWT {
-    'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name' :string;
-    'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress':string;
-    'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname':string;
-   exp:number
-
+    username :string;
+    email:string;
+    imeprezime:string;
+    id:string;
+    exp:number
 }
