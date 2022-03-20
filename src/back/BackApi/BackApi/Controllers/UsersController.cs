@@ -6,18 +6,18 @@ using System.Diagnostics;
 
 namespace BackApi.Controllers
 {
-    [Route("api/")]
+    [Route("api/users")]
     [ApiController]
-    public class LogRegController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private IKorisnikServis korsrv;
 
-        public LogRegController(IKorisnikServis korisnikServis)
+        public UsersController(IKorisnikServis korisnikServis)
         {
             this.korsrv = korisnikServis;
         }
 
-        [HttpPost("users")]
+        [HttpPost]
         public async Task<ActionResult<string>> Register(KorisnikApi req)
         {
             Boolean tmp = korsrv.Register(req);

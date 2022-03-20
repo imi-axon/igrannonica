@@ -15,10 +15,10 @@ namespace BackApi.Services
 
     public class KorisnikServis: IKorisnikServis
     {
-        private KorisnikContext kontext;
+        private BazaContext kontext;
         private readonly IConfiguration configuration;
 
-        public KorisnikServis(KorisnikContext korisnikContext,IConfiguration configuration)
+        public KorisnikServis(BazaContext korisnikContext,IConfiguration configuration)
         {
             kontext = korisnikContext;
             this.configuration = configuration;
@@ -45,11 +45,13 @@ namespace BackApi.Services
         private string KreirajToken(Korisnik korisnik)
         {
             var punoIme = korisnik.Name + " " + korisnik.Lastname;
+            string uid = "" + korisnik.UserId;
             List<Claim> claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Name,korisnik.Username ),
-                new Claim(ClaimTypes.Email,korisnik.Email ),
-                new Claim(ClaimTypes.GivenName,punoIme)
+                new Claim("username",korisnik.Username ),
+                new Claim("email",korisnik.Email ),
+                new Claim("imeprezime",punoIme),
+                new Claim("id",uid)
             };
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration.GetSection("AppSettings:Token").Value));
 

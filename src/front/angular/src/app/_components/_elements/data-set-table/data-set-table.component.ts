@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
 
@@ -16,8 +16,17 @@ export class DataSetTableComponent implements OnInit, OnChanges{
   dataJSON: any;
   keys : any;
   
+  
+  // Stranicenje
+  dataPages: any[][] = [];
+  rowsPerPage: number = 20;
+  currentPage: number = 0;
+  
+  
   // Neophodna promenljivo ako je potrebno prikazati podatke u tabeli na load-u
   @Input() onBind: boolean;
+  
+  public pageInput: number;
   
   ngOnInit(): void {
     
@@ -41,6 +50,9 @@ export class DataSetTableComponent implements OnInit, OnChanges{
     self.dataJSON = data;
     console.log("Local dataset: " + self.dataJSON);
     self.keys = Object.keys(self.dataJSON[0]);
+    
+    self.splitData(self.dataJSON);
+    self.currentPage = 0;
   }
   
   
@@ -49,6 +61,9 @@ export class DataSetTableComponent implements OnInit, OnChanges{
     this.dataJSON = data;
     console.log("Dataset from API: " + this.dataJSON);
     this.keys = Object.keys(this.dataJSON[0]);
+    
+    this.splitData(this.dataJSON);
+    this.currentPage = 0;
   }
   
   // TRENUTNO ZA TESTIRANJE BEZ BACKENDA
@@ -56,6 +71,65 @@ export class DataSetTableComponent implements OnInit, OnChanges{
     this.dataJSON = this.testJSON;
     this.keys = Object.keys(this.dataJSON[0]);
     this.datasetHidden = false;
+    
+    this.splitData(this.dataJSON);
+    this.currentPage = 0;
   }
-
+  
+  
+  
+  
+  
+  private splitData(data: any){
+    this.dataPages = [];
+    
+    let arrayCounter = 0;
+    this.dataPages.push([]);
+    let sectionCounter = 0;
+    
+    for(let i = 0; i < data.length; i++){
+      if(sectionCounter < this.rowsPerPage){
+        this.dataPages[arrayCounter].push(data[i]);
+      }
+      else{
+        sectionCounter = 0;
+        this.dataPages.push([]);
+        this.dataPages[++arrayCounter].push(data[i]);
+      }
+      sectionCounter++
+    }
+    
+    console.log(this.dataPages);
+  }
+  
+  
+  public previousPage(){
+    if(this.currentPage < 1)
+      return;
+    this.currentPage--;
+  }
+  
+  public nextPage(){
+    if(this.currentPage > this.dataPages.length - 2)
+      return;
+    this.currentPage++;
+  }
+  
+  public minPage(){
+    this.currentPage = 0;
+  }
+  
+  public maxPage(){
+    this.currentPage = this.dataPages.length - 1;
+  }
+  
+  public goToPage(){
+    if(this.pageInput == null 
+      || this.pageInput <= 0 
+      || this.pageInput > this.dataPages.length)
+      return;
+      
+    this.currentPage = this.pageInput - 1;
+  }
+  
 }

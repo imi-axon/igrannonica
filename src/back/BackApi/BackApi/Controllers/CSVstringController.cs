@@ -13,7 +13,7 @@ namespace BackApi.Controllers
     public class CSVstringController : ControllerBase
     {
 
-        public KorisnikContext context;
+        public BazaContext context;
         public IProjectService service;
         public CSVstringController(IProjectService service)
         {
