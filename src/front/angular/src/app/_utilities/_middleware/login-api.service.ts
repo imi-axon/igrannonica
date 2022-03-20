@@ -9,7 +9,7 @@ import { HeaderUtil } from '../_helpers/http-util';
 })
 export class LoginApiService {
 
-  private url: string = apiProperties.url + "/api/login";
+  private url: string = apiProperties.url + "/api/users/login";
 
   constructor(private http: HttpClient) { }
 
