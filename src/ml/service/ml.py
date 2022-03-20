@@ -10,8 +10,10 @@ from tensorflow import keras
 
 #print(tf.__version__)
 
-from utils.ml import csv_to_df
+from util import csv_to_df
 
+
+# ==== Statistics ====
 
 class Statistics:
 
@@ -49,14 +51,6 @@ class Statistics:
     #povratna vrednost je Series
     def stat_max(self):
         return self.dataset.max()
-
-
-    
-
-
-
-
-
 
 #proba
 #ucitavanje podataka
