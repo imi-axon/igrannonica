@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BackApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/projects")]
     [ApiController]
     public class ProjectController : ControllerBase
     {
@@ -17,22 +17,23 @@ namespace BackApi.Controllers
             this.service = service;
         }
 
-        [HttpPost("noviproj")]
-        public async Task<ActionResult<string>> NoviProjekat(ProjectAPI req)
+        [HttpPost]
+        public async Task<ActionResult<string>> NoviProjekat([FromBody] ProjectAPI req)
         {
+            //POTREBNO IZVADITI USER_ID IZ WEB TOKENA!!!
             Boolean rez;
             rez = service.CreateProject(req);
             if (rez)
                 return Ok("Uspesno Kreiran");
-            else return BadRequest("Neka Greska");
+            else return BadRequest("Projekat sa ovim imenom vec postoji");
         }
 
         [HttpDelete("{projid}/delete")]
-        public async Task<ActionResult<string>> DeleteProject(ProjectAPI req, int projid)
+        public async Task<ActionResult<string>> DeleteProject([FromBody] ProjectAPI req, int projid)
         {
             Boolean rez = service.DeleteProject(projid,req.User_id);
             if (rez)
-                return Ok("xd");
+                return Ok("Projekat izbrisan");
             else return BadRequest("Greska pri brisanju");
         }
     }

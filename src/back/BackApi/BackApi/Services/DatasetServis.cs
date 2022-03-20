@@ -1,11 +1,17 @@
 ﻿using BackApi.Entities;
 using BackApi.Models;
+using CsvHelper;
+using System.IO;
+using System.Globalization;
+using System.Linq;
 
 namespace BackApi.Services
 {
     public interface IDatasetServis
     {
-        public string Novi(DatasetApi model,int projid);
+        public void Novi(DatasetApi model,int projid);
+
+        public dynamic daLiPostoji(int projectID, out Boolean uspeh);
     }
 
     public class DatasetServis : IDatasetServis
@@ -19,7 +25,7 @@ namespace BackApi.Services
             this.configuration = configuration;
         }
 
-        public string Novi(DatasetApi model,int projid)
+        public void Novi(DatasetApi model,int projid)
         {
 
             var Dataset = new Dataset();
@@ -48,7 +54,37 @@ namespace BackApi.Services
             //string xd= "n1;n2;n3;out\r1; 1; 0; 1\r1; 0; 0; 1\r0; 0; 1; 1\r1; 0; 1; 1\r0; 0; 0; 0\r";
             File.WriteAllTextAsync(datafile, model.filecontent);
 
-            return datafile;
+            //return datafile;
+        }
+
+        public dynamic daLiPostoji(int projectID, out Boolean uspeh)
+        {
+            var rez = kontext.Projects.FirstOrDefault(x => x.Id == projectID);
+            if(rez == null)
+            {
+                uspeh = false;
+                return "Ne postoji dati projekat";
+            }    
+            else
+            {
+                foreach(Dataset d in kontext.Datasets)
+                {
+                    if(d.ProjectId == projectID)
+                    {
+                        using(var streamReader = new StreamReader(d.Path))
+                        {
+                            using(var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
+                            {
+                                var records = csvReader.GetRecords<dynamic>().ToList();
+                                uspeh = true;
+                                return records;
+                            }
+                        }
+                    }
+                }
+                uspeh=false;
+                return "Dati projekat nema ni jedan DataSet!";
+            }
         }
     }
 }
