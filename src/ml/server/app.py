@@ -1,12 +1,15 @@
-from util.text import *
+from const import ROOT_ROUTE
+from util.csv import *
+from util.json import *
 from flask import Flask, request
 
 app = Flask(__name__)
+CROUTE = ROOT_ROUTE + 'dataset/'
 
 # ==== Routes ====
 
 # Aktivnost: Add Dataset
-@app.route('/api/dataset/validate/csv', methods=['POST'])
+@app.route(CROUTE+'validate/csv', methods=['POST'])
 def validate_csv():
 
     print('Pocetak kontrolera (za Add Dataset)')
@@ -20,7 +23,7 @@ def validate_csv():
 
 
 # Aktivnost: Get Dataset
-@app.route('/api/dataset/convert/json', methods=['POST'])
+@app.route(CROUTE+'convert/json', methods=['POST'])
 def convert_csv_to_json():
 
     print('Pocetak kontrolera (za Get Dataset)')
@@ -41,7 +44,7 @@ def convert_csv_to_json():
 
 
 # Aktivnost: Edit Dataset
-@app.route('/api/dataset/edit', methods=['POST'])
+@app.route(CROUTE+'edit', methods=['POST'])
 def edit_dataset():
 
     pass
