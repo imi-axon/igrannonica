@@ -1,5 +1,6 @@
 ﻿using BackApi.Entities;
 using BackApi.Models;
+using System.Text;
 
 namespace BackApi.Services
 {
@@ -7,6 +8,9 @@ namespace BackApi.Services
     {
         Boolean CreateProject(ProjectAPI model);
         Boolean DeleteProject(int projid,int userid);
+        string ListProjects(int userid);
+        string GetProjById(int projid, int userid);
+        Boolean EditProject(int projid, ProjectAPI proj);
     }
     public class ProjectService:IProjectService
     {
@@ -47,7 +51,7 @@ namespace BackApi.Services
             return true;
         }
 
-        public void DeleteDataset(int datasetid)    //implementacija ce biti pomerena u dataset servis
+        private void DeleteDataset(int datasetid)    //implementacija ce biti pomerena u dataset servis
         {
             try
             {
@@ -59,7 +63,7 @@ namespace BackApi.Services
 
         }
 
-        public void DeleteNN(int nnid)      //implementacija ce biti pomerena u NN servis
+        private void DeleteNN(int nnid)      //implementacija ce biti pomerena u NN servis
         {
             try
             {
@@ -98,6 +102,57 @@ namespace BackApi.Services
                 return true;
             }
             return false;
+        }
+
+        public string ListProjects(int userid)
+        {
+            var rez = new StringBuilder();
+            rez.Append("[");
+            List<Project> lista= context.Projects.Where(x => x.User_id == userid).ToList();
+            foreach(Project p in lista)
+            {
+                rez.Append("{");
+                rez.Append("\"" +"ProjectId"+ "\":" + "\"" +p.Id+ "\",");
+                rez.Append("\"" + "Name" + "\":" + "\"" + p.Name + "\",");
+                rez.Append("\"" + "Public" + "\":" + "\"" + p.Public + "\",");
+                rez.Append("\"" + "Description" + "\":" + "\"" + p.Description + "\"");
+                rez.Append("},");
+            }
+            if(rez.Length>2) rez.Remove(rez.Length - 1, 1); //posto kasnije gleda da li je rez="[]" tj prazan array
+            rez.Append("]");
+            return rez.ToString();
+        }
+
+        public string GetProjById(int projid, int userid)
+        {
+            var rez = new StringBuilder();
+            var proj = context.Projects.Where(x => x.User_id == userid && x.Id == projid);
+            foreach (Project p in proj) 
+            {
+                rez.Append("{");
+                rez.Append("\"" + "ProjectId" + "\":" + "\"" + p.Id + "\",");
+                rez.Append("\"" + "Name" + "\":" + "\"" + p.Name + "\",");
+                rez.Append("\"" + "Public" + "\":" + "\"" + p.Public + "\",");
+                rez.Append("\"" + "Description" + "\":" + "\"" + p.Description + "\"");
+                rez.Append("}");
+            }
+
+            return rez.ToString();
+        }
+
+        public Boolean EditProject(int projid,ProjectAPI proj)
+        {
+            Boolean rez;
+            if (projid != proj.Id)
+                return rez = false;
+            var edited = context.Projects.Find(projid);
+            edited.Name = proj.Name;
+            edited.Description = proj.Description;
+            edited.Public = proj.Public;
+            edited.User_id = proj.User_id;
+            context.SaveChanges();
+            rez = true;
+            return rez;
         }
     }
 }

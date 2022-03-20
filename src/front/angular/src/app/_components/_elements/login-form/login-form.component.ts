@@ -4,6 +4,9 @@ import { regExp } from 'src/app/_utilities/_constants/regExp';
 import { Router } from '@angular/router';
 import { LoginService } from 'src/app/_utilities/_services/login.service';
 import { User } from 'src/app/_utilities/_data-types/models';
+import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
+import { NavbarComponent } from '../navbar/navbar.component';
+import { AuthService } from 'src/app/_utilities/_services/auth.service';
 
 
 @Component({
@@ -17,7 +20,8 @@ export class LoginFormComponent implements OnInit {
   
   constructor(
     private loginService:LoginService,
-    private router:Router
+    private router:Router,
+    private authService:AuthService
   ) { }
 
    private pattUsername = regExp.pattUsername;
@@ -31,8 +35,8 @@ export class LoginFormComponent implements OnInit {
 
   onSubmit(f:NgForm)
   {
-    console.log(f.value);
-    console.log(f.valid);
+    // console.log(f.value);
+    // console.log(f.valid);
 
     if (!this.invalidUsername) {
       if(!this.invalidPass){
@@ -53,7 +57,6 @@ export class LoginFormComponent implements OnInit {
   
   public checkUsername(){
     this.invalidUsername=false;
-    console.log(this.login.username);
     if(!this.pattUsername.test(this.login.username)){
       this.invalidUsername = true;
       console.log("netacan username")
@@ -68,11 +71,13 @@ export class LoginFormComponent implements OnInit {
   }
 
   handleSuccess(self: any) {
-    console.log("Tacno");
-    
+    //console.log("Tacno jeeeeeee");
+    self.router.navigate(RedirectRoutes.ON_LOGIN); //SELF, NE THIS
+    self.authService.logovan=true;
   }
 
   handleError(self: any, message: string) {
+    console.log("GRESKA")
     self.errorMessage = message;
     self.isSignUpFailed = true;
   }

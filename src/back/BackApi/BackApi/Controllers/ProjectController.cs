@@ -36,5 +36,31 @@ namespace BackApi.Controllers
                 return Ok("Projekat izbrisan");
             else return BadRequest("Greska pri brisanju");
         }
+
+        [HttpGet("{projid}")]
+        public async Task<ActionResult<string>> GetProjById(int projid,int userid)
+        {
+            var rez = service.GetProjById(projid, userid);
+            if (rez != "")
+                return Ok(rez);
+            else return NotFound();
+        }
+        [HttpGet]
+        public async Task<ActionResult<string>> ListProjects(int userid)
+        {
+            var rez = service.ListProjects(userid);
+            if (rez != "[]")
+                return Ok(rez);
+            else return NotFound();
+        }
+
+        [HttpPut("{projid}")]
+        public async Task<ActionResult<string>> EditProject(int projid,ProjectAPI req)
+        {
+            Boolean rez = service.EditProject(projid,req);
+            if (rez)
+                return Ok("Uspesno Izmenjeni Detalji");
+            else return NotFound();
+        }
     }
 }

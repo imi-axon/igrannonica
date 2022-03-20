@@ -30,6 +30,7 @@ namespace BackApi.Controllers
 
             return await response.Content.ReadAsStringAsync();
         }
+        
         [HttpPost("{id}/dataset")]
         public async Task<ActionResult<dynamic>> NewDataSet(int id, [FromBody] DatasetApi req)
         {
@@ -43,5 +44,33 @@ namespace BackApi.Controllers
 
             return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Ne valja CSV." });
         }
+
+        [HttpDelete("{projid}")]
+        public async Task<ActionResult<string>> BrisiDataset(int projid)
+        {
+            var rez = datasrv.Brisi(projid);
+            if (rez)
+                return Ok("Uspesno Obrisan");
+            else return BadRequest("Vec obrisan ili ne postoji");
+        }
+
+        [HttpGet("{projid}")]
+        public async Task<ActionResult<string>> ListajDataset(int projid)
+        {
+            var rez = datasrv.Listaj(projid);
+            if (rez != "[]")
+                return Ok(rez);
+            else return NotFound("Ne postoji dataset");
+        }
+
+        [HttpGet("{projid}/procitaj")]
+        public async Task<ActionResult<string>> ProcitajDataset(int projid,Boolean main)
+        {
+            var rez = datasrv.Procitaj(projid,main);
+            if (rez != null)
+                return Ok(rez);
+            else return NotFound("Ne postoji dataset");
+        }
+
     }
 }
