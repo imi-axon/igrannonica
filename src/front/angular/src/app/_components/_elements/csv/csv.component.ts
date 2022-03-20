@@ -15,6 +15,8 @@ export class CsvComponent implements OnInit {
   @Output() public csv:string;
   
   @Output() jsonLoaded = new EventEmitter<any>();
+  @Output() fileError = new EventEmitter<any>();
+  @Output() fileChosen = new EventEmitter<any>();
 
   
   constructor(private ngxCsvParser: NgxCsvParser) { }
@@ -24,6 +26,9 @@ export class CsvComponent implements OnInit {
   
   
   public izabranFajl(event: Event){
+    this.fileChosen.emit();
+    console.log("FILE CHOSEN");
+    
     //console.log(event);
     this.poruka="";
     const target = event.target as HTMLInputElement;
@@ -31,11 +36,13 @@ export class CsvComponent implements OnInit {
     
     if(!file){
       console.log("Uneti fajl nije pronadjen u input komponenti!");
+      this.fileError.emit();
       return;
     }
     
     if(file.type != "text/csv" && file.type!="application/vnd.ms-excel"){
       this.poruka = "Uneti fajl mora biti u .csv formatu!";
+      this.fileError.emit();
       return;
     }
     
@@ -51,6 +58,7 @@ export class CsvComponent implements OnInit {
       
       if(this.csv.trim() === ""){
         this.poruka = "Uneti fajl ne sme biti prazan!";
+        this.fileError.emit();
         return;
       }
       
@@ -69,7 +77,7 @@ export class CsvComponent implements OnInit {
         this.tableData = next;
         
         this.jsonLoaded.emit(this.tableData);
-        
+        console.log("FILE LOADED");
       }
     ); 
   }

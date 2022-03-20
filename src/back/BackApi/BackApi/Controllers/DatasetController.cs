@@ -2,10 +2,11 @@
 using BackApi.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace BackApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/projects")]
     [ApiController]
     public class DatasetController : ControllerBase
     {
@@ -15,13 +16,61 @@ namespace BackApi.Controllers
             datasrv = datasetServis;
         }
 
-        [HttpPost("{projid}/NoviDataset")]
-        public async Task<ActionResult<string>> NoviDataset(DatasetApi req,int projid)
+        [HttpGet("{id}/dataset")]
+        public async Task<ActionResult<dynamic>> Get(int id)
         {
+            //UKOLIKO KORISNIK NIJE ULOGOVAN VRACA UNAUTHORIZED
+            Boolean uspeh;
+            string pom = datasrv.daLiPostoji(id, out uspeh);
+            if(!uspeh)
+                return NotFound(pom);
+            
+            //string tekst = "n1;n2;n3;out\r1; 1; 0; 1\r1; 0; 0; 1\r0; 0; 1; 1\r1; 0; 1; 1\r0; 0; 0; 0\r";
+            var response = await KonekcijaSaML.convertCSVstring(pom);
 
-            var xd = datasrv.Novi(req,projid);
-
-            return Ok(xd);
+            return await response.Content.ReadAsStringAsync();
         }
+        
+        [HttpPost("{id}/dataset")]
+        public async Task<ActionResult<dynamic>> NewDataSet(int id, [FromBody] DatasetApi req)
+        {
+            var response = await KonekcijaSaML.validateCSVstring(req.filecontent);
+
+            if (response.StatusCode == HttpStatusCode.Created)
+            {
+                datasrv.Novi(req, id);
+                return StatusCode(StatusCodes.Status200OK, new { message = "Sve je u redu." });
+            }
+
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Ne valja CSV." });
+        }
+
+        [HttpDelete("{projid}")]
+        public async Task<ActionResult<string>> BrisiDataset(int projid)
+        {
+            var rez = datasrv.Brisi(projid);
+            if (rez)
+                return Ok("Uspesno Obrisan");
+            else return BadRequest("Vec obrisan ili ne postoji");
+        }
+
+        [HttpGet("{projid}")]
+        public async Task<ActionResult<string>> ListajDataset(int projid)
+        {
+            var rez = datasrv.Listaj(projid);
+            if (rez != "[]")
+                return Ok(rez);
+            else return NotFound("Ne postoji dataset");
+        }
+
+        [HttpGet("{projid}/procitaj")]
+        public async Task<ActionResult<string>> ProcitajDataset(int projid,Boolean main)
+        {
+            var rez = datasrv.Procitaj(projid,main);
+            if (rez != null)
+                return Ok(rez);
+            else return NotFound("Ne postoji dataset");
+        }
+
     }
 }

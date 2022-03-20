@@ -1,0 +1,1 @@
+export const JWT_HEADER_NAME:string = 'Json-Web-Token';

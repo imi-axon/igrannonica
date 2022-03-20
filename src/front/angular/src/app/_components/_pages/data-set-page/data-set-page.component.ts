@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
+import { LoaderComponent } from '../../_elements/loader/loader.component';
 
 @Component({
   selector: 'app-data-set-page',
@@ -15,12 +16,12 @@ export class DataSetPageComponent implements OnInit {
   private TEST_PROJECT_ID: number = 99999;
   
   constructor(private datasetService: DatasetService, private router: Router) { }
-
+  
   ngOnInit(): void {
     
   }
   
-  public showDataset(data:any){
+  public showDataset(){
     this.datasetHidden = false;
   }
   
