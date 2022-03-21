@@ -7,7 +7,7 @@ export class HeaderUtil
     static jwtOnlyHeaders(): HttpHeaders
     {
         let obj: { [key: string]: string } = {};
-        obj[JWT_HEADER_NAME] = JWTUtil.get();
+        obj[JWT_HEADER_NAME] = 'bearer ' + JWTUtil.get();
         return new HttpHeaders(obj);
     }
 }

@@ -24,12 +24,12 @@ namespace BackApi.Controllers
         public async Task<ActionResult<string>> NoviProjekat([FromBody] ProjectAPI req)
         {
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized("Ulogujte se");
+            if (userid == -1) return Unauthorized();
             Boolean rez;
             rez = service.CreateProject(req,userid);
             if (rez)
-                return Ok("Uspesno Kreiran");
-            else return BadRequest("Projekat sa ovim imenom vec postoji");
+                return Ok();
+            else return BadRequest();
         }
 
         [HttpDelete("{projid}/delete")]
