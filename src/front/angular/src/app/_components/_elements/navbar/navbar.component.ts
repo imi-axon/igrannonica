@@ -20,6 +20,7 @@ export class NavbarComponent implements OnInit {
     JWTUtil.delete();
     this.router.navigate(RedirectRoutes.ON_LOGOUT);
     this.auth.logovan=false;
+    this.auth.korisnickoIme='';
   }
 
 }
