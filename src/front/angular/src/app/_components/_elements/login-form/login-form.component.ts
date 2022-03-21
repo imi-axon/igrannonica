@@ -7,6 +7,7 @@ import { User } from 'src/app/_utilities/_data-types/models';
 import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { AuthService } from 'src/app/_utilities/_services/auth.service';
+import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
 
 
 @Component({
@@ -72,8 +73,10 @@ export class LoginFormComponent implements OnInit {
 
   handleSuccess(self: any) {
     //console.log("Tacno jeeeeeee");
-    self.router.navigate(RedirectRoutes.ON_LOGIN); //SELF, NE THIS
     self.authService.logovan=true;
+    self.authService.korisnickoIme=JWTUtil.getUsername();
+    self.router.navigate(RedirectRoutes.ON_LOGIN); //SELF, NE THIS
+ 
   }
 
   handleError(self: any, message: string) {
