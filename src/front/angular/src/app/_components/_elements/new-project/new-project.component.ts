@@ -21,10 +21,7 @@ export class NewProjectComponent implements OnInit {
     if(f.value.public=='') this.newProject.isPublic=false;
     else this.newProject.isPublic=f.value.public;
 
-    // console.log(f.value);
-    // console.log(this.newProject.name,this.newProject.description,this.newProject.isPublic);
-
-    this.newProjectService.newProject(this.newProject,this,this.handleSuccess,this.handleError,this.handleError);
+    this.newProjectService.newProject(this.newProject,this,this.handleSuccess,this.handleError);
 
   }
 
@@ -34,9 +31,11 @@ export class NewProjectComponent implements OnInit {
   }
 
   handleError(self: any, message: string) {
-    self.errorMessage = message;
-    self.isSignUpFailed = true;
+     console.log("netacno")
+    // self.errorMessage = message;
   }
+
+
 
   ngOnInit(): void {
   }

@@ -8,7 +8,6 @@ export class HeaderUtil
     {
         let obj: { [key: string]: string } = {};
         obj[JWT_HEADER_NAME] = JWTUtil.get();
-        
         return new HttpHeaders(obj);
     }
 }

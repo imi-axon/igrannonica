@@ -14,7 +14,7 @@ export class LoginService {
     this.loginAPI.login(applicantData).subscribe(
 
       // Success
-      (response) => {
+      (response:any) => {
         if (response.status== HttpStatusCode.Ok) { 
         //  console.log("TACNO");
           JWTUtil.store(response.body.v);
