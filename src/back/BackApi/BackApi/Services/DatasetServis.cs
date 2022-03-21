@@ -10,9 +10,9 @@ namespace BackApi.Services
 {
     public interface IDatasetServis
     {
-        public void Novi(DatasetApi model,int projid);
-        public dynamic daLiPostoji(int projectID, out Boolean uspeh);
-        public Boolean Brisi(int datasetid);
+        public Boolean Novi(DatasetApi model,int projid,int userid);
+        public dynamic daLiPostoji(int projectID, out Boolean uspeh, int userid);
+        public Boolean Brisi(int projid,int userid);
         public string Listaj(int projid);
         public string Procitaj(int projid, Boolean main);
     }
@@ -28,8 +28,11 @@ namespace BackApi.Services
             this.configuration = configuration;
         }
 
-        public void Novi(DatasetApi model,int projid)
+        public Boolean Novi(DatasetApi model,int projid,int userid)
         {
+            var tmp= kontext.Projects.FirstOrDefault(x=> x.Id==projid && x.User_id==userid); // provera vlasnistva projekta pre dodavanja dataset-a
+            if (tmp == null)
+                return false;
 
             var Dataset = new Dataset();
             Dataset.Name = "Default"; //moze se promeniti ukoliko bude implementovano vise dataseta po projektu
@@ -58,16 +61,17 @@ namespace BackApi.Services
             //string xd= "n1;n2;n3;out\r1; 1; 0; 1\r1; 0; 0; 1\r0; 0; 1; 1\r1; 0; 1; 1\r0; 0; 0; 0\r";
             File.WriteAllTextAsync(datafile, model.filecontent);
 
+            return true;
             //return datafile;
         }
 
-        public dynamic daLiPostoji(int projectID, out Boolean uspeh)
+        public dynamic daLiPostoji(int projectID, out Boolean uspeh,int userid)
         {
-            var rez = kontext.Projects.FirstOrDefault(x => x.Id == projectID);
+            var rez = kontext.Projects.FirstOrDefault(x => x.Id == projectID && x.User_id==userid);
             if(rez == null)
             {
                 uspeh = false;
-                return "Ne postoji dati projekat";
+                return "Ne postoji dati projekat ili vi niste njegov vlasnik";
             }    
             else
             {
@@ -91,8 +95,11 @@ namespace BackApi.Services
             }
         }
 
-        public Boolean Brisi(int projid)
+        public Boolean Brisi(int projid,int userid)
         {
+            var tmp = kontext.Projects.FirstOrDefault(x => x.Id == projid && x.User_id == userid); // provera vlasnistva projekta pre brisanja dataset-a
+            if (tmp == null)
+                return false;
 
             List<Dataset> lista= kontext.Datasets.Where(x=> x.ProjectId == projid).ToList();
             var dataset = lista[0];
