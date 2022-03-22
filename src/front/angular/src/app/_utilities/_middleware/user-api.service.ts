@@ -7,12 +7,12 @@ import { HeaderUtil } from '../_helpers/http-util';
 @Injectable({
   providedIn: 'root'
 })
-export class RegistrationApiService {
+export class UserApiService {
   
   constructor(private http: HttpClient) { }
   
   
-  sendRegistration(applicantData: any): Observable<HttpResponse<any>> {
+  Register(applicantData: any): Observable<HttpResponse<any>> {
     
     return this.http.post<any>(
       apiProperties.url + "/api/users",
@@ -23,5 +23,7 @@ export class RegistrationApiService {
       }
     );
   }
+  
+  // Login
   
 }

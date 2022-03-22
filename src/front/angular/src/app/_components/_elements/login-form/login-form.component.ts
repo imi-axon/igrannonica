@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { regExp } from 'src/app/_utilities/_constants/regExp';
 import { Router } from '@angular/router';
 import { LoginService } from 'src/app/_utilities/_services/login.service';
-import { User } from 'src/app/_utilities/_data-types/models';
+import { UserRegistration } from 'src/app/_utilities/_data-types/models';
 import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { AuthService } from 'src/app/_utilities/_services/auth.service';
@@ -17,7 +17,7 @@ import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
 })
 export class LoginFormComponent implements OnInit {
 
-  public login:User = new User();
+  public login:UserRegistration = new UserRegistration();
   
   constructor(
     private loginService:LoginService,

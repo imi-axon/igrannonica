@@ -12,11 +12,11 @@ export class DatasetApiService {
   constructor(private http:HttpClient) { }
   
   // POST DATASET api/projects/{id}/dataset
-  public postCSV(csvStr:String, project_id:number): Observable<HttpResponse<any>>{
+  public AddDataset(csvStr:String, project_id:number): Observable<HttpResponse<any>>{
     return this.http.post<any>(
       apiProperties.url + '/api/projects/' + project_id + '/dataset',
       { 
-        csvstring:csvStr 
+        dataset:csvStr 
       },
       { 
         observe: 'response',
@@ -27,7 +27,7 @@ export class DatasetApiService {
   
   
   // GET DATASET api/projects/{id}/dataset
-  public getCSV(project_id:number): Observable<HttpResponse<any>>{
+  public GetDataset(project_id:number): Observable<HttpResponse<any>>{
     return this.http.get<any>(
       apiProperties.url + '/api/projects/' + project_id + '/dataset',
       {
