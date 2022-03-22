@@ -34,9 +34,19 @@ export class DatasetApiService {
         observe: 'response',
         headers: HeaderUtil.jwtOnlyHeaders()
       }
-    )
+    );
   }
   
+  
+  public GetStatistics(project_id: number, main: boolean){
+    return this.http.get<any>(
+      apiProperties.url + '/api/projects/' + project_id + '/dataset/' + main + '/statistics',
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    );
+  }
   
   
   
