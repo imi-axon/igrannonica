@@ -17,7 +17,7 @@ namespace BackApi.Services
         public int GetUserId()
         {
             int rez= -1; // ako nije ulogovan vraca -1
-            if (httpContext.HttpContext != null)
+            if (httpContext.HttpContext.User.FindFirstValue("id") != null)
             {
                 rez = int.Parse(httpContext.HttpContext.User.FindFirstValue("id"));
             }
