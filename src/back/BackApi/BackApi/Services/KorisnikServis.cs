@@ -78,7 +78,7 @@ namespace BackApi.Services
             var korisnik= new Korisnik();
             korisnik.Username = model.Username;
             korisnik.Lastname = model.Lastname;
-            korisnik.Name=model.Name;
+            korisnik.Name=model.Firstname;
             korisnik.Email=model.Email;
 
             KreirajPWHash(model.Password, out byte[] pwHash, out byte[] pwSalt);

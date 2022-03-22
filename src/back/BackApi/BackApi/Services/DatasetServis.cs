@@ -5,6 +5,7 @@ using System.IO;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 
 namespace BackApi.Services
 {
@@ -145,7 +146,7 @@ namespace BackApi.Services
 
         }
 
-        public string Procitaj(int projid,Boolean main)
+        public string Procitaj(int projid, Boolean main)
         {
             var rez = "";
             List<Dataset> lista = kontext.Datasets.Where(x => x.ProjectId == projid && x.Main == main).ToList();
@@ -162,10 +163,7 @@ namespace BackApi.Services
             content.Remove(content.Length - 2, 2);
             var str = content.ToString();
             
-            //rez=pozivML...
-            //pozovi ml servis za parsiranje csv-a
-
-            return str; //return rez kad implement poziv
+            return str; //vraca csvstring, iz kontrolera zove ml deo
         }
         
     }

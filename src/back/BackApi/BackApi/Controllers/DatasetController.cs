@@ -83,7 +83,11 @@ namespace BackApi.Controllers
         {
             var rez = datasrv.Procitaj(projid,main);
             if (rez != null)
-                return Ok(rez);
+            {
+                var response = await KonekcijaSaML.convertCSVstring(rez);
+
+                return await response.Content.ReadAsStringAsync();
+            }
             else return NotFound("Ne postoji dataset");
         }
 
@@ -91,16 +95,15 @@ namespace BackApi.Controllers
         public async Task<ActionResult<string>> DajStatistiku(int id, Boolean main)
         {
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized("Ulogujte se");
-
+            if (userid == -1) return Unauthorized();
             string csvstring = datasrv.Procitaj(id, main);
 
             var response = await KonekcijaSaML.getStatistic(csvstring);
             if (response.StatusCode == HttpStatusCode.Created)
             {
-                return Ok(response.ToString());
+                return Ok(response);
             }
-            return BadRequest(response.ToString());
+            return BadRequest();
         }
 
     }

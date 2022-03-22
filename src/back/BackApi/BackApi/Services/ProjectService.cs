@@ -33,6 +33,7 @@ namespace BackApi.Services
             project.Name = model.Name;
             project.Description = model.Description;
             project.User_id = userid;
+            project.Public = model.Public;
             project.Creation_Date = DateTime.Now;
 
             context.Projects.Add(project);
