@@ -11,15 +11,19 @@ namespace BackApi.Controllers
     public class UsersController : ControllerBase
     {
         private IKorisnikServis korsrv;
+        private IJwtServis jwtsrv;
 
-        public UsersController(IKorisnikServis korisnikServis)
+        public UsersController(IKorisnikServis korisnikServis,IJwtServis jwtServis)
         {
             this.korsrv = korisnikServis;
+            this.jwtsrv = jwtServis;
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> Register(KorisnikApi req)
+        public async Task<ActionResult<string>> Register(KorisnikRegister req)
         {
+            int userid = jwtsrv.GetUserId();
+            if (userid != -1) return Forbid();
             Boolean tmp = korsrv.Register(req);
             string rez = "";
             if (tmp)
@@ -35,8 +39,10 @@ namespace BackApi.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(KorisnikApi req)
+        public async Task<ActionResult<string>> Login(KorisnikLogin req)
         {
+            int userid = jwtsrv.GetUserId();
+            if (userid != -1) return Forbid();
             Boolean uspeh;
             var rez = korsrv.Login(req, out uspeh);
             if (uspeh)

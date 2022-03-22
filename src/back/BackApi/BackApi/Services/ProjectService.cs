@@ -6,11 +6,11 @@ namespace BackApi.Services
 {
     public interface IProjectService
     {
-        Boolean CreateProject(ProjectAPI model,int userid);
+        Boolean CreateProject(ProjectPostPut model,int userid);
         Boolean DeleteProject(int projid,int userid);
         string ListProjects(int userid);
         string GetProjById(int projid, int userid);
-        Boolean EditProject(int projid, ProjectAPI proj,int userid);
+        Boolean EditProject(int projid, ProjectPostPut proj,int userid);
     }
     public class ProjectService:IProjectService
     {
@@ -22,7 +22,7 @@ namespace BackApi.Services
             this.context = context;
             this.configuration = configuration;
         }
-        public Boolean CreateProject(ProjectAPI model,int userid)
+        public Boolean CreateProject(ProjectPostPut model,int userid)
         {
             if(context.Projects.Any(x=> x.Name == model.Name))
             {
@@ -140,11 +140,9 @@ namespace BackApi.Services
             return rez.ToString();
         }
 
-        public Boolean EditProject(int projid,ProjectAPI proj,int userid)
+        public Boolean EditProject(int projid,ProjectPostPut proj,int userid)
         {
             Boolean rez;
-            if (projid != proj.Id)
-                return rez = false;
             var edited = context.Projects.Find(projid);
             if(edited == null)
                 return rez = false;

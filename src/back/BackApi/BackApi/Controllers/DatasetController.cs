@@ -27,9 +27,12 @@ namespace BackApi.Controllers
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized("Ulogujte se");
             Boolean uspeh;
-            string pom = datasrv.daLiPostoji(id, out uspeh,userid);
+            Boolean owner;
+            string pom = datasrv.daLiPostoji(id, out uspeh,userid,out owner);
             if(!uspeh)
                 return NotFound(pom);
+            if (!owner)
+                return Forbid(pom);
             
             //string tekst = "n1;n2;n3;out\r1; 1; 0; 1\r1; 0; 0; 1\r0; 0; 1; 1\r1; 0; 1; 1\r0; 0; 0; 0\r";
             var response = await KonekcijaSaML.convertCSVstring(pom);
@@ -38,7 +41,7 @@ namespace BackApi.Controllers
         }
         
         [HttpPost("{id}/dataset")]
-        public async Task<ActionResult<dynamic>> NewDataSet(int id, [FromBody] DatasetApi req)
+        public async Task<ActionResult<dynamic>> NewDataSet(int id, [FromBody] DatasetGetPost req)
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized("Ulogujte se");

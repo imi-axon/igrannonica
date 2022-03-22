@@ -21,7 +21,7 @@ namespace BackApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> NoviProjekat([FromBody] ProjectAPI req)
+        public async Task<ActionResult<string>> NoviProjekat([FromBody] ProjectPostPut req)
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
@@ -33,7 +33,7 @@ namespace BackApi.Controllers
         }
 
         [HttpDelete("{projid}/delete")]
-        public async Task<ActionResult<string>> DeleteProject([FromBody] ProjectAPI req, int projid)
+        public async Task<ActionResult<string>> DeleteProject(int projid)
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized("Ulogujte se");
@@ -65,7 +65,7 @@ namespace BackApi.Controllers
         }
 
         [HttpPut("{projid}")]
-        public async Task<ActionResult<string>> EditProject(int projid,ProjectAPI req)
+        public async Task<ActionResult<string>> EditProject(int projid,ProjectPostPut req)
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized("Ulogujte se");
