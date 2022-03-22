@@ -34,9 +34,7 @@ th, td {
 }
 
 .data-cell{word-break: break-all;
-    border-left: solid 2px #00246d;
-    border-top: solid 2px #00246d;
-    border-bottom: solid 2px #00246d;
+    outline: solid 1px #00246d;
 }
 
 .column100 {
@@ -54,6 +52,7 @@ th, td {
     left: 0px;
     min-width: 100px;
     background-color: #002864 !important;
+    outline: solid 2px #001330;
 }
 
 .row100 td {
@@ -74,7 +73,7 @@ th, td {
 }
 
 .head .column100{
-    border-left: solid 2px #002864;
+    outline: solid 1px #002864;
 }
 
 .statistics{
@@ -84,7 +83,7 @@ th, td {
     padding: 0px;
 }
 .statistics th{
-    border-left: solid 2px #002864;
+    outline: solid 1px #002864;
     z-index: 1;
     padding: 15px;
     padding-left: 25px;

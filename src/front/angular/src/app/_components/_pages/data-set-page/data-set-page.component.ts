@@ -10,7 +10,8 @@ import { LoaderComponent } from '../../_elements/loader/loader.component';
 })
 export class DataSetPageComponent implements OnInit {
   
-  public datasetHidden:boolean = true;
+  public datasetHidden: boolean = true;
+  public errorMessage: string = "";
   
   // TEST PROJECT ID, IZBRISATI KADA BUDEMO IMALI PRAVI ID
   private TEST_PROJECT_ID: number = 99999;
@@ -26,12 +27,22 @@ export class DataSetPageComponent implements OnInit {
   }
   
   public sendDataset(csv: string){
-    this.datasetService.addCSV(csv, this.TEST_PROJECT_ID, this, this.postSuccess);
+    this.errorMessage = "";
+    this.datasetService.AddDataset(csv, this.TEST_PROJECT_ID, this, this.handleSuccess, this.handleBadDataFormat, this.handleUnauthorized);
   }
   
-  private postSuccess(self:any){
+  private handleSuccess(self:any){
     console.log("Uspesan POST dataseta.");
     self.router.navigate(['statistics']);
+  }
+  
+  
+  private handleBadDataFormat(self: any, message: string){
+    this.errorMessage = message;
+  }
+  
+  private handleUnauthorized(self: any, message: string){
+    this.errorMessage = message;
   }
   
 

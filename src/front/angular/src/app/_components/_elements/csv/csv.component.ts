@@ -65,8 +65,6 @@ export class CsvComponent implements OnInit {
       this.parseToJSON(file);
     }
   }
-
-  //F-ja za pretvaranje ulaznog .csv fajla u string
   
   //F-ja za parsovanje ulaznog .csv fajla u JSON radi prikaza u tabeli
   private parseToJSON(file: File){

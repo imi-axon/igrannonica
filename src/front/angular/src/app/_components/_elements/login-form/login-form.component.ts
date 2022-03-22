@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { regExp } from 'src/app/_utilities/_constants/regExp';
 import { Router } from '@angular/router';
-import { LoginService } from 'src/app/_utilities/_services/login.service';
-import { User, UserLogin } from 'src/app/_utilities/_data-types/models';
+import { UserService } from 'src/app/_utilities/_services/user.service';
+import { UserLogin } from 'src/app/_utilities/_data-types/models';
 import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
-import { NavbarComponent } from '../navbar/navbar.component';
 import { AuthService } from 'src/app/_utilities/_services/auth.service';
 import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
 
@@ -21,7 +20,7 @@ export class LoginFormComponent implements OnInit {
   public loginUser: UserLogin = new UserLogin();
   
   constructor(
-    private loginService:LoginService,
+    private userService:UserService,
     private router:Router,
     private authService:AuthService
   ) { }
@@ -45,7 +44,7 @@ export class LoginFormComponent implements OnInit {
        this.loginUser.username=f.value.username;
        this.loginUser.password=f.value.pass;
        console.log(this.loginUser);
-       this.loginService.loginUser(this.loginUser,this,this.handleSuccess,this.handleError);
+       this.userService.loginUser(this.loginUser,this,this.handleSuccess,this.handleError);
        
       } 
       else { console.log("Lozinka nije pravilna");}

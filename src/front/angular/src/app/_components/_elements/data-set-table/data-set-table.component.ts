@@ -46,24 +46,27 @@ export class DataSetTableComponent implements OnInit, OnChanges{
     setTimeout(()=> {
       this.loadingStartedEvent.emit();
     }, 0);
-    this.datasetService.getCSV(1, this, this.successfulLoad, this.failedLoad);
+    this.datasetService.GetDataset(1, this, this.handleSuccessfulLoad, this.handleNotLoggedIn, this.handleForbidden, this.handleNotFound);
   }
   
-  public failedLoad(self:any){
+  public handleNotLoggedIn(self:any, message: string){
     
     self.loadedEvent.emit();
   }
   
-  public unauthorizedLoad(self:any){
+  public handleForbidden(self:any, message: string){
     
     self.loadedEvent.emit();
   }
   
-  public successfulLoad(self:any, data: any){
-    console.log("Ucitan datase. Obavestite u Discordu ako se ovo ispise vise puta.");
-    // self.dataJSON = self.testJSON;
+  public handleNotFound(self:any, message: string){
+    
+    self.loadedEvent.emit();
+  }
+  
+  public handleSuccessfulLoad(self:any, data: any){
     self.dataJSON = data;
-    console.log("Local dataset: " + self.dataJSON);
+    console.log("API dataset: " + self.dataJSON);
     self.keys = Object.keys(self.dataJSON[0]);
     
     self.splitData(self.dataJSON);
@@ -89,7 +92,6 @@ export class DataSetTableComponent implements OnInit, OnChanges{
   // TRENUTNO ZA TESTIRANJE BEZ BACKENDA
   public LoadDummyData(){    
     this.loadingStartedEvent.emit();
-    console.log("STARTED");
     setTimeout(()=> {
     
       console.log(this.testJSON);
@@ -102,10 +104,9 @@ export class DataSetTableComponent implements OnInit, OnChanges{
       this.splitData(this.dataJSON);
       this.currentPage = 0;
       
-      console.log("LOADED")
       this.loadedEvent.emit();
     
-  }, 1000);
+    }, 5000);
   }
   
   
