@@ -3,6 +3,7 @@ using BackApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using System.Net;
 
 namespace BackApi.Controllers
@@ -23,7 +24,6 @@ namespace BackApi.Controllers
         [HttpGet("{id}/dataset")]
         public async Task<ActionResult<dynamic>> Get(int id)
         {
-            //UKOLIKO KORISNIK NIJE ULOGOVAN VRACA UNAUTHORIZED
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized("Ulogujte se");
             Boolean uspeh;
@@ -41,7 +41,7 @@ namespace BackApi.Controllers
         }
         
         [HttpPost("{id}/dataset")]
-        public async Task<ActionResult<dynamic>> NewDataSet(int id, [FromBody] DatasetGetPost req)
+        public async Task<ActionResult<string>> NewDataSet(int id, [FromBody] DatasetGetPost req)
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized("Ulogujte se");
@@ -85,6 +85,22 @@ namespace BackApi.Controllers
             if (rez != null)
                 return Ok(rez);
             else return NotFound("Ne postoji dataset");
+        }
+
+        [HttpGet("{id}/dataset/{main}/statistics")]
+        public async Task<ActionResult<string>> DajStatistiku(int id, Boolean main)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized("Ulogujte se");
+
+            string csvstring = datasrv.Procitaj(id, main);
+
+            var response = await KonekcijaSaML.getStatistic(csvstring);
+            if (response.StatusCode == HttpStatusCode.Created)
+            {
+                return Ok(response.ToString());
+            }
+            return BadRequest(response.ToString());
         }
 
     }
