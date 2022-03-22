@@ -6,11 +6,11 @@ namespace BackApi.Services
 {
     public interface IProjectService
     {
-        Boolean CreateProject(ProjectAPI model);
+        Boolean CreateProject(ProjectPostPut model,int userid);
         Boolean DeleteProject(int projid,int userid);
-        string ListProjects(int userid);
+        string ListProjects(int userid,int pubuserid);
         string GetProjById(int projid, int userid);
-        Boolean EditProject(int projid, ProjectAPI proj);
+        Boolean EditProject(int projid, ProjectPostPut proj,int userid);
     }
     public class ProjectService:IProjectService
     {
@@ -22,7 +22,7 @@ namespace BackApi.Services
             this.context = context;
             this.configuration = configuration;
         }
-        public Boolean CreateProject(ProjectAPI model)
+        public Boolean CreateProject(ProjectPostPut model,int userid)
         {
             if(context.Projects.Any(x=> x.Name == model.Name))
             {
@@ -32,7 +32,7 @@ namespace BackApi.Services
             Project project = new Project();
             project.Name = model.Name;
             project.Description = model.Description;
-            project.User_id = model.User_id;
+            project.User_id = userid;
             project.Creation_Date = DateTime.Now;
 
             context.Projects.Add(project);
@@ -104,17 +104,29 @@ namespace BackApi.Services
             return false;
         }
 
-        public string ListProjects(int userid)
+        public string ListProjects(int userid,int pubuserid) //userid je id trenutno ulogovanog korisnika; pubuserid je id od prosledjenog username-a
         {
             var rez = new StringBuilder();
             rez.Append("[");
-            List<Project> lista= context.Projects.Where(x => x.User_id == userid).ToList();
-            foreach(Project p in lista)
+            List<Project> listapub = context.Projects.Where(x => x.User_id == pubuserid && x.Public == true).ToList();
+            foreach (Project p in listapub)
+            {
+                rez.Append("{");
+                rez.Append("\"" + "ProjectId" + "\":" + "\"" + p.Id + "\",");
+                rez.Append("\"" + "Name" + "\":" + "\"" + p.Name + "\",");
+                rez.Append("\"" + "Public" + "\":" + "\"" + p.Public + "\",");
+                rez.Append("\"" + "Creationdate" + "\":" + "\"" + p.Creation_Date + "\",");
+                rez.Append("\"" + "Description" + "\":" + "\"" + p.Description + "\"");
+                rez.Append("},");
+            }
+            List<Project> listapriv= context.Projects.Where(x => x.User_id == userid && x.Public==false).ToList();
+            foreach(Project p in listapriv)
             {
                 rez.Append("{");
                 rez.Append("\"" +"ProjectId"+ "\":" + "\"" +p.Id+ "\",");
                 rez.Append("\"" + "Name" + "\":" + "\"" + p.Name + "\",");
                 rez.Append("\"" + "Public" + "\":" + "\"" + p.Public + "\",");
+                rez.Append("\"" + "Creationdate" + "\":" + "\"" + p.Creation_Date + "\",");
                 rez.Append("\"" + "Description" + "\":" + "\"" + p.Description + "\"");
                 rez.Append("},");
             }
@@ -140,16 +152,17 @@ namespace BackApi.Services
             return rez.ToString();
         }
 
-        public Boolean EditProject(int projid,ProjectAPI proj)
+        public Boolean EditProject(int projid,ProjectPostPut proj,int userid)
         {
             Boolean rez;
-            if (projid != proj.Id)
-                return rez = false;
             var edited = context.Projects.Find(projid);
+            if(edited == null)
+                return rez = false;
+            if (edited.User_id != userid)
+                return rez = false;
             edited.Name = proj.Name;
             edited.Description = proj.Description;
             edited.Public = proj.Public;
-            edited.User_id = proj.User_id;
             context.SaveChanges();
             rez = true;
             return rez;

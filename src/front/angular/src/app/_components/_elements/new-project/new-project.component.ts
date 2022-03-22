@@ -18,13 +18,10 @@ export class NewProjectComponent implements OnInit {
   {
     this.newProject.name=f.value.projectName;
     this.newProject.description=f.value.projectDesc;
-    if(f.value.public=='') this.newProject.isPublic=false;
-    else this.newProject.isPublic=f.value.public;
+    if(f.value.public=='') this.newProject.public=false;
+    else this.newProject.public=f.value.public;
 
-    // console.log(f.value);
-    // console.log(this.newProject.name,this.newProject.description,this.newProject.isPublic);
-
-    this.newProjectService.newProject(this.newProject,this,this.handleSuccess,this.handleError,this.handleError);
+    this.newProjectService.newProject(this.newProject,this,this.handleSuccess,this.handleError);
 
   }
 
@@ -34,9 +31,11 @@ export class NewProjectComponent implements OnInit {
   }
 
   handleError(self: any, message: string) {
-    self.errorMessage = message;
-    self.isSignUpFailed = true;
+     console.log("netacno")
+    // self.errorMessage = message;
   }
+
+
 
   ngOnInit(): void {
   }

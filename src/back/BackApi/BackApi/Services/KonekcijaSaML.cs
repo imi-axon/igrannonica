@@ -29,6 +29,17 @@ namespace BackApi
 
             return result;
         }
+        public static async Task<HttpResponseMessage> getStatistic(string csvstring)
+        {
+            // Debug.WriteLine(csvstring);
+            HttpClient client = new HttpClient();
+            StringContent content = new StringContent(csvstring);
+
+            Debug.WriteLine("Salje se zahtev ML-u (za Add Dataset)");
+            var result = await client.PostAsync("http://localhost:5000/api/dataset/statistic", content);
+
+            return result;
+        }
         /*public static async Task<dynamic> getRequest(string tekst)
         {
             Debug.WriteLine(tekst);

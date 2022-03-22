@@ -10,8 +10,8 @@
                     <!-- DODATNA KOLONA-->
                     <th class="column-first"></th>
                     
-                    <th class="column100" *ngFor="let key of keys"> 
-                        {{key}} 
+                    <th class="column100" *ngFor="let column of columns"> 
+                        {{column}} 
                     </th> 
                 </tr>
             </thead>
@@ -26,8 +26,8 @@
                     </td>
                     
                     <!-- CELIJE IZ SETA-->
-                    <td class="column100 data-cell" *ngFor="let key of keys">
-                        {{ row[key] }}
+                    <td class="column100 data-cell" *ngFor="let column of columns">
+                        {{ row[column] }}
                     </td>
                     
                 </tr>
@@ -40,7 +40,7 @@
                 <!-- CELIJA PRVE KOLONE -->
                 <th class="column-first"></th>
                 
-                <th *ngFor="let key of keys"> 
+                <th *ngFor="let column of columns"> 
                     Col
                 </th> 
             </tr>

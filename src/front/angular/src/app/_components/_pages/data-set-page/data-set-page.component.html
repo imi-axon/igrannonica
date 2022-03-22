@@ -13,6 +13,8 @@
             <div class="inside-container">
                 <button class="dataset-title-button"> <h1>Dataset1</h1> </button>
                 <app-csv #csvInput (fileChosen)="loader.start()" (jsonLoaded)="datasetTable.LoadDataDirectlyFromInput($event); this.showDataset(); loader.stop();" (fileError)="loader.stop();"></app-csv>
+                
+                <p style="color: red; font-weight:bold;"> {{errorMessage}} </p>
             </div> 
             
             <loader #loader></loader>
@@ -22,6 +24,7 @@
             </div>
             
             <button class="btn btn-primary" (click)="sendDataset(csvInput.csv);"> Potvrdi </button>
+            
             
         </div>
         

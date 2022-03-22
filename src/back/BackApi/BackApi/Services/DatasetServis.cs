@@ -10,9 +10,9 @@ namespace BackApi.Services
 {
     public interface IDatasetServis
     {
-        public void Novi(DatasetApi model,int projid);
-        public dynamic daLiPostoji(int projectID, out Boolean uspeh);
-        public Boolean Brisi(int datasetid);
+        public Boolean Novi(DatasetGetPost model,int projid,int userid);
+        public dynamic daLiPostoji(int projectID, out Boolean uspeh, int userid, out Boolean owner);
+        public Boolean Brisi(int projid,int userid);
         public string Listaj(int projid);
         public string Procitaj(int projid, Boolean main);
     }
@@ -28,8 +28,11 @@ namespace BackApi.Services
             this.configuration = configuration;
         }
 
-        public void Novi(DatasetApi model,int projid)
+        public Boolean Novi(DatasetGetPost model,int projid,int userid)
         {
+            var tmp= kontext.Projects.FirstOrDefault(x=> x.Id==projid && x.User_id==userid); // provera vlasnistva projekta pre dodavanja dataset-a
+            if (tmp == null)
+                return false;
 
             var Dataset = new Dataset();
             Dataset.Name = "Default"; //moze se promeniti ukoliko bude implementovano vise dataseta po projektu
@@ -58,41 +61,55 @@ namespace BackApi.Services
             //string xd= "n1;n2;n3;out\r1; 1; 0; 1\r1; 0; 0; 1\r0; 0; 1; 1\r1; 0; 1; 1\r0; 0; 0; 0\r";
             File.WriteAllTextAsync(datafile, model.filecontent);
 
+            return true;
             //return datafile;
         }
 
-        public dynamic daLiPostoji(int projectID, out Boolean uspeh)
+        public dynamic daLiPostoji(int projectID, out Boolean uspeh,int userid,out Boolean owner)
         {
             var rez = kontext.Projects.FirstOrDefault(x => x.Id == projectID);
-            if(rez == null)
+            owner = false;
+            if (rez == null)
             {
                 uspeh = false;
                 return "Ne postoji dati projekat";
-            }    
+            }
             else
             {
-                foreach(Dataset d in kontext.Datasets)
+                if (rez.User_id != userid)
                 {
-                    if(d.ProjectId == projectID)
+                    uspeh = false;
+                    return "Vi niste vlasnik projekta";
+                }
+                else
+                {
+                    owner = true;
+                    foreach (Dataset d in kontext.Datasets)
                     {
-                        using(var streamReader = new StreamReader(d.Path))
+                        if (d.ProjectId == projectID)
                         {
-                            using(var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
+                            using (var streamReader = new StreamReader(d.Path))
                             {
-                                var records = csvReader.GetRecords<dynamic>().ToList();
-                                uspeh = true;
-                                return records;
+                                using (var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
+                                {
+                                    var records = csvReader.GetRecords<dynamic>().ToList();
+                                    uspeh = true;
+                                    return records;
+                                }
                             }
                         }
                     }
+                    uspeh = false;
+                    return "Dati projekat nema ni jedan DataSet!";
                 }
-                uspeh=false;
-                return "Dati projekat nema ni jedan DataSet!";
             }
         }
 
-        public Boolean Brisi(int projid)
+        public Boolean Brisi(int projid,int userid)
         {
+            var tmp = kontext.Projects.FirstOrDefault(x => x.Id == projid && x.User_id == userid); // provera vlasnistva projekta pre brisanja dataset-a
+            if (tmp == null)
+                return false;
 
             List<Dataset> lista= kontext.Datasets.Where(x=> x.ProjectId == projid).ToList();
             var dataset = lista[0];

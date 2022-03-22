@@ -9,8 +9,9 @@ namespace BackApi.Services
 {
     public interface IKorisnikServis
     {
-        Boolean Register(KorisnikApi model);
-        string Login(KorisnikApi model,out Boolean uspeh);
+        Boolean Register(KorisnikRegister model);
+        string Login(KorisnikLogin model,out Boolean uspeh);
+        public int UsernameToId(string username);
     }
 
     public class KorisnikServis: IKorisnikServis
@@ -64,7 +65,7 @@ namespace BackApi.Services
                 return jwt;
         }
 
-        public Boolean Register(KorisnikApi model)
+        public Boolean Register(KorisnikRegister model)
         {
             //string rez = "";
 
@@ -92,7 +93,7 @@ namespace BackApi.Services
             return true;
         }
 
-        public string Login(KorisnikApi model,out Boolean uspeh)
+        public string Login(KorisnikLogin model,out Boolean uspeh)
         {
             var kor =kontext.Korisnici.FirstOrDefault(x => x.Username == model.Username);
             var jwtoken = "";
@@ -110,6 +111,14 @@ namespace BackApi.Services
                 return "Pogresan username ili password";
             }
  
+        }
+
+        public int UsernameToId(string username)
+        {
+            var kor = kontext.Korisnici.FirstOrDefault(x => x.Username == username);
+            if(kor != null)
+                return kor.UserId;
+            return -1;
         }
     }
 }

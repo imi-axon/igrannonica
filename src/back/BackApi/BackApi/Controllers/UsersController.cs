@@ -1,5 +1,6 @@
 ﻿using BackApi.Models;
 using BackApi.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -11,15 +12,21 @@ namespace BackApi.Controllers
     public class UsersController : ControllerBase
     {
         private IKorisnikServis korsrv;
+        private IJwtServis jwtsrv;
+        private IProjectService projsrv;
 
-        public UsersController(IKorisnikServis korisnikServis)
+        public UsersController(IKorisnikServis korisnikServis,IJwtServis jwtServis,IProjectService projectService)
         {
             this.korsrv = korisnikServis;
+            this.jwtsrv = jwtServis;
+            this.projsrv = projectService;
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> Register(KorisnikApi req)
+        public async Task<ActionResult<string>> Register(KorisnikRegister req)
         {
+            int userid = jwtsrv.GetUserId();
+            if (userid != -1) return Forbid();
             Boolean tmp = korsrv.Register(req);
             string rez = "";
             if (tmp)
@@ -35,8 +42,10 @@ namespace BackApi.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(KorisnikApi req)
+        public async Task<ActionResult<string>> Login(KorisnikLogin req)
         {
+            int userid = jwtsrv.GetUserId();
+            if (userid != -1) return Forbid();
             Boolean uspeh;
             var rez = korsrv.Login(req, out uspeh);
             if (uspeh)
@@ -47,6 +56,18 @@ namespace BackApi.Controllers
                 });   
             else
                 return BadRequest(rez);
+        }
+        [HttpGet("{username}/projects")]
+        public async Task<ActionResult<string>> ListProjects(string username)
+        {
+            int userid = jwtsrv.GetUserId();
+            var pubuserid = korsrv.UsernameToId(username);
+            if (pubuserid == -1)
+                return NotFound("Korisnik sa tim username-om ne postoji");
+            var rez = projsrv.ListProjects(userid,pubuserid);
+            if (rez != "[]")
+                return Ok(rez);
+            else return NotFound("Korisnik sa tim username-om nema projekte");
         }
     }
 }
