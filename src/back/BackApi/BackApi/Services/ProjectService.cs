@@ -8,7 +8,7 @@ namespace BackApi.Services
     {
         Boolean CreateProject(ProjectPostPut model,int userid);
         Boolean DeleteProject(int projid,int userid);
-        string ListProjects(int userid);
+        string ListProjects(int userid,int pubuserid);
         string GetProjById(int projid, int userid);
         Boolean EditProject(int projid, ProjectPostPut proj,int userid);
     }
@@ -104,17 +104,29 @@ namespace BackApi.Services
             return false;
         }
 
-        public string ListProjects(int userid)
+        public string ListProjects(int userid,int pubuserid) //userid je id trenutno ulogovanog korisnika; pubuserid je id od prosledjenog username-a
         {
             var rez = new StringBuilder();
             rez.Append("[");
-            List<Project> lista= context.Projects.Where(x => x.User_id == userid).ToList();
-            foreach(Project p in lista)
+            List<Project> listapub = context.Projects.Where(x => x.User_id == pubuserid && x.Public == true).ToList();
+            foreach (Project p in listapub)
+            {
+                rez.Append("{");
+                rez.Append("\"" + "ProjectId" + "\":" + "\"" + p.Id + "\",");
+                rez.Append("\"" + "Name" + "\":" + "\"" + p.Name + "\",");
+                rez.Append("\"" + "Public" + "\":" + "\"" + p.Public + "\",");
+                rez.Append("\"" + "Creationdate" + "\":" + "\"" + p.Creation_Date + "\",");
+                rez.Append("\"" + "Description" + "\":" + "\"" + p.Description + "\"");
+                rez.Append("},");
+            }
+            List<Project> listapriv= context.Projects.Where(x => x.User_id == userid && x.Public==false).ToList();
+            foreach(Project p in listapriv)
             {
                 rez.Append("{");
                 rez.Append("\"" +"ProjectId"+ "\":" + "\"" +p.Id+ "\",");
                 rez.Append("\"" + "Name" + "\":" + "\"" + p.Name + "\",");
                 rez.Append("\"" + "Public" + "\":" + "\"" + p.Public + "\",");
+                rez.Append("\"" + "Creationdate" + "\":" + "\"" + p.Creation_Date + "\",");
                 rez.Append("\"" + "Description" + "\":" + "\"" + p.Description + "\"");
                 rez.Append("},");
             }

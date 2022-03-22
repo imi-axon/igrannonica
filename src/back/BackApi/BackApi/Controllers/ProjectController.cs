@@ -58,7 +58,7 @@ namespace BackApi.Controllers
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized("Ulogujte se");
-            var rez = service.ListProjects(userid);
+            var rez = service.ListProjects(userid,userid);
             if (rez != "[]")
                 return Ok(rez);
             else return NotFound();

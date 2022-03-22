@@ -11,6 +11,7 @@ namespace BackApi.Services
     {
         Boolean Register(KorisnikRegister model);
         string Login(KorisnikLogin model,out Boolean uspeh);
+        public int UsernameToId(string username);
     }
 
     public class KorisnikServis: IKorisnikServis
@@ -110,6 +111,14 @@ namespace BackApi.Services
                 return "Pogresan username ili password";
             }
  
+        }
+
+        public int UsernameToId(string username)
+        {
+            var kor = kontext.Korisnici.FirstOrDefault(x => x.Username == username);
+            if(kor != null)
+                return kor.UserId;
+            return -1;
         }
     }
 }

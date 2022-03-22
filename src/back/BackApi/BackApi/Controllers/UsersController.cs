@@ -1,5 +1,6 @@
 ﻿using BackApi.Models;
 using BackApi.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -12,11 +13,13 @@ namespace BackApi.Controllers
     {
         private IKorisnikServis korsrv;
         private IJwtServis jwtsrv;
+        private IProjectService projsrv;
 
-        public UsersController(IKorisnikServis korisnikServis,IJwtServis jwtServis)
+        public UsersController(IKorisnikServis korisnikServis,IJwtServis jwtServis,IProjectService projectService)
         {
             this.korsrv = korisnikServis;
             this.jwtsrv = jwtServis;
+            this.projsrv = projectService;
         }
 
         [HttpPost]
@@ -53,6 +56,18 @@ namespace BackApi.Controllers
                 });   
             else
                 return BadRequest(rez);
+        }
+        [HttpGet("{username}/projects")]
+        public async Task<ActionResult<string>> ListProjects(string username)
+        {
+            int userid = jwtsrv.GetUserId();
+            var pubuserid = korsrv.UsernameToId(username);
+            if (pubuserid == -1)
+                return NotFound("Korisnik sa tim username-om ne postoji");
+            var rez = projsrv.ListProjects(userid,pubuserid);
+            if (rez != "[]")
+                return Ok(rez);
+            else return NotFound("Korisnik sa tim username-om nema projekte");
         }
     }
 }
