@@ -17,17 +17,30 @@ export class User
 }
 /* REGISTRACIJA */
 
+/*LOGIN*/
+export class UserLogin
+{
+    public username:string="";
+    public password:string="";
+
+    constructor(){
+        this.username="";
+        this.password="";
+    }
+} 
+/*LOGIN*/ 
+
 export class Project
 {
     public name:string="";
     public description:string="";
-    public isPublic:boolean=false;
+    public public:boolean=false;
 
     constructor()
     {
         this.name="";
         this.description="";
-        this.isPublic=false;
+        this.public=false;
     }
 }
 

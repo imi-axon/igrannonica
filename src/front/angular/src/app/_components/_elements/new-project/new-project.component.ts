@@ -18,8 +18,8 @@ export class NewProjectComponent implements OnInit {
   {
     this.newProject.name=f.value.projectName;
     this.newProject.description=f.value.projectDesc;
-    if(f.value.public=='') this.newProject.isPublic=false;
-    else this.newProject.isPublic=f.value.public;
+    if(f.value.public=='') this.newProject.public=false;
+    else this.newProject.public=f.value.public;
 
     this.newProjectService.newProject(this.newProject,this,this.handleSuccess,this.handleError);
 
