@@ -30,7 +30,7 @@ export class UserLogin
 } 
 /*LOGIN*/ 
 
-export class Project
+export class NewProject
 {
     public name:string="";
     public description:string="";
@@ -41,6 +41,25 @@ export class Project
         this.name="";
         this.description="";
         this.public=false;
+    }
+}
+
+
+export class Project
+{
+    public projectid:number=-1;
+    public name:string="";
+    public description:string="";
+    public public:boolean=false;
+    public creationdate:string="";
+
+    constructor()
+    {
+        this.name="";
+        this.description="";
+        this.public=false;
+        this.creationdate="";
+        this.projectid=-1;
     }
 }
 
