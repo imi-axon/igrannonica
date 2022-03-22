@@ -47,19 +47,19 @@ export class NewProject
 
 export class Project
 {
-    public projectid:number=-1;
-    public name:string="";
-    public description:string="";
-    public public:boolean=false;
-    public creationdate:string="";
+    public ProjectId:number=-1;
+    public Name:string="";
+    public Description:string="";
+    public Public:boolean=false;
+    public Creationdate:string="";
 
     constructor()
     {
-        this.name="";
-        this.description="";
-        this.public=false;
-        this.creationdate="";
-        this.projectid=-1;
+        this.Name="";
+        this.Description="";
+        this.Public=false;
+        this.Creationdate="";
+        this.ProjectId=-1;
     }
 }
 

@@ -19,9 +19,11 @@ export class ListaProjekataComponent implements OnInit {
    this.projectsService.userProjects(this.username,this,this.handleSuccess,this.handleError);
   }
 
-  handleSuccess(self: any,projekti?: Project[]) {
+  handleSuccess(self: any, projekti: Project[]) {
     console.log("Tacno jeeeeeee");
     if(projekti) self.projekti=projekti;
+    //console.log(projekti[0]);
+    //console.log(projekti[0].Description);
  
   }
 
