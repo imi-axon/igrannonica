@@ -2,8 +2,8 @@
 {
     public class ProjectPostPut
     {
-        public string Name { get; set; }
-        public Boolean Public { get; set; }
-        public string Description { get; set; }
+        public string name { get; set; }
+        public Boolean ispublic { get; set; }
+        public string description { get; set; }
     }
 }
