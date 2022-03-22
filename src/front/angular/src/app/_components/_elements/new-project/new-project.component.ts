@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Project } from 'src/app/_utilities/_data-types/models';
+import { NewProject } from 'src/app/_utilities/_data-types/models';
 import { NewProjectService } from 'src/app/_utilities/_services/new-project.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { NewProjectService } from 'src/app/_utilities/_services/new-project.serv
 })
 export class NewProjectComponent implements OnInit {
 
-  public newProject:Project=new Project();
+  public newProject:NewProject=new NewProject();
 
   constructor( private newProjectService:NewProjectService) {}
 

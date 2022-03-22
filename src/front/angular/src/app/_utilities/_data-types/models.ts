@@ -60,7 +60,7 @@ export class UserLogin
 } 
 /*LOGIN*/ 
 
-export class Project
+export class NewProject
 {
     public name:string="";
     public description:string="";
@@ -71,6 +71,25 @@ export class Project
         this.name="";
         this.description="";
         this.public=false;
+    }
+}
+
+
+export class Project
+{
+    public ProjectId:number=-1;
+    public Name:string="";
+    public Description:string="";
+    public Public:boolean=false;
+    public Creationdate:string="";
+
+    constructor()
+    {
+        this.Name="";
+        this.Description="";
+        this.Public=false;
+        this.Creationdate="";
+        this.ProjectId=-1;
     }
 }
 
