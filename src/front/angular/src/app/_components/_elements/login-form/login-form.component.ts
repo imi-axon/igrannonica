@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { regExp } from 'src/app/_utilities/_constants/regExp';
 import { Router } from '@angular/router';
 import { LoginService } from 'src/app/_utilities/_services/login.service';
-import { User } from 'src/app/_utilities/_data-types/models';
+import { User, UserLogin } from 'src/app/_utilities/_data-types/models';
 import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { AuthService } from 'src/app/_utilities/_services/auth.service';
@@ -17,7 +17,8 @@ import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
 })
 export class LoginFormComponent implements OnInit {
 
-  public login:User = new User();
+  public login:UserLogin = new UserLogin();
+  public loginUser: UserLogin = new UserLogin();
   
   constructor(
     private loginService:LoginService,
@@ -36,19 +37,15 @@ export class LoginFormComponent implements OnInit {
 
   onSubmit(f:NgForm)
   {
-    // console.log(f.value);
-    // console.log(f.valid);
 
     if (!this.invalidUsername) {
       if(!this.invalidPass){
        console.log("tacno");
        //poslati back-u
-       let loginUser=
-       {
-         username: f.value.username,
-         password: f.value.pass //sifra se hashira serverside
-       }
-       this.loginService.loginUser(loginUser,this,this.handleSuccess,this.handleError);
+       this.loginUser.username=f.value.username;
+       this.loginUser.password=f.value.pass;
+       console.log(this.loginUser);
+       this.loginService.loginUser(this.loginUser,this,this.handleSuccess,this.handleError);
        
       } 
       else { console.log("Lozinka nije pravilna");}

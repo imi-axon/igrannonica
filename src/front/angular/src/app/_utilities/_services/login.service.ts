@@ -16,15 +16,22 @@ export class LoginService {
       // Success
       (response:any) => {
         if (response.status== HttpStatusCode.Ok) { 
-        //  console.log("TACNO");
+          console.log("TACNO");
           JWTUtil.store(response.body.v);
           if (self && successCallback) successCallback(self);
         }
-        else {
+        if(response.status==HttpStatusCode.BadRequest)
+        {
+          console.log("NETACNO");
+          JWTUtil.delete();
+          if (self && errorCallback) errorCallback(self, response.body.message);
+        }
+        if(response.status==HttpStatusCode.Forbidden)
+        {
           console.log("NETACNO");
           JWTUtil.delete();
           if (self && errorCallback)
-            errorCallback(self, response.body.message);
+            errorCallback(self, response.body.message); 
         }
       }
     

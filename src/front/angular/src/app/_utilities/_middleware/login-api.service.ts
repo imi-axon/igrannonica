@@ -21,7 +21,6 @@ export class LoginApiService {
         headers: HeaderUtil.jwtOnlyHeaders()
       });
 
-    //response.subscribe();
     return response;
   }
 
