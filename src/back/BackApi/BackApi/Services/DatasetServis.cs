@@ -60,7 +60,7 @@ namespace BackApi.Services
             
 
             //string xd= "n1;n2;n3;out\r1; 1; 0; 1\r1; 0; 0; 1\r0; 0; 1; 1\r1; 0; 1; 1\r0; 0; 0; 0\r";
-            File.WriteAllTextAsync(datafile, model.filecontent);
+            File.WriteAllTextAsync(datafile, model.dataset);
 
             return true;
             //return datafile;

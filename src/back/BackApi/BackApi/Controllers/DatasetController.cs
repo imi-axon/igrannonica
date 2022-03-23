@@ -45,7 +45,7 @@ namespace BackApi.Controllers
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized("Ulogujte se");
-            var response = await KonekcijaSaML.validateCSVstring(req.filecontent);
+            var response = await KonekcijaSaML.validateCSVstring(req);
 
             if (response.StatusCode == HttpStatusCode.Created)
             {
