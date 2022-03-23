@@ -23,8 +23,8 @@ import { StatisticsPageComponent } from './_components/_pages/statistics-page/st
 import { DatasetService } from './_utilities/_services/dataset.service';
 import { NgxCsvParserModule } from 'ngx-csv-parser';
 import { HomeComponent } from './_components/_elements/home/home.component';
-import { HomePageComponent } from './_components/_pages/home-page/home-page.component';
 import { LoaderComponent } from './_components/_elements/loader/loader.component';
+import { ListaProjekataComponent } from './_components/_elements/lista-projekata/lista-projekata.component';
 
 
 @NgModule({
@@ -42,7 +42,8 @@ import { LoaderComponent } from './_components/_elements/loader/loader.component
     NewProjectComponent,
     StatisticsPageComponent,
     HomeComponent,
-    LoaderComponent
+    LoaderComponent,
+    ListaProjekataComponent
   ],
   imports: [
     NgxCsvParserModule,

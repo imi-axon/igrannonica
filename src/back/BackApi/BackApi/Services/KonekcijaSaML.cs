@@ -36,7 +36,7 @@ namespace BackApi
             StringContent content = new StringContent(csvstring);
 
             Debug.WriteLine("Salje se zahtev ML-u (za Add Dataset)");
-            var result = await client.PostAsync("http://localhost:5000/api/dataset/statistic", content);
+            var result = await client.PostAsync("http://localhost:5000/api/dataset/statistics", content);
 
             return result;
         }

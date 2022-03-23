@@ -1,0 +1,8 @@
+<h1 *ngIf="projekti.length==0">Nemate projekte</h1>
+<ul class="list-group list-group-flush" *ngIf="projekti.length>0">
+
+  <li class="list-group-item d-inline-block" *ngFor="let p of projekti">{{p.Name}}
+  <a id="openProj" href="#" class="btn btn-dark btn-sm" role="button">Open project</a>    
+  </li>
+
+</ul>

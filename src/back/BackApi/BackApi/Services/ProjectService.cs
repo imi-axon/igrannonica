@@ -24,15 +24,16 @@ namespace BackApi.Services
         }
         public Boolean CreateProject(ProjectPostPut model,int userid)
         {
-            if(context.Projects.Any(x=> x.Name == model.Name))
+            if(context.Projects.Any(x=> x.Name == model.name))
             {
                 return false;
             }
 
             Project project = new Project();
-            project.Name = model.Name;
-            project.Description = model.Description;
+            project.Name = model.name;
+            project.Description = model.description;
             project.User_id = userid;
+            project.Public = model.ispublic;
             project.Creation_Date = DateTime.Now;
 
             context.Projects.Add(project);
@@ -160,9 +161,9 @@ namespace BackApi.Services
                 return rez = false;
             if (edited.User_id != userid)
                 return rez = false;
-            edited.Name = proj.Name;
-            edited.Description = proj.Description;
-            edited.Public = proj.Public;
+            edited.Name = proj.name;
+            edited.Description = proj.description;
+            edited.Public = proj.ispublic;
             context.SaveChanges();
             rez = true;
             return rez;
