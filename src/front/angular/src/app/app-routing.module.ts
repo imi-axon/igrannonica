@@ -13,7 +13,7 @@ import { StatisticsPageComponent } from './_components/_pages/statistics-page/st
 const routes: Routes = [
   {path:'project',component:ProjectPageComponent},
   {path:'new-project', component:NewProjectPageComponent},
-  {path:'dataset',component:DataSetPageComponent},
+  {path:'dataset/:ProjectId',component:DataSetPageComponent},
   {path:'registration-successful',component:RegistrationSuccessfulComponent},
   {path:'statistics', component:StatisticsPageComponent},
   {path:'login',component:LoginPageComponent},

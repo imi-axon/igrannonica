@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
 import { LoaderComponent } from '../../_elements/loader/loader.component';
 
@@ -14,9 +14,10 @@ export class DataSetPageComponent implements OnInit {
   public errorMessage: string = "";
   
   // TEST PROJECT ID, IZBRISATI KADA BUDEMO IMALI PRAVI ID
-  private TEST_PROJECT_ID: number = 99999;
+  //private TEST_PROJECT_ID: number = 99999;
+  public ProjectId: number=-1;
   
-  constructor(private datasetService: DatasetService, private router: Router) { }
+  constructor(private datasetService: DatasetService, private router: Router,public activatedRoute: ActivatedRoute) { }
   
   ngOnInit(): void {
     
@@ -29,12 +30,17 @@ export class DataSetPageComponent implements OnInit {
   public sendDataset(csv: string){
     // this.errorMessage = "";
     // this.datasetService.AddDataset(csv, this.TEST_PROJECT_ID, this, this.handleSuccess, this.handleBadDataFormat, this.handleUnauthorized);
-    this.datasetService.AddDataset(csv, 1, this, this.handleSuccess);
+    
+    //U lista-projekata.component.html na klik dugmeta se salje id projekta 'ProjectId'
+    let p = this.activatedRoute.snapshot.paramMap.get("ProjectId");
+    if (p != null) this.ProjectId = p as unknown as number;
+    
+    this.datasetService.AddDataset(csv, this.ProjectId, this, this.handleSuccess);
   }
   
   private handleSuccess(self:any){
     console.log("Uspesan POST dataseta.");
-   // self.router.navigate(['statistics']);
+    self.router.navigate(['statistics']);
   }
   
   
