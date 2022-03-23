@@ -1,0 +1,41 @@
+<div class="wrap-table100">
+    <div class="table100 ver1 m-b-110">
+        
+        <table>
+            
+            <thead>
+                <!-- REZ NA NAZIVE KOLONA -->
+                <tr class="row100 head"> 
+                    
+                    <!-- DODATNA KOLONA-->
+                    <th class="column-first">
+                        
+                    </th>
+                    
+                    <th class="column100" *ngFor="let column of headers"> 
+                        {{column}}
+                    </th> 
+                </tr>
+            </thead>
+            
+            <tbody>
+                
+                <tr class="row100" *ngFor="let row of headers; let i = index">
+                    
+                    <!-- CELIJE ZA NAZIV REDOVA -->
+                    <td class="column-first">
+                        {{row}}
+                    </td>
+                    
+                    <!-- CELIJE IZ KORELACIONE TABELE -->
+                    <td class="column100 data-cell" *ngFor="let cell of correlationMatrix[i]" [ngStyle]="GetCorrelationColor(cell)" >
+                        {{cell}}
+                    </td>
+                    
+                </tr>
+                
+            </tbody>
+            
+        </table>
+    </div>
+</div>

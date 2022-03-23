@@ -27,7 +27,6 @@ export class CsvComponent implements OnInit {
   
   public izabranFajl(event: Event){
     this.fileChosen.emit();
-    console.log("FILE CHOSEN");
     
     //console.log(event);
     this.poruka="";
@@ -75,7 +74,6 @@ export class CsvComponent implements OnInit {
         this.tableData = next;
         
         this.jsonLoaded.emit(this.tableData);
-        console.log("FILE LOADED");
       }
     ); 
   }

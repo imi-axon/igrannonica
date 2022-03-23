@@ -1,5 +1,4 @@
 import { Component, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
 import { EventEmitter } from '@angular/core';
 
 @Component({
@@ -10,108 +9,112 @@ import { EventEmitter } from '@angular/core';
 export class DataSetTableComponent implements OnInit, OnChanges{
   
   datasetHidden:boolean = true;
-  dataJSON: any;
-  columns : any;
+  dataset: any;
+  columns: string[];
+  statistics: any;
+  rowNulls: number[];
   
-  testJSON:any = JSON.parse('[{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"}]');
-  
-  // Stranicenje
+  // Stranicenje za prikaz podataka
   dataPages: any[][] = [];
   rowsPerPage: number = 20;
   currentPage: number = 0;
+  rowNullsPages: any[][] = [];
   
-  // Neophodna promenljivo ako je potrebno prikazati podatke u tabeli na load-u
-  @Input() onBind: boolean;
-  
+  // Sada se koristi samo na stranici za input fajla
   @Output() loadingStartedEvent = new EventEmitter<null>();
+  
+  // Koristi se na stranici za input fajla i statistics stranici
   @Output() loadedEvent = new EventEmitter<null>();
   
+  
+  
+  
+  
+  public statisticsOptions: string[] = ["Minimum","Maximum", "Average", "Median", "Null"];
+  public statisticsArrays: number[][] = [];
+  public selectedOption: number = 0;
   public pageInput: number;
+  
+  public visible: boolean = false;
   
   ngOnInit(): void {
     
   }
 
   
-  constructor(private datasetService: DatasetService) {}
+  constructor() {}
   
-  // Ovde se nalazi funkcija za unos podataka na load-u samo na stranicama gde je to potrebno
   ngOnChanges(): void {
-    // UKLJUCITI KADA SE BUDE TESTIRALO LOAD-OVANJE PODATAKA ON-INIT/ON-LOAD
-    //this.LoadDataFromAPI();
-  }
-  
-  
-  public LoadDataFromAPI(){
-    setTimeout(()=> {
-      this.loadingStartedEvent.emit();
-    }, 0);
-    this.datasetService.GetDataset(1, this, this.handleSuccessfulLoad, this.handleNotLoggedIn, this.handleForbidden, this.handleNotFound);
-  }
-  
-  public handleNotLoggedIn(self:any, message: string){
     
-    self.loadedEvent.emit();
   }
   
-  public handleForbidden(self:any, message: string){
-    
-    self.loadedEvent.emit();
-  }
   
-  public handleNotFound(self:any, message: string){
-    
-    self.loadedEvent.emit();
-  }
   
-  public handleSuccessfulLoad(self:any, data: any){
-    self.dataJSON = data;
-    console.log("API dataset: " + self.dataJSON);
-    self.columns = Object.keys(self.dataJSON[0]);
-    
-    self.splitData(self.dataJSON);
-    self.currentPage = 0;
-    
-    self.loadedEvent.emit();
-  }
   
   
   // Ovo se koristi samo na dataset stranici da bi se prikazala tabela pre nego sto je posaljemo na back
   public LoadDataDirectlyFromInput(data:Event){
     this.loadingStartedEvent.emit();
     
-    this.dataJSON = data;
-    this.columns = Object.keys(this.dataJSON[0]);
+    this.dataset = data;
+    console.log("Dataset iz input-a:");
+    console.log(this.dataset);
     
-    this.splitData(this.dataJSON);
+    this.columns = Object.keys(this.dataset[0]);
+    
+    this.splitData(this.dataset);
     this.currentPage = 0;
+    
+    this.loadedEvent.emit();
+    this.visible = true;
+  }
+  
+  public LoadDataAndStatistics(dataset: any, statistics: any, rowNulls: any){    
+    
+    this.dataset = dataset;
+    console.log("Dataset iz statistics stranice:");
+    console.log(this.dataset);
+    
+    this.columns = Object.keys(this.dataset[0]);
+    this.statistics = statistics;
+    this.rowNulls = rowNulls;
+    
+    this.datasetHidden = false;
+    
+    this.splitDataAndNulls(this.dataset, this.rowNulls);
+    this.currentPage = 0;
+    
+    this.createStatisticsArrays(this.statistics);
     
     this.loadedEvent.emit();
   }
   
-  // TRENUTNO ZA TESTIRANJE BEZ BACKENDA
-  public LoadDummyData(){    
-    this.loadingStartedEvent.emit();
-    setTimeout(()=> {
+  
+  private createStatisticsArrays(statistics: any){
+    this.statisticsArrays = [];
+    this.selectedOption = 0;
     
-      console.log(this.testJSON);
-      
-      this.dataJSON = this.testJSON;
-      this.columns = Object.keys(this.dataJSON[0]);
-      
-      this.datasetHidden = false;
-      
-      this.splitData(this.dataJSON);
-      this.currentPage = 0;
-      
-      this.loadedEvent.emit();
+    console.log(this.statistics)
+    // Iteracija kroz sve moguce opcije (pravimo po niz za min, max, avg, ...)
+    for(let i = 0; i < this.statisticsOptions.length; i++)
+      this.statisticsArrays.push([]);
     
-    }, 5000);
+    // Iteracija kroz sve primljene kolone i njihove statistike (upisujemo u svaki od napravljenih nizova)
+    for(let i = 0; i < this.statistics.length; i++){
+      this.statisticsArrays[0].push(this.statistics[i]['min']);
+      this.statisticsArrays[1].push(this.statistics[i]['max']);
+      this.statisticsArrays[2].push(this.statistics[i]['avg']);
+      this.statisticsArrays[3].push(this.statistics[i]['med']);
+      this.statisticsArrays[4].push(this.statistics[i]['nul']);
+    }
+    
   }
-  
-  
-  
-  
+  public shiftTroughStatisticsOptions(){
+    if(this.selectedOption == (this.statisticsOptions.length - 1))
+      this.selectedOption = 0;
+    else
+      this.selectedOption++;
+  }
   
   private splitData(data: any){
     this.dataPages = [];
@@ -131,8 +134,36 @@ export class DataSetTableComponent implements OnInit, OnChanges{
       }
       sectionCounter++;
     }
+  }
+  
+  private splitDataAndNulls(data: any, rowNulls: any){
+    this.dataPages = [];
+    this.rowNulls = [];
     
-    console.log(this.dataPages);
+    let arrayCounter = 0;
+    
+    this.dataPages.push([]);
+    this.rowNullsPages.push([]);
+    
+    let sectionCounter = 0;
+    
+    for(let i = 0; i < data.length; i++){
+      if(sectionCounter < this.rowsPerPage){
+        this.dataPages[arrayCounter].push(data[i]);
+        
+        this.rowNullsPages[arrayCounter].push(rowNulls[i]);
+      }
+      else{
+        sectionCounter = 0;
+        
+        this.dataPages.push([]);
+        this.dataPages[++arrayCounter].push(data[i]);
+        
+        this.rowNullsPages.push([]);
+        this.rowNullsPages[arrayCounter].push(rowNulls[i]);
+      }
+      sectionCounter++;
+    }
   }
   
   

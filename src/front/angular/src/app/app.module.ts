@@ -25,6 +25,7 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
 import { HomeComponent } from './_components/_elements/home/home.component';
 import { HomePageComponent } from './_components/_pages/home-page/home-page.component';
 import { LoaderComponent } from './_components/_elements/loader/loader.component';
+import { CorrelationTableComponent } from './_components/_elements/correlation-table/correlation-table.component';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { LoaderComponent } from './_components/_elements/loader/loader.component
     NewProjectComponent,
     StatisticsPageComponent,
     HomeComponent,
-    LoaderComponent
+    LoaderComponent,
+    CorrelationTableComponent
   ],
   imports: [
     NgxCsvParserModule,
