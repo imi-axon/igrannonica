@@ -8,7 +8,7 @@
             <div class="row mb-3">
                 
                 <div class="col form-group">
-                    <input type="text" class="form-control" placeholder="Ime" name="name" #name="ngModel" [(ngModel)]="registration.firstname"
+                    <input type="text" class="form-control" placeholder="Ime" name="firstname" #name="ngModel" [(ngModel)]="registration.firstname"
                         required [class.invalid]="name.touched && registrationCheck.invalidName" (blur)="checkName()" (input)="checkName()">
                 </div>
                 
