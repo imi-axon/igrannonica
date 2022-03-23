@@ -15,9 +15,9 @@ from util import read_str_to_df
 
 class Statistics:
 
-    # klasa Statistika kao argument u konstruktoru ima string 
-    def __init__(self, csvString):
-        self.dataset = read_str_to_df(csvString)
+    # klasa Statistika kao argument u konstruktoru ima ucitani dataframe
+    def __init__(self, df):
+        self.dataset = df
         
 
     #f-ja correlation_matrix - za izracunavanje korelacione matrice
@@ -50,6 +50,10 @@ class Statistics:
     def stat_max(self):
         return self.dataset.max()
 
+    #f-ja stat_null za svaku kolonu racuna broj null vrednosti
+    #povratna vrednost je Series
+    def stat_null(self):
+        return self.dataset.isnull().sum()
 
     
 
