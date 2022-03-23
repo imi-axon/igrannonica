@@ -27,7 +27,7 @@ train_labels = train_dataset.pop('MPG') #izdvajanje ciljne promenljive
 test_labels = test_dataset.pop('MPG')
 
 train_stats = train_dataset.describe() #opsta statistika
-train_stats.pop("MPG") #ovaj atribut ignorisemo jer je ciljna promenljiva (ona koja se prediktuje)
+# train_stats.pop("MPG") #ovaj atribut ignorisemo jer je ciljna promenljiva (ona koja se prediktuje)
 train_stats = train_stats.transpose()
 train_stats
 
