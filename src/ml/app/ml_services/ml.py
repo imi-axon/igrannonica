@@ -10,7 +10,6 @@ from tensorflow import keras
 
 #print(tf.__version__)
 
-from util import csv_to_df
 
 
 # ==== Statistics ====
