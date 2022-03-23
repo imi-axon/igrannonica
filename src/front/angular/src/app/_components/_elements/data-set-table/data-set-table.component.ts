@@ -37,6 +37,8 @@ export class DataSetTableComponent implements OnInit, OnChanges{
   
   public visible: boolean = false;
   
+  showsStatistics: boolean = true;
+  
   ngOnInit(): void {
     
   }
@@ -66,7 +68,9 @@ export class DataSetTableComponent implements OnInit, OnChanges{
     this.currentPage = 0;
     
     this.loadedEvent.emit();
+    
     this.visible = true;
+    this.showsStatistics = false;
   }
   
   public LoadDataAndStatistics(dataset: any, statistics: any, rowNulls: any){    
