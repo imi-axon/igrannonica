@@ -16,7 +16,7 @@ export class DatasetApiService {
     return this.http.post<any>(
       apiProperties.url + '/api/projects/' + project_id + '/dataset',
       { 
-        dataset:csvStr 
+        filecontent:csvStr 
       },
       { 
         observe: 'response',

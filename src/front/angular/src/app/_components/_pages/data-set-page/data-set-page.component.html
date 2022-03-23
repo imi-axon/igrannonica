@@ -2,13 +2,14 @@
 <div class="container-fluid">
     
     
-    <div class="row">
+    <!-- <div class="row"> -->
         
-        <div class="col-lg-2" >
+        <!-- <div class="col-lg-2" >
             <sidebar></sidebar>
-        </div>
+        </div> -->
         
-        <div class="col-lg-10 project-container">
+        <!-- <div class="col-lg-10 project-container"> -->
+            <div class="col project-container">
             
             <div class="inside-container">
                 <button class="dataset-title-button"> <h1>Dataset1</h1> </button>
@@ -23,12 +24,12 @@
                 <data-set-table #datasetTable></data-set-table>
             </div>
             
-            <button class="btn btn-primary" (click)="sendDataset(csvInput.csv);"> Potvrdi </button>
+            <button class="btn btn-primary" (click)="sendDataset(csvInput.filecontent);"> Potvrdi </button>
             
             
         </div>
         
-    </div>
+    <!-- </div> -->
     
     
 </div>

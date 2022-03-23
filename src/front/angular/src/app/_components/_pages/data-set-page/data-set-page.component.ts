@@ -27,13 +27,14 @@ export class DataSetPageComponent implements OnInit {
   }
   
   public sendDataset(csv: string){
-    this.errorMessage = "";
-    this.datasetService.AddDataset(csv, this.TEST_PROJECT_ID, this, this.handleSuccess, this.handleBadDataFormat, this.handleUnauthorized);
+    // this.errorMessage = "";
+    // this.datasetService.AddDataset(csv, this.TEST_PROJECT_ID, this, this.handleSuccess, this.handleBadDataFormat, this.handleUnauthorized);
+    this.datasetService.AddDataset(csv, 1, this, this.handleSuccess);
   }
   
   private handleSuccess(self:any){
     console.log("Uspesan POST dataseta.");
-    self.router.navigate(['statistics']);
+   // self.router.navigate(['statistics']);
   }
   
   

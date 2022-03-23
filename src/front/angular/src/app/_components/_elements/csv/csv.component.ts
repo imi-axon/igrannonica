@@ -12,7 +12,7 @@ export class CsvComponent implements OnInit {
   
   public tableData:any;
   public poruka:string;
-  @Output() public csv:string;
+  @Output() public filecontent:string;
   
   @Output() jsonLoaded = new EventEmitter<any>();
   @Output() fileError = new EventEmitter<any>();
@@ -53,10 +53,10 @@ export class CsvComponent implements OnInit {
     let reader: FileReader = new FileReader();
     reader.readAsText(file);
     reader.onload = (e) => {
-      this.csv = reader.result as string;
+      this.filecontent = reader.result as string;
       //console.log(this.csv);
       
-      if(this.csv.trim() === ""){
+      if(this.filecontent.trim() === ""){
         this.poruka = "Uneti fajl ne sme biti prazan!";
         this.fileError.emit();
         return;
