@@ -8,7 +8,7 @@
                 <tr class="row100 head"> 
                     
                     <!-- DODATNA KOLONA-->
-                    <th class="column100">
+                    <th class="column100" *ngIf="this.showsStatistics">
                         
                     </th>
                     
@@ -23,7 +23,7 @@
                 <tr class="row100" *ngFor="let i = index; let row of dataPages[currentPage];">
                     
                     <!-- CELIJE ZA PRVU KOLONU -->
-                    <td class="column-first">
+                    <td class="column-first" *ngIf="this.showsStatistics">
                         Null:&nbsp;&nbsp; {{rowNullsPages[currentPage][i]}}
                     </td>
                     
@@ -37,7 +37,7 @@
             </tbody>
             
             <!-- RED ZA PRIKAZ STATISTIKE -->
-            <tr class="row100 statistics">
+            <tr class="row100 statistics" *ngIf="this.showsStatistics">
                 
                 <!-- CELIJA PRVE KOLONE -->
                 <th class="column100">
