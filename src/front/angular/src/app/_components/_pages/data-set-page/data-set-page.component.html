@@ -2,28 +2,34 @@
 <div class="container-fluid">
     
     
-    <div class="row">
+    <!-- <div class="row"> -->
         
-        <div class="col-lg-2" >
+        <!-- <div class="col-lg-2" >
             <sidebar></sidebar>
-        </div>
+        </div> -->
         
-        <div class="col-lg-10 project-container">
+        <!-- <div class="col-lg-10 project-container"> -->
+            <div class="col project-container">
             
             <div class="inside-container">
                 <button class="dataset-title-button"> <h1>Dataset1</h1> </button>
-                <app-csv #csvInput (jsonLoaded)="datasetTable.LoadDataDirectlyFromInput($event); this.showDataset($event);"></app-csv>
+                <app-csv #csvInput (fileChosen)="loader.start()" (jsonLoaded)="datasetTable.LoadDataDirectlyFromInput($event); this.showDataset(); loader.stop();" (fileError)="loader.stop();"></app-csv>
+                
+                <p style="color: red; font-weight:bold;"> {{errorMessage}} </p>
             </div> 
             
-            <div class="dataset-container" [class.hidden]="datasetHidden">
+            <loader #loader></loader>
+            
+            <div class="dataset-container" [class.hidden]="datasetHidden || loader.isLoading">
                 <data-set-table #datasetTable></data-set-table>
             </div>
             
-            <button class="btn btn-primary" (click)="sendDataset(csvInput.csv);"> Potvrdi </button>
+            <button class="btn btn-primary" (click)="sendDataset(csvInput.filecontent);"> Potvrdi </button>
+            
             
         </div>
         
-    </div>
+    <!-- </div> -->
     
     
 </div>

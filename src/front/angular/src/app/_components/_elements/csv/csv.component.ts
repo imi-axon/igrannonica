@@ -12,9 +12,11 @@ export class CsvComponent implements OnInit {
   
   public tableData:any;
   public poruka:string;
-  @Output() public csv:string;
+  @Output() public filecontent:string;
   
   @Output() jsonLoaded = new EventEmitter<any>();
+  @Output() fileError = new EventEmitter<any>();
+  @Output() fileChosen = new EventEmitter<any>();
 
   
   constructor(private ngxCsvParser: NgxCsvParser) { }
@@ -24,6 +26,8 @@ export class CsvComponent implements OnInit {
   
   
   public izabranFajl(event: Event){
+    this.fileChosen.emit();
+    
     //console.log(event);
     this.poruka="";
     const target = event.target as HTMLInputElement;
@@ -31,11 +35,13 @@ export class CsvComponent implements OnInit {
     
     if(!file){
       console.log("Uneti fajl nije pronadjen u input komponenti!");
+      this.fileError.emit();
       return;
     }
     
     if(file.type != "text/csv" && file.type!="application/vnd.ms-excel"){
       this.poruka = "Uneti fajl mora biti u .csv formatu!";
+      this.fileError.emit();
       return;
     }
     
@@ -46,19 +52,18 @@ export class CsvComponent implements OnInit {
     let reader: FileReader = new FileReader();
     reader.readAsText(file);
     reader.onload = (e) => {
-      this.csv = reader.result as string;
+      this.filecontent = reader.result as string;
       //console.log(this.csv);
       
-      if(this.csv.trim() === ""){
+      if(this.filecontent.trim() === ""){
         this.poruka = "Uneti fajl ne sme biti prazan!";
+        this.fileError.emit();
         return;
       }
       
       this.parseToJSON(file);
     }
   }
-
-  //F-ja za pretvaranje ulaznog .csv fajla u string
   
   //F-ja za parsovanje ulaznog .csv fajla u JSON radi prikaza u tabeli
   private parseToJSON(file: File){
@@ -69,7 +74,6 @@ export class CsvComponent implements OnInit {
         this.tableData = next;
         
         this.jsonLoaded.emit(this.tableData);
-        
       }
     ); 
   }

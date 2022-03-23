@@ -22,6 +22,10 @@ import { NewProjectComponent } from './_components/_elements/new-project/new-pro
 import { StatisticsPageComponent } from './_components/_pages/statistics-page/statistics-page.component';
 import { DatasetService } from './_utilities/_services/dataset.service';
 import { NgxCsvParserModule } from 'ngx-csv-parser';
+import { HomeComponent } from './_components/_elements/home/home.component';
+import { LoaderComponent } from './_components/_elements/loader/loader.component';
+import { ListaProjekataComponent } from './_components/_elements/lista-projekata/lista-projekata.component';
+import { CorrelationTableComponent } from './_components/_elements/correlation-table/correlation-table.component';
 
 
 @NgModule({
@@ -37,7 +41,11 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
     RegistrationSuccessfulComponent,
     LoginFormComponent,
     NewProjectComponent,
-    StatisticsPageComponent
+    StatisticsPageComponent,
+    HomeComponent,
+    LoaderComponent,
+    ListaProjekataComponent,
+    CorrelationTableComponent
   ],
   imports: [
     NgxCsvParserModule,
