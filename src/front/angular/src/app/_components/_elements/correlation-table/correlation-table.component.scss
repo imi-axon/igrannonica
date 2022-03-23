@@ -48,17 +48,13 @@ th, td {
 }
 
 .column-first{
-    position: sticky;
     padding-left: 15px;
+    position: sticky;
     left: 0px;
     min-width: 100px;
     background-color: #002864 !important;
-    outline: solid 2px #001330 !important;
+    outline: solid 2px #001330;
     color: #FFFFFF !important;
-    
-    :hover{
-        color: #0066ff !important;
-    }
 }
 
 .row100 td {
@@ -72,8 +68,6 @@ th, td {
     position: sticky;
     height: 20px;
     padding: 0px;
-    
-    z-index: 10;
 }
 .head th
 {
@@ -97,29 +91,6 @@ th, td {
     padding-left: 25px;
     padding-right: 25px;
 }
-
-.statistics-cell{
-    font-size: 15px !important;
-}
-
-#statistics-switch-button{
-    font-weight: bold;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 14px;
-    padding-right: 14px;
-    background: none;
-    color: #FFFFFF;
-    border: solid 2px #FFFFFF;
-    min-width: 100px;
-    outline: none;
-    
-    &:hover{
-        color: #003cff;
-        background-color: #ffffff;
-        border: solid 2px #00000000;
-    }
-}
   
 /*==================================================================*/
 
@@ -138,7 +109,7 @@ th, td {
     background-color: #003e80;
     
     &:hover{
-        background-color: #00265e;
+        background-color: #001f4f;
     }
 }
   
@@ -156,7 +127,7 @@ th, td {
 }
   
 .table100.ver1 .row100 td:hover {
-    background-color: #0056d8;
+    background-color: #1a4d99;
     color: #FFFFFF;
 }
 
@@ -204,8 +175,4 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 
 .page-item{
     font-size: 18px;
-}
-
-.hidden{
-    display: none;
 }

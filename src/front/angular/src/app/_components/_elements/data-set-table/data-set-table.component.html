@@ -4,11 +4,13 @@
         
         <table>
             <thead>
-                <!-- REZ NA NAZIVE KOLONA / SORTIRANJE -->
+                <!-- RED NA NAZIVE KOLONA / SORTIRANJE -->
                 <tr class="row100 head"> 
                     
                     <!-- DODATNA KOLONA-->
-                    <th class="column-first"></th>
+                    <th class="column100">
+                        
+                    </th>
                     
                     <th class="column100" *ngFor="let column of columns"> 
                         {{column}} 
@@ -18,16 +20,16 @@
             
             <tbody>
                 
-                <tr class="row100" *ngFor="let row of dataPages[currentPage];">
+                <tr class="row100" *ngFor="let i = index; let row of dataPages[currentPage];">
                     
                     <!-- CELIJE ZA PRVU KOLONU -->
                     <td class="column-first">
-                        
+                        Null:&nbsp;&nbsp; {{rowNullsPages[currentPage][i]}}
                     </td>
                     
                     <!-- CELIJE IZ SETA-->
                     <td class="column100 data-cell" *ngFor="let column of columns">
-                        {{ row[column] }}
+                        {{row[column]}}
                     </td>
                     
                 </tr>
@@ -38,10 +40,14 @@
             <tr class="row100 statistics">
                 
                 <!-- CELIJA PRVE KOLONE -->
-                <th class="column-first"></th>
+                <th class="column100">
+                    <button id="statistics-switch-button" type="button" (click)="shiftTroughStatisticsOptions()">
+                        {{statisticsOptions[selectedOption]}}
+                    </button>
+                </th>
                 
-                <th *ngFor="let column of columns"> 
-                    Col
+                <th *ngFor="let stat of statisticsArrays[selectedOption]" class="statistics-cell"> 
+                    {{stat}}
                 </th> 
             </tr>
             
