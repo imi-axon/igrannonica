@@ -8,14 +8,18 @@ namespace BackApi
 {
     public static class KonekcijaSaML
     {
-        public static async Task<HttpResponseMessage> convertCSVstring(string csvstring)
+        public static async Task<HttpResponseMessage> convertCSVstring(DatasetGetPost csvstring)
         {
             // Debug.WriteLine(csvstring);
             HttpClient client = new HttpClient();
-            StringContent content = new StringContent(csvstring);
+            //   StringContent content = new StringContent(csvstring);
+            var myContent = JsonConvert.SerializeObject(csvstring);
+            var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+            var byteContent = new ByteArrayContent(buffer);
+            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             Debug.WriteLine("Salje se zahtev ML-u (za Get Dataset)");
-            var result = await client.PostAsync("http://localhost:8000/api/dataset/convert/json", content);
+            var result = await client.PostAsync("http://localhost:8000/api/dataset/convert/json", byteContent);
 
             return result;
         }
@@ -28,7 +32,6 @@ namespace BackApi
             var myContent = JsonConvert.SerializeObject(csvstring);
             var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
             var byteContent = new ByteArrayContent(buffer);
-
             byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             Debug.WriteLine("Salje se zahtev ML-u (za Add Dataset)");
@@ -36,14 +39,19 @@ namespace BackApi
 
             return result;
         }
-        public static async Task<HttpResponseMessage> getStatistic(string csvstring)
+        public static async Task<HttpResponseMessage> getStatistic(DatasetGetPost dataset)
         {
             // Debug.WriteLine(csvstring);
             HttpClient client = new HttpClient();
-            StringContent content = new StringContent(csvstring);
+            // StringContent content = new StringContent(csvstring);
+
+            var myContent = JsonConvert.SerializeObject(dataset);
+            var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+            var byteContent = new ByteArrayContent(buffer);
+            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             Debug.WriteLine("Salje se zahtev ML-u (za Add Dataset)");
-            var result = await client.PostAsync("http://localhost:8000/api/dataset/statistics", content);
+            var result = await client.PostAsync("http://localhost:8000/api/dataset/statistics", byteContent);
 
             return result;
         }

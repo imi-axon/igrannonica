@@ -33,9 +33,11 @@ namespace BackApi.Controllers
                 return NotFound(pom);
             if (!owner)
                 return Forbid(pom);
-            
+
             //string tekst = "n1;n2;n3;out\r1; 1; 0; 1\r1; 0; 0; 1\r0; 0; 1; 1\r1; 0; 1; 1\r0; 0; 0; 0\r";
-            var response = await KonekcijaSaML.convertCSVstring(pom);
+            DatasetGetPost dataset = new DatasetGetPost();
+            dataset.dataset = pom;
+            var response = await KonekcijaSaML.convertCSVstring(dataset);
 
             return await response.Content.ReadAsStringAsync();
         }
@@ -79,12 +81,14 @@ namespace BackApi.Controllers
         }*/
 
         [HttpGet("{projid}/procitaj")]
-        public async Task<ActionResult<string>> ProcitajDataset(int projid,Boolean main)
+        public async Task<ActionResult<dynamic>> ProcitajDataset(int projid,Boolean main)
         {
             var rez = datasrv.Procitaj(projid,main);
             if (rez != null)
             {
-                var response = await KonekcijaSaML.convertCSVstring(rez);
+                DatasetGetPost dataset = new DatasetGetPost();
+                dataset.dataset = rez;
+                var response = await KonekcijaSaML.convertCSVstring(dataset);
 
                 return await response.Content.ReadAsStringAsync();
             }
@@ -96,10 +100,12 @@ namespace BackApi.Controllers
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
-            string csvstring = datasrv.Procitaj(id, main);
+            
+            DatasetGetPost dataset = new DatasetGetPost();
+            dataset.dataset = datasrv.Procitaj(id, main);
 
-            var response = await KonekcijaSaML.getStatistic(csvstring);
-            if (response.StatusCode == HttpStatusCode.Created)
+            var response = await KonekcijaSaML.getStatistic(dataset);
+            if (response.StatusCode == HttpStatusCode.OK)
             {
                 return Ok(response);
             }
