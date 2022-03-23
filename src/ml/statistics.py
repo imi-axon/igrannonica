@@ -55,7 +55,10 @@ class Statistics:
     def stat_null(self):
         return self.dataset.isnull().sum()
 
-    
+    #f-ja stat_row_null za racuna broj null vrednosti za svaku vrstu
+    #povratna vrednost je Series
+    def stat_row_null(self):
+        return self.dataset.isna().transpose().sum()
 
 
 
