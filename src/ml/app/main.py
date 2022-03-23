@@ -1,9 +1,8 @@
 # FastAPI
 from fastapi import FastAPI, Response, status
-from pydantic import BaseModel
 
 # Models
-from models import Dataset, DatasetEditActions
+from models import Dataset, DatasetEditActions, Statistics
 
 # Utils
 from util.csv import csv_is_valid, csv_decode
@@ -11,7 +10,7 @@ from util.json import json_encode, json_decode
 from util.dataset import DatasetEditor
 
 # ML
-# ...
+from ml_services.statistics import statistics_json
 
 
 app = FastAPI()
@@ -39,8 +38,8 @@ def convert_csv_to_json(body: Dataset, response: Response):
     print('Pocetak kontrolera (za Get Dataset)')
 
     csvstring = body.dataset
-    
     print(csvstring)
+    
     resp = ''
 
     try:
@@ -58,7 +57,7 @@ def convert_csv_to_json(body: Dataset, response: Response):
     return fin
 
 
-# Aktivnost: Edit Dataset
+# Edit Dataset
 @app.post('/api/dataset/edit', status_code=200)
 def edit_dataset(body: DatasetEditActions):
     
@@ -69,3 +68,15 @@ def edit_dataset(body: DatasetEditActions):
     DatasetEditor.execute(actions, dataset)
 
     return None
+
+
+# Get Dataset Statistics
+@app.post('/api/dataset/statistics', status_code=200, response_model=Statistics)
+def get_statistics(body: Dataset):
+    
+    csvstr: str = body.dataset
+    stats: str = statistics_json(csvstr)
+
+    print(stats)
+
+    return { 'statistics': stats }
