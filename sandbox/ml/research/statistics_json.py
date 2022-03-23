@@ -16,7 +16,7 @@ import json
 from statistics import Statistics
 
 from util import read_str_to_df
-
+from util import object_to_json
 
 
 def statistics_json(csvString):
@@ -34,15 +34,21 @@ def statistics_json(csvString):
     json += '"cormat":' #begin cormat
     json +='{' 
     json += '"cols":'
-    json += '['
+    #json += '['
     
     number_columns = corr_matrix.shape[0]
-    for i in range (0,number_columns):
-        column = corr_matrix.columns[i]
-        json += '"' + column + '"'
-        if (i!=number_columns-1):
-            json += ','
-    json += ']'
+    #for i in range (0,number_columns):
+    #    column = corr_matrix.columns[i]
+    #    json += '"' + column + '"'
+    #    if (i!=number_columns-1):
+    #        json += ','
+    #json += ']'
+    
+    mat_columns = corr_matrix.columns.to_list()
+    json_columns = object_to_json(mat_columns)
+    json += json_columns
+    
+    
     json += ','
 
     json += '"cors":'
@@ -94,6 +100,14 @@ def statistics_json(csvString):
             json+=','
     
     json += ']' #end colstats
+
+    json += ','
+    
+    json += '"rownulls":'
+    row_null = stat.stat_row_null().to_list()
+    json_row_null = object_to_json(row_null)
+    
+    json += json_row_null
 
     json += '}' #end
     return json
