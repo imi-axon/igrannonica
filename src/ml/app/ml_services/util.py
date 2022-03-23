@@ -5,10 +5,10 @@ if sys.version_info[0]<3:
 else:
     from io import StringIO
 
-# f-ja read_str_to_df prosledjeni string konvertuje u DataFrame
-def read_str_to_df(x):
+# f-ja read_str_to_df prosledjeni csv string konvertuje u DataFrame
+def csv_to_df(x, sep):
     TESTDATA = StringIO(x)
-    df = pd.read_csv(TESTDATA, sep=";")
+    df = pd.read_csv(TESTDATA, sep=sep)
     return df
 
 
