@@ -21,7 +21,7 @@ app = FastAPI()
 @app.post('/api/dataset/validate/csv', status_code=201)
 def validate_csv(body: Dataset, response: Response):
 
-    print('Pocetak kontrolera (za Add Dataset)')
+    # print('Pocetak kontrolera (za Add Dataset)')
 
     csvstring = body.dataset
 
@@ -35,24 +35,24 @@ def validate_csv(body: Dataset, response: Response):
 @app.post('/api/dataset/convert/json', status_code=201, response_model=Dataset)
 def convert_csv_to_json(body: Dataset, response: Response):
 
-    print('Pocetak kontrolera (za Get Dataset)')
+    # print('Pocetak kontrolera (za Get Dataset)')
 
     csvstring = body.dataset
-    print(csvstring)
+    # print(csvstring)
     
     resp = ''
 
     try:
         obj = csv_decode_2(csvstring)
-        print(obj)
+        # print(obj)
         resp = json_encode(obj)
-        print(resp)
+        # print(resp)
     except:
         response.status_code = status.HTTP_400_BAD_REQUEST
     
     fin = {'dataset': resp}
 
-    print(fin)
+    # print(fin)
 
     return fin
 
@@ -77,6 +77,6 @@ def get_statistics(body: Dataset):
     csvstr: str = body.dataset
     stats: str = statistics_json(csvstr)
 
-    print(stats)
+    # print(stats)
 
     return { 'statistics': stats }

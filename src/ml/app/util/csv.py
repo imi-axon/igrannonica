@@ -36,7 +36,7 @@ def csv_decode_2(text: str) -> list[list]:
             row[cols[i]] = r[i]
         result2.append(row)
 
-    print(result2)
+    # print(result2)
     # result = [x for x in result]
 
     # print(result)
