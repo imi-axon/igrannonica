@@ -9,16 +9,17 @@ namespace BackApi.Services
 {
     public interface IKorisnikServis
     {
-        Boolean Register(KorisnikApi model);
-        string Login(KorisnikApi model,out Boolean uspeh);
+        Boolean Register(KorisnikRegister model);
+        string Login(KorisnikLogin model,out Boolean uspeh);
+        public int UsernameToId(string username);
     }
 
     public class KorisnikServis: IKorisnikServis
     {
-        private KorisnikContext kontext;
+        private BazaContext kontext;
         private readonly IConfiguration configuration;
 
-        public KorisnikServis(KorisnikContext korisnikContext,IConfiguration configuration)
+        public KorisnikServis(BazaContext korisnikContext,IConfiguration configuration)
         {
             kontext = korisnikContext;
             this.configuration = configuration;
@@ -45,11 +46,13 @@ namespace BackApi.Services
         private string KreirajToken(Korisnik korisnik)
         {
             var punoIme = korisnik.Name + " " + korisnik.Lastname;
+            string uid = "" + korisnik.UserId;
             List<Claim> claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Name,korisnik.Username ),
-                new Claim(ClaimTypes.Email,korisnik.Email ),
-                new Claim(ClaimTypes.GivenName,punoIme)
+                new Claim("username",korisnik.Username ),
+                new Claim("email",korisnik.Email ),
+                new Claim("imeprezime",punoIme),
+                new Claim("id",uid)
             };
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration.GetSection("AppSettings:Token").Value));
 
@@ -62,23 +65,23 @@ namespace BackApi.Services
                 return jwt;
         }
 
-        public Boolean Register(KorisnikApi model)
+        public Boolean Register(KorisnikRegister model)
         {
             //string rez = "";
 
-            if (kontext.Korisnici.Any(x => x.Username == model.Username))
+            if (kontext.Korisnici.Any(x => x.Username == model.username))
             {
                 //rez = "Korisnik sa tim Username-om vec postoji!";
                 return false;
             }
 
             var korisnik= new Korisnik();
-            korisnik.Username = model.Username;
-            korisnik.Lastname = model.Lastname;
-            korisnik.Name=model.Name;
-            korisnik.Email=model.Email;
+            korisnik.Username = model.username;
+            korisnik.Lastname = model.lastname;
+            korisnik.Name=model.firstname;
+            korisnik.Email=model.email;
 
-            KreirajPWHash(model.Password, out byte[] pwHash, out byte[] pwSalt);
+            KreirajPWHash(model.password, out byte[] pwHash, out byte[] pwSalt);
 
             korisnik.PasswordHash=pwHash;
             korisnik.PasswordSalt=pwSalt;
@@ -90,12 +93,12 @@ namespace BackApi.Services
             return true;
         }
 
-        public string Login(KorisnikApi model,out Boolean uspeh)
+        public string Login(KorisnikLogin model,out Boolean uspeh)
         {
-            var kor =kontext.Korisnici.FirstOrDefault(x => x.Username == model.Username);
+            var kor =kontext.Korisnici.FirstOrDefault(x => x.Username == model.username);
             var jwtoken = "";
 
-            if (kor != null && ProveriPWHash(model.Password, kor.PasswordHash, kor.PasswordSalt))
+            if (kor != null && ProveriPWHash(model.password, kor.PasswordHash, kor.PasswordSalt))
                 {            
                         jwtoken = KreirajToken(kor);
                         uspeh = true;
@@ -108,6 +111,14 @@ namespace BackApi.Services
                 return "Pogresan username ili password";
             }
  
+        }
+
+        public int UsernameToId(string username)
+        {
+            var kor = kontext.Korisnici.FirstOrDefault(x => x.Username == username);
+            if(kor != null)
+                return kor.UserId;
+            return -1;
         }
     }
 }

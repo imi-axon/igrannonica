@@ -2,8 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { regExp } from 'src/app/_utilities/_constants/regExp';
 import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
-import { User } from 'src/app/_utilities/_data-types/models';
-import { RegistrationService } from 'src/app/_utilities/_services/registration.service';
+import { RegistrationCheck, UserRegistration } from 'src/app/_utilities/_data-types/models';
+import { UserService } from 'src/app/_utilities/_services/user.service';
 
 @Component({
   selector: 'registration-form',
@@ -11,7 +11,7 @@ import { RegistrationService } from 'src/app/_utilities/_services/registration.s
   styleUrls: ['./registration-form.component.scss']
 })
 export class RegistrationFormComponent implements OnInit {
-  public registration:User = new User();
+  public registration:UserRegistration = new UserRegistration();
   public passwordAgain:string = "";
   
   public registrationCheck:RegistrationCheck = new RegistrationCheck();
@@ -20,45 +20,41 @@ export class RegistrationFormComponent implements OnInit {
   isSignUpFailed = false;
   errorMessage = '';
   
-  constructor(private registrationService: RegistrationService, private router:Router) { }
+  constructor(private userService: UserService) { }
   
   
 
   ngOnInit(): void {
   }
   
-  public SubmitRegistracija(userForm:any){
+  public SubmitRegistracija(){
     if(this.registrationCheck.invalidRegistration)
       return;
-      
-      let registrationUser = {
-        name : userForm.value.name,
-        lastname : userForm.value.lastname,
-        username : userForm.value.username,
-        email : userForm.value.email,
-        password : userForm.value.password //sifra se hashira serverside-field promenjen sa username na password
-      }
     
-      this.registrationService.registerUser(registrationUser, this, this.handleSuccess, this.handleError);
+    this.userService.Register(this.registration, this, this.handleSuccess, this.handleUsedUsername, this.handleLogedIn);
     
   }
   
   handleSuccess(self: any) {
-    console.log("TEST");
     self.router.navigate(RedirectRoutes.ON_REGISTER_SUCCESSFUL);
   }
 
-  handleError(self: any, message: string) {
+  handleUsedUsername(self: any, message: string) {
     self.errorMessage = message;
     self.isSignUpFailed = true;
   }
+  
+  handleLogedIn(self: any, message: string){
+    
+  }
+  
   
   // Validacije
   
   public checkName(){
     this.registrationCheck.invalidName = false;
     
-    if(!regExp.pattName.test(this.registration.name))
+    if(!regExp.pattName.test(this.registration.firstname))
       this.registrationCheck.invalidName = true;
     
     this.registrationCheck.checkForm();
@@ -110,34 +106,4 @@ export class RegistrationFormComponent implements OnInit {
     this.registrationCheck.checkForm();
   }
   
-}
-
-// Klasa koja cuva informacije o tome koje komponente nisu validne
-class RegistrationCheck
-{
-  public invalidRegistration = true;
-  
-  public invalidName:boolean = true;
-  public invalidLastname:boolean = true;
-  public invalidUsername:boolean = true;
-  public invalidEmail:boolean = true;
-  public invalidPassword:boolean = true;
-  public invalidPasswordAgain:boolean = true;
-  
-  constructor() {
-      this.invalidRegistration = true;
-      this.invalidName = true;
-      this.invalidLastname = true;
-      this.invalidUsername = true;
-      this.invalidEmail = true;
-      this.invalidPassword = true;
-      this.invalidPasswordAgain = true;
-  }
-  
-  public checkForm(){
-      if(this.invalidName || this.invalidLastname || this.invalidUsername || this.invalidEmail || this.invalidPassword || this.invalidPasswordAgain)
-          this.invalidRegistration = true;
-      else
-          this.invalidRegistration = false;
-  }
 }

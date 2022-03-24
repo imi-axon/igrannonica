@@ -1,31 +1,35 @@
+
 <div class="wrap-table100">
     <div class="table100 ver1 m-b-110">
+        
         <table>
             <thead>
-                <!-- REZ NA NAZIVE KOLONA / SORTIRANJE -->
+                <!-- RED NA NAZIVE KOLONA / SORTIRANJE -->
                 <tr class="row100 head"> 
                     
                     <!-- DODATNA KOLONA-->
-                    <th class="column-first"></th>
+                    <th class="column100" *ngIf="this.showsStatistics">
+                        
+                    </th>
                     
-                    <th class="column100" *ngFor="let key of keys"> 
-                        {{key}} 
+                    <th class="column100" *ngFor="let column of columns"> 
+                        {{column}} 
                     </th> 
                 </tr>
             </thead>
             
             <tbody>
                 
-                <tr class="row100" *ngFor="let row of dataJSON;">
+                <tr class="row100" *ngFor="let i = index; let row of dataPages[currentPage];">
                     
                     <!-- CELIJE ZA PRVU KOLONU -->
-                    <td class="column-first">
-                        
+                    <td class="column-first" *ngIf="this.showsStatistics">
+                        Null:&nbsp;&nbsp; {{rowNullsPages[currentPage][i]}}
                     </td>
                     
                     <!-- CELIJE IZ SETA-->
-                    <td class="column100 data-cell" *ngFor="let key of keys">
-                        {{ row[key] }}
+                    <td class="column100 data-cell" *ngFor="let column of columns">
+                        {{row[column]}}
                     </td>
                     
                 </tr>
@@ -33,16 +37,59 @@
             </tbody>
             
             <!-- RED ZA PRIKAZ STATISTIKE -->
-            <tr class="row100 statistics">
+            <tr class="row100 statistics" *ngIf="this.showsStatistics">
                 
                 <!-- CELIJA PRVE KOLONE -->
-                <th class="column-first"></th>
+                <th class="column100">
+                    <button id="statistics-switch-button" type="button" (click)="shiftTroughStatisticsOptions()">
+                        {{statisticsOptions[selectedOption]}}
+                    </button>
+                </th>
                 
-                <th *ngFor="let key of keys"> 
-                    1
+                <th *ngFor="let stat of statisticsArrays[selectedOption]" class="statistics-cell"> 
+                    {{stat}}
                 </th> 
             </tr>
             
         </table>
     </div>
 </div>
+
+<div class="row justify-content-center align-items-center">
+    
+    <div class="col-lg-4 col-sm-12 d-flex align-items-center justify-content-center">
+        <p> Showing page {{currentPage + 1}} out of {{dataPages.length}}</p>
+    </div>
+    
+    <div class="col-lg-4 col-sm-12">
+        <ul class="pagination justify-content-center">
+            
+            <li class="page-item">
+                <button class="page-link" [class.disabled]="currentPage < 1" [disabled]="currentPage < 1" (click)="minPage();">&lt;&lt;&lt;</button>
+            </li>
+            
+            <li class="page-item">
+                <button class="page-link" [class.disabled]="currentPage < 1" [disabled]="currentPage < 1" (click)="previousPage()">&lt;</button>
+            </li>
+            
+            <li class="page-item">
+                <button class="page-link" [class.disabled]="currentPage > dataPages.length - 2" [disabled]="currentPage > dataPages.length - 2" (click)="nextPage()">&gt;</button>
+            </li>
+            
+            <li class="page-item">
+                <button class="page-link" [class.disabled]="currentPage > dataPages.length - 2" [disabled]="currentPage > dataPages.length - 2" (click)="maxPage();">&gt;&gt;&gt;</button>
+            </li>
+            
+        </ul>
+    </div>  
+    
+    <div class="col-lg-4 col-sm-12 d-flex align-items-center justify-content-center">
+        <div class="jump">
+            <button class="border" (click)="goToPage();">
+                Jump to
+            </button>
+            <input type="number" [(ngModel)]="pageInput">
+        </div>
+    </div>
+</div>
+

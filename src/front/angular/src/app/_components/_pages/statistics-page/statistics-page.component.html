@@ -3,26 +3,30 @@
     <div class="row">
         <div class="col-md-8 data-table">
             
-            <div id="dataset" [class.hidden]="correlationView">
-                <data-set-table #dataset [onBind]="this.onBind"></data-set-table>
+            <div id="dataset" [class.hidden]="correlationView || loader.isLoading || !visible">
+                <data-set-table #datasetComponent (loadedEvent)="loader.stop();"></data-set-table>
             </div>
         
-            <div id="korelaciona" [class.hidden]="!correlationView">
-                
+            <div id="korelaciona" [class.hidden]="!correlationView || loader.isLoading || !visible">
+                <correlation-table #corr></correlation-table>
             </div>
+            
+            <loader #loader class="loader"></loader>
             
         </div>
         
         <div class="col-md-4 graf border">
             <!-- OVDE CE ICI GRAFIK KOMPONENTA -->
+            <!-- U NJU TREBA DA SE DODA [class.hidden]="loader.isLoading || !visible" -->
         </div>
     </div>
     
     <div class="row border config">
         
         <div class="button-group">
-            <button (click)="switchTableView()"> Switch view </button>
-            <button (click)="dataset.LoadDummyData();"> Local Dataset (DEBUG) </button>
+            <button (click)="switchTableView();"> Switch view </button>
+            <!-- STAVITI LoadDataFromAPI(); UMESTO LoadTestData(); KADA ZELIMO REALNE VREDNOSTI-->
+            <button (click)="loader.start(); LoadTestData();"> Local Dataset (DEBUG) </button>
         </div>
         
         <div class="button-group">

@@ -1,4 +1,4 @@
-<form #npf="ngForm" style="max-width: 50em;"> 
+<form #npf="ngForm" (ngSubmit)="onSubmit(npf)" style="max-width: 50em;" > 
     <!-- npf-> new project form -->
     <div class="mb-3">
       <label for="projectName">Naziv projekta</label>
@@ -11,7 +11,7 @@
       <p class="textarea-info">*Maksimalan broj karaktera je 250</p>
     </div>
     <div class="form-check mb-3">
-      <input type="checkbox" class="form-check-input" id="public">
+      <input type="checkbox" class="form-check-input" id="public" name="public" ngModel #public="ngModel" >
       <label class="form-check-label" for="public">public</label>
     </div>
     <button type="submit" [disabled]="npf.invalid" class="btn btn-primary mt-3">Submit</button>
