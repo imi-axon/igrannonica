@@ -21,6 +21,7 @@ namespace BackApi.Controllers
             this.jwtsrv = jwtServis;
         }
 
+        /*
         [HttpGet("{id}/dataset")]
         public async Task<ActionResult<dynamic>> Get(int id)
         {
@@ -41,6 +42,7 @@ namespace BackApi.Controllers
 
             return await response.Content.ReadAsStringAsync();
         }
+        */
         
         [HttpPost("{id}/dataset")]
         public async Task<ActionResult<string>> NewDataSet(int id, [FromBody] DatasetGetPost req)
@@ -80,7 +82,7 @@ namespace BackApi.Controllers
             else return NotFound("Ne postoji dataset");
         }*/
 
-        [HttpGet("{projid}/procitaj")]
+        [HttpGet("{projid}/dataset")]
         public async Task<ActionResult<dynamic>> ProcitajDataset(int projid,Boolean main)
         {
             var rez = datasrv.Procitaj(projid,main);
@@ -107,7 +109,7 @@ namespace BackApi.Controllers
             var response = await KonekcijaSaML.getStatistic(dataset);
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                return Ok(response);
+                return await response.Content.ReadAsStringAsync();
             }
             return BadRequest();
         }
