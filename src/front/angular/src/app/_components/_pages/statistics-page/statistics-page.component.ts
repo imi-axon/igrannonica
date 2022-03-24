@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { waitForAsync } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
 import { CorrelationTableComponent } from '../../_elements/correlation-table/correlation-table.component';
@@ -20,6 +21,9 @@ export class StatisticsPageComponent implements OnInit{
   test_project_id: number = 1;
   test_main_boolean: boolean = false;
   
+  projectid: number = 0
+  projectMain: boolean = true
+
   public statisticsSet: any;
   public dataset: any;
   public correlation: any;
@@ -36,11 +40,20 @@ export class StatisticsPageComponent implements OnInit{
   
   public visible: boolean = false;
   
-  constructor(private datasetService: DatasetService) { }
+  constructor(
+    private datasetService: DatasetService,
+    private activatedRoute: ActivatedRoute
+  ) { }
   
 
   ngOnInit(): void {
+    let proj = this.activatedRoute.snapshot.paramMap.get('ProjectId')
+    if (proj != null)
+      this.projectid = Number.parseInt(proj);
     
+    console.log('>>>>>>>>> PARAMETAR:' + this.projectid)
+
+    this.LoadDataFromAPI();
   }
   
   switchTableView(){
@@ -70,7 +83,7 @@ export class StatisticsPageComponent implements OnInit{
   
   // DATASET
   public LoadDataFromAPI(){
-    this.datasetService.GetDataset(1, this, this.handleDataSuccessfulLoad, this.handleDataNotLoggedIn, this.handleDataForbidden, this.handleDataNotFound);
+    this.datasetService.GetDataset(this.projectid, this, this.handleDataSuccessfulLoad, this.handleDataNotLoggedIn, this.handleDataForbidden, this.handleDataNotFound);
     
   }
   
@@ -87,18 +100,23 @@ export class StatisticsPageComponent implements OnInit{
   }
   
   public handleDataSuccessfulLoad(self:any, data: any){
-    self.dataset = data;
+    self.dataset = JSON.parse(data.dataset);
+    console.log(self.dataset)
     
-    this.LoadStatisticsFromAPI();
+    self.LoadStatisticsFromAPI();
   }
   
   // STATISTIKA
   public LoadStatisticsFromAPI(){
-    this.datasetService.GetStatistics( this.test_project_id, this.test_main_boolean, this.handleStatisticsSuccessfulLoad, this.handleStatisticsUnauthorized, this.handleStatisticsForbidden, this.handleStatisticsNotFound);
+    console.log('Load Statistics From API')
+    this.datasetService.GetStatistics(this.projectid, this.projectMain, this, this.handleStatisticsSuccessfulLoad, this.handleStatisticsUnauthorized, this.handleStatisticsForbidden, this.handleStatisticsNotFound);
   }
   
   public handleStatisticsSuccessfulLoad(self:any, statisticsSet: any){
-    self.statisticsSet = statisticsSet;
+    console.log('HANDLER')
+    console.log(statisticsSet)
+    self.statisticsSet = JSON.parse(statisticsSet.statistics);
+    console.log(self.statisticsSet)
     
     self.correlation = self.statisticsSet.cormat;
     self.statistics = self.statisticsSet.colstats;
@@ -107,7 +125,7 @@ export class StatisticsPageComponent implements OnInit{
     self.datasetComponent.LoadDataAndStatistics(self.dataset, self.statistics, self.rowNulls);
     self.correlationComponent.ParseCorrelationData(self.correlation);
     
-    this.visible = true;
+    self.visible = true;
   }
   
   public handleStatisticsUnauthorized(self:any, message: string){

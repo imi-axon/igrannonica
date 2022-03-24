@@ -5,7 +5,7 @@ from fastapi import FastAPI, Response, status
 from models import Dataset, DatasetEditActions, Statistics
 
 # Utils
-from util.csv import csv_is_valid, csv_decode
+from util.csv import csv_is_valid, csv_decode, csv_decode_2
 from util.json import json_encode, json_decode
 from util.dataset import DatasetEditor
 
@@ -43,7 +43,7 @@ def convert_csv_to_json(body: Dataset, response: Response):
     resp = ''
 
     try:
-        obj = csv_decode(csvstring)
+        obj = csv_decode_2(csvstring)
         print(obj)
         resp = json_encode(obj)
         print(resp)

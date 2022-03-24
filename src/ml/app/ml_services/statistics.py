@@ -80,7 +80,7 @@ def statistics_json(csvString):
         json += '"med":'
         json += str(col_med[i])
         json += ','
-        json += '"null":'
+        json += '"nul":'
         json += str(col_null[i])
         json += '}'
         if(i!=number_of_columns-1):

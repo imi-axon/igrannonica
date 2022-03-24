@@ -15,7 +15,7 @@ const routes: Routes = [
   {path:'new-project', component:NewProjectPageComponent},
   {path:'dataset/:ProjectId',component:DataSetPageComponent},
   {path:'registration-successful',component:RegistrationSuccessfulComponent},
-  {path:'statistics', component:StatisticsPageComponent},
+  {path:'statistics/:ProjectId', component:StatisticsPageComponent},
   {path:'login',component:LoginPageComponent},
   {path:'registration',component:RegistrationPageComponent},
   {path:'home',component:HomePageComponent},
