@@ -3,14 +3,14 @@ using Microsoft.AspNetCore.Http;
 
 namespace BackApi.Services
 {
-    public interface IJwtServis
+    public interface IJwtService
     {
         public int GetUserId();
     }
-    public class JwtServis: IJwtServis
+    public class JwtService: IJwtService
     {
         private readonly IHttpContextAccessor httpContext;
-        public JwtServis(IHttpContextAccessor httpContextAccessor)
+        public JwtService(IHttpContextAccessor httpContextAccessor)
         {
             this.httpContext = httpContextAccessor;
         }

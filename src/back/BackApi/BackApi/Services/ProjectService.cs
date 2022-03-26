@@ -14,10 +14,10 @@ namespace BackApi.Services
     }
     public class ProjectService:IProjectService
     {
-        private BazaContext context;
+        private DataBaseContext context;
         private readonly IConfiguration configuration;
 
-        public ProjectService(BazaContext context, IConfiguration configuration)
+        public ProjectService(DataBaseContext context, IConfiguration configuration)
         {
             this.context = context;
             this.configuration = configuration;

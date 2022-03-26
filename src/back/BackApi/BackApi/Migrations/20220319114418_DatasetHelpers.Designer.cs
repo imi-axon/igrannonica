@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BackApi.Migrations
 {
-    [DbContext(typeof(BazaContext))]
+    [DbContext(typeof(DataBaseContext))]
     [Migration("20220319114418_DatasetHelpers")]
     partial class DatasetHelpers
     {

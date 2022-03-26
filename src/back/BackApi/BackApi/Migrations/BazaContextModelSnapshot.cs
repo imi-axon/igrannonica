@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BackApi.Migrations
 {
-    [DbContext(typeof(BazaContext))]
+    [DbContext(typeof(DataBaseContext))]
     partial class BazaContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

@@ -6,7 +6,7 @@ using System.Net.Http.Headers;
 
 namespace BackApi
 {
-    public static class KonekcijaSaML
+    public static class MLconnection
     {
         public static async Task<HttpResponseMessage> convertCSVstring(DatasetGetPost csvstring)
         {

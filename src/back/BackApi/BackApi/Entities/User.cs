@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BackApi.Entities
 {
-    public class Korisnik
+    public class User
     {
         [Key]
         public int UserId { get; set; }

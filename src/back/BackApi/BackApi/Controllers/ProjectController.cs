@@ -13,15 +13,15 @@ namespace BackApi.Controllers
     public class ProjectController : ControllerBase
     {
         private IProjectService service;
-        private IJwtServis jwtsrv;
-        public ProjectController(IProjectService service,IJwtServis jwtServis)
+        private IJwtService jwtsrv;
+        public ProjectController(IProjectService service,IJwtService jwtServis)
         {
             this.service = service;
             this.jwtsrv = jwtServis;
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> NoviProjekat([FromBody] ProjectPostPut req)
+        public async Task<ActionResult<string>> NewProject([FromBody] ProjectPostPut req)
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
@@ -44,7 +44,7 @@ namespace BackApi.Controllers
         }
 
         [HttpGet("{projid}")]
-        public async Task<ActionResult<string>> GetProjById(int projid)
+        public async Task<ActionResult<string>> GetProjectById(int projid)
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized("Ulogujte se");
