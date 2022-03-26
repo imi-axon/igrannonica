@@ -10,7 +10,7 @@ from util.json import json_encode, json_decode
 from util.dataset import DatasetEditor
 
 # ML
-from ml_services.statistics import statistics_json
+from services.statistics import statistics_json
 
 
 app = FastAPI()

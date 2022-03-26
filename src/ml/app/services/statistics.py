@@ -14,7 +14,7 @@ from tensorflow import keras
 
 # ==== Statistics ====
 
-class Statistics:
+class StatisticsService:
 
     # klasa Statistika kao argument u konstruktoru ima ucitani dataframe
     def __init__(self, df):

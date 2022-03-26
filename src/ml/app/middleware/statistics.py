@@ -1,14 +1,14 @@
 import json
 
-from .ml import Statistics
+from ..services.statistics import StatisticsService
 
-from .util import read_str_to_df
-from .util import object_to_json
+from ..services.util import read_str_to_df
+from ..services.util import object_to_json
 
 
 def statistics_json(csvString):
     dataframe = read_str_to_df(csvString)
-    stat = Statistics(dataframe)
+    stat = StatisticsService(dataframe)
     
     
     number_of_columns = dataframe.shape[1]
