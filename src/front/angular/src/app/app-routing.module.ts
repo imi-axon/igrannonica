@@ -5,6 +5,7 @@ import { HomePageComponent } from './_components/_pages/home-page/home-page.comp
 import { LoginPageComponent } from './_components/_pages/login-page/login-page.component';
 import { MyProjectsPageComponent } from './_components/_pages/my-projects-page/my-projects-page.component';
 import { NewProjectPageComponent } from './_components/_pages/new-project-page/new-project-page.component';
+import { ProfilPageComponent } from './_components/_pages/profil-page/profil-page.component';
 import { ProjectPageComponent } from './_components/_pages/project-page/project-page.component';
 import { RegistrationPageComponent } from './_components/_pages/registration-page/registration-page.component';
 import { RegistrationSuccessfulComponent } from './_components/_pages/registration-successful/registration-successful.component';
@@ -20,7 +21,8 @@ const routes: Routes = [
   {path:'registration',component:RegistrationPageComponent},
   {path:'home',component:HomePageComponent},
   {path: '', redirectTo:'/home', pathMatch: 'full'},
-  {path:'my-projects',component:MyProjectsPageComponent}
+  {path:'my-projects',component:MyProjectsPageComponent},
+  {path:'profil', component:ProfilPageComponent}
 ];
 
 @NgModule({
@@ -30,4 +32,6 @@ const routes: Routes = [
 export class AppRoutingModule { }
 
 //Kada se dodaje nova putanja, dodati je u niz
-export const routingComponents=[ProjectPageComponent, NewProjectPageComponent, DataSetPageComponent, StatisticsPageComponent, LoginPageComponent, RegistrationPageComponent,HomePageComponent,MyProjectsPageComponent];
+export const routingComponents=[ProjectPageComponent, NewProjectPageComponent,
+   DataSetPageComponent, StatisticsPageComponent, LoginPageComponent, RegistrationPageComponent,
+   HomePageComponent,MyProjectsPageComponent,ProfilPageComponent];
