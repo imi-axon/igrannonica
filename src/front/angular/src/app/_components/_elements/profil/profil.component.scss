@@ -1,6 +1,8 @@
 .card
 {
-   // border: none;
+    border: none;
+    width: 15rem;
+    color:#555555;
 }
 .podaci
 {
@@ -10,4 +12,13 @@
 {
     max-width: 50%;
     max-height: auto;
+}
+
+.ime_prezime
+{
+    font-size: large;
+}
+#drzava
+{
+    font-size: small;
 }
