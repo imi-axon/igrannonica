@@ -9,27 +9,27 @@ using System.Diagnostics;
 
 namespace BackApi.Services
 {
-    public interface IDatasetServis
+    public interface IDatasetService
     {
-        public Boolean Novi(DatasetGetPost model,int projid,int userid);
-        public dynamic daLiPostoji(int projectID, out Boolean uspeh, int userid, out Boolean owner);
-        public Boolean Brisi(int projid,int userid);
-        public string Listaj(int projid);
-        public string Procitaj(int projid, Boolean main);
+        public Boolean New(DatasetGetPost model,int projid,int userid);
+        public dynamic IsExist(int projectID, out Boolean uspeh, int userid, out Boolean owner);
+        public Boolean Delete(int projid,int userid);
+        public string ListDatasets(int projid);
+        public string Read(int projid, Boolean main);
     }
 
-    public class DatasetServis : IDatasetServis
+    public class DatasetService : IDatasetService
     {
-        private BazaContext kontext;
+        private DataBaseContext kontext;
         private readonly IConfiguration configuration;
 
-        public DatasetServis(BazaContext datasetContext, IConfiguration configuration)
+        public DatasetService(DataBaseContext datasetContext, IConfiguration configuration)
         {
             kontext = datasetContext;
             this.configuration = configuration;
         }
 
-        public Boolean Novi(DatasetGetPost model,int projid,int userid)
+        public Boolean New(DatasetGetPost model,int projid,int userid)
         {
             var tmp= kontext.Projects.FirstOrDefault(x=> x.Id==projid && x.User_id==userid); // provera vlasnistva projekta pre dodavanja dataset-a
             if (tmp == null)
@@ -66,7 +66,7 @@ namespace BackApi.Services
             //return datafile;
         }
 
-        public dynamic daLiPostoji(int projectID, out Boolean uspeh,int userid,out Boolean owner)
+        public dynamic IsExist(int projectID, out Boolean uspeh,int userid,out Boolean owner)
         {
             var rez = kontext.Projects.FirstOrDefault(x => x.Id == projectID);
             owner = false;
@@ -106,7 +106,7 @@ namespace BackApi.Services
             }
         }
 
-        public Boolean Brisi(int projid,int userid)
+        public Boolean Delete(int projid,int userid)
         {
             var tmp = kontext.Projects.FirstOrDefault(x => x.Id == projid && x.User_id == userid); // provera vlasnistva projekta pre brisanja dataset-a
             if (tmp == null)
@@ -126,7 +126,7 @@ namespace BackApi.Services
             return true;
         }
 
-        public string Listaj(int projid)
+        public string ListDatasets(int projid)
         {
             var rez = new StringBuilder();
             rez.Append("[");
@@ -146,7 +146,7 @@ namespace BackApi.Services
 
         }
 
-        public string Procitaj(int projid, Boolean main)
+        public string Read(int projid, Boolean main)
         {
             var rez = "";
             List<Dataset> lista = kontext.Datasets.Where(x => x.ProjectId == projid && x.Main == main).ToList();

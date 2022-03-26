@@ -7,25 +7,25 @@ using System.Security.Cryptography;
 
 namespace BackApi.Services
 {
-    public interface IKorisnikServis
+    public interface IUserService
     {
-        Boolean Register(KorisnikRegister model);
-        string Login(KorisnikLogin model,out Boolean uspeh);
+        Boolean Register(UserRegister model);
+        string Login(UserLogin model,out Boolean uspeh);
         public int UsernameToId(string username);
     }
 
-    public class KorisnikServis: IKorisnikServis
+    public class UserService: IUserService
     {
-        private BazaContext kontext;
+        private DataBaseContext kontext;
         private readonly IConfiguration configuration;
 
-        public KorisnikServis(BazaContext korisnikContext,IConfiguration configuration)
+        public UserService(DataBaseContext korisnikContext,IConfiguration configuration)
         {
             kontext = korisnikContext;
             this.configuration = configuration;
         }
 
-        private void KreirajPWHash(string password, out byte[] pwHash, out byte[] pwSalt)
+        private void CreatePWHash(string password, out byte[] pwHash, out byte[] pwSalt)
         {
             using(var hmac=new HMACSHA512())
             {
@@ -34,7 +34,7 @@ namespace BackApi.Services
             }
         }
 
-        private Boolean ProveriPWHash(string password,byte[] pwHash,byte[] pwSalt)
+        private Boolean CheckPWHash(string password,byte[] pwHash,byte[] pwSalt)
         {
             using (var hmac = new HMACSHA512(pwSalt))
             {
@@ -43,7 +43,7 @@ namespace BackApi.Services
             }
         }
 
-        private string KreirajToken(Korisnik korisnik)
+        private string CreateToken(User korisnik)
         {
             var punoIme = korisnik.Name + " " + korisnik.Lastname;
             string uid = "" + korisnik.UserId;
@@ -65,42 +65,42 @@ namespace BackApi.Services
                 return jwt;
         }
 
-        public Boolean Register(KorisnikRegister model)
+        public Boolean Register(UserRegister model)
         {
             //string rez = "";
 
-            if (kontext.Korisnici.Any(x => x.Username == model.username))
+            if (kontext.Users.Any(x => x.Username == model.username))
             {
                 //rez = "Korisnik sa tim Username-om vec postoji!";
                 return false;
             }
 
-            var korisnik= new Korisnik();
+            var korisnik= new User();
             korisnik.Username = model.username;
             korisnik.Lastname = model.lastname;
             korisnik.Name=model.firstname;
             korisnik.Email=model.email;
 
-            KreirajPWHash(model.password, out byte[] pwHash, out byte[] pwSalt);
+            CreatePWHash(model.password, out byte[] pwHash, out byte[] pwSalt);
 
             korisnik.PasswordHash=pwHash;
             korisnik.PasswordSalt=pwSalt;
 
-            kontext.Korisnici.Add(korisnik);
+            kontext.Users.Add(korisnik);
             kontext.SaveChanges();
             //rez = "Korisnik uspesno registrovan";
 
             return true;
         }
 
-        public string Login(KorisnikLogin model,out Boolean uspeh)
+        public string Login(UserLogin model,out Boolean uspeh)
         {
-            var kor =kontext.Korisnici.FirstOrDefault(x => x.Username == model.username);
+            var kor =kontext.Users.FirstOrDefault(x => x.Username == model.username);
             var jwtoken = "";
 
-            if (kor != null && ProveriPWHash(model.password, kor.PasswordHash, kor.PasswordSalt))
+            if (kor != null && CheckPWHash(model.password, kor.PasswordHash, kor.PasswordSalt))
                 {            
-                        jwtoken = KreirajToken(kor);
+                        jwtoken = CreateToken(kor);
                         uspeh = true;
                         return jwtoken;
 
@@ -115,7 +115,7 @@ namespace BackApi.Services
 
         public int UsernameToId(string username)
         {
-            var kor = kontext.Korisnici.FirstOrDefault(x => x.Username == username);
+            var kor = kontext.Users.FirstOrDefault(x => x.Username == username);
             if(kor != null)
                 return kor.UserId;
             return -1;
