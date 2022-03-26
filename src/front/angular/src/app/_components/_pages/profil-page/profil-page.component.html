@@ -1,0 +1,35 @@
+<div class="container mt-5">
+    <div class="container1 d-flex justify-content-center">
+        <app-profil></app-profil>
+    </div>
+    <br><br>
+    <div class="mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="kolona col-sm-12 col-md-4 d-flex justify-content-center">
+                    <div class="input-group input-group-sm pe-5">
+                        <button type="button" class=" dugme btn btn-primary input-group-text">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <input type="text" class="form-control" placeholder="Search..." aria-label="Small"
+                            aria-describedby="inputGroup-sizing-sm">
+                    </div>
+                </div>
+
+                <div class="kolona col-sm-12 col-md-4 d-flex justify-content-md-center">
+                    <h3 id="naslov" class="pt-0">user experiments</h3>
+                </div>
+
+                <div class=" kolona col-sm-12 col-md-4 d-flex justify-content-md-end">
+                    <a id="newProjectButton" href="new-project" class="dugme btn btn-primary" role="button">Create new
+                        project</a>
+                </div>
+            </div>
+        </div>
+        <hr class="mt-2 mb-5 ">
+
+        <div class="projekti mx-auto">
+            <app-lista-projekata></app-lista-projekata>
+        </div>
+    </div>
+</div>

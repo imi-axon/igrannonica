@@ -41,7 +41,7 @@ export class JWTUtil
         return (g == null)? '' : g["email"];
     }
 
-    static fullName(): string {
+    static getFullName(): string {
         let g = this.getPayload();
         return (g == null)? '' : g["imeprezime"];
     }
