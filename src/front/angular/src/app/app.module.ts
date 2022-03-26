@@ -26,7 +26,7 @@ import { HomeComponent } from './_components/_elements/home/home.component';
 import { LoaderComponent } from './_components/_elements/loader/loader.component';
 import { ListaProjekataComponent } from './_components/_elements/lista-projekata/lista-projekata.component';
 import { CorrelationTableComponent } from './_components/_elements/correlation-table/correlation-table.component';
-import { ProfilPageComponent } from './_components/_pages/profil-page/profil-page.component';
+import { ProfilComponent } from './_components/_elements/profil/profil.component';
 
 
 @NgModule({
@@ -47,7 +47,7 @@ import { ProfilPageComponent } from './_components/_pages/profil-page/profil-pag
     LoaderComponent,
     ListaProjekataComponent,
     CorrelationTableComponent,
-    ProfilPageComponent
+    ProfilComponent
   ],
   imports: [
     NgxCsvParserModule,
