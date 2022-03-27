@@ -22,6 +22,7 @@ namespace BackApi.Services
     {
         private DataBaseContext kontext;
         private readonly IConfiguration configuration;
+        private static IStorageService storageService;
 
         public DatasetService(DataBaseContext datasetContext, IConfiguration configuration)
         {
@@ -31,7 +32,7 @@ namespace BackApi.Services
 
         public Boolean New(DatasetGetPost model,int projid,int userid)
         {
-            var tmp= kontext.Projects.FirstOrDefault(x=> x.Id==projid && x.User_id==userid); // provera vlasnistva projekta pre dodavanja dataset-a
+            var tmp= kontext.Projects.FirstOrDefault(x=> x.ProjectId==projid && x.UserId==userid); // provera vlasnistva projekta pre dodavanja dataset-a
             if (tmp == null)
                 return false;
 
@@ -46,21 +47,16 @@ namespace BackApi.Services
             kontext.Add(Dataset);
             kontext.SaveChanges();
 
-            var basepath = @"Storage\";
-            var projfolder = "proj" +projid;
-            var projpath = Path.Combine(basepath, projfolder);
-            var datapath = Path.Combine(projpath, "data");
-            var filename = "data" + Dataset.DatasetId + ".csv";   //trenutno samo csv ubuduce ce se dodavati Ext property-podrzani fajltipovi
-            var datafile = Path.Combine(datapath, filename);
+            var path = storageService.CreateDataset(projid, Dataset.DatasetId);
 
-            Dataset.Path = datafile;
+            Dataset.Path = path;
 
             kontext.Entry(Dataset).State=Microsoft.EntityFrameworkCore.EntityState.Modified;
             kontext.SaveChanges();
             
 
             //string xd= "n1;n2;n3;out\r1; 1; 0; 1\r1; 0; 0; 1\r0; 0; 1; 1\r1; 0; 1; 1\r0; 0; 0; 0\r";
-            File.WriteAllTextAsync(datafile, model.dataset);
+            File.WriteAllTextAsync(path, model.dataset);
 
             return true;
             //return datafile;
@@ -68,7 +64,7 @@ namespace BackApi.Services
 
         public dynamic IsExist(int projectID, out Boolean uspeh,int userid,out Boolean owner)
         {
-            var rez = kontext.Projects.FirstOrDefault(x => x.Id == projectID);
+            var rez = kontext.Projects.FirstOrDefault(x => x.ProjectId == projectID);
             owner = false;
             if (rez == null)
             {
@@ -77,7 +73,7 @@ namespace BackApi.Services
             }
             else
             {
-                if (rez.User_id != userid)
+                if (rez.UserId != userid)
                 {
                     uspeh = false;
                     return "Vi niste vlasnik projekta";
@@ -108,7 +104,7 @@ namespace BackApi.Services
 
         public Boolean Delete(int projid,int userid)
         {
-            var tmp = kontext.Projects.FirstOrDefault(x => x.Id == projid && x.User_id == userid); // provera vlasnistva projekta pre brisanja dataset-a
+            var tmp = kontext.Projects.FirstOrDefault(x => x.ProjectId == projid && x.UserId == userid); // provera vlasnistva projekta pre brisanja dataset-a
             if (tmp == null)
                 return false;
 
@@ -116,9 +112,8 @@ namespace BackApi.Services
             var dataset = lista[0];
             if (dataset == null)
                 return false;
-            var basepath = @"";
-            basepath = Path.Combine(basepath, dataset.Path);
-            File.Delete(basepath);
+
+            storageService.DeleteDataset(dataset.Path);
 
             kontext.Datasets.Remove(dataset);
             kontext.SaveChanges();
@@ -151,8 +146,9 @@ namespace BackApi.Services
             var rez = "";
             List<Dataset> lista = kontext.Datasets.Where(x => x.ProjectId == projid && x.Main == main).ToList();
             if (lista.Count == 0) return null;
-            var path = @"";
-            path = Path.Combine(path, lista[0].Path);
+
+            var path = storageService.GetDataset(lista[0].Path);
+
             string[] lines=File.ReadAllLines(path);
             var content = new StringBuilder();
             foreach(string line in lines)
