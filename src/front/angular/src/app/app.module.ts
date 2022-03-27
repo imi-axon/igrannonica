@@ -28,6 +28,7 @@ import { ListaProjekataComponent } from './_components/_elements/lista-projekata
 import { CorrelationTableComponent } from './_components/_elements/correlation-table/correlation-table.component';
 import { ProfilComponent } from './_components/_elements/profil/profil.component';
 import { OpcijeDatasetComponent } from './_components/_elements/opcije-dataset/opcije-dataset.component';
+import { OpcijeEditDatasetComponent } from './_components/_elements/opcije-edit-dataset/opcije-edit-dataset.component';
 
 
 @NgModule({
@@ -49,7 +50,8 @@ import { OpcijeDatasetComponent } from './_components/_elements/opcije-dataset/o
     ListaProjekataComponent,
     CorrelationTableComponent,
     ProfilComponent,
-    OpcijeDatasetComponent
+    OpcijeDatasetComponent,
+    OpcijeEditDatasetComponent
   ],
   imports: [
     NgxCsvParserModule,
