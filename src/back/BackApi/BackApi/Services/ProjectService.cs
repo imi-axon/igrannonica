@@ -16,11 +16,12 @@ namespace BackApi.Services
     {
         private DataBaseContext context;
         private readonly IConfiguration configuration;
-        private static IDatasetService datasetService;
-        private static IStorageService storageService;
+        private IDatasetService datasetService;
+        private IStorageService storageService =new StorageService();
 
-        public ProjectService(DataBaseContext context, IConfiguration configuration)
+        public ProjectService(DataBaseContext context, IConfiguration configuration, IDatasetService datasetService)
         {
+            this.datasetService = datasetService;
             this.context = context;
             this.configuration = configuration;
         }

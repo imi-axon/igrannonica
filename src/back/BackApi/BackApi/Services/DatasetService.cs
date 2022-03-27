@@ -16,13 +16,14 @@ namespace BackApi.Services
         public Boolean Delete(int projid,int userid);
         public string ListDatasets(int projid);
         public string Read(int projid, Boolean main);
+        public string ProjIdToPath(int projid);
     }
 
     public class DatasetService : IDatasetService
     {
         private DataBaseContext kontext;
         private readonly IConfiguration configuration;
-        private static IStorageService storageService;
+        private static IStorageService storageService=new StorageService();
 
         public DatasetService(DataBaseContext datasetContext, IConfiguration configuration)
         {
@@ -162,5 +163,11 @@ namespace BackApi.Services
             return str; //vraca csvstring, iz kontrolera zove ml deo
         }
         
+        public string ProjIdToPath(int projid)
+        {
+            Dataset dset = kontext.Datasets.FirstOrDefault(x => x.ProjectId == projid);
+            if (dset == null) return null;
+            return dset.Path;
+        }
     }
 }
