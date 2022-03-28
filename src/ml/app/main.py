@@ -7,10 +7,10 @@ from models import Dataset, DatasetEditActions, Statistics
 # Utils
 from util.csv import csv_is_valid, csv_decode, csv_decode_2
 from util.json import json_encode, json_decode
-from util.dataset import DatasetEditor
+from .middleware.dataset_editor import DatasetEditor
 
 # ML
-from services.statistics import statistics_json
+from middleware.statistics import statistics_json
 
 
 app = FastAPI()
