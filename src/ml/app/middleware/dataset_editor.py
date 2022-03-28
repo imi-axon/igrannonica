@@ -55,6 +55,10 @@ class DatasetEditor:
                     elif act[2] == 'median':
                         print('median')
                         service.fill_na_median([col])
+
+                    elif act[2] == 'cat':
+                        print('cat')
+                        service.fill_na_categorical([col])
                     
                     else:
                         return None
