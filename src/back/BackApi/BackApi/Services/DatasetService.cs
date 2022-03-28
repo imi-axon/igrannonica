@@ -15,8 +15,10 @@ namespace BackApi.Services
         public dynamic IsExist(int projectID, out Boolean uspeh, int userid, out Boolean owner);
         public Boolean Delete(int projid,int userid);
         public string ListDatasets(int projid);
-        public string Read(int projid, Boolean main);
+        public string Read(int projid, Boolean main,int userid,out Boolean owner);
         public string ProjIdToPath(int projid);
+        public Boolean EditHelperset(int projid, int userid, DatasetGetPost model);
+        public Boolean UpdateMainDataset(int projid, int userid, out Boolean owner);
     }
 
     public class DatasetService : IDatasetService
@@ -55,9 +57,25 @@ namespace BackApi.Services
             kontext.Entry(Dataset).State=Microsoft.EntityFrameworkCore.EntityState.Modified;
             kontext.SaveChanges();
             
+            var Temp = new Dataset();
+            Temp.Name = "Default - Pomocni";
+            Temp.ProjectId = projid;
+            Temp.Ext = ".csv";
+            Temp.Path="None";
+            Temp.Main = false;
+
+            kontext.Add(Temp);
+            kontext.SaveChanges();
+
+            var pathalt=storageService.CreateDataset(projid, Temp.DatasetId);
+            Temp.Path = pathalt;
+
+            kontext.Entry(Temp).State=Microsoft.EntityFrameworkCore.EntityState.Modified;
+            kontext.SaveChanges();
 
             //string xd= "n1;n2;n3;out\r1; 1; 0; 1\r1; 0; 0; 1\r0; 0; 1; 1\r1; 0; 1; 1\r0; 0; 0; 0\r";
             File.WriteAllTextAsync(path, model.dataset);
+            File.WriteAllTextAsync(pathalt,model.dataset);
 
             return true;
             //return datafile;
@@ -142,9 +160,16 @@ namespace BackApi.Services
 
         }
 
-        public string Read(int projid, Boolean main)
+        public string Read(int projid, Boolean main,int userid,out Boolean owner)
         {
             var rez = "";
+            var chkowner=kontext.Projects.FirstOrDefault(x=> x.ProjectId == projid && x.UserId==userid);
+            if (chkowner == null)
+            {
+                owner = false;
+                return null;
+            }
+            owner = true;   
             List<Dataset> lista = kontext.Datasets.Where(x => x.ProjectId == projid && x.Main == main).ToList();
             if (lista.Count == 0) return null;
 
@@ -169,5 +194,32 @@ namespace BackApi.Services
             if (dset == null) return null;
             return dset.Path;
         }
+
+        public Boolean EditHelperset(int projid,int userid,DatasetGetPost model) // sluzi za rucno menjanje helper csv-a
+        {
+            var chkowner = kontext.Projects.FirstOrDefault(x => x.ProjectId == projid && x.UserId == userid);
+            if (chkowner == null)
+                return false;
+            Dataset edit=kontext.Datasets.FirstOrDefault(x=> x.ProjectId == projid && x.Main==false);
+            if (edit == null) return false;
+
+            var path = storageService.GetDataset(edit.Path);
+            File.WriteAllTextAsync(path, model.dataset);
+            return true;
+        }
+
+        public Boolean UpdateMainDataset(int projid,int userid,out Boolean owner)
+        {
+            var temp = Read(projid, false, userid, out owner);
+            if(!owner) return false;
+            if(temp == null) return false;
+            Dataset dest = kontext.Datasets.FirstOrDefault(x => x.ProjectId == projid && x.Main == true);
+            if (dest == null) return false;
+
+            var path=storageService.GetDataset(dest.Path);
+            File.WriteAllTextAsync(path, temp);
+            return true;    
+        }
+
     }
 }

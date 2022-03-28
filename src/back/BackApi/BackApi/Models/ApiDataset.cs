@@ -6,4 +6,15 @@
         //public string Ext { get; set; } //.csv .json .xml - u koliko se implentuje filtype support
         //public string Name { get; set; } // ukoliko se implementuje vise datasetova po projectu
     }
+
+    public class DatasetMLPost
+    {
+        public string data { get; set; }
+        public string actions { get; set; }
+    }
+
+    public class ActionsPut
+    {
+        public string actions { get; set; }
+    }
 }

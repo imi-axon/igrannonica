@@ -85,7 +85,12 @@ namespace BackApi.Controllers
         [HttpGet("{projid}/dataset")]
         public async Task<ActionResult<dynamic>> ReadDataset(int projid,Boolean main)
         {
-            var rez = datasrv.Read(projid,main);
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            Boolean owner;
+            var rez = datasrv.Read(projid,main,userid,out owner);
+            if (!owner)
+                return Forbid();
             if (rez != null)
             {
                 DatasetGetPost dataset = new DatasetGetPost();
@@ -104,8 +109,10 @@ namespace BackApi.Controllers
             if (userid == -1) return Unauthorized();
             
             DatasetGetPost dataset = new DatasetGetPost();
-            dataset.dataset = datasrv.Read(id, main);
-
+            Boolean owner;
+            dataset.dataset = datasrv.Read(id, main,userid,out owner);
+            if (!owner)
+                return Forbid();
             var response = await MLconnection.getStatistic(dataset);
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -114,5 +121,45 @@ namespace BackApi.Controllers
             return BadRequest();
         }
 
+        [HttpPut("{id}/dataset/{main}/edit")]
+        public async Task<ActionResult<string>> EditDataset(int id, Boolean main, [FromBody] ActionsPut act)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            Boolean owner;
+            var dataset = datasrv.Read(id,main,userid,out owner);
+            if (!owner)
+                return Forbid();
+            if (dataset == null)
+                return NotFound();
+            DatasetMLPost snd = new DatasetMLPost();
+            snd.data = dataset;
+            snd.actions = act.actions;
+            var response = await MLconnection.editDataset(snd);
+            if(response.StatusCode == HttpStatusCode.OK)
+            {
+                var savestr = new DatasetGetPost();
+                savestr.dataset = await response.Content.ReadAsStringAsync();
+                if (datasrv.EditHelperset(id, userid, savestr))
+                {
+                    return Ok();
+                }
+                else return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Greska prilikom cuvanja promena" });
+            }
+            return BadRequest();
+        }
+        [HttpPut("{id}/dataset/save")]
+        public async Task<ActionResult<string>> SaveDataset(int id)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            Boolean owner;
+            var chk = datasrv.UpdateMainDataset(id, userid, out owner);
+            if (!owner)
+                return Forbid();
+            if(!chk)
+                return NotFound();
+            return Ok();
+        }
     }
 }
