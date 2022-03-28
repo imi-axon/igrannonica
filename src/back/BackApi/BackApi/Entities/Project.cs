@@ -6,13 +6,13 @@ namespace BackApi.Entities
     public class Project
     {
         [Key]
-        public int Id { get; set; }
-        public Korisnik Korisnik { get; set; }
+        public int ProjectId { get; set; }
+        public User User { get; set; }
 
-        [ForeignKey("Korisnik")]
-        public int User_id { get; set; }
+        [ForeignKey("User")]
+        public int UserId { get; set; }
         public string Name { get; set; }
-        public DateTime Creation_Date { get; set; }
+        public DateTime CreationDate { get; set; }
         public string Description { get; set; } = string.Empty;
 
         public Boolean Public { get; set; } = false;

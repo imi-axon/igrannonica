@@ -14,11 +14,14 @@ namespace BackApi.Services
     }
     public class ProjectService:IProjectService
     {
-        private BazaContext context;
+        private DataBaseContext context;
         private readonly IConfiguration configuration;
+        private IDatasetService datasetService;
+        private IStorageService storageService =new StorageService();
 
-        public ProjectService(BazaContext context, IConfiguration configuration)
+        public ProjectService(DataBaseContext context, IConfiguration configuration, IDatasetService datasetService)
         {
+            this.datasetService = datasetService;
             this.context = context;
             this.configuration = configuration;
         }
@@ -32,27 +35,19 @@ namespace BackApi.Services
             Project project = new Project();
             project.Name = model.name;
             project.Description = model.description;
-            project.User_id = userid;
+            project.UserId = userid;
             project.Public = model.ispublic;
-            project.Creation_Date = DateTime.Now;
+            project.CreationDate = DateTime.Now;
 
             context.Projects.Add(project);
             context.SaveChanges();
 
-            var tmp = project;
-            var basepath = @"Storage\";
-            var projfolder = "proj" + tmp.Id;
-            var projpath =Path.Combine(basepath, projfolder);
-            Directory.CreateDirectory(projpath);
-            var datapath =Path.Combine(projpath, "data");
-            Directory.CreateDirectory(datapath);
-            var mrezapath = Path.Combine(projpath,"mreze");
-            Directory.CreateDirectory(mrezapath);
+            storageService.CreateProject(project.ProjectId);
 
             return true;
         }
 
-        private void DeleteDataset(int datasetid)    //implementacija ce biti pomerena u dataset servis
+        private void DeleteDataset(int datasetid)    //implementacija ce biti pomerena u dataset servis 
         {
             try
             {
@@ -77,12 +72,12 @@ namespace BackApi.Services
 
         public Boolean DeleteProject(int projid, int userid) //manual cascade delete
         {
-            var tmp = context.Projects.Where(x => x.User_id == userid && x.Id == projid).FirstOrDefault();
-            if (userid == tmp.User_id) {
+            var tmp = context.Projects.Where(x => x.UserId == userid && x.ProjectId == projid).FirstOrDefault();
+            if (userid == tmp.UserId) {
                 List<Dataset> datasets = context.Datasets.Where(x => x.ProjectId == projid).ToList();
                 foreach (Dataset dataset in datasets)
                 {
-                    DeleteDataset(dataset.DatasetId);
+                    datasetService.Delete(projid,userid);
                 }
 
                 List<NN> NNs = context.NNs.Where(x => x.ProjectId == projid).ToList();
@@ -92,10 +87,7 @@ namespace BackApi.Services
                     DeleteNN(n.NNId);
                 }
 
-                var basepath = @"Storage\";
-                var projfolder = "proj" + tmp.Id;
-                var projpath = Path.Combine(basepath, projfolder);
-                Directory.Delete(projpath,true);
+                storageService.DeleteProject(tmp.ProjectId);
 
                 context.Projects.Remove(tmp);
                 context.SaveChanges();
@@ -109,25 +101,25 @@ namespace BackApi.Services
         {
             var rez = new StringBuilder();
             rez.Append("[");
-            List<Project> listapub = context.Projects.Where(x => x.User_id == pubuserid && x.Public == true).ToList();
+            List<Project> listapub = context.Projects.Where(x => x.UserId == pubuserid && x.Public == true).ToList();
             foreach (Project p in listapub)
             {
                 rez.Append("{");
-                rez.Append("\"" + "ProjectId" + "\":" + "\"" + p.Id + "\",");
+                rez.Append("\"" + "ProjectId" + "\":" + "\"" + p.ProjectId + "\",");
                 rez.Append("\"" + "Name" + "\":" + "\"" + p.Name + "\",");
                 rez.Append("\"" + "Public" + "\":" + "\"" + p.Public + "\",");
-                rez.Append("\"" + "Creationdate" + "\":" + "\"" + p.Creation_Date + "\",");
+                rez.Append("\"" + "Creationdate" + "\":" + "\"" + p.CreationDate + "\",");
                 rez.Append("\"" + "Description" + "\":" + "\"" + p.Description + "\"");
                 rez.Append("},");
             }
-            List<Project> listapriv= context.Projects.Where(x => x.User_id == userid && x.Public==false).ToList();
+            List<Project> listapriv= context.Projects.Where(x => x.UserId == userid && x.Public==false).ToList();
             foreach(Project p in listapriv)
             {
                 rez.Append("{");
-                rez.Append("\"" +"ProjectId"+ "\":" + "\"" +p.Id+ "\",");
+                rez.Append("\"" +"ProjectId"+ "\":" + "\"" +p.ProjectId+ "\",");
                 rez.Append("\"" + "Name" + "\":" + "\"" + p.Name + "\",");
                 rez.Append("\"" + "Public" + "\":" + "\"" + p.Public + "\",");
-                rez.Append("\"" + "Creationdate" + "\":" + "\"" + p.Creation_Date + "\",");
+                rez.Append("\"" + "Creationdate" + "\":" + "\"" + p.CreationDate + "\",");
                 rez.Append("\"" + "Description" + "\":" + "\"" + p.Description + "\"");
                 rez.Append("},");
             }
@@ -139,11 +131,11 @@ namespace BackApi.Services
         public string GetProjById(int projid, int userid)
         {
             var rez = new StringBuilder();
-            var proj = context.Projects.Where(x => x.User_id == userid && x.Id == projid);
+            var proj = context.Projects.Where(x => x.UserId == userid && x.ProjectId == projid);
             foreach (Project p in proj) 
             {
                 rez.Append("{");
-                rez.Append("\"" + "ProjectId" + "\":" + "\"" + p.Id + "\",");
+                rez.Append("\"" + "ProjectId" + "\":" + "\"" + p.ProjectId + "\",");
                 rez.Append("\"" + "Name" + "\":" + "\"" + p.Name + "\",");
                 rez.Append("\"" + "Public" + "\":" + "\"" + p.Public + "\",");
                 rez.Append("\"" + "Description" + "\":" + "\"" + p.Description + "\"");
@@ -159,7 +151,7 @@ namespace BackApi.Services
             var edited = context.Projects.Find(projid);
             if(edited == null)
                 return rez = false;
-            if (edited.User_id != userid)
+            if (edited.UserId != userid)
                 return rez = false;
             edited.Name = proj.name;
             edited.Description = proj.description;

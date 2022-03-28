@@ -4,18 +4,16 @@ using BackApi.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
 namespace BackApi.Migrations
 {
-    [DbContext(typeof(BazaContext))]
-    [Migration("20220320103119_Ispravka Strukture")]
-    partial class IspravkaStrukture
+    [DbContext(typeof(DataBaseContext))]
+    partial class DataBaseContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,7 +55,65 @@ namespace BackApi.Migrations
                     b.ToTable("Datasets");
                 });
 
-            modelBuilder.Entity("BackApi.Entities.Korisnik", b =>
+            modelBuilder.Entity("BackApi.Entities.NN", b =>
+                {
+                    b.Property<int>("NNId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NNId"), 1L, 1);
+
+                    b.Property<string>("DataPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NNName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("NNId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("NNs");
+                });
+
+            modelBuilder.Entity("BackApi.Entities.Project", b =>
+                {
+                    b.Property<int>("ProjectId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProjectId"), 1L, 1);
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Public")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProjectId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("BackApi.Entities.User", b =>
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
@@ -91,65 +147,7 @@ namespace BackApi.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Korisnici");
-                });
-
-            modelBuilder.Entity("BackApi.Entities.NN", b =>
-                {
-                    b.Property<int>("NNId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NNId"), 1L, 1);
-
-                    b.Property<string>("DataPath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NNName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.HasKey("NNId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.ToTable("NNs");
-                });
-
-            modelBuilder.Entity("BackApi.Entities.Project", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("Creation_Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Public")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("User_id")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("User_id");
-
-                    b.ToTable("Projects");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("BackApi.Entities.Dataset", b =>
@@ -176,13 +174,13 @@ namespace BackApi.Migrations
 
             modelBuilder.Entity("BackApi.Entities.Project", b =>
                 {
-                    b.HasOne("BackApi.Entities.Korisnik", "Korisnik")
+                    b.HasOne("BackApi.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("User_id")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Korisnik");
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

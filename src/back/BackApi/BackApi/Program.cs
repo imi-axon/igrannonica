@@ -14,7 +14,7 @@ var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<BazaContext>();
+builder.Services.AddDbContext<DataBaseContext>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -43,11 +43,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-
-builder.Services.AddScoped<IKorisnikServis,KorisnikServis>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddScoped<IProjectService,ProjectService>();
-builder.Services.AddScoped<IDatasetServis,DatasetServis>();
-builder.Services.AddScoped<IJwtServis, JwtServis>();
+builder.Services.AddScoped<IDatasetService,DatasetService>();
+builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<IStorageService, StorageService>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddCors(options =>

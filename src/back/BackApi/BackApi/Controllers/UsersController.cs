@@ -11,27 +11,43 @@ namespace BackApi.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private IKorisnikServis korsrv;
-        private IJwtServis jwtsrv;
+        private IUserService korsrv;
+        private IJwtService jwtsrv;
         private IProjectService projsrv;
+        private IConfiguration configuration;
+        private IEmailService emailsrv;
 
-        public UsersController(IKorisnikServis korisnikServis,IJwtServis jwtServis,IProjectService projectService)
+        public UsersController(IUserService korisnikServis, IJwtService jwtServis, IProjectService projectService, IConfiguration configuration, IEmailService emailService)
         {
             this.korsrv = korisnikServis;
             this.jwtsrv = jwtServis;
             this.projsrv = projectService;
+            this.configuration = configuration;
+            this.emailsrv = emailService;
+        }
+
+        [HttpPost("{emailtoken}")]
+        public async Task<ActionResult<string>> Verify(string emailtoken)
+        {
+            string pom = emailsrv.ValidateToken(emailtoken);
+            if (pom != null)
+            {
+                string message = emailsrv.VerifyEmailAdress(pom);
+                return Ok(message);
+            }
+            return BadRequest();
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> Register(KorisnikRegister req)
+        public async Task<ActionResult<string>> Register(UserRegister req)
         {
             int userid = jwtsrv.GetUserId();
             if (userid != -1) return Forbid();
             Boolean tmp = korsrv.Register(req);
             string rez = "";
             if (tmp)
-            {   
-                rez = "Korisnik uspesno registrovan";
+            {
+                rez = "Korisnik uspesno registrovan(nije verifikovan)";
                 return Ok(rez);
             }
             else
@@ -40,9 +56,8 @@ namespace BackApi.Controllers
                 return BadRequest(rez);
             }
         }
-
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(KorisnikLogin req)
+        public async Task<ActionResult<string>> Login(UserLogin req)
         {
             int userid = jwtsrv.GetUserId();
             if (userid != -1) return Forbid();

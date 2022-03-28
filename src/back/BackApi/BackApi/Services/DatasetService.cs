@@ -9,29 +9,33 @@ using System.Diagnostics;
 
 namespace BackApi.Services
 {
-    public interface IDatasetServis
+    public interface IDatasetService
     {
-        public Boolean Novi(DatasetGetPost model,int projid,int userid);
-        public dynamic daLiPostoji(int projectID, out Boolean uspeh, int userid, out Boolean owner);
-        public Boolean Brisi(int projid,int userid);
-        public string Listaj(int projid);
-        public string Procitaj(int projid, Boolean main);
+        public Boolean New(DatasetGetPost model,int projid,int userid);
+        public dynamic IsExist(int projectID, out Boolean uspeh, int userid, out Boolean owner);
+        public Boolean Delete(int projid,int userid);
+        public string ListDatasets(int projid);
+        public string Read(int projid, Boolean main,int userid,out Boolean owner);
+        public string ProjIdToPath(int projid);
+        public Boolean EditHelperset(int projid, int userid, DatasetGetPost model);
+        public Boolean UpdateMainDataset(int projid, int userid, out Boolean owner);
     }
 
-    public class DatasetServis : IDatasetServis
+    public class DatasetService : IDatasetService
     {
-        private BazaContext kontext;
+        private DataBaseContext kontext;
         private readonly IConfiguration configuration;
+        private static IStorageService storageService=new StorageService();
 
-        public DatasetServis(BazaContext datasetContext, IConfiguration configuration)
+        public DatasetService(DataBaseContext datasetContext, IConfiguration configuration)
         {
             kontext = datasetContext;
             this.configuration = configuration;
         }
 
-        public Boolean Novi(DatasetGetPost model,int projid,int userid)
+        public Boolean New(DatasetGetPost model,int projid,int userid)
         {
-            var tmp= kontext.Projects.FirstOrDefault(x=> x.Id==projid && x.User_id==userid); // provera vlasnistva projekta pre dodavanja dataset-a
+            var tmp= kontext.Projects.FirstOrDefault(x=> x.ProjectId==projid && x.UserId==userid); // provera vlasnistva projekta pre dodavanja dataset-a
             if (tmp == null)
                 return false;
 
@@ -46,29 +50,40 @@ namespace BackApi.Services
             kontext.Add(Dataset);
             kontext.SaveChanges();
 
-            var basepath = @"Storage\";
-            var projfolder = "proj" +projid;
-            var projpath = Path.Combine(basepath, projfolder);
-            var datapath = Path.Combine(projpath, "data");
-            var filename = "data" + Dataset.DatasetId + ".csv";   //trenutno samo csv ubuduce ce se dodavati Ext property-podrzani fajltipovi
-            var datafile = Path.Combine(datapath, filename);
+            var path = storageService.CreateDataset(projid, Dataset.DatasetId);
 
-            Dataset.Path = datafile;
+            Dataset.Path = path;
 
             kontext.Entry(Dataset).State=Microsoft.EntityFrameworkCore.EntityState.Modified;
             kontext.SaveChanges();
             
+            var Temp = new Dataset();
+            Temp.Name = "Default - Pomocni";
+            Temp.ProjectId = projid;
+            Temp.Ext = ".csv";
+            Temp.Path="None";
+            Temp.Main = false;
+
+            kontext.Add(Temp);
+            kontext.SaveChanges();
+
+            var pathalt=storageService.CreateDataset(projid, Temp.DatasetId);
+            Temp.Path = pathalt;
+
+            kontext.Entry(Temp).State=Microsoft.EntityFrameworkCore.EntityState.Modified;
+            kontext.SaveChanges();
 
             //string xd= "n1;n2;n3;out\r1; 1; 0; 1\r1; 0; 0; 1\r0; 0; 1; 1\r1; 0; 1; 1\r0; 0; 0; 0\r";
-            File.WriteAllTextAsync(datafile, model.dataset);
+            File.WriteAllTextAsync(path, model.dataset);
+            File.WriteAllTextAsync(pathalt,model.dataset);
 
             return true;
             //return datafile;
         }
 
-        public dynamic daLiPostoji(int projectID, out Boolean uspeh,int userid,out Boolean owner)
+        public dynamic IsExist(int projectID, out Boolean uspeh,int userid,out Boolean owner)
         {
-            var rez = kontext.Projects.FirstOrDefault(x => x.Id == projectID);
+            var rez = kontext.Projects.FirstOrDefault(x => x.ProjectId == projectID);
             owner = false;
             if (rez == null)
             {
@@ -77,7 +92,7 @@ namespace BackApi.Services
             }
             else
             {
-                if (rez.User_id != userid)
+                if (rez.UserId != userid)
                 {
                     uspeh = false;
                     return "Vi niste vlasnik projekta";
@@ -106,9 +121,9 @@ namespace BackApi.Services
             }
         }
 
-        public Boolean Brisi(int projid,int userid)
+        public Boolean Delete(int projid,int userid)
         {
-            var tmp = kontext.Projects.FirstOrDefault(x => x.Id == projid && x.User_id == userid); // provera vlasnistva projekta pre brisanja dataset-a
+            var tmp = kontext.Projects.FirstOrDefault(x => x.ProjectId == projid && x.UserId == userid); // provera vlasnistva projekta pre brisanja dataset-a
             if (tmp == null)
                 return false;
 
@@ -116,9 +131,8 @@ namespace BackApi.Services
             var dataset = lista[0];
             if (dataset == null)
                 return false;
-            var basepath = @"";
-            basepath = Path.Combine(basepath, dataset.Path);
-            File.Delete(basepath);
+
+            storageService.DeleteDataset(dataset.Path);
 
             kontext.Datasets.Remove(dataset);
             kontext.SaveChanges();
@@ -126,7 +140,7 @@ namespace BackApi.Services
             return true;
         }
 
-        public string Listaj(int projid)
+        public string ListDatasets(int projid)
         {
             var rez = new StringBuilder();
             rez.Append("[");
@@ -146,13 +160,21 @@ namespace BackApi.Services
 
         }
 
-        public string Procitaj(int projid, Boolean main)
+        public string Read(int projid, Boolean main,int userid,out Boolean owner)
         {
             var rez = "";
+            var chkowner=kontext.Projects.FirstOrDefault(x=> x.ProjectId == projid && x.UserId==userid);
+            if (chkowner == null)
+            {
+                owner = false;
+                return null;
+            }
+            owner = true;   
             List<Dataset> lista = kontext.Datasets.Where(x => x.ProjectId == projid && x.Main == main).ToList();
             if (lista.Count == 0) return null;
-            var path = @"";
-            path = Path.Combine(path, lista[0].Path);
+
+            var path = storageService.GetDataset(lista[0].Path);
+
             string[] lines=File.ReadAllLines(path);
             var content = new StringBuilder();
             foreach(string line in lines)
@@ -166,5 +188,38 @@ namespace BackApi.Services
             return str; //vraca csvstring, iz kontrolera zove ml deo
         }
         
+        public string ProjIdToPath(int projid)
+        {
+            Dataset dset = kontext.Datasets.FirstOrDefault(x => x.ProjectId == projid);
+            if (dset == null) return null;
+            return dset.Path;
+        }
+
+        public Boolean EditHelperset(int projid,int userid,DatasetGetPost model) // sluzi za rucno menjanje helper csv-a
+        {
+            var chkowner = kontext.Projects.FirstOrDefault(x => x.ProjectId == projid && x.UserId == userid);
+            if (chkowner == null)
+                return false;
+            Dataset edit=kontext.Datasets.FirstOrDefault(x=> x.ProjectId == projid && x.Main==false);
+            if (edit == null) return false;
+
+            var path = storageService.GetDataset(edit.Path);
+            File.WriteAllTextAsync(path, model.dataset);
+            return true;
+        }
+
+        public Boolean UpdateMainDataset(int projid,int userid,out Boolean owner)
+        {
+            var temp = Read(projid, false, userid, out owner);
+            if(!owner) return false;
+            if(temp == null) return false;
+            Dataset dest = kontext.Datasets.FirstOrDefault(x => x.ProjectId == projid && x.Main == true);
+            if (dest == null) return false;
+
+            var path=storageService.GetDataset(dest.Path);
+            File.WriteAllTextAsync(path, temp);
+            return true;    
+        }
+
     }
 }

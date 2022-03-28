@@ -6,7 +6,7 @@ using System.Net.Http.Headers;
 
 namespace BackApi
 {
-    public static class KonekcijaSaML
+    public static class MLconnection
     {
         public static async Task<HttpResponseMessage> convertCSVstring(DatasetGetPost csvstring)
         {
@@ -50,11 +50,29 @@ namespace BackApi
             var byteContent = new ByteArrayContent(buffer);
             byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-            Debug.WriteLine("Salje se zahtev ML-u (za Add Dataset)");
+            Debug.WriteLine("Salje se zahtev ML-u (za Statistiku)");
             var result = await client.PostAsync("http://localhost:8000/api/dataset/statistics", byteContent);
 
             return result;
         }
+
+        public static async Task<HttpResponseMessage> editDataset(DatasetMLPost dataset)
+        {
+            // Debug.WriteLine(csvstring);
+            HttpClient client = new HttpClient();
+            // StringContent content = new StringContent(csvstring);
+
+            var myContent = JsonConvert.SerializeObject(dataset);
+            var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+            var byteContent = new ByteArrayContent(buffer);
+            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            Debug.WriteLine("Salje se zahtev ML-u (za Edit Dataset)");
+            var result = await client.PostAsync("http://localhost:8000/api/dataset/edit", byteContent);
+
+            return result;
+        }
+
         /*public static async Task<dynamic> getRequest(string tekst)
         {
             Debug.WriteLine(tekst);

@@ -2,10 +2,10 @@
 
 namespace BackApi.Entities
 {
-    public class BazaContext:DbContext
+    public class DataBaseContext:DbContext
     {
         protected readonly IConfiguration Configuration;
-        public BazaContext(IConfiguration configuration)
+        public DataBaseContext(IConfiguration configuration)
         {
             Configuration = configuration;
         }
@@ -14,7 +14,7 @@ namespace BackApi.Entities
             options.UseSqlServer(Configuration.GetConnectionString("SqlExpress"));
         }
         //dodatavanje tabela u bazu
-        public DbSet<Korisnik> Korisnici { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<Dataset> Datasets { get; set; }
         public DbSet<NN> NNs { get; set; }
