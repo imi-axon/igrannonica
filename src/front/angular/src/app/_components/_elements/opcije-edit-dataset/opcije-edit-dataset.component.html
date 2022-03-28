@@ -2,42 +2,54 @@
 <div class="btn-group-vertical">
 
     <div class="dugme-tekst ">
-        <button type="button" class="btn m-0 btn-secondary" style="border-bottom-right-radius: 0% ; border-bottom-left-radius: 0%;" data-toggle="tooltip" data-placement="top"
-            title="Izbrisi kolone">
+        <button type="button" class="btn m-0 btn-secondary" style="border-bottom-right-radius: 0% ; border-bottom-left-radius: 0%;" 
+         matTooltip="Izbrisi kolone"
+         matTooltipPosition="right">
             <i class="bi bi-trash"></i>
-        </button> Izbrisi kolone
+        </button> 
+        <!-- Izbrisi kolone -->
     </div>
     <div class="dugme-tekst ">
-        <button type="button" class="btn m-0 btn-secondary" style="border-radius: 0%;" data-toggle="tooltip" data-placement="right"
-            title="Izbrisi redove sa null vrednostima">
+        <button type="button" class="btn m-0 btn-secondary" style="border-radius: 0%;"
+         matTooltip="Izbrisi redove sa null vrednostima"
+         matTooltipPosition="right">
             <i class="bi bi-trash"></i>
-        </button> Izbrisi redove sa null vrednostima
+        </button> 
+        <!-- Izbrisi redove sa null vrednostima -->
     </div>
     <div class="dugme-tekst mb-3">
-        <button type="button" class="btn btn-secondary" style="border-top-left-radius: 0%;border-top-right-radius: 0%;" data-toggle="tooltip" data-placement="bottom"
-            title="Popuni redove sa null vrednostima">
+        <button type="button" class="btn btn-secondary" style="border-top-left-radius: 0%;border-top-right-radius: 0%;"
+         matTooltip="Popuni redove sa null vrednostima"
+         matTooltipPosition="right"
+         >
             <i class="bi bi-plus-square-dotted"></i>
-        </button> Popuni redove sa null vrednostima
+        </button> 
+        <!-- Popuni redove sa null vrednostima -->
     </div>
 
     <div class="dugme-tekst mb-3">
 
-        <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="right" title="Duplikati">
+        <button type="button" class="btn btn-secondary"
+         matTooltip="Izbrisi duplikate"
+         matTooltipPosition="right">
             <i class="fas fa-clone"></i>
-        </button> Duplikati
+        </button> 
+        <!-- Duplikati -->
     </div>
 
-    <div class="dugme-tekst mb-4">
-        <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="bottom"
-            title="Enkodiranje">
+    <div class="btn-group" role="group">
+        <span>
+        <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" 
+        matTooltip="Enkodiranje"
+        matTooltipPosition="right"
+        style="width:77%"
+        >
             <i class="bi bi-file-binary"></i>
-        </button> Enkodiranje
-    </div>
+        </button>
+         <!-- Enkodiranje -->
+        </span>
+        <div  class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+          <a class="dropdown-item" href="#">Dropdown link</a>
+          <a class="dropdown-item" href="#">Dropdown link</a>
+        </div>
 </div>
-
-
-<script type="text/javascript">
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-    })
-</script>

@@ -29,6 +29,8 @@ import { CorrelationTableComponent } from './_components/_elements/correlation-t
 import { ProfilComponent } from './_components/_elements/profil/profil.component';
 import { OpcijeDatasetComponent } from './_components/_elements/opcije-dataset/opcije-dataset.component';
 import { OpcijeEditDatasetComponent } from './_components/_elements/opcije-edit-dataset/opcije-edit-dataset.component';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 
 
 @NgModule({
@@ -58,7 +60,9 @@ import { OpcijeEditDatasetComponent } from './_components/_elements/opcije-edit-
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    NoopAnimationsModule,
+    MatTooltipModule
   ],
   providers: [DatasetService],
   bootstrap: [AppComponent]
