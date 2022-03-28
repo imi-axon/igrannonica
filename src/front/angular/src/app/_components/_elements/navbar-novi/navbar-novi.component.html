@@ -1,0 +1,60 @@
+
+<nav class="navbar navbar-expand-sm">
+    <div class="container-fluid">
+        
+      <!-- <a class="navbar-brand" routerLink="/">Igrannonica</a> -->
+      
+      <!--
+        Dugme za prikaz linkova na manjim ekranima / mobilnim uredjajima
+      -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+        <ul class="navbar-nav mx-auto">
+          
+          <li class="nav-item">
+              <button class="btn btn-secondary navbar-btn" routerLink="" [routerLinkActive]="['active']">Home</button>
+          </li>
+
+          <div class="btn-group mx-4">
+
+          <li class="nav-item">
+            <button class="dugmeDesno btn btn-secondary navbar-btn" routerLink="/my-projects" [routerLinkActive]="['active']" 
+            >My Experiments</button>
+          </li>
+
+          <li class="nav-item">
+            <button class="dugmeLevo btn btn-secondary navbar-btn" routerLink="/new-project" [routerLinkActive]="['active']">New Experiment</button>
+          </li>
+        </div>
+
+
+          <li class="nav-item" *ngIf="!auth.logovan">
+            <button class="dugmeDesno btn btn-secondary navbar-btn" routerLink="/registration" [routerLinkActive]="['active']">Registration</button>
+          </li>
+          
+          <li class="nav-item" *ngIf="!auth.logovan">
+            <button class="dugmeLevo btn btn-secondary navbar-btn" routerLink="/login" [routerLinkActive]="['active']">Login</button>
+          </li>
+ 
+          <li class="nav-item" *ngIf="auth.logovan">
+            <button id="korisnickoIme" class="dugmeDesno btn btn-secondary navbar-btn" routerLink="/profil" [routerLinkActive]="['active']">My Account</button>
+            <!-- {{auth.korisnickoIme}} -->
+          </li>
+         
+
+          <li class="nav-item" *ngIf="auth.logovan">
+            <button class="dugmeLevo btn btn-secondary navbar-btn" routerLink="/login" [routerLinkActive]="['active']" (click)="logout()">Logout</button>
+          </li>
+
+       
+          		
+        </ul>		  
+      </div>
+      
+      
+    </div>
+  </nav>
+  

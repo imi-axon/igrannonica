@@ -32,6 +32,7 @@ import { OpcijeEditDatasetComponent } from './_components/_elements/opcije-edit-
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 import {MatSelectModule} from '@angular/material/select';
+import { NavbarNoviComponent } from './_components/_elements/navbar-novi/navbar-novi.component';
 
 
 @NgModule({
@@ -54,7 +55,8 @@ import {MatSelectModule} from '@angular/material/select';
     CorrelationTableComponent,
     ProfilComponent,
     OpcijeDatasetComponent,
-    OpcijeEditDatasetComponent
+    OpcijeEditDatasetComponent,
+    NavbarNoviComponent
   ],
   imports: [
     NgxCsvParserModule,
