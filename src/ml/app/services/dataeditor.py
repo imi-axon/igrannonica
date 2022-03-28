@@ -5,6 +5,8 @@ import tensorflow as tf
 from tensorflow import keras
 
 
+from sklearn.preprocessing import LabelEncoder
+
 class DataEditorService:
 
     # klasa DataEditorService kao argument u konstruktoru ima DataFrame (ucitani csv - skup podataka)
@@ -64,6 +66,28 @@ class DataEditorService:
     #delete_duplicates : uklanja duplikate
     def delete_duplicates(self):
         self.dataset.drop_duplicates(inplace=True)
+
+    #enkodiranje kategorijskih kolona
+    #label_encoding : vrsi enkodiranje prosledjenih kolona pomocu label encoding-a
+    def label_encoding(self,columns):
+        lb_enc = LabelEncoder()
+        del_columns = []
+        cat = self.find_categorical_columns()
+        for column in columns:
+            if column in cat:
+                self.dataset[column + '_code'] = lb_enc.fit_transform(self.dataset[column])
+                del_columns.append(column)
+        self.delete_columns(del_columns)
+
+    #enkodiranje kategorijskih kolona
+    #one_hot_encoding : vrsi enkodiranje prosledjenih kolona pomocu one-hot encoding-a
+    #povratna vrednost je DataFrame
+    def one_hot_encoding(self,columns):
+        cat = self.find_categorical_columns()
+        for column in columns:
+            if column in cat:
+                self.dataset = pd.get_dummies(self.dataset, columns=[column], prefix = [column])
+        return self.dataset
 
 
 
