@@ -10,6 +10,8 @@ namespace BackApi.Entities
         public string Name { get; set; }
         public string Lastname { get; set; }
         public string Email { get; set; }
+        public string EmailToken { get; set; }  
+        public Boolean Verified { get; set; }   
         public string Username { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }

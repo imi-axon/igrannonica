@@ -18,11 +18,13 @@ namespace BackApi.Services
     {
         private DataBaseContext kontext;
         private readonly IConfiguration configuration;
+        private IEmailService emailService;
 
-        public UserService(DataBaseContext korisnikContext,IConfiguration configuration)
+        public UserService(DataBaseContext korisnikContext,IConfiguration configuration, IEmailService emailService)
         {
             kontext = korisnikContext;
             this.configuration = configuration;
+            this.emailService = emailService;
         }
 
         private void CreatePWHash(string password, out byte[] pwHash, out byte[] pwSalt)
@@ -65,10 +67,26 @@ namespace BackApi.Services
                 return jwt;
         }
 
+        private string CreateEmailToken(User korisnik, int expiretime)
+        {
+            List<Claim> claims = new List<Claim>()
+            {
+                new Claim("username",korisnik.Username ),
+            };
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration.GetSection("AppSettings:Token").Value));
+
+            var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(expiretime),
+                signingCredentials: cred);
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+            return jwt;
+        }
+
         public Boolean Register(UserRegister model)
         {
             //string rez = "";
-
             if (kontext.Users.Any(x => x.Username == model.username))
             {
                 //rez = "Korisnik sa tim Username-om vec postoji!";
@@ -80,6 +98,9 @@ namespace BackApi.Services
             korisnik.Lastname = model.lastname;
             korisnik.Name=model.firstname;
             korisnik.Email=model.email;
+            korisnik.Verified = false;
+            string jwtoken = CreateEmailToken(korisnik, int.Parse(configuration.GetSection("AppSettings2:EmailToken").Value.ToString()));
+            korisnik.EmailToken = jwtoken; 
 
             CreatePWHash(model.password, out byte[] pwHash, out byte[] pwSalt);
 
@@ -90,12 +111,13 @@ namespace BackApi.Services
             kontext.SaveChanges();
             //rez = "Korisnik uspesno registrovan";
 
+            emailService.SendEmail("Kliknite na link za potvrdu registracije:http://localhost:4200/login?token=" + jwtoken, "Potvrda registracije", model.email);
             return true;
         }
 
         public string Login(UserLogin model,out Boolean uspeh)
         {
-            var kor =kontext.Users.FirstOrDefault(x => x.Username == model.username);
+            var kor =kontext.Users.FirstOrDefault(x => x.Username == model.username && x.Verified==true);
             var jwtoken = "";
 
             if (kor != null && CheckPWHash(model.password, kor.PasswordHash, kor.PasswordSalt))
@@ -108,7 +130,7 @@ namespace BackApi.Services
             else
             {
                 uspeh = false;
-                return "Pogresan username ili password";
+                return "Pogresan username ili password ili korisnik nije verifikovan";
             }
  
         }
