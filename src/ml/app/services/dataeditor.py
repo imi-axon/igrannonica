@@ -6,12 +6,13 @@ from tensorflow import keras
 
 
 from sklearn.preprocessing import LabelEncoder
+from .util import read_str_to_df
 
 class DataEditorService:
 
     # klasa DataEditorService kao argument u konstruktoru ima DataFrame (ucitani csv - skup podataka)
     def __init__(self, dataframe):
-        self.dataset = dataframe
+        self.dataset = read_str_to_df(dataframe)
 
     #delete_columns : brise kolone iz dataset-a
     #columns : lista stringova (naziva kolona) koje treba obrisati

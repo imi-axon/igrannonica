@@ -1,3 +1,5 @@
+from services.dataeditor import DataEditorService
+
 class DatasetEditor:
 
     any_token = '??'
@@ -25,6 +27,8 @@ class DatasetEditor:
     def execute(actions: list, data: str):
         actions = DatasetEditor.sort_actions([a for a in actions])
 
+        service = DataEditorService(data)
+
         for action in actions:
             act = action['action']
             col = action['column']
@@ -34,25 +38,51 @@ class DatasetEditor:
                 # Delete
                 if act[0] == 'del' and act[1] == 'col':
                     print('Delete Column')
+                    service.delete_columns([col])
 
                 elif act[0] == 'del' and act[1] == 'nullrows':
                     print('Delete Rows with null')
+                    service.delete_rows([col])
 
                 # Insert
                 elif act[0] == 'ins' and act[1] == 'nullrows':    
                     print('Insert in Rows with null')
+                    
+                    if act[2] == 'mean':
+                        print('mean')
+                        service.fill_na_mean([col])
+                    
+                    elif act[2] == 'median':
+                        print('median')
+                        service.fill_na_median([col])
+                    
+                    else:
+                        return None
 
                 # Encode
                 elif act[0] == 'enc':
                     print('Encode')
+                    
+                    if act[1] == 'label':
+                        print('label')
+                        service.label_encoding([col])
+                    
+                    elif act[1] == 'onehot':
+                        print('onehot')
+                        service.one_hot_encoding([col])
+                    
+                    else:
+                        return None
 
                 else:
-                    return ('Komanda ' + act[0] + ' nepoznata', 500)
+                    return None
 
             # -- Globalne akcije --
+            elif act[0] == 'del' and act[1] == 'duplicates':
+                    print('Delete Duplicates')
+                    service.delete_duplicates()
+            
             else:
-                if act[0] == 'del' and act[1] == 'duplicates':
-                    print('Delete Duplicates')
+                return None
 
-                elif act[0] == 'std':
-                    print('Delete Duplicates')
+        return service.dataset.to_csv()

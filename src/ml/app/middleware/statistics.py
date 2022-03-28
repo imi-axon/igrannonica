@@ -1,9 +1,9 @@
 import json
 
-from ..services.statistics import StatisticsService
+from services.statistics import StatisticsService
 
-from ..services.util import read_str_to_df
-from ..services.util import object_to_json
+from services.util import read_str_to_df
+from services.util import object_to_json
 
 
 def statistics_json(csvString):

@@ -7,7 +7,7 @@ from models import Dataset, DatasetEditActions, Statistics
 # Utils
 from util.csv import csv_is_valid, csv_decode, csv_decode_2
 from util.json import json_encode, json_decode
-from .middleware.dataset_editor import DatasetEditor
+from middleware.dataset_editor import DatasetEditor
 
 # ML
 from middleware.statistics import statistics_json
@@ -59,15 +59,18 @@ def convert_csv_to_json(body: Dataset, response: Response):
 
 # Edit Dataset
 @app.post('/api/dataset/edit', status_code=200)
-def edit_dataset(body: DatasetEditActions):
+def edit_dataset(body: DatasetEditActions, response: Response):
     
-    actions = [{'action':str.split(a['action']), 'column':a['column']} for a in json_decode(body.actions)]
+    actions = [{'action':str.split(a['action']), 'column':(a['column'] if 'column' in a.keys() else '')} for a in json_decode(body.actions)]
     dataset = body.data
     # dataset = csv_decode(payload['data'])
 
-    DatasetEditor.execute(actions, dataset)
+    res = DatasetEditor.execute(actions, dataset)
 
-    return None
+    if res == None:
+        response.status_code = status.HTTP_400_BAD_REQUEST
+
+    return { 'dataset': res }
 
 
 # Get Dataset Statistics
