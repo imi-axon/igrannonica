@@ -31,6 +31,7 @@ import { OpcijeDatasetComponent } from './_components/_elements/opcije-dataset/o
 import { OpcijeEditDatasetComponent } from './_components/_elements/opcije-edit-dataset/opcije-edit-dataset.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations'
+import {MatSelectModule} from '@angular/material/select';
 
 
 @NgModule({
@@ -62,7 +63,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations'
     HttpClientModule,
     FormsModule,
     NoopAnimationsModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSelectModule
   ],
   providers: [DatasetService],
   bootstrap: [AppComponent]
