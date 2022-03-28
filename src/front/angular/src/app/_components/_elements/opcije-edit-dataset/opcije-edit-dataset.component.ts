@@ -9,7 +9,17 @@ export class OpcijeEditDatasetComponent implements OnInit {
 
   constructor() { }
 
+  prikaziEnkodiranje: boolean = false;
   ngOnInit(): void {
+  }
+
+  public vrsteEnkodiranja() {
+    console.log("uso");
+    if (this.prikaziEnkodiranje == false)
+      this.prikaziEnkodiranje = true;
+    else this.prikaziEnkodiranje = false;
+
+    console.log(this.prikaziEnkodiranje);
   }
 
 }

@@ -32,39 +32,32 @@
         <!-- Duplikati -->
     </div>
 
-    <!-- <div class="btn-group" role="group">
-        <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
-         matTooltip="Enkodiranje" matTooltipPosition="right"
-            style="width:77%">
-            <i class="bi bi-file-binary"></i>
-        </button>
-        Enkodiranje
-        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-            <a class="dropdown-item" href="#">Dropdown link</a>
-            <a class="dropdown-item" href="#">Dropdown link</a>
-        </div>
-    </div> -->
+    <div class="dugme-tekst mb-3">
+    <button type="button" class="dugme btn btn-secondary dropdown-toggle" style="width:77%" matTooltip="Enkodiranje" matTooltipPosition="right"
+        (click)="vrsteEnkodiranja()">
+        <i class="bi bi-file-binary"></i>
+    </button>
+</div>
 
-    <mat-form-field>
-        <button type="button" class="btn btn-secondary" style="width:24%" matTooltip="Enkodiranje" matTooltipPosition="right"> 
-            <span>  <i class="bi bi-file-binary">
-              
-            </i>
-            <mat-select>
-                <mat-option>
-                    1
-                </mat-option>
-                <mat-option>
-                    2
-                </mat-option>
-                <mat-option>
-                    3
-                </mat-option>
-            </mat-select></span>
-           
-         
-  
-        </button>
-    </mat-form-field>
+
+    <div class="container" style="max-width: 15em;">
+    <div id="enkodiranje" *ngIf="prikaziEnkodiranje" class="row m-2">
+
+        <div id="enkodiranjeGrupa" class="" >
+
+            <button type="button" class="dugmeEnc col-12 btn m-2 btn-secondary" matTooltip="Enkodiranje 1" matTooltipPosition="right">
+                Enkodiranje 1
+            </button>
+            <button type="button" class="dugmeEnc col-12 btn m-2 btn-secondary" matTooltip="Enkodiranje 2" matTooltipPosition="right">
+                Enkodiranje 2
+            </button>
+            <button type="button" class="dugmeEnc col-12 btn m-2 btn-secondary" matTooltip="Enkodiranje 3" matTooltipPosition="right">
+                Enkodiranje 3
+            </button>
+
+        </div>
+
+    </div>
+</div>
 
 </div>
