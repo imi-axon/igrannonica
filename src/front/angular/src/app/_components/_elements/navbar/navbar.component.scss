@@ -1,4 +1,55 @@
+$bojaNavbar:#343a40;
 #korisnickoIme
 {
     color:#0084FF;
+}
+// .navbar-toggler
+// {
+//     margin-left: 85%;
+// }
+
+// @media (max-width: 576px) { 
+//     .navbar-nav
+//     {
+//         text-align: right;
+//     }
+// }
+
+.navbar-toggler
+{
+   // color:$bojaNavbar;
+    background-color: $bojaNavbar;
+}
+
+@media (max-width: 576px) { 
+    .navbar
+    {
+        background-color: transparent;
+    }
+    // .nav-item a{
+    //     color:$bojaNavbar;
+    // }
+    // .nav-item a:hover{
+    //     color:blue;
+    // }
+    .nav-item a{
+        color:$bojaNavbar;
+    }
+    .nav-item a:hover{
+        color:$bojaNavbar;
+        font-weight: bold;
+    }
+    .nav-item a.active{
+        color:$bojaNavbar;
+        font-weight: bold;
+    }
+}
+@media (min-width: 576px) { 
+    .navbar
+    {
+        background-color: $bojaNavbar
+    }
+    .nav-link{
+        color:white;
+    }
 }

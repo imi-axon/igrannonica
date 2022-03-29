@@ -22,5 +22,6 @@ export class NavbarComponent implements OnInit {
     this.auth.logovan=false;
     this.auth.korisnickoIme='';
   }
+ 
 
 }
