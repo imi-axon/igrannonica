@@ -1,5 +1,6 @@
-import { HttpStatusCode } from '@angular/common/http';
+import { HttpClient, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { JWTUtil } from '../_helpers/jwt-util';
 import { UserApiService } from '../_middleware/user-api.service';
 
@@ -8,7 +9,8 @@ import { UserApiService } from '../_middleware/user-api.service';
 })
 export class UserService {
 
-  constructor(private userAPI:UserApiService) { }
+  readonly conn = "https://localhost:7057/api/users/";
+  constructor(private userAPI:UserApiService, private http:HttpClient) { }
   
   
     Register(applicantData: any, self?: any, successCallback?: Function, badRequestCallback?: Function, forbiddenCallback?: Function) {
@@ -62,5 +64,8 @@ export class UserService {
   
     }
     
+    verifyUser(token:any):Observable<any>{
+      return this.http.get<any>(this.conn+token)
+    }
 
 }

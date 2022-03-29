@@ -10,6 +10,7 @@ import { ProjectPageComponent } from './_components/_pages/project-page/project-
 import { RegistrationPageComponent } from './_components/_pages/registration-page/registration-page.component';
 import { RegistrationSuccessfulComponent } from './_components/_pages/registration-successful/registration-successful.component';
 import { StatisticsPageComponent } from './_components/_pages/statistics-page/statistics-page.component';
+import { VerificationComponent } from './_components/_pages/verification/verification.component';
 
 const routes: Routes = [
   {path:'project',component:ProjectPageComponent},
@@ -22,7 +23,8 @@ const routes: Routes = [
   {path:'home',component:HomePageComponent},
   {path: '', redirectTo:'/home', pathMatch: 'full'},
   {path:'my-projects',component:MyProjectsPageComponent},
-  {path:'profil', component:ProfilPageComponent}
+  {path:'profil', component:ProfilPageComponent},
+  {path:'verification', component:VerificationComponent}
 ];
 
 @NgModule({
@@ -34,4 +36,4 @@ export class AppRoutingModule { }
 //Kada se dodaje nova putanja, dodati je u niz
 export const routingComponents=[ProjectPageComponent, NewProjectPageComponent,
    DataSetPageComponent, StatisticsPageComponent, LoginPageComponent, RegistrationPageComponent,
-   HomePageComponent,MyProjectsPageComponent,ProfilPageComponent];
+   HomePageComponent,MyProjectsPageComponent,ProfilPageComponent,VerificationComponent];

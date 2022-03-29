@@ -33,6 +33,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 import {MatSelectModule} from '@angular/material/select';
 import { NavbarNoviComponent } from './_components/_elements/navbar-novi/navbar-novi.component';
+import { VerificationComponent } from './_components/_pages/verification/verification.component';
 
 
 @NgModule({
@@ -56,7 +57,8 @@ import { NavbarNoviComponent } from './_components/_elements/navbar-novi/navbar-
     ProfilComponent,
     OpcijeDatasetComponent,
     OpcijeEditDatasetComponent,
-    NavbarNoviComponent
+    NavbarNoviComponent,
+    VerificationComponent
   ],
   imports: [
     NgxCsvParserModule,

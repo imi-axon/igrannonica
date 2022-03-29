@@ -111,7 +111,7 @@ namespace BackApi.Services
             kontext.SaveChanges();
             //rez = "Korisnik uspesno registrovan";
 
-            emailService.SendEmail("Kliknite na link za potvrdu registracije:http://localhost:4200/login?token=" + jwtoken, "Potvrda registracije", model.email);
+            emailService.SendEmail("Kliknite na link za potvrdu registracije:http://localhost:4200/verification?token=" + jwtoken, "Potvrda registracije", model.email);
             return true;
         }
 

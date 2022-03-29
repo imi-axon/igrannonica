@@ -26,14 +26,14 @@ namespace BackApi.Controllers
             this.emailsrv = emailService;
         }
 
-        [HttpPost("{emailtoken}")]
+        [HttpGet("{emailtoken}")]
         public async Task<ActionResult<string>> Verify(string emailtoken)
         {
             string pom = emailsrv.ValidateToken(emailtoken);
             if (pom != null)
             {
                 string message = emailsrv.VerifyEmailAdress(pom);
-                return Ok(message);
+                return Ok();
             }
             return BadRequest();
         }
