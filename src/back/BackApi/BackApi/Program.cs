@@ -8,6 +8,8 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Http;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
+using Microsoft.Extensions.FileProviders;
+using System.Diagnostics;
 
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -77,9 +79,34 @@ app.UseAuthentication();
 
 app.UseCors(myAllowSpecificOrigins);
 
+
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = x =>
+    {
+        Debug.WriteLine(x.Context.User.Identities);
+        foreach (var identity in x.Context.User.Identities)
+        {
+            Debug.WriteLine(identity.Name);
+        }
+
+        //if (x.Context.User.Identity.IsAuthenticated)
+        //{
+        //    return;
+        //}
+
+        //x.Context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+    },
+    FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "Storage")),
+    RequestPath = "/Storage"
+});
+
+
 app.UseAuthorization();
 
 app.MapControllers();
+
 
 app.Run();
 
