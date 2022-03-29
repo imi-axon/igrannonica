@@ -1,35 +1,29 @@
-
-<div class="container-fluid">
-    
-    
-    <!-- <div class="row"> -->
-        
-        <!-- <div class="col-lg-2" >
-            <sidebar></sidebar>
-        </div> -->
-        
-        <!-- <div class="col-lg-10 project-container"> -->
-            <div class="col project-container">
-            
-            <div class="inside-container">
-                <button class="dataset-title-button"> <h1>Dataset1</h1> </button>
-                <app-csv #csvInput (fileChosen)="loader.start()" (jsonLoaded)="datasetTable.LoadDataDirectlyFromInput($event); this.showDataset(); loader.stop();" (fileError)="loader.stop();"></app-csv>
-                
-                <p style="color: red; font-weight:bold;"> {{errorMessage}} </p>
-            </div> 
-            
-            <loader #loader></loader>
-            
-            <div class="dataset-container" [class.hidden]="datasetHidden || loader.isLoading">
-                <data-set-table #datasetTable></data-set-table>
-            </div>
-            
-            <button class="btn btn-primary" (click)="sendDataset(csvInput.filecontent);"> Potvrdi </button>
-            
-            
+<div class="container mb-5">
+    <div class="container mx-auto mt-5 mb-5">
+        <div class="mx-auto text-center">
+        <button class="dataset-title-button px-4">
+            <h1>Dataset1</h1>
+        </button>
+    </div>
+        <div class="container">
+            <app-csv #csvInput (fileChosen)="loader.start()"
+                (jsonLoaded)="datasetTable.LoadDataDirectlyFromInput($event); this.showDataset(); loader.stop();"
+                (fileError)="loader.stop();"></app-csv>
         </div>
-        
-    <!-- </div> -->
+        <p style="color: red; font-weight:bold;"> {{errorMessage}} </p>
+
+        <loader #loader></loader>
+
+        <div class="datasetcont container" [class.hidden]="datasetHidden || loader.isLoading">
+            <data-set-table #datasetTable></data-set-table>
+        </div>
+
+
+    </div>
+    <!-- sakrij ako nije ucitano -->
     
-    
+    <div class="container d-flex justify-content-center">
+            <button class="btn btn-primary mb-5" (click)="sendDataset(csvInput.filecontent);"> Potvrdi </button>
+    </div>
+
 </div>
