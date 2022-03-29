@@ -21,7 +21,7 @@
                 <tr *ngFor="let i = index; let row of dataPages[currentPage];">
 
                     <!-- CELIJE ZA PRVU KOLONU   class="column-first" -->
-                    <td class="column-first" *ngIf="this.showsStatistics">
+                    <td class="" *ngIf="this.showsStatistics">
                         Null:&nbsp;&nbsp; {{rowNullsPages[currentPage][i]}}
                     </td>
 
@@ -33,6 +33,22 @@
                 </tr>
 
             </tbody>
+
+            <tr class="statistics" *ngIf="this.showsStatistics">
+                
+                <!-- CELIJA PRVE KOLONE -->
+                <th class="">
+                    <!-- id="statistics-switch-button" -->
+                    <button class="btn btn-primary" style="background-color: #0d6efd;"  type="button" (click)="shiftTroughStatisticsOptions()">
+                        {{statisticsOptions[selectedOption]}}
+                    </button>
+                </th>
+                
+                <th *ngFor="let stat of statisticsArrays[selectedOption]" class="statistics-cell"> 
+                    {{stat}}
+                </th> 
+            </tr>
+
         </table>
     </div>
 
