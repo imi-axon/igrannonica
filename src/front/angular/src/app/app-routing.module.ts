@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DataSetPageComponent } from './_components/_pages/data-set-page/data-set-page.component';
+import { EditDatasetPageComponent } from './_components/_pages/edit-dataset-page/edit-dataset-page.component';
 import { HomePageComponent } from './_components/_pages/home-page/home-page.component';
 import { LoginPageComponent } from './_components/_pages/login-page/login-page.component';
 import { MyProjectsPageComponent } from './_components/_pages/my-projects-page/my-projects-page.component';
@@ -24,7 +25,9 @@ const routes: Routes = [
   {path: '', redirectTo:'/home', pathMatch: 'full'},
   {path:'my-projects',component:MyProjectsPageComponent},
   {path:'profil', component:ProfilPageComponent},
-  {path:'verification', component:VerificationComponent}
+  {path:'verification', component:VerificationComponent},
+  
+  {path:'edit-dataset/:ProjectId', component:EditDatasetPageComponent}
 ];
 
 @NgModule({
@@ -36,4 +39,4 @@ export class AppRoutingModule { }
 //Kada se dodaje nova putanja, dodati je u niz
 export const routingComponents=[ProjectPageComponent, NewProjectPageComponent,
    DataSetPageComponent, StatisticsPageComponent, LoginPageComponent, RegistrationPageComponent,
-   HomePageComponent,MyProjectsPageComponent,ProfilPageComponent,VerificationComponent];
+   HomePageComponent,MyProjectsPageComponent,ProfilPageComponent,VerificationComponent,EditDatasetPageComponent];
