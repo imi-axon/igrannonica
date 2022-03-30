@@ -123,7 +123,7 @@ manager = TrainManager()
 @app.websocket("/api/nn/train/start/{client_id}")
 async def training_stream(client_id: str, websocket: WebSocket):
     await manager.connect(client_id, websocket)
-    rcv = await manager.receive(client_id)
+    #rcv = await manager.receive(client_id)
 
     try:
         while (await manager.send(client_id)) == False:
