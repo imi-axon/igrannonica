@@ -17,7 +17,7 @@ export class NewProjectService {
         // OK (Success)
           if(response.status== HttpStatusCode.Ok){
              if(self && successCallback) 
-                successCallback(self);
+                successCallback(self,response.body);
           }
           
          // Not Acceptable

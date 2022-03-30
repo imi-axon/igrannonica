@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 import { NewProject } from 'src/app/_utilities/_data-types/models';
 import { NewProjectService } from 'src/app/_utilities/_services/new-project.service';
 
@@ -12,7 +13,7 @@ export class NewProjectComponent implements OnInit {
 
   public newProject:NewProject=new NewProject();
 
-  constructor( private newProjectService:NewProjectService) {}
+  constructor( private newProjectService:NewProjectService, private router:Router) {}
 
   onSubmit(f:NgForm)
   {
@@ -25,8 +26,11 @@ export class NewProjectComponent implements OnInit {
 
   }
 
-  handleSuccess(self: any) {
-    console.log("Tacno");
+  handleSuccess(self: any,id:any) {
+    console.log("Tacno" + id);
+    self.router.navigate(['dataset/'+id]);
+    
+    
     
   }
 
