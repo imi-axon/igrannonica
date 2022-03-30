@@ -11,6 +11,7 @@ namespace BackApi.Services
         string ListProjects(int userid,int pubuserid);
         string GetProjById(int projid, int userid);
         Boolean EditProject(int projid, ProjectPostPut proj,int userid);
+        int getProjectId(ProjectPostPut model);
     }
     public class ProjectService:IProjectService
     {
@@ -159,6 +160,12 @@ namespace BackApi.Services
             context.SaveChanges();
             rez = true;
             return rez;
+        }
+
+        public int getProjectId(ProjectPostPut model)
+        {
+            var tmp = context.Projects.Where(x => x.Name == model.name).FirstOrDefault();
+            return tmp.ProjectId;
         }
     }
 }

@@ -17,18 +17,6 @@ export class VerificationComponent implements OnInit {
   ngOnInit(): void {
     this.activateroute.queryParams.subscribe(params=>{
       this.pom=params['token'];})
-      this.sendrequest();
-  }
-
-  sendrequest()
-  {
-    this.verifyservice.verifyUser(this.pom).subscribe(
-      res=>{
-        this.route.navigate(['login'])
-      },
-      err=>{
-        console.log(err)
-      }
-    );
+      this.verifyservice.verifyUser(this.pom);
   }
 }

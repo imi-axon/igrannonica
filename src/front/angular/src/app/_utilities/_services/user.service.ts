@@ -1,5 +1,6 @@
 import { HttpClient, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { JWTUtil } from '../_helpers/jwt-util';
 import { UserApiService } from '../_middleware/user-api.service';
@@ -9,8 +10,7 @@ import { UserApiService } from '../_middleware/user-api.service';
 })
 export class UserService {
 
-  readonly conn = "https://localhost:7057/api/users/";
-  constructor(private userAPI:UserApiService, private http:HttpClient) { }
+  constructor(private userAPI:UserApiService, private http:HttpClient, private router:Router) { }
   
   
     Register(applicantData: any, self?: any, successCallback?: Function, badRequestCallback?: Function, forbiddenCallback?: Function) {
@@ -63,9 +63,16 @@ export class UserService {
       );
   
     }
-    
-    verifyUser(token:any):Observable<any>{
-      return this.http.get<any>(this.conn+token)
+    verifyUser(token:any){
+      this.userAPI.verify(token).subscribe(
+        res=>{
+          console.log("Uspesno Verifikovan");
+          this.router.navigate(['login'])
+        },
+        err=>{
+          console.log(err)
+        }
+      )
     }
 
 }
