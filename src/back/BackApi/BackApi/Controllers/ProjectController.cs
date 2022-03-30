@@ -27,8 +27,9 @@ namespace BackApi.Controllers
             if (userid == -1) return Unauthorized();
             Boolean rez;
             rez = service.CreateProject(req,userid);
+            int id = service.getProjectId(req);
             if (rez)
-                return Ok();
+                return id+"";
             else return BadRequest();
         }
 
