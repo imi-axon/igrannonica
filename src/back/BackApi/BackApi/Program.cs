@@ -81,7 +81,9 @@ app.UseAuthentication();
 
 app.UseCors(myAllowSpecificOrigins);
 
+app.UseAuthorization();
 
+app.MapControllers();
 
 app.UseStaticFiles(new StaticFileOptions
 {
@@ -99,11 +101,6 @@ app.UseStaticFiles(new StaticFileOptions
     FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "Storage")),
     RequestPath = "/Storage"
 });
-
-
-app.UseAuthorization();
-
-app.MapControllers();
 
 
 app.Run();
