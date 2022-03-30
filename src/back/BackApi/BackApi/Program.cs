@@ -83,13 +83,13 @@ app.UseCors(myAllowSpecificOrigins);
 
 app.UseStaticFiles(new StaticFileOptions
 {
-    OnPrepareResponse = x =>
+    OnPrepareResponse = context =>
     {
-        Debug.WriteLine(x.Context.User.Identities);
-        foreach (var identity in x.Context.User.Identities)
-        {
-            Debug.WriteLine(identity.Name);
-        }
+        Debug.WriteLine("RADIIII");
+        //byte b;
+        //Debug.WriteLine(context.Context.Response.Headers.);
+        //while ((int)(b = (byte)context.Context.Request.Body.ReadByte()) != -1)
+        //    Debug.WriteLine(b);
 
         //if (x.Context.User.Identity.IsAuthenticated)
         //{
