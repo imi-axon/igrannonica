@@ -10,6 +10,8 @@ using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 using Microsoft.Extensions.FileProviders;
 using System.Diagnostics;
+using System.Security.Claims;
+using System.Net;
 
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -85,18 +87,14 @@ app.UseStaticFiles(new StaticFileOptions
 {
     OnPrepareResponse = context =>
     {
-        Debug.WriteLine("RADIIII");
-        //byte b;
-        //Debug.WriteLine(context.Context.Response.Headers.);
-        //while ((int)(b = (byte)context.Context.Request.Body.ReadByte()) != -1)
-        //    Debug.WriteLine(b);
+        // TODO: Ovo treba promeniti tako da samo ML server moze da pristupi Static fajlovima!!!
 
-        //if (x.Context.User.Identity.IsAuthenticated)
-        //{
-        //    return;
-        //}
+        if (context.Context.User.Identity.IsAuthenticated)
+        {
+            return;
+        }
 
-        //x.Context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+        context.Context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
     },
     FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "Storage")),
     RequestPath = "/Storage"
