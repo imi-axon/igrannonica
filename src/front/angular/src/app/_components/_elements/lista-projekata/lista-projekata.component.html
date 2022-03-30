@@ -1,9 +1,12 @@
 <h1 *ngIf="projekti.length==0">Nemate projekte</h1>
 <div class="row" *ngIf="projekti.length>0">
 
-  <div class="col-md-3" *ngFor="let p of projekti">
+  <div class="col-md-4" *ngFor="let p of projekti">
     <div class="projekat p-2 pb-0 shadow rounded" routerLink="/dataset/{{p.ProjectId}}">
-      <h1 class="imeProjekta">{{p.Name}}</h1><br>
+      <div class="imeIopis">
+      <p class="imeProjekta">{{p.Name}}</p>
+      <p class="opis">{{p.Description}}</p>
+    </div>
       <p class="datum">Created | 22/9/2022</p>
     </div>
 
