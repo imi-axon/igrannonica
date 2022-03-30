@@ -9,9 +9,10 @@ namespace BackApi.Services
 {
     public interface IUserService
     {
-        Boolean Register(UserRegister model);
+        string Register(UserRegister model);
         string Login(UserLogin model,out Boolean uspeh);
         public int UsernameToId(string username);
+        public int EmailToId(string email);
     }
 
     public class UserService: IUserService
@@ -84,15 +85,66 @@ namespace BackApi.Services
             return jwt;
         }
 
-        public Boolean Register(UserRegister model)
+        public string Register(UserRegister model)
         {
             //string rez = "";
-            if (kontext.Users.Any(x => x.Username == model.username))
+            if (kontext.Users.Any(x => (x.Username == model.username && x.Verified == true) || (x.Email == model.email && x.Verified == true)))
             {
                 //rez = "Korisnik sa tim Username-om vec postoji!";
-                return false;
+                return "Korisnik sa ovim email-om ili username-om vec postoji!";
             }
 
+            else if (kontext.Users.Any(x => (x.Email == model.email && x.Verified == false) || (x.Username == model.username && x.Verified == false)))
+            {
+                int id1 = UsernameToId(model.username);
+                int id2 = EmailToId(model.email);
+                int ind1 = 0;
+                int ind2 = 0;
+                foreach(var user in kontext.Users)
+                {
+                    if(user.UserId == id1)
+                    {
+                        string pom = emailService.ValidateToken(user.EmailToken);
+                        if (pom != "")
+                            return "Korisnik sa ovim username-om treba da se verifikuje, pokusajte za 5min sa ovim ili promenite username";
+                        else
+                        {
+                            ind1 = 1;
+                            break;
+                        }
+
+                    }
+                }
+
+                if(ind1 == 1)
+                {
+                    var user = kontext.Users.Find(id1);
+                    kontext.Users.Remove(user);
+                    kontext.SaveChanges();
+                }
+
+                foreach (var user in kontext.Users)
+                {
+                    if (user.UserId == id2)
+                    {
+                        string pom = emailService.ValidateToken(user.EmailToken);
+                        if (pom != "")
+                            return "Korisnik sa ovim email-om treba da se verifikuje, pokusajte za 5min sa ovim ili promenite email";
+                        else
+                        {
+                            ind2 = 1;
+                            break;
+                        }
+
+                    }
+                }
+                if (ind2 == 1)
+                {
+                    var user = kontext.Users.Find(id2);
+                    kontext.Users.Remove(user);
+                    kontext.SaveChanges();
+                }
+            }
             var korisnik= new User();
             korisnik.Username = model.username;
             korisnik.Lastname = model.lastname;
@@ -112,7 +164,7 @@ namespace BackApi.Services
             //rez = "Korisnik uspesno registrovan";
 
             emailService.SendEmail("Kliknite na link za potvrdu registracije:http://localhost:4200/verification?token=" + jwtoken, "Potvrda registracije", model.email);
-            return true;
+            return "Proverite vas email i verifikujte se";
         }
 
         public string Login(UserLogin model,out Boolean uspeh)
@@ -139,6 +191,14 @@ namespace BackApi.Services
         {
             var kor = kontext.Users.FirstOrDefault(x => x.Username == username);
             if(kor != null)
+                return kor.UserId;
+            return -1;
+        }
+
+        public int EmailToId(string email)
+        {
+            var kor = kontext.Users.FirstOrDefault(x => x.Email == email);
+            if (kor != null)
                 return kor.UserId;
             return -1;
         }

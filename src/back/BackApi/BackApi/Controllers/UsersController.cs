@@ -43,12 +43,13 @@ namespace BackApi.Controllers
         {
             int userid = jwtsrv.GetUserId();
             if (userid != -1) return Forbid();
-            Boolean tmp = korsrv.Register(req);
+            string tmp = korsrv.Register(req);
             string rez = "";
-            if (tmp)
+            if (tmp != "")
             {
-                rez = "Korisnik uspesno registrovan(nije verifikovan)";
-                return Ok(rez);
+                return tmp;
+                //rez = "Korisnik uspesno registrovan(nije verifikovan)";
+                //return Ok(rez);
             }
             else
             {
