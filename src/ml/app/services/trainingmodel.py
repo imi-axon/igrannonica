@@ -55,6 +55,12 @@ class TrainingService():
         
         self.dataframe = self.load_dataframe() #dataframe koji se sastoji samo od ulaznih i izlaznih kolona
 
+        #podela na trening i testne podatke
+        self.train_dataset, self.test_dataset, self.train_labels, self.test_labels = self.train_test()
+
+        #skaliranje podataka
+        self.normed_train_dataset, self.normed_test_dataset = self.data_standardization()
+
         
 
 
@@ -72,13 +78,13 @@ class TrainingService():
 
     #f-ja train_test - podela podataka za treniranje i testiranje
     #outputs - lista stringova (nazivi kolona koji su output)
-    def train_test(dataset, outputs):
-        train_dataset = dataset.sample(frac=0.8,random_state=0) #80% podataka za treniranje
-        test_dataset = dataset.drop(train_dataset.index) #ostalih 20% podataka za testiranje
+    def train_test(self):
+        train_dataset = self.dataframe.sample(frac=0.8,random_state=0) #80% podataka za treniranje
+        test_dataset = self.dataframe.drop(train_dataset.index) #ostalih 20% podataka za testiranje
         
-        train_labels = dataset.loc[:,outputs]
-        test_labels = dataset.loc[:,outputs]
-        for output in outputs:
+        train_labels = train_dataset.loc[:,self.outputs]
+        test_labels = test_dataset.loc[:,self.outputs]
+        for output in self.outputs:
             train_dataset.pop(output)
             test_dataset.pop(output)
         return train_dataset, test_dataset, train_labels, test_labels
@@ -87,18 +93,18 @@ class TrainingService():
     #vrsi se standardizacije celokupnog dataset-a
     #standardizacija podataka -> skaliranje distribucija vrednosti tako da srednja vrednost bude 0, a standardna devijacija 1
     # f-ja vraca standardizovane podatke (dataframe) koji se kasnije koriste za pravljenje neuronske mreze
-    def data_standardization(train_dataset, test_dataset):
+    def data_standardization(self):
         scaler = StandardScaler()
-        normed_train_data = scaler.fit_transform(train_dataset)
+        normed_train_data = scaler.fit_transform(self.train_dataset)
         #normed_train_data -> povratna vrednost je niz (array)
-        normed_test_data = scaler.fit_transform(test_dataset)
+        normed_test_data = scaler.fit_transform(self.test_dataset)
         #normed_test_data1
         normed_train_df = pd.DataFrame(data = normed_train_data, 
-                    index = train_dataset.index, 
-                    columns = train_dataset.columns) # od niza pravi dataframe
+                    index = self.train_dataset.index, 
+                    columns = self.train_dataset.columns) # od niza pravi dataframe
         normed_test_df = pd.DataFrame(data = normed_test_data, 
-                    index = test_dataset.index, 
-                    columns = test_dataset.columns)
+                    index = self.test_dataset.index, 
+                    columns = self.test_dataset.columns)
         return normed_train_df, normed_test_df
 
 
@@ -120,3 +126,35 @@ class TrainingService():
                 metrics = self.METRICS)
         
         return model
+
+    #obucavanje modela
+    def fit_model(self, model):
+        history = model.fit(self.normed_train_dataset, self.train_labels, 
+                            epochs = self.EPOCHS, 
+                            validation_split = 0.2, 
+                            verbose=0)
+
+        return history.history
+
+
+    def evaluate_model(self, model):
+        results = model.evaluate(self.normed_test_dataset, self.test_labels, verbose = 0)
+
+        return results
+
+
+    def predict_model(self, model):
+        predictions = model.predict(self.test_dataset)
+
+        return predictions
+
+
+    def start_training(self):
+        model = self.build_model()
+        
+        history = self.fit_model(model)
+
+        results = self.evaluate_model(model)
+        predictions = self.predict_model(model)
+
+        return history, results, predictions
