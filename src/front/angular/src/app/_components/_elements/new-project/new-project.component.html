@@ -2,7 +2,9 @@
     <!-- npf-> new project form -->
     <div class="mb-3">
       <label for="projectName">Naziv projekta</label>
-      <input type="text" class="form-control" id="projectName" name="projectName" ngModel required #projectName="ngModel"  placeholder="Naziv projekta">
+      <input maxlength="30" type="text" class="form-control" id="projectName" name="projectName" ngModel required #projectName="ngModel"  placeholder="Naziv projekta">
+      <!-- maksimalan broj karaktera je 250 -->
+      <p class="textarea-info">*Maksimalan broj karaktera je 30</p>
     </div>
     <div class="mb-3">
       <label for="projectDescription">Opis projekta</label>
