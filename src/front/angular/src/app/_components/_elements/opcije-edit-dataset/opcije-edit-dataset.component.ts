@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-opcije-edit-dataset',
@@ -10,6 +10,16 @@ export class OpcijeEditDatasetComponent implements OnInit {
   constructor() { }
 
   prikaziEnkodiranje: boolean = false;
+  
+  
+  @Output() RemoveColumnsClicked = new EventEmitter<any>();
+  @Output() RemoveNullRowsClicked = new EventEmitter<any>();
+  @Output() FillNullRowsClicked = new EventEmitter<any>();
+  @Output() RemoveDuplicatesClicked = new EventEmitter<null>();
+  @Output() EncodeColumnsOneHotClicked = new EventEmitter<any>();
+  @Output() EncodeColumnsLabelClicked = new EventEmitter<any>();
+  
+  
   ngOnInit(): void {
   }
 
@@ -21,5 +31,31 @@ export class OpcijeEditDatasetComponent implements OnInit {
 
     console.log(this.prikaziEnkodiranje);
   }
-
+  
+  
+  
+  public RemoveColumns(){
+    this.RemoveColumnsClicked.emit();
+  }
+  
+  public RemoveNullRows(){
+    this.RemoveNullRowsClicked.emit();
+  }
+  
+  public FillNullRows(){
+    this.FillNullRowsClicked.emit();
+  }
+  
+  public RemoveDuplicates(){
+    this.RemoveDuplicatesClicked.emit();
+  }
+  
+  public OneHotEncoding(){
+    this.EncodeColumnsOneHotClicked.emit();
+  }
+  
+  public LabelEncoding(){
+    this.EncodeColumnsLabelClicked.emit();
+  }
+  
 }

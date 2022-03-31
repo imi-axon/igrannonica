@@ -34,6 +34,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 import {MatSelectModule} from '@angular/material/select';
 import { NavbarNoviComponent } from './_components/_elements/navbar-novi/navbar-novi.component';
 import { VerificationComponent } from './_components/_pages/verification/verification.component';
+import { EditDatasetComponent } from './_components/_elements/edit-dataset/edit-dataset.component';
 
 
 @NgModule({
@@ -58,7 +59,8 @@ import { VerificationComponent } from './_components/_pages/verification/verific
     OpcijeDatasetComponent,
     OpcijeEditDatasetComponent,
     NavbarNoviComponent,
-    VerificationComponent
+    VerificationComponent,
+    EditDatasetComponent
   ],
   imports: [
     NgxCsvParserModule,
