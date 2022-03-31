@@ -1,0 +1,11 @@
+{
+    "navbar":{
+        "home":"Home",
+        "registration":"Registration",
+        "login":"Login",
+        "myExperiments":"My Experiments",
+        "myAccount":"My Account",
+        "logout":"Logout",
+        "select":""
+    }
+}

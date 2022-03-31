@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "i18n:init": "ngx-translate-extract --input ./src --output ./src/assets/i18n/*.json --key-as-default-value --replace --format json"
   },
   "private": true,
   "dependencies": {
@@ -20,6 +21,8 @@
     "@angular/platform-browser": "~13.2.0",
     "@angular/platform-browser-dynamic": "~13.2.0",
     "@angular/router": "~13.2.0",
+    "@ngx-translate/core": "^14.0.0",
+    "@ngx-translate/http-loader": "^7.0.0",
     "bootstrap-icons": "^1.8.1",
     "crypto-js": "^4.1.1",
     "js-sha512": "^0.8.0",

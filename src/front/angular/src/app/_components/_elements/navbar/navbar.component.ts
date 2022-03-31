@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
 import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
 import { AuthService } from 'src/app/_utilities/_services/auth.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'navbar',
@@ -11,7 +12,9 @@ import { AuthService } from 'src/app/_utilities/_services/auth.service';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor(private router:Router,public auth:AuthService) { }
+  constructor(private router:Router,public auth:AuthService, public translate:TranslateService) { 
+
+  }
   ngOnInit(): void {
   }
   

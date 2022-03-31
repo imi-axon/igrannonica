@@ -1,0 +1,11 @@
+{
+    "navbar":{
+        "home":"Pocetna",
+        "registration":"Registracija",
+        "login":"Prijava",
+        "myExperiments":"Moji Eksperimenti",
+        "myAccount":"Moj Nalog",
+        "logout":"Odjava",
+        "select":""
+    }
+}
