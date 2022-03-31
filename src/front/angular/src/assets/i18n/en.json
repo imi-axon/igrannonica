@@ -7,5 +7,20 @@
         "myAccount":"My Account",
         "logout":"Logout",
         "select":""
+    },
+    "register":{
+        "register":"Register",
+        "firstname_placeholder":"First name",
+        "lastname_placeholder":"Last name",
+        "username_placeholder":"Username",
+        "email_placeholder":"E-mail",
+        "password_placeholder":"Password*",
+        "password2_placeholder":"Retype password",
+        "obavestenje1-1":"*Password must be longer than 8 characters",
+        "obavestenje1-2":"*The password must contain one number, one uppercase and one lowercase letter",
+        "dugme":"Register",
+        "login1":"Already have an account?",
+        "login2":"Log in here"
+
     }
 }

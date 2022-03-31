@@ -7,5 +7,20 @@
         "myAccount":"Moj Nalog",
         "logout":"Odjava",
         "select":""
+    },
+    "register":{
+        "register":"Registruj se",
+        "firstname_placeholder":"Ime",
+        "lastname_placeholder":"Prezime",
+        "username_placeholder":"Korisnicko ime",
+        "email_placeholder":"E-mail",
+        "password_placeholder":"Lozinka",
+        "password2_placeholder":"Ponovite lozinku",
+        "obavestenje1-1":"*Lozinka mora biti duža od 8 karaktera",
+        "obavestenje1-2":"*Lozinka mora sadržati jedan broj, jedno veliko i jedno malo slovo",
+        "dugme":"Registruj se",
+        "login1":"Vec imate nalog?",
+        "login2":"Ulogujte se ovde"
+    
     }
 }

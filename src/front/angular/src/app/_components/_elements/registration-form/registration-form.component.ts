@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { regExp } from 'src/app/_utilities/_constants/regExp';
 import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
 import { RegistrationCheck, UserRegistration } from 'src/app/_utilities/_data-types/models';
@@ -20,7 +21,7 @@ export class RegistrationFormComponent implements OnInit {
   isSignUpFailed = false;
   errorMessage = '';
   
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService,public translate:TranslateService) { }
   
   
 
