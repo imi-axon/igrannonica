@@ -3,6 +3,7 @@ from typing import Dict, List
 
 # FastAPI
 from fastapi import FastAPI, Response, WebSocketDisconnect, status, WebSocket
+from fastapi.responses import PlainTextResponse
 
 # Models
 from models import Dataset, DatasetEditActions, Statistics, TempTrainingInstance, WsConn
@@ -61,7 +62,7 @@ def convert_csv_to_json(body: Dataset, response: Response):
 
 
 # Edit Dataset
-@app.post('/api/dataset/edit', status_code=200)
+@app.post('/api/dataset/edit', status_code=200, response_class=PlainTextResponse)
 def edit_dataset(body: DatasetEditActions, response: Response):
     
     actions = [{'action':str.split(a['action']), 'column':(a['column'] if 'column' in a.keys() else '')} for a in json_decode(body.actions)]
@@ -69,11 +70,27 @@ def edit_dataset(body: DatasetEditActions, response: Response):
     # dataset = csv_decode(payload['data'])
 
     res = DatasetEditor.execute(actions, dataset)
+    resnew = []
+    resrows = res.split('\r\n')
+    for row in resrows:
+        resnew.append(row.split(',')[1:])
+
+    res2 = ''
+    for row in resnew:
+        r = ''
+        for i in range(len(row)):
+            r += row[i] + ';'
+
+        res2 += r[:-1] + '\n'
+
+    res = res2
+
+    print(f'EDIT: RES2: {res2}')
 
     if res == None:
         response.status_code = status.HTTP_400_BAD_REQUEST
 
-    print(f'EIDT: {res}')
+    #print(f'EIDT: {res}')
 
     return res
 

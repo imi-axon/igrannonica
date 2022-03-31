@@ -29,9 +29,9 @@ export class DatasetService {
     );
   }
   
-  GetDataset(project_id: number, self?: any, successCallback?: Function, unauthorizedCallback?: Function, forbiddenCallback?: Function, notFoundCallback?: Function){
+  GetDataset(project_id: number, main: boolean, self?: any, successCallback?: Function, unauthorizedCallback?: Function, forbiddenCallback?: Function, notFoundCallback?: Function){
     
-    this.datasetAPI.GetDataset(project_id).subscribe(
+    this.datasetAPI.GetDataset(project_id, main).subscribe(
       (response) => {
         
         if(response.status == HttpStatusCode.Ok)

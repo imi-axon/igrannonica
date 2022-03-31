@@ -30,7 +30,7 @@ export class EditDatasetPageComponent implements OnInit {
     setTimeout(() => {
       this.checkProjectId();
     
-      this.datasetAPI.GetDataset(this.ProjectId, this, this.successfulGetDatasetCallback);
+      this.datasetAPI.GetDataset(this.ProjectId, false, this, this.successfulGetDatasetCallback);
     }, 0);
     
   }
@@ -68,7 +68,7 @@ export class EditDatasetPageComponent implements OnInit {
   }
   
   private successfulEditCallback(self: any){
-    self.datasetAPI.GetDataset(self.ProjectId, self, self.successfulGetDatasetCallback);
+    self.datasetAPI.GetDataset(self.ProjectId, false, self, self.successfulGetDatasetCallback);
   }
   
   
