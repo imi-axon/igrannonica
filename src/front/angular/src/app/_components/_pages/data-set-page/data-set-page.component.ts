@@ -35,12 +35,12 @@ export class DataSetPageComponent implements OnInit {
     let p = this.activatedRoute.snapshot.paramMap.get("ProjectId");
     if (p != null) this.ProjectId = p as unknown as number;
     
-    this.datasetService.AddDataset(csv, this.ProjectId, this, this.handleSuccess);
+    this.datasetService.AddDataset(csv, this.ProjectId, this, this.handleSuccess,this.handleBadDataFormat,this.handleUnauthorized);
   }
   
   private handleSuccess(self:any){
-    console.log("Uspesan POST dataseta.");
-    self.router.navigate(['statistics']);
+    console.log("Uspesan POST dataseta."+self.ProjectId);
+    self.router.navigate(['edit-dataset/'+self.ProjectId]);
   }
   
   

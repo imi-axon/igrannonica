@@ -1,0 +1,36 @@
+.container
+{
+    width: 100%;
+}
+.projekti{
+    height:75vh;
+    background-color:#F0F0F0;
+    overflow-y: scroll;
+    width:95%;
+    
+}
+.kolona
+{
+    color:#555555;
+}
+.dugme
+{
+    background-color: #555555;
+    border:none;
+}
+
+hr{
+    background-color:#555555;
+    height: 0.5rem;
+}
+@media (max-width:800px) {
+    .zaVelikeEkrane{
+        display: none;
+    }
+   
+}
+@media (min-width:800px) {
+    .zaMaleEkrane{
+        display: none;
+    }
+}

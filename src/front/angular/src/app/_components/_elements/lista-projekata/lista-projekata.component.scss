@@ -1,4 +1,30 @@
-#openProj
+.projekat
 {
-    float:right;
+    background-color: white;
+    height: 20vh;
+    margin-bottom: 10%;
+    
+}
+.imeProjekta
+{
+    color:black;
+    font-size: large;
+    font-weight: bold;
+    word-wrap: break-word;
+    height: 40%;
+}
+.imeIopis{
+    height: 85%;
+}
+.opis{
+    text-overflow: ellipsis;
+    overflow:hidden;
+    height:60%;  
+    width:90%
+}
+
+.opis-text
+.datum
+{
+    color: #868686;
 }

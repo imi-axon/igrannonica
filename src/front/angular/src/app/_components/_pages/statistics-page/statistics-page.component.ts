@@ -83,7 +83,7 @@ export class StatisticsPageComponent implements OnInit{
   
   // DATASET
   public LoadDataFromAPI(){
-    this.datasetService.GetDataset(this.projectid, this, this.handleDataSuccessfulLoad, this.handleDataNotLoggedIn, this.handleDataForbidden, this.handleDataNotFound);
+    this.datasetService.GetDataset(this.projectid, true, this, this.handleDataSuccessfulLoad, this.handleDataNotLoggedIn, this.handleDataForbidden, this.handleDataNotFound);
     
   }
   

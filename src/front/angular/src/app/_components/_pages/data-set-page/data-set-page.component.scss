@@ -2,28 +2,28 @@
     display: none;
 }
 
-.project-container{
-    display: flex;
-    flex-direction: column;
-    align-items:center;
-    justify-content: space-evenly;
+// .project-container{
+//     display: flex;
+//     flex-direction: column;
+//     align-items:center;
+//     justify-content: space-evenly;
     
-    height: 94.1vh;
-}
+//     height: 94.1vh;
+// }
 
-.inside-container{
-    display: flex;
-    flex-direction: column;
-    align-items:center;
-    justify-content: space-evenly;
+// .inside-container{
+//     display: flex;
+//     flex-direction: column;
+//     align-items:center;
+//     justify-content: space-evenly;
     
-    height: 20vh;
-}
+//     height: 20vh;
+// }
 
 .dataset-title-button{
     background: none;
     border: none;
-    padding: 0px;
+    padding: 0%;
     
     h1{
         display: block;
@@ -37,19 +37,13 @@
             color: #333333;
         }
     }
-    
-}
-
-.input-section{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly;
 }
 
 
+// .input-section{
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     justify-content: space-evenly;
+// }
 
-.dataset-container{
-    width: 1000px;
-    height: 550px;
-}

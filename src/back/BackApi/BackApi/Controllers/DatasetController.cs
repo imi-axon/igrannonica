@@ -13,9 +13,9 @@ namespace BackApi.Controllers
     [Authorize]
     public class DatasetController : ControllerBase
     {
-        private IDatasetServis datasrv;
-        private IJwtServis jwtsrv;
-        public DatasetController(IDatasetServis datasetServis, IJwtServis jwtServis)
+        private IDatasetService datasrv;
+        private IJwtService jwtsrv;
+        public DatasetController(IDatasetService datasetServis, IJwtService jwtServis)
         {
             this.datasrv = datasetServis;
             this.jwtsrv = jwtServis;
@@ -49,11 +49,11 @@ namespace BackApi.Controllers
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized("Ulogujte se");
-            var response = await KonekcijaSaML.validateCSVstring(req);
+            var response = await MLconnection.validateCSVstring(req);
 
             if (response.StatusCode == HttpStatusCode.Created)
             {
-                var chk=datasrv.Novi(req, id,userid);
+                var chk=datasrv.New(req, id,userid);
                 if (chk)
                     return StatusCode(StatusCodes.Status200OK, new { message = "Sve je u redu." });
                 else return StatusCode(StatusCodes.Status403Forbidden, new { message = "Vi niste vlasnik projekta" });
@@ -63,11 +63,11 @@ namespace BackApi.Controllers
         }
 
         [HttpDelete("{projid}")]
-        public async Task<ActionResult<string>> BrisiDataset(int projid)
+        public async Task<ActionResult<string>> DeleteDataset(int projid)
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized("Ulogujte se");
-            var rez = datasrv.Brisi(projid,userid);
+            var rez = datasrv.Delete(projid,userid);
             if (rez)
                 return Ok("Uspesno Obrisan");
             else return BadRequest("Vec obrisan ili vi niste vlasnik projekta");
@@ -83,14 +83,19 @@ namespace BackApi.Controllers
         }*/
 
         [HttpGet("{projid}/dataset")]
-        public async Task<ActionResult<dynamic>> ProcitajDataset(int projid,Boolean main)
+        public async Task<ActionResult<dynamic>> ReadDataset(int projid,Boolean main)
         {
-            var rez = datasrv.Procitaj(projid,main);
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            Boolean owner;
+            var rez = datasrv.Read(projid,main,userid,out owner);
+            if (!owner)
+                return Forbid();
             if (rez != null)
             {
                 DatasetGetPost dataset = new DatasetGetPost();
                 dataset.dataset = rez;
-                var response = await KonekcijaSaML.convertCSVstring(dataset);
+                var response = await MLconnection.convertCSVstring(dataset);
 
                 return await response.Content.ReadAsStringAsync();
             }
@@ -98,15 +103,17 @@ namespace BackApi.Controllers
         }
 
         [HttpGet("{id}/dataset/{main}/statistics")]
-        public async Task<ActionResult<string>> DajStatistiku(int id, Boolean main)
+        public async Task<ActionResult<string>> GetStatistics(int id, Boolean main)
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
             
             DatasetGetPost dataset = new DatasetGetPost();
-            dataset.dataset = datasrv.Procitaj(id, main);
-
-            var response = await KonekcijaSaML.getStatistic(dataset);
+            Boolean owner;
+            dataset.dataset = datasrv.Read(id, main,userid,out owner);
+            if (!owner)
+                return Forbid();
+            var response = await MLconnection.getStatistic(dataset);
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 return await response.Content.ReadAsStringAsync();
@@ -114,5 +121,45 @@ namespace BackApi.Controllers
             return BadRequest();
         }
 
+        [HttpPut("{id}/dataset/{main}/edit")]
+        public async Task<ActionResult<string>> EditDataset(int id, Boolean main, [FromBody] ActionsPut act)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            Boolean owner;
+            var dataset = datasrv.Read(id,main,userid,out owner);
+            if (!owner)
+                return Forbid();
+            if (dataset == null)
+                return NotFound();
+            DatasetMLPost snd = new DatasetMLPost();
+            snd.data = dataset;
+            snd.actions = act.actions;
+            var response = await MLconnection.editDataset(snd);
+            if(response.StatusCode == HttpStatusCode.OK)
+            {
+                var savestr = new DatasetGetPost();
+                savestr.dataset = await response.Content.ReadAsStringAsync();
+                if (datasrv.EditHelperset(id, userid, savestr))
+                {
+                    return Ok();
+                }
+                else return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Greska prilikom cuvanja promena" });
+            }
+            return BadRequest();
+        }
+        [HttpPut("{id}/dataset/save")]
+        public async Task<ActionResult<string>> SaveDataset(int id)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            Boolean owner;
+            var chk = datasrv.UpdateMainDataset(id, userid, out owner);
+            if (!owner)
+                return Forbid();
+            if(!chk)
+                return NotFound();
+            return Ok();
+        }
     }
 }

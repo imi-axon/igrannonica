@@ -1,18 +1,18 @@
-<div class="wrap-table100">
-    <div class="table100 ver1 m-b-110">
+<div class="container">
+    <div class="tabela">
         
-        <table>
+        <table class="tabela1 table table-bordered table-hover table-responsive ">
             
             <thead>
                 <!-- REZ NA NAZIVE KOLONA -->
-                <tr class="row100 head"> 
+                <tr class=""> 
                     
                     <!-- DODATNA KOLONA-->
-                    <th class="column-first">
+                    <th class="">
                         
                     </th>
                     
-                    <th class="column100" *ngFor="let column of headers"> 
+                    <th scope="col" *ngFor="let column of headers"> 
                         {{column}}
                     </th> 
                 </tr>
@@ -20,15 +20,15 @@
             
             <tbody>
                 
-                <tr class="row100" *ngFor="let row of headers; let i = index">
+                <tr *ngFor="let row of headers; let i = index">
                     
                     <!-- CELIJE ZA NAZIV REDOVA -->
-                    <td class="column-first">
+                    <td class="">
                         {{row}}
                     </td>
                     
                     <!-- CELIJE IZ KORELACIONE TABELE -->
-                    <td class="column100 data-cell" *ngFor="let cell of correlationMatrix[i]" [ngStyle]="GetCorrelationColor(cell)" >
+                    <td class="" *ngFor="let cell of correlationMatrix[i]" [ngStyle]="GetCorrelationColor(cell)" >
                         {{cell}}
                     </td>
                     

@@ -26,6 +26,15 @@ import { HomeComponent } from './_components/_elements/home/home.component';
 import { LoaderComponent } from './_components/_elements/loader/loader.component';
 import { ListaProjekataComponent } from './_components/_elements/lista-projekata/lista-projekata.component';
 import { CorrelationTableComponent } from './_components/_elements/correlation-table/correlation-table.component';
+import { ProfilComponent } from './_components/_elements/profil/profil.component';
+import { OpcijeDatasetComponent } from './_components/_elements/opcije-dataset/opcije-dataset.component';
+import { OpcijeEditDatasetComponent } from './_components/_elements/opcije-edit-dataset/opcije-edit-dataset.component';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations'
+import {MatSelectModule} from '@angular/material/select';
+import { NavbarNoviComponent } from './_components/_elements/navbar-novi/navbar-novi.component';
+import { VerificationComponent } from './_components/_pages/verification/verification.component';
+import { EditDatasetComponent } from './_components/_elements/edit-dataset/edit-dataset.component';
 
 
 @NgModule({
@@ -45,14 +54,23 @@ import { CorrelationTableComponent } from './_components/_elements/correlation-t
     HomeComponent,
     LoaderComponent,
     ListaProjekataComponent,
-    CorrelationTableComponent
+    CorrelationTableComponent,
+    ProfilComponent,
+    OpcijeDatasetComponent,
+    OpcijeEditDatasetComponent,
+    NavbarNoviComponent,
+    VerificationComponent,
+    EditDatasetComponent
   ],
   imports: [
     NgxCsvParserModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    NoopAnimationsModule,
+    MatTooltipModule,
+    MatSelectModule
   ],
   providers: [DatasetService],
   bootstrap: [AppComponent]

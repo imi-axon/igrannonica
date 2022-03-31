@@ -1,0 +1,18 @@
+$boja:#555555;
+$bojaHover:#8A8A8A;
+
+.dugmeDesno
+{
+    border-bottom-right-radius: 0%;
+    border-top-right-radius: 0%;
+}
+
+.dugmeLevo
+{
+    border-bottom-left-radius: 0%;
+    border-top-left-radius: 0%;
+}
+
+.btn:focus{
+    box-shadow: none !important;
+    }

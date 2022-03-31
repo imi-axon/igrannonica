@@ -8,13 +8,17 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Http;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
+using Microsoft.Extensions.FileProviders;
+using System.Diagnostics;
+using System.Security.Claims;
+using System.Net;
 
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<BazaContext>();
+builder.Services.AddDbContext<DataBaseContext>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -43,11 +47,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-
-builder.Services.AddScoped<IKorisnikServis,KorisnikServis>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddScoped<IProjectService,ProjectService>();
-builder.Services.AddScoped<IDatasetServis,DatasetServis>();
-builder.Services.AddScoped<IJwtServis, JwtServis>();
+builder.Services.AddScoped<IDatasetService,DatasetService>();
+builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<IStorageService, StorageService>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddCors(options =>
@@ -79,6 +84,24 @@ app.UseCors(myAllowSpecificOrigins);
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = context =>
+    {
+        // TODO: Ovo treba promeniti tako da samo ML server moze da pristupi Static fajlovima!!!
+
+        if (context.Context.User.Identity.IsAuthenticated)
+        {
+            return;
+        }
+
+        context.Context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+    },
+    FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "Storage")),
+    RequestPath = "/Storage"
+});
+
 
 app.Run();
 

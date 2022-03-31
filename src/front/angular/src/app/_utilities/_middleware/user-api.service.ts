@@ -34,5 +34,7 @@ export class UserApiService {
 
     return response;
   }
-  
+  verify(token:any):Observable<any>{
+    return this.http.get<any>(apiProperties.url+"/api/users/"+token);
+  }
 }

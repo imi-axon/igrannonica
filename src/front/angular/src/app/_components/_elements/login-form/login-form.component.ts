@@ -71,6 +71,7 @@ export class LoginFormComponent implements OnInit {
     //console.log("Tacno jeeeeeee");
     self.authService.logovan=true;
     self.authService.korisnickoIme=JWTUtil.getUsername();
+    self.authService.ime_prezime=JWTUtil.getFullName();
     self.router.navigate(RedirectRoutes.ON_LOGIN); //SELF, NE THIS
  
   }
