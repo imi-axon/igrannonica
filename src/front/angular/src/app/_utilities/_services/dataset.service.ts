@@ -14,7 +14,7 @@ export class DatasetService {
     this.datasetAPI.AddDataset(csvData, project_id).subscribe(
       (response) => {
         
-        if(response.status == HttpStatusCode.Created)
+        if(response.status == HttpStatusCode.Ok)
           if(self && successCallback) 
             successCallback(self);
         

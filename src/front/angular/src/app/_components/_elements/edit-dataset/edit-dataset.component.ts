@@ -13,7 +13,7 @@ export class EditDatasetComponent implements OnInit {
   
   // Stranicenje za prikaz podataka
   dataPages: any[][] = [];
-  rowsPerPage: number = 15;
+  rowsPerPage: number = 13;
   currentPage: number = 0;
   rowNullsPages: any[][] = [];
   pageInput: number;

@@ -51,7 +51,7 @@ export class DatasetApiService {
   
   // EDIT
   public EditDataset(editJSON: any, project_id: number, main: boolean): Observable<HttpResponse<any>>{
-    return this.http.post<any>(apiProperties.url + '/api/projects/' + project_id + 'dataset/' + main + '/edit',
+    return this.http.put<any>(apiProperties.url + '/api/projects/' + project_id + '/dataset/' + main + '/edit',
       {
         actions: JSON.stringify(editJSON)
       },
