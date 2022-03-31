@@ -29,7 +29,8 @@ class TrainingService():
     #actPerLayer -> lista stringova ('relu', 'sigmoid', 'tanh') -> aktivaciona funkcija za svaki sloj
     #nbperlayer -> lista int -> broj neurona za svaki sloj
     #metrics -> lista stringova ('mse', 'mae', 'rmse' -> za regresiju; 'precision', 'recall','accuracy')
-    def __init__(self, datasetAll,inputs, outputs, epochs, learning_rate, regularization_rate,regularization, actGlobal, actPerLayer, nbperlayer, metrics):
+    ##type -> string -> "CLASSIFICATION"/"REGRESSION"
+    def __init__(self, datasetAll,inputs, outputs, epochs, learning_rate, regularization_rate,regularization, actGlobal, actPerLayer, nbperlayer, metrics, type):
         self.datasetAll = datasetAll
         self.inputs = inputs
         self.outputs = outputs
@@ -50,9 +51,11 @@ class TrainingService():
         self.NB_PER_LAYER = nbperlayer
 
         self.METRICS = metrics
+        self.TYPE = type
 
         self.REGRESSION_LOSS = 'mse'
-        
+        self.CLASSIFICATION_LOSS = 'categorical_crossentropy'
+
         self.dataframe = self.load_dataframe() #dataframe koji se sastoji samo od ulaznih i izlaznih kolona
 
         #podela na trening i testne podatke
@@ -109,15 +112,15 @@ class TrainingService():
 
 
     #regression
-    def build_model(self):
+    def build_regression_model(self):
         model = Sequential()
         
-        model.add(Dense(len(self.inputs), kernel_regularizer = self.REGULARIZATION, input_shape=[len(self.inputs)]))
+        model.add(Dense(self.NB_PER_LAYER[0], kernel_regularizer = self.REGULARIZATION, input_shape=[len(self.inputs)]))
         model.add(Activation(self.ACT_PER_LAYER[0])) 
         
-        for i in range(0, len(self.NB_PER_LAYER)):
+        for i in range(1, len(self.NB_PER_LAYER)):
             model.add(Dense(self.NB_PER_LAYER[i], kernel_regularizer = self.REGULARIZATION))
-            model.add(Activation(self.ACT_PER_LAYER[i+1])) 
+            model.add(Activation(self.ACT_PER_LAYER[i])) 
         
         model.add(Dense(1))
 
@@ -126,6 +129,26 @@ class TrainingService():
                 metrics = self.METRICS)
         
         return model
+
+    #classification
+    def build_classification_model(self):
+        model = Sequential()
+
+        model.add(Dense(self.NB_PER_LAYER[0], kernel_regularizer = self.REGULARIZATION, input_shape=[len(self.inputs)], activation = self.ACT_PER_LAYER[0]))
+        
+        for i in range(1, len(self.NB_PER_LAYER)):
+            model.add(Dense(self.NB_PER_LAYER[i], kernel_regularizer = self.REGULARIZATION, activation=self.ACT_PER_LAYER[i]))
+            
+        #izlazni sloj
+        model.add(Dense(len(self.outputs), activation='softmax'))
+
+        model.compile(loss = self.CLASSIFICATION_LOSS,
+                optimizer = self.OPTIMIZER,
+                metrics = self.METRICS)
+
+        return model
+
+
 
     #obucavanje modela
     def fit_model(self, model):
@@ -150,7 +173,10 @@ class TrainingService():
 
 
     def start_training(self):
-        model = self.build_model()
+        if(self.TYPE=="REGRESSION"):
+            model = self.build_regression_model()
+        elif(self.TYPE=="CLASSIFICATION"):
+            model = self.build_classification_model()
         
         history = self.fit_model(model)
 
