@@ -73,14 +73,21 @@ def edit_dataset(body: DatasetEditActions, response: Response):
     if res == None:
         response.status_code = status.HTTP_400_BAD_REQUEST
 
-    return { 'dataset': res }
+    print(f'EIDT: {res}')
+
+    return res
 
 
 # Get Dataset Statistics
 @app.post('/api/dataset/statistics', status_code=200, response_model=Statistics)
 def get_statistics(body: Dataset):
     
+    print(body)
+
     csvstr: str = body.dataset
+
+    print(csvstr)
+
     stats: str = statistics_json(csvstr)
 
     # print(stats)

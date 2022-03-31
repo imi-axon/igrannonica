@@ -30,7 +30,6 @@ export class EditDatasetPageComponent implements OnInit {
     setTimeout(() => {
       this.checkProjectId();
     
-      //this.editDataset.LoadTestData();
       this.datasetAPI.GetDataset(this.ProjectId, this, this.successfulGetDatasetCallback);
     }, 0);
     
@@ -59,14 +58,13 @@ export class EditDatasetPageComponent implements OnInit {
   // CALLBACK ==========================================================================
   
   private successfulGetStatisticsCallback(self: any, response: any){
-    self.statistics = JSON.parse(response);
-    
+    self.statistics = JSON.parse(response.statistics);
     self.editDataset.LoadDataAndRowNulls(self.dataset, self.statistics.rownulls);
   }
   
   private successfulGetDatasetCallback(self: any, response: any){
-    self.dataset = JSON.parse(response);
-    self.datasetAPI.GetStatistics(self.ProjectId, self, self.successfulGetStatisticsCallback);
+    self.dataset = JSON.parse(response.dataset);
+    self.datasetAPI.GetStatistics(self.ProjectId, false, self, self.successfulGetStatisticsCallback);
   }
   
   private successfulEditCallback(self: any){
