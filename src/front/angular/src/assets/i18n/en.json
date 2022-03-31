@@ -8,7 +8,7 @@
         "logout":"Logout",
         "select":""
     },
-    "register":{
+    "register":{ 
         "register":"Register",
         "firstname_placeholder":"First name",
         "lastname_placeholder":"Last name",
@@ -22,5 +22,14 @@
         "login1":"Already have an account?",
         "login2":"Log in here"
 
+    },
+    "login":{
+        "login":"Login",
+        "username_placeholder":"Username",
+        "password_placeholder":"Password",
+        "zapamti_me":"Remember me",
+        "register1":"Do not have an account? ",
+        "register2":"Register here",
+        "dugme":"Login"
     }
 }

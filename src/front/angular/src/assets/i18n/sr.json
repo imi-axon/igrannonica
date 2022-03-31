@@ -21,6 +21,14 @@
         "dugme":"Registruj se",
         "login1":"Vec imate nalog?",
         "login2":"Ulogujte se ovde"
-    
+    },
+    "login":{
+        "login":"Uloguj se",
+        "username_placeholder":"Korisnicko ime",
+        "password_placeholder":"Lozinka",
+        "zapamti_me":"Zapamti me",
+        "register1":"Nemate nalog? ",
+        "register2":"Registrujte se ovde",
+        "dugme":"Uloguj se"
     }
 }
