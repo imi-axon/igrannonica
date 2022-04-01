@@ -9,9 +9,9 @@ export class DatasetService {
   
   constructor(private datasetAPI:DatasetApiService) { }
   
-  AddDataset(csvData: any, project_id: number, self?: any, successCallback?: Function, badRequestCallback?: Function, unauthorizedCallback?: Function) {
+  AddDataset(datasetFile: FormData, project_id: number, self?: any, successCallback?: Function, badRequestCallback?: Function, unauthorizedCallback?: Function) {
     
-    this.datasetAPI.AddDataset(csvData, project_id).subscribe(
+    this.datasetAPI.AddDataset(datasetFile, project_id).subscribe(
       (response) => {
         
         if(response.status == HttpStatusCode.Ok)

@@ -23,11 +23,11 @@ export class DataSetPageComponent implements OnInit {
     
   }
   
-  public showDataset(){
+  public ShowDataset(){
     this.datasetHidden = false;
   }
   
-  public sendDataset(csv: string){
+  public SendDataset(file: File){
     // this.errorMessage = "";
     // this.datasetService.AddDataset(csv, this.TEST_PROJECT_ID, this, this.handleSuccess, this.handleBadDataFormat, this.handleUnauthorized);
     
@@ -35,7 +35,10 @@ export class DataSetPageComponent implements OnInit {
     let p = this.activatedRoute.snapshot.paramMap.get("ProjectId");
     if (p != null) this.ProjectId = p as unknown as number;
     
-    this.datasetService.AddDataset(csv, this.ProjectId, this, this.handleSuccess,this.handleBadDataFormat,this.handleUnauthorized);
+    let formData : FormData = new FormData();
+    formData.append("dataset", file);
+    
+    this.datasetService.AddDataset(formData, this.ProjectId, this, this.handleSuccess,this.handleBadDataFormat,this.handleUnauthorized);
   }
   
   private handleSuccess(self:any){

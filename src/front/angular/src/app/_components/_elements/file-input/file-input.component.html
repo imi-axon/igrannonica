@@ -1,0 +1,8 @@
+<!-- upload CSV fajl sa racunara -->
+<div class="csvUpload container">
+    <input class="form-control" type="file" id="formFile" accept=".csv" required=".csv" (change)="AddFile($event)" ><br>
+    <p id="greskaPoruka">{{message}}</p>
+    <!-- $event.target.files ne radi -->
+</div>
+
+

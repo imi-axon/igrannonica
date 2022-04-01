@@ -12,12 +12,10 @@ export class DatasetApiService {
   constructor(private http:HttpClient) { }
   
   // POST DATASET api/projects/{id}/dataset
-  public AddDataset(csvStr:String, project_id:number): Observable<HttpResponse<any>>{
+  public AddDataset(datasetFile: FormData, project_id:number): Observable<HttpResponse<any>>{
     return this.http.post<any>(
       apiProperties.url + '/api/projects/' + project_id + '/dataset',
-      { 
-        dataset:csvStr 
-      },
+        datasetFile,
       { 
         observe: 'response',
         headers: HeaderUtil.jwtOnlyHeaders()
