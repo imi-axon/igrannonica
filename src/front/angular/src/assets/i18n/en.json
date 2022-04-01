@@ -33,7 +33,7 @@
         "dugme":"Login"
     },
     "csv":{
-        "format":"The file must be in csv format!",
+        "format":"The file must be in .csv format!",
         "prazan":"The file must not be empty!"
     },
     "data-set-table":{
@@ -86,12 +86,12 @@
         "naslov2":"Meteorological analysis V1"
     },
     "my-projects-page":{
-        "projekti":"Projects",
+        "projekti":"Experiments",
         "novi":"Create new"
 
     },
     "new-project-page":{
-        "novi":"New project"
+        "novi":"Create new"
     },
     "profil-page":{
         "eksperimenti":"User experiments"

@@ -84,12 +84,12 @@
         "naslov2":"Meteoroloska analiza V1"
     },
     "my-projects-page":{
-        "projekti":"Projekti",
-        "novi":"Novi projekat"
+        "projekti":"Eksperimenti",
+        "novi":"Novi eksperiment"
 
     },
     "new-project-page":{
-        "novi":"Novi projekat"
+        "novi":"Novi eksperiment"
     },
     "profil-page":{
         "eksperimenti":"Korisnikovi eksperimenti"
