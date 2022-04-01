@@ -51,8 +51,12 @@ export class DataSetTableComponent implements OnInit, OnChanges{
   }
   
   
-  
-  
+  public EmptyDataset(){
+    this.dataset = null;
+    this.columns = [];
+    this.statistics = null;
+    this.rowNulls = [];
+  }
   
   // Ovo se koristi samo na dataset stranici da bi se prikazala tabela pre nego sto je posaljemo na back
   public LoadDataDirectlyFromInput(data:Event){

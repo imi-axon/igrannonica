@@ -6,9 +6,11 @@
         </button>
     </div>
         <div class="container">
-            <app-csv #csvInput (fileChosen)="loader.start()"
-                (jsonLoaded)="datasetTable.LoadDataDirectlyFromInput($event); this.showDataset(); loader.stop();"
-                (fileError)="loader.stop();"></app-csv>
+            <app-file-input #csvInput 
+                (fileChosen)="loader.start();" 
+                (fileError)="loader.stop(); datasetTable.EmptyDataset();"
+                (jsonLoaded)="datasetTable.LoadDataDirectlyFromInput($event); this.ShowDataset(); loader.stop();"> 
+            </app-file-input>
         </div>
         <p style="color: red; font-weight:bold;"> {{errorMessage}} </p>
 
@@ -23,7 +25,7 @@
     <!-- sakrij ako nije ucitano -->
     
     <div class="container d-flex justify-content-center">
-            <button class="btn btn-primary mb-5" (click)="sendDataset(csvInput.filecontent);"> Potvrdi </button>
+        <button class="btn btn-primary mb-5" (click)="SendDataset(csvInput.inputFile);" [disabled]="!csvInput.fileReadyToSend"> Potvrdi </button>
     </div>
 
 </div>

@@ -14,7 +14,7 @@ import { DataSetTableComponent } from './_components/_elements/data-set-table/da
 import { observable } from 'rxjs';
 import { RegistrationFormComponent } from './_components/_elements/registration-form/registration-form.component';
 import { RegistrationPageComponent } from './_components/_pages/registration-page/registration-page.component';
-import { CsvComponent } from './_components/_elements/csv/csv.component';
+import { FileInputComponent } from './_components/_elements/file-input/file-input.component';
 import { FormsModule } from '@angular/forms';
 import { RegistrationSuccessfulComponent } from './_components/_pages/registration-successful/registration-successful.component';
 import { LoginFormComponent } from './_components/_elements/login-form/login-form.component';
@@ -41,7 +41,7 @@ import { EditDatasetComponent } from './_components/_elements/edit-dataset/edit-
   declarations: [
     AppComponent,
     routingComponents, //ovde se nalaze sve putanje dodate u routingComponents niz u app-routing.module.ts
-    CsvComponent,
+    FileInputComponent,
     NavbarComponent, 
     SidebarComponent,
     DataSetTableComponent,
