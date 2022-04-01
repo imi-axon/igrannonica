@@ -1,0 +1,109 @@
+{
+    "navbar":{
+        "home":"Home",
+        "registration":"Registration",
+        "login":"Login",
+        "myExperiments":"My Experiments",
+        "myAccount":"My Account",
+        "logout":"Logout",
+        "select":""
+    },
+    "register":{ 
+        "register":"Register",
+        "firstname_placeholder":"First name",
+        "lastname_placeholder":"Last name",
+        "username_placeholder":"Username",
+        "email_placeholder":"E-mail",
+        "password_placeholder":"Password*",
+        "password2_placeholder":"Retype password",
+        "obavestenje1-1":"*Password must be longer than 8 characters",
+        "obavestenje1-2":"*The password must contain one number, one uppercase and one lowercase letter",
+        "dugme":"Register",
+        "login1":"Already have an account?",
+        "login2":"Log in here"
+
+    },
+    "login":{
+        "login":"Login",
+        "username_placeholder":"Username",
+        "password_placeholder":"Password",
+        "zapamti_me":"Remember me",
+        "register1":"Do not have an account? ",
+        "register2":"Register here",
+        "dugme":"Login"
+    },
+    "csv":{
+        "format":"The file must be in .csv format!",
+        "prazan":"The file must not be empty!"
+    },
+    "data-set-table":{
+        "p1-1":"Showing page ",
+        "p1-2":"out of ",
+        "jump":"Jump to"
+    },
+    "lista-projekata":{
+        "kreiran":"Created"
+    },
+    "new-project":{
+        "name":"Experiment name",
+        "poruka":"*The maximum number of characters is 30",
+        "opis":"Description of the experiment",
+        "poruka2":"*The maximum number of characters is 250",
+        "public":"Public",
+        "submit":"Submit"
+    },
+    
+    "opcije-dataset":{
+        "tabela":"Table",
+        "statistika":"Statistics",
+        "izmeni":"Edit data"
+    },
+    "opcije-edit-dataset":{
+        "izbrisiKol":"Delete columns",
+        "nullRedovi":"Delete rows containing null values",
+        "popuni":"Fill in the rows containing the null values",
+        "duplikati":"Delete duplicates",
+        "enkodiranje":"Encoding",
+        "onehot1":"Onehot encoding",
+        "label1":"Label encoding"
+    },
+    "profil":{
+            "izmeni":"Edit data"
+    },
+
+
+
+
+
+
+
+    "data-set-page":{
+        "naslov":"Dataset",
+        "submit":"Submit"
+    },
+    "edit-dataset-page":{
+        "naslov1":" My experiments",
+        "naslov2":"Meteorological analysis V1"
+    },
+    "my-projects-page":{
+        "projekti":"Experiments",
+        "novi":"Create new"
+
+    },
+    "new-project-page":{
+        "novi":"Create new"
+    },
+    "profil-page":{
+        "eksperimenti":"User experiments"
+    },
+    "registration-successful":{
+        "uspeh":"Registration successful",
+        "login":"Login"
+    },
+    "statistics-page":{
+        "view":"Switch view",
+        "debug": "Local Dataset (DEBUG)",
+        "dugme":"BUTTON"
+    }
+
+}

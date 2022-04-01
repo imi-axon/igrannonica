@@ -35,6 +35,10 @@ import {MatSelectModule} from '@angular/material/select';
 import { NavbarNoviComponent } from './_components/_elements/navbar-novi/navbar-novi.component';
 import { VerificationComponent } from './_components/_pages/verification/verification.component';
 import { EditDatasetComponent } from './_components/_elements/edit-dataset/edit-dataset.component';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { HttpClient } from '@angular/common/http';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
 
 
 @NgModule({
@@ -70,9 +74,21 @@ import { EditDatasetComponent } from './_components/_elements/edit-dataset/edit-
     FormsModule,
     NoopAnimationsModule,
     MatTooltipModule,
-    MatSelectModule
+    MatSelectModule,
+    TranslateModule.forRoot({
+      loader:{
+        provide:TranslateLoader,
+        useFactory:HttpLoaderFactory,
+        deps:[HttpClient]
+      }
+    
+    })
   ],
   providers: [DatasetService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+export function HttpLoaderFactory(http:HttpClient){
+  return new TranslateHttpLoader(http);
+}
