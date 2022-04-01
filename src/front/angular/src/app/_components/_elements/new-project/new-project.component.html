@@ -1,21 +1,21 @@
 <form #npf="ngForm" (ngSubmit)="onSubmit(npf)" style="max-width: 50em;" > 
     <!-- npf-> new project form -->
     <div class="mb-3">
-      <label for="projectName">Naziv projekta</label>
-      <input maxlength="30" type="text" class="form-control" id="projectName" name="projectName" ngModel required #projectName="ngModel"  placeholder="Naziv projekta">
+      <label for="projectName">{{'new-project.name'|translate}}</label>
+      <input maxlength="30" type="text" class="form-control" id="projectName" name="projectName" ngModel required #projectName="ngModel"  placeholder="{{'new-project.name'|translate}}">
       <!-- maksimalan broj karaktera je 250 -->
-      <p class="textarea-info">*Maksimalan broj karaktera je 30</p>
+      <p class="textarea-info">{{'new-project.poruka'|translate}}</p>
     </div>
     <div class="mb-3">
-      <label for="projectDescription">Opis projekta</label>
+      <label for="projectDescription">{{'new-project.opis'|translate}}</label>
       <!-- maksimalan broj karaktera je 250 -->
-      <textarea maxlength="250" class="form-control" id="projectDescription" name="projectDesc" ngModel #projectDesc="ngModel" placeholder="Opis projekta"></textarea>
-      <p class="textarea-info">*Maksimalan broj karaktera je 250</p>
+      <textarea maxlength="250" class="form-control" id="projectDescription" name="projectDesc" ngModel #projectDesc="ngModel" placeholder="{{'new-project.opis'|translate}}"></textarea>
+      <p class="textarea-info">{{'new-project.poruka2'|translate}}</p>
     </div>
     <div class="form-check mb-3">
       <input type="checkbox" class="form-check-input" id="public" name="public" ngModel #public="ngModel" >
-      <label class="form-check-label" for="public">public</label>
+      <label class="form-check-label" for="public">{{'new-project.public'|translate}}</label>
     </div>
-    <button type="submit" [disabled]="npf.invalid" class="btn btn-primary mt-3">Submit</button>
+    <button type="submit" [disabled]="npf.invalid" class="btn btn-primary mt-3">{{'new-project.submit'|translate}}</button>
 </form>
 

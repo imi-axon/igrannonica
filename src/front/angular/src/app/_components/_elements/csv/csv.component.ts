@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { NgxCsvParser } from 'ngx-csv-parser';
 
 @Component({
@@ -19,7 +20,7 @@ export class CsvComponent implements OnInit {
   @Output() fileChosen = new EventEmitter<any>();
 
   
-  constructor(private ngxCsvParser: NgxCsvParser) { }
+  constructor(private ngxCsvParser: NgxCsvParser,public translate:TranslateService) { }
   
   ngOnInit(): void {
   }
@@ -40,7 +41,9 @@ export class CsvComponent implements OnInit {
     }
     
     if(file.type != "text/csv" && file.type!="application/vnd.ms-excel"){
-      this.poruka = "Uneti fajl mora biti u .csv formatu!";
+    //  this.poruka = "Uneti fajl mora biti u .csv formatu!";
+     // this.poruka=this.translate.instant('csv.format');
+      this.translate.stream('csv.format').subscribe((text:string)=>this.poruka=text);
       this.fileError.emit();
       return;
     }
@@ -56,7 +59,8 @@ export class CsvComponent implements OnInit {
       //console.log(this.csv);
       
       if(this.filecontent.trim() === ""){
-        this.poruka = "Uneti fajl ne sme biti prazan!";
+       // this.poruka = "Uneti fajl ne sme biti prazan!";
+       this.translate.stream('csv.prazan').subscribe((text:string)=>this.poruka=text);
         this.fileError.emit();
         return;
       }

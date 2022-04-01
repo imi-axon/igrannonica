@@ -27,13 +27,13 @@
     <div class="row border config">
 
         <div class="button-group">
-            <button (click)="switchTableView();"> Switch view </button>
+            <button (click)="switchTableView();">{{'statistics-page.view'|translate}}</button>
             <!-- STAVITI LoadDataFromAPI(); UMESTO LoadTestData(); KADA ZELIMO REALNE VREDNOSTI-->
-            <button (click)="loader.start(); LoadTestData();"> Local Dataset (DEBUG) </button>
+            <button (click)="loader.start(); LoadTestData();">{{'statistics-page.debug'|translate}} </button>
         </div>
 
         <div class="button-group">
-            <button> Button </button>
+            <button> {{'statistics-page.dugme'|translate}} </button>
             <button> Button </button>
             <button> Button </button>
         </div>
