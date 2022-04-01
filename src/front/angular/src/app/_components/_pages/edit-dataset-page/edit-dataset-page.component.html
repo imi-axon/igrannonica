@@ -10,7 +10,8 @@
     <div class="row edit-section">
         
         <div class="col-11 dataset-edit">
-            <app-edit-dataset #edit>
+            <app-edit-dataset #edit
+            (ChangedField)="HandleFileChange($event);">
                 
             </app-edit-dataset>
         </div>
@@ -23,7 +24,9 @@
             <app-opcije-edit-dataset 
                 (RemoveColumnsClicked)="RemoveColumns(edit.GetSelectedColumns())"
                 (RemoveNullRowsClicked)="RemoveNullRows(edit.GetSelectedColumns())"
-                (FillNullRowsClicked)="FillNullRowsWithMean(edit.GetSelectedColumns())"
+                (FillNullRowsCatClicked)="FillNullRowsWithCat(edit.GetSelectedColumns())"
+                (FillNullRowsAverageClicked)="FillNullRowsWithMean(edit.GetSelectedColumns())"
+                (FillNullRowsMedianClicked)="FillNullRowsWithMedian(edit.GetSelectedColumns())"
                 (RemoveDuplicatesClicked)="RemoveDuplicates(edit.GetSelectedColumns())"
                 (EncodeColumnsOneHotClicked)="OneHotEncoding(edit.GetSelectedColumns())"
                 (EncodeColumnsLabelClicked)="LabelEncoding(edit.GetSelectedColumns())">

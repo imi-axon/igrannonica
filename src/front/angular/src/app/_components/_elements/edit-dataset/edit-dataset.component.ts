@@ -24,7 +24,10 @@ export class EditDatasetComponent implements OnInit {
   
   
   // Koristi se na stranici za input fajla i statistics stranici
-  @Output() loadedEvent = new EventEmitter<null>();
+  @Output() LoadedEvent = new EventEmitter<null>();
+  
+  // Pokrenut event o promeni polja u datasetu
+  @Output() ChangedField = new EventEmitter<any>();
   
   constructor() { }
 
@@ -32,7 +35,7 @@ export class EditDatasetComponent implements OnInit {
   
   ngOnInit(): void {
     // Moze se ukljuciti za testiranje prikaza
-    // this.LoadTestData();
+     this.LoadTestData();
   }
   
   
@@ -44,6 +47,16 @@ export class EditDatasetComponent implements OnInit {
     this.LoadDataAndRowNulls(testDataset, testStatistics.rownulls);
   }
   
+  
+  // Izmenjeno polje u datasetu
+  public ChangeField(input: any, pageRow: number, col: number, currentPage: number){
+    
+    let row = pageRow + currentPage * this.rowsPerPage;
+    //console.log("Row: " + row + " | Col: " + col);
+    
+    let change: any = { value: input.value, col: this.columns[col], row: row };
+    this.ChangedField.emit(change);
+  }
   
   // Ucitavanje
   public LoadDataAndRowNulls(dataset: any, rowNulls: any){    
@@ -58,7 +71,7 @@ export class EditDatasetComponent implements OnInit {
     this.splitDataAndNulls(this.dataset, this.rowNulls);
     this.currentPage = 0;
     
-    this.loadedEvent.emit();
+    this.LoadedEvent.emit();
   }
   private splitDataAndNulls(data: any, rowNulls: any){
     this.dataPages = [];

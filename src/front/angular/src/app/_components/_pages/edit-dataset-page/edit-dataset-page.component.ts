@@ -75,6 +75,17 @@ export class EditDatasetPageComponent implements OnInit {
   
   // KOMANDE  =========================================================================
   
+  // IZMENI KOLONU
+  public HandleFileChange(event: any){
+    let command = [{ action: "put", col: event.col, row: event.row, value: event.value }]
+    
+    console.log(command);
+    
+    // Ispod kao novi parametar bi isao callback za gresku gde bi mogli da revert-ujemo vrednost u polju (za to bi morali da posaljemo startu vrednost ovoj f-ji)
+    this.datasetAPI.EditDataset(command, this.ProjectId, false, this);
+  }
+  
+  
   // BRISI KOLONE
   public RemoveColumns(selectedColumns: string[]){
     if(selectedColumns.length <= 0)
@@ -92,7 +103,7 @@ export class EditDatasetPageComponent implements OnInit {
       
     let editJSON = this.getActionsJSON(selectedColumns, 'del nullrows');
     
-    this.datasetAPI.EditDataset(editJSON, this.ProjectId, false, this.successfulEditCallback);
+    this.datasetAPI.EditDataset(editJSON, this.ProjectId, false, this, this.successfulEditCallback);
   }
   
   // POPUNI REDOVE SA NULL KATEGORIJSKI
@@ -102,7 +113,7 @@ export class EditDatasetPageComponent implements OnInit {
     
     let editJSON = this.getActionsJSON(selectedColumns, 'ins nullrows cat');
     
-    this.datasetAPI.EditDataset(editJSON, this.ProjectId, false, this.successfulEditCallback);
+    this.datasetAPI.EditDataset(editJSON, this.ProjectId, false, this, this.successfulEditCallback);
   }
   
   // POPUNI REDOVE SA NULL PROSEKOM
@@ -112,7 +123,7 @@ export class EditDatasetPageComponent implements OnInit {
     
     let editJSON = this.getActionsJSON(selectedColumns, 'ins nullrows mean');
     
-    this.datasetAPI.EditDataset(editJSON, this.ProjectId, false, this.successfulEditCallback);
+    this.datasetAPI.EditDataset(editJSON, this.ProjectId, false, this, this.successfulEditCallback);
   }
   
   // POPUNI REDOVE SA NULL MEDIJANOM
@@ -122,7 +133,7 @@ export class EditDatasetPageComponent implements OnInit {
     
     let editJSON = this.getActionsJSON(selectedColumns, 'ins nullrows median');
     
-    this.datasetAPI.EditDataset(editJSON, this.ProjectId, false, this.successfulEditCallback);
+    this.datasetAPI.EditDataset(editJSON, this.ProjectId, false, this, this.successfulEditCallback);
   }
   
   // OBRISI REDOVE DUPLIKATE
@@ -133,7 +144,7 @@ export class EditDatasetPageComponent implements OnInit {
     let editJSON = [{ action: 'del duplicates' }];
     
     
-    this.datasetAPI.EditDataset(editJSON, this.ProjectId, false, this.successfulEditCallback);
+    this.datasetAPI.EditDataset(editJSON, this.ProjectId, false, this, this.successfulEditCallback);
   }
   
   // ONEHOT NAD IZABRANIM KOLONAMA
@@ -143,7 +154,7 @@ export class EditDatasetPageComponent implements OnInit {
       
     let editJSON = this.getActionsJSON(selectedColumns, 'enc onehot');
     
-    this.datasetAPI.EditDataset(editJSON, this.ProjectId, false, this.successfulEditCallback);
+    this.datasetAPI.EditDataset(editJSON, this.ProjectId, false, this, this.successfulEditCallback);
   }
   
   // LABEL NAD IZABRANIM KOLONAMA
@@ -153,7 +164,7 @@ export class EditDatasetPageComponent implements OnInit {
       
     let editJSON = this.getActionsJSON(selectedColumns, 'enc label');
     
-    this.datasetAPI.EditDataset(editJSON, this.ProjectId, false, this.successfulEditCallback);
+    this.datasetAPI.EditDataset(editJSON, this.ProjectId, false, this, this.successfulEditCallback);
   }
   
 
