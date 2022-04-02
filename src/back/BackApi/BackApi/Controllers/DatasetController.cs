@@ -45,19 +45,19 @@ namespace BackApi.Controllers
         */
         
         [HttpPost("{id}/dataset")]
-        public async Task<ActionResult<string>> NewDataSet(int id, [FromBody] DatasetGetPost req)
+        public async Task<ActionResult<string>> NewDataSet(int id, IFormFile req )
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized("Ulogujte se");
-            var response = await MLconnection.validateCSVstring(req);
+            //var response = await MLconnection.validateCSVstring(req); // ceka se implementacija obrade fajla na ml-u a ne stringa
 
-            if (response.StatusCode == HttpStatusCode.Created)
-            {
+            //if (response.StatusCode == HttpStatusCode.Created)
+            //{
                 var chk=datasrv.New(req, id,userid);
                 if (chk)
                     return StatusCode(StatusCodes.Status200OK, new { message = "Sve je u redu." });
                 else return StatusCode(StatusCodes.Status403Forbidden, new { message = "Vi niste vlasnik projekta" });
-            }
+            //}
 
             return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Ne valja CSV." });
         }

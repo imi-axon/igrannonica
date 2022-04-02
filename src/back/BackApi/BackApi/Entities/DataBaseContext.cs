@@ -11,7 +11,8 @@ namespace BackApi.Entities
         }
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            options.UseSqlServer(Configuration.GetConnectionString("SqlExpress"));
+            options.UseMySql(Configuration.GetConnectionString("MariaDB"),
+            ServerVersion.AutoDetect(Configuration.GetConnectionString("MariaDB")));
         }
         //dodatavanje tabela u bazu
         public DbSet<User> Users { get; set; }

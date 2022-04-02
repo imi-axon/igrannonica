@@ -11,7 +11,7 @@ namespace BackApi.Services
 {
     public interface IDatasetService
     {
-        public Boolean New(DatasetGetPost model,int projid,int userid);
+        public Boolean New(IFormFile model,int projid,int userid);
         public dynamic IsExist(int projectID, out Boolean uspeh, int userid, out Boolean owner);
         public Boolean Delete(int projid,int userid);
         public string ListDatasets(int projid);
@@ -33,7 +33,7 @@ namespace BackApi.Services
             this.configuration = configuration;
         }
 
-        public Boolean New(DatasetGetPost model,int projid,int userid)
+        public Boolean New(IFormFile model,int projid,int userid)
         {
             var tmp= kontext.Projects.FirstOrDefault(x=> x.ProjectId==projid && x.UserId==userid); // provera vlasnistva projekta pre dodavanja dataset-a
             if (tmp == null)
@@ -74,8 +74,16 @@ namespace BackApi.Services
             kontext.SaveChanges();
 
             //string xd= "n1;n2;n3;out\r1; 1; 0; 1\r1; 0; 0; 1\r0; 0; 1; 1\r1; 0; 1; 1\r0; 0; 0; 0\r";
-            File.WriteAllTextAsync(path, model.dataset);
-            File.WriteAllTextAsync(pathalt,model.dataset);
+            //File.WriteAllTextAsync(path, model.dataset);
+            //File.WriteAllTextAsync(pathalt,model.dataset);
+            using (var stream = System.IO.File.Create(Dataset.Path))
+            {
+                model.CopyToAsync(stream);
+            }
+            using (var stream = System.IO.File.Create(Temp.Path))
+            {
+                model.CopyToAsync(stream);
+            }
 
             return true;
             //return datafile;
