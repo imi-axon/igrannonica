@@ -39,6 +39,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CreateNeuralNetworkComponent } from './_components/_elements/create-neural-network/create-neural-network.component';
+import { DatasetOptionsComponent } from './_components/_elements/dataset-options/dataset-options.component';
 
 
 
@@ -66,7 +67,9 @@ import { CreateNeuralNetworkComponent } from './_components/_elements/create-neu
     NavbarNoviComponent,
     VerificationComponent,
     EditDatasetComponent,
-    CreateNeuralNetworkComponent
+    CreateNeuralNetworkComponent,
+    DatasetOptionsComponent
+
   ],
   imports: [
     NgxCsvParserModule,
