@@ -136,15 +136,16 @@ namespace BackApi.Services
                 return false;
 
             List<Dataset> lista= kontext.Datasets.Where(x=> x.ProjectId == projid).ToList();
-            var dataset = lista[0];
-            if (dataset == null)
+            var ifempty = lista[0];
+            if (ifempty == null)
                 return false;
+            foreach (Dataset d in lista)
+            {
+                storageService.DeleteDataset(d.Path);
 
-            storageService.DeleteDataset(dataset.Path);
-
-            kontext.Datasets.Remove(dataset);
-            kontext.SaveChanges();
-
+                kontext.Datasets.Remove(d);
+                kontext.SaveChanges();
+            }
             return true;
         }
 
@@ -198,7 +199,7 @@ namespace BackApi.Services
         
         public string ProjIdToPath(int projid)
         {
-            Dataset dset = kontext.Datasets.FirstOrDefault(x => x.ProjectId == projid);
+            Dataset dset = kontext.Datasets.FirstOrDefault(x => x.ProjectId == projid && x.Main==true);
             if (dset == null) return null;
             return dset.Path;
         }

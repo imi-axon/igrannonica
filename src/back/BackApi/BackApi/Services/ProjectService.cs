@@ -12,6 +12,7 @@ namespace BackApi.Services
         string GetProjById(int projid, int userid);
         Boolean EditProject(int projid, ProjectPostPut proj,int userid);
         int getProjectId(ProjectPostPut model);
+        public Boolean projectOwnership(int userid, int projid);
     }
     public class ProjectService:IProjectService
     {
@@ -166,6 +167,13 @@ namespace BackApi.Services
         {
             var tmp = context.Projects.Where(x => x.Name == model.name).FirstOrDefault();
             return tmp.ProjectId;
+        }
+
+        public Boolean projectOwnership(int userid,int projid)
+        {
+            var tmp=context.Projects.FirstOrDefault(x=> x.UserId==userid && x.ProjectId ==projid);
+            if (tmp == null) return false;
+            return true;
         }
     }
 }

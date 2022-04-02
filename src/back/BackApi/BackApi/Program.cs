@@ -14,6 +14,7 @@ using System.Security.Claims;
 using System.Net;
 
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
+var mlhost = "localhost:8000";
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,6 +67,7 @@ builder.Services.AddCors(options =>
         });
 });
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -89,14 +91,15 @@ app.UseStaticFiles(new StaticFileOptions
 {
     OnPrepareResponse = context =>
     {
-        // TODO: Ovo treba promeniti tako da samo ML server moze da pristupi Static fajlovima!!!
-
-        if (context.Context.User.Identity.IsAuthenticated)
+        var x = context.Context.Request.Host;
+        if (/*x.ToString() == null  ||*/ x.ToString() != mlhost)
         {
-            return;
+            context.Context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+            context.Context.Response.ContentLength = 0;
+            context.Context.Response.Body = Stream.Null;
+            context.Context.Response.Headers.Add("Cache-Control", "no-store");
         }
 
-        context.Context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
     },
     FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "Storage")),
     RequestPath = "/Storage"
