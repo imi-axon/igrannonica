@@ -137,7 +137,7 @@ async def training_stream(client_id: str, websocket: WebSocket):
             sleep(1)
 
     except WebSocketDisconnect:
-        pass
+        manager.disconnect(client_id)
 
     finally:
         manager.disconnect(client_id)
