@@ -4,7 +4,9 @@ from fastapi import WebSocket, WebSocketDisconnect
 import pandas as pd
 import tensorflow as tf
 from tensorflow import keras
-from keras import layers
+from keras import layers, Sequential
+import numpy
+from typing import List
 
 from typing import Callable
 
@@ -68,7 +70,7 @@ class TrainingInstance():
             model = keras.Sequential([
                 layers.Dense(10, activation='relu', input_shape=[len(train_dataset.keys())]),
                 layers.Dense(5, activation = 'relu'),
-                layers.Dense(1)
+                layers.Dense(1, activation='linear')
             ])
 
             optimizer = tf.keras.optimizers.RMSprop(0.001)
@@ -79,38 +81,41 @@ class TrainingInstance():
             return model
 
 
-        model: keras.Sequential = build_model()
+        model: Sequential = build_model()
+        
+        j = 1
 
-        EPOCHS = 10
+        # print('\n\n>>>>>>>> W <<<<<<<<<')
+        # print(model.layers[j].get_weights()[0])
+        # print('\n\n>>>>>>>> B <<<<<<<<<')
+        # print(model.layers[j].get_weights()[1])
+
+        EPOCHS = 100
 
         # cb = EpochEndCallback()
         # cb.addMyCallbackFunction(self.epcb)
         hist = model.fit(
             normed_train_data, train_labels,
             #epochs = EPOCHS, validation_split = 0.2, verbose=1, callbacks=[cb])
-            epochs = EPOCHS, validation_split = 0.2, verbose=1)
+            epochs = EPOCHS, verbose=1, validation_data=(normed_test_data, test_labels))
 
-        df = pd.DataFrame(hist.history)
-        print(df)
+        # df = pd.DataFrame(hist.history)
+        # print(df)
 
+        # print('\n\n>>>>>>>> W <<<<<<<<<')
+        # print(model.layers[j].get_weights()[0])
+        # print('\n\n>>>>>>>> B <<<<<<<<<')
+        # print(model.layers[j].get_weights()[1])
 
+        loss, mae, mse = model.evaluate(normed_test_data, test_labels, verbose=2)
+        print(loss)
+        print(mae)
+        print(mse)
 
-        j = 0
-
-        print(model.layers[j].get_config())
-
-        print('\n\n>>>>>>>> [0] <<<<<<<<<')
-        we = model.layers[j].get_weights()[0]
-        print(len(we))
-        print(we)
-        x = []
-        for w in we:
-            x.extend(w)
-        print(len(x))
-        print(x)
-
-        print('\n\n>>>>>>>> [1] <<<<<<<<<')
-        print(model.layers[j].get_weights()[1])
+        loss, mae, mse = model.evaluate(normed_test_data, test_labels, verbose=2)
+        print(loss)
+        print(mae)
+        print(mse)
 
 
 class WsConn():
