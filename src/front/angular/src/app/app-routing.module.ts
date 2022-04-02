@@ -4,6 +4,7 @@ import { ChangepassPageComponent } from './_components/_pages/changepass-page/ch
 import { DataSetPageComponent } from './_components/_pages/data-set-page/data-set-page.component';
 import { EditDatasetPageComponent } from './_components/_pages/edit-dataset-page/edit-dataset-page.component';
 import { HomePageComponent } from './_components/_pages/home-page/home-page.component';
+import { InputusernamePageComponent } from './_components/_pages/inputusername-page/inputusername-page.component';
 import { LoginPageComponent } from './_components/_pages/login-page/login-page.component';
 import { MyProjectsPageComponent } from './_components/_pages/my-projects-page/my-projects-page.component';
 import { NewProjectPageComponent } from './_components/_pages/new-project-page/new-project-page.component';
@@ -28,7 +29,8 @@ const routes: Routes = [
   {path:'profil', component:ProfilPageComponent},
   {path:'verification', component:VerificationComponent},
   {path: 'changepass', component:ChangepassPageComponent},
-  {path:'edit-dataset/:ProjectId', component:EditDatasetPageComponent}
+  {path:'edit-dataset/:ProjectId', component:EditDatasetPageComponent},
+  {path:'input-username', component:InputusernamePageComponent},
 ];
 
 @NgModule({

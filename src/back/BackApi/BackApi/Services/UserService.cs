@@ -198,10 +198,8 @@ namespace BackApi.Services
             {
                 string jwtoken = CreateEmailToken(user.Username, int.Parse(configuration.GetSection("AppSettings2:EmailToken").Value.ToString()));
                 bool res = emailService.SendEmailForPass("Kliknite na link da biste promenili lozinku: http://localhost:4200/changepass?token=" + jwtoken, "Promena lozinke", user.Email);
-                if (res)
-                    return "Proverite vas mail";
+                return "Proverite vas mail";
             }
-            return "Greska";
         }
 
         public string ChangePasswordInDataBase(string username, string password)

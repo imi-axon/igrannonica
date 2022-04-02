@@ -37,6 +37,8 @@ import { VerificationComponent } from './_components/_pages/verification-page/ve
 import { EditDatasetComponent } from './_components/_elements/edit-dataset/edit-dataset.component';
 import { ChangepassFormComponent } from './_components/_elements/changepass-form/changepass-form.component';
 import { ChangepassPageComponent } from './_components/_pages/changepass-page/changepass-page.component';
+import { InputusernameFormComponent } from './_components/_elements/inputusername-form/inputusername-form.component';
+import { InputusernamePageComponent } from './_components/_pages/inputusername-page/inputusername-page.component';
 
 
 @NgModule({
@@ -64,7 +66,10 @@ import { ChangepassPageComponent } from './_components/_pages/changepass-page/ch
     VerificationComponent,
     EditDatasetComponent,
     ChangepassFormComponent,
-    ChangepassPageComponent
+    ChangepassPageComponent,
+    InputusernamePageComponent,
+    InputusernameFormComponent
+    
   ],
   imports: [
     NgxCsvParserModule,
