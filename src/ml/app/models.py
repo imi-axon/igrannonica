@@ -5,7 +5,7 @@ from pydantic import BaseModel
 # privremeno !!!
 class TempTrainingInstance():
     def __init__(self):
-        self.data: List[int] = [i for i in range(1,4)]
+        self.data: List[int] = [i for i in range(1,100)]
 
     async def get_data(self) -> str | None:
         return str(self.data.pop()) if len(self.data) > 0 else None
@@ -19,7 +19,7 @@ class Statistics (BaseModel):
 
 class DatasetEditActions (BaseModel):
     actions: str
-    data: str
+    dataset: str
 
 class WsConn():
 

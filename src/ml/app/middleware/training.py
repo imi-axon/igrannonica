@@ -21,7 +21,7 @@ class EpochEndCallback(keras.callbacks.Callback):
 
 class TrainingInstance():
 
-    def __init__(self, epcb: Callable):
+    def __init__(self, epcb: Callable = lambda:1):
         self.epcb = epcb
 
     def train(self):
@@ -66,8 +66,8 @@ class TrainingInstance():
 
         def build_model():
             model = keras.Sequential([
-                layers.Dense(64, activation='relu', input_shape=[len(train_dataset.keys())]),
-                layers.Dense(64, activation = 'relu'),
+                layers.Dense(10, activation='relu', input_shape=[len(train_dataset.keys())]),
+                layers.Dense(5, activation = 'relu'),
                 layers.Dense(1)
             ])
 
@@ -79,15 +79,38 @@ class TrainingInstance():
             return model
 
 
-        model = build_model()
+        model: keras.Sequential = build_model()
 
         EPOCHS = 10
 
-        cb = EpochEndCallback()
-        cb.addMyCallbackFunction(self.epcb)
-        model.fit(
+        # cb = EpochEndCallback()
+        # cb.addMyCallbackFunction(self.epcb)
+        hist = model.fit(
             normed_train_data, train_labels,
-            epochs = EPOCHS, validation_split = 0.2, verbose=1, callbacks=[cb])
+            #epochs = EPOCHS, validation_split = 0.2, verbose=1, callbacks=[cb])
+            epochs = EPOCHS, validation_split = 0.2, verbose=1)
+
+        df = pd.DataFrame(hist.history)
+        print(df)
+
+
+
+        j = 0
+
+        print(model.layers[j].get_config())
+
+        print('\n\n>>>>>>>> [0] <<<<<<<<<')
+        we = model.layers[j].get_weights()[0]
+        print(len(we))
+        print(we)
+        x = []
+        for w in we:
+            x.extend(w)
+        print(len(x))
+        print(x)
+
+        print('\n\n>>>>>>>> [1] <<<<<<<<<')
+        print(model.layers[j].get_weights()[1])
 
 
 class WsConn():
@@ -111,4 +134,4 @@ class WsConn():
             pass
         
 
-            
+TrainingInstance().train()
