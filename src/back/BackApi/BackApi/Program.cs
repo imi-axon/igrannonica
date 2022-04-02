@@ -90,13 +90,14 @@ app.UseStaticFiles(new StaticFileOptions
     OnPrepareResponse = context =>
     {
         // TODO: Ovo treba promeniti tako da samo ML server moze da pristupi Static fajlovima!!!
-
+        /*
         if (context.Context.User.Identity.IsAuthenticated)
         {
             return;
         }
 
         context.Context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+        */
     },
     FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "Storage")),
     RequestPath = "/Storage"

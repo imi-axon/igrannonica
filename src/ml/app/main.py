@@ -11,10 +11,11 @@ from models import Dataset, DatasetEditActions, Statistics, TempTrainingInstance
 # Utils
 from util.csv import csv_is_valid, csv_decode, csv_decode_2
 from util.json import json_encode, json_decode
-from middleware.dataset_editor import DatasetEditor
+import util.http as httpc
 
 # ML
-from middleware.statistics import statistics_json
+from middleware.statistics import StatisticsMiddleware
+from middleware.dataset_editor import DatasetEditor
 
 
 app = FastAPI()
@@ -26,8 +27,9 @@ app = FastAPI()
 def validate_csv(body: Dataset, response: Response):
 
     # print('Pocetak kontrolera (za Add Dataset)')
+    csvstring = httpc.get(body.dataset)
 
-    csvstring = body.dataset
+    print(f'>>>>>>>>>> {csvstring}')
 
     if not csv_is_valid(csvstring):
         response.status_code = status.HTTP_400_BAD_REQUEST
@@ -41,7 +43,7 @@ def convert_csv_to_json(body: Dataset, response: Response):
 
     # print('Pocetak kontrolera (za Get Dataset)')
 
-    csvstring = body.dataset
+    csvstring = httpc.get(body.dataset)
     # print(csvstring)
     
     resp = ''
@@ -66,31 +68,12 @@ def convert_csv_to_json(body: Dataset, response: Response):
 def edit_dataset(body: DatasetEditActions, response: Response):
     
     actions = [{'action':str.split(a['action']), 'column':(a['column'] if 'column' in a.keys() else '')} for a in json_decode(body.actions)]
-    dataset = body.data
-    # dataset = csv_decode(payload['data'])
+    dataset = httpc.get(body.dataset)
 
     res = DatasetEditor.execute(actions, dataset)
-    resnew = []
-    resrows = res.split('\r\n')
-    for row in resrows:
-        resnew.append(row.split(',')[1:])
-
-    res2 = ''
-    for row in resnew:
-        r = ''
-        for i in range(len(row)):
-            r += row[i] + ';'
-
-        res2 += r[:-1] + '\n'
-
-    res = res2
-
-    print(f'EDIT: RES2: {res2}')
 
     if res == None:
         response.status_code = status.HTTP_400_BAD_REQUEST
-
-    #print(f'EIDT: {res}')
 
     return res
 
@@ -101,11 +84,11 @@ def get_statistics(body: Dataset):
     
     print(body)
 
-    csvstr: str = body.dataset
+    csvstr: str = httpc.get(body.dataset)
 
     print(csvstr)
 
-    stats: str = statistics_json(csvstr)
+    stats: str = StatisticsMiddleware(csvstr).statistics_json()
 
     # print(stats)
 

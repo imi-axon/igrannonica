@@ -19,7 +19,7 @@ class Statistics (BaseModel):
 
 class DatasetEditActions (BaseModel):
     actions: str
-    data: str
+    dataset: str
 
 class WsConn():
 

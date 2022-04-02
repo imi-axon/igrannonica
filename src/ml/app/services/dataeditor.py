@@ -90,6 +90,9 @@ class DataEditorService:
                 self.dataset = pd.get_dummies(self.dataset, columns=[column], prefix = [column])
         return self.dataset
 
+    def csv_result(self, sep: str = ';'):
+        return self.dataset.to_csv(sep=sep, index=False)
+
 
 
 

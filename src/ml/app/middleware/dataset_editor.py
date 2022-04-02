@@ -89,4 +89,4 @@ class DatasetEditor:
             else:
                 return None
 
-        return service.dataset.to_csv()
+        return service.csv_result()
