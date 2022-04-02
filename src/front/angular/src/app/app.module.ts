@@ -33,8 +33,10 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 import {MatSelectModule} from '@angular/material/select';
 import { NavbarNoviComponent } from './_components/_elements/navbar-novi/navbar-novi.component';
-import { VerificationComponent } from './_components/_pages/verification/verification.component';
+import { VerificationComponent } from './_components/_pages/verification-page/verification.component';
 import { EditDatasetComponent } from './_components/_elements/edit-dataset/edit-dataset.component';
+import { ChangepassFormComponent } from './_components/_elements/changepass-form/changepass-form.component';
+import { ChangepassPageComponent } from './_components/_pages/changepass-page/changepass-page.component';
 
 
 @NgModule({
@@ -60,7 +62,9 @@ import { EditDatasetComponent } from './_components/_elements/edit-dataset/edit-
     OpcijeEditDatasetComponent,
     NavbarNoviComponent,
     VerificationComponent,
-    EditDatasetComponent
+    EditDatasetComponent,
+    ChangepassFormComponent,
+    ChangepassPageComponent
   ],
   imports: [
     NgxCsvParserModule,

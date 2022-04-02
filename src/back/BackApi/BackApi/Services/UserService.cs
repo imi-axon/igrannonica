@@ -13,6 +13,8 @@ namespace BackApi.Services
         string Login(UserLogin model,out Boolean uspeh);
         public int UsernameToId(string username);
         public int EmailToId(string email);
+        public string ChangePassword(string username);
+        public string ChangePasswordInDataBase(string username, string password);
     }
 
     public class UserService: IUserService
@@ -68,13 +70,13 @@ namespace BackApi.Services
                 return jwt;
         }
 
-        private string CreateEmailToken(User korisnik, int expiretime)
+        private string CreateEmailToken(string username, int expiretime)
         {
             List<Claim> claims = new List<Claim>()
             {
-                new Claim("username",korisnik.Username ),
+                new Claim("username",username),
             };
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration.GetSection("AppSettings:Token").Value));
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration.GetSection("AppSettings2:Token").Value));
 
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             var token = new JwtSecurityToken(
@@ -151,7 +153,7 @@ namespace BackApi.Services
             korisnik.Name=model.firstname;
             korisnik.Email=model.email;
             korisnik.Verified = false;
-            string jwtoken = CreateEmailToken(korisnik, int.Parse(configuration.GetSection("AppSettings2:EmailToken").Value.ToString()));
+            string jwtoken = CreateEmailToken(korisnik.Username, int.Parse(configuration.GetSection("AppSettings2:EmailToken").Value.ToString()));
             korisnik.EmailToken = jwtoken; 
 
             CreatePWHash(model.password, out byte[] pwHash, out byte[] pwSalt);
@@ -187,6 +189,33 @@ namespace BackApi.Services
  
         }
 
+        public string ChangePassword(string username)
+        {
+            var user = kontext.Users.FirstOrDefault(x=> x.Username == username);
+            if (user == null)
+                return "Korisnik sa ovim usernam-om ne postoji";
+            else
+            {
+                string jwtoken = CreateEmailToken(user.Username, int.Parse(configuration.GetSection("AppSettings2:EmailToken").Value.ToString()));
+                bool res = emailService.SendEmailForPass("Kliknite na link da biste promenili lozinku: http://localhost:4200/changepass?token=" + jwtoken, "Promena lozinke", user.Email);
+                if (res)
+                    return "Proverite vas mail";
+            }
+            return "Greska";
+        }
+
+        public string ChangePasswordInDataBase(string username, string password)
+        {
+            var user = kontext.Users.FirstOrDefault(x => x.Username == username);
+            if (user == null)
+                return "Greska";
+            CreatePWHash(password, out byte[] pwHash, out byte[] pwSalt);
+            user.PasswordHash = pwHash;
+            user.PasswordSalt = pwSalt;
+            kontext.SaveChanges();
+            return "Uspesno promenjena lozinka";
+
+        }
         public int UsernameToId(string username)
         {
             var kor = kontext.Users.FirstOrDefault(x => x.Username == username);
