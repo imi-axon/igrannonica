@@ -100,5 +100,51 @@ export class DatasetService {
     )
   }
   
+  SaveDataset(project_id: number, successCallback?: Function, unauthorizedCallback?: Function, forbiddenCallback?: Function, notFoundCallback?: Function){
+    this.datasetAPI.SaveDataset(project_id).subscribe(
+      (response) => {
+        
+        if(response.status == HttpStatusCode.Ok)
+          if(self && successCallback) 
+            successCallback(self);
+        
+        if(response.status == HttpStatusCode.Unauthorized)
+          if(self && unauthorizedCallback)
+            unauthorizedCallback(self, response.body.message);
+        
+        if(response.status == HttpStatusCode.Forbidden)
+          if(self && forbiddenCallback)
+            forbiddenCallback(self, response.body.message);
+        
+        if(response.status == HttpStatusCode.NotFound)
+          if(self && notFoundCallback)
+            notFoundCallback(self, response.body.message);
+      }
+    )
+  }
+  
+  GetDatasetAsFile(project_id: number, successCallback?: Function, unauthorizedCallback?: Function, forbiddenCallback?: Function, notFoundCallback?: Function){
+    this.datasetAPI.GetDatasetAsFile(project_id).subscribe(
+      (response) => {
+        
+        if(response.status == HttpStatusCode.Ok)
+          if(self && successCallback) 
+            successCallback(self, response.body);
+        
+        if(response.status == HttpStatusCode.Unauthorized)
+          if(self && unauthorizedCallback)
+            unauthorizedCallback(self);
+        
+        if(response.status == HttpStatusCode.Forbidden)
+          if(self && forbiddenCallback)
+            forbiddenCallback(self);
+        
+        if(response.status == HttpStatusCode.NotFound)
+          if(self && notFoundCallback)
+            notFoundCallback(self);
+      }
+    )
+  }
+  
   
 }

@@ -35,6 +35,7 @@ import {MatSelectModule} from '@angular/material/select';
 import { NavbarNoviComponent } from './_components/_elements/navbar-novi/navbar-novi.component';
 import { VerificationComponent } from './_components/_pages/verification/verification.component';
 import { EditDatasetComponent } from './_components/_elements/edit-dataset/edit-dataset.component';
+import { DatasetOptionsComponent } from './_components/_elements/dataset-options/dataset-options.component';
 
 
 @NgModule({
@@ -60,7 +61,8 @@ import { EditDatasetComponent } from './_components/_elements/edit-dataset/edit-
     OpcijeEditDatasetComponent,
     NavbarNoviComponent,
     VerificationComponent,
-    EditDatasetComponent
+    EditDatasetComponent,
+    DatasetOptionsComponent
   ],
   imports: [
     NgxCsvParserModule,

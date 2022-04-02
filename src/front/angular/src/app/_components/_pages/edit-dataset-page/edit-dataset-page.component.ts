@@ -55,6 +55,16 @@ export class EditDatasetPageComponent implements OnInit {
   }
   
   
+  // PONOVO KUPIMO PODATKE
+  public UpdateData(){
+    this.datasetAPI.GetDataset(this.ProjectId, true, this, this.successfulGetDatasetCallback);
+  }
+  
+  // CUVAMO TRENUTNU IZMENU KAO TRAJNU
+  public SaveData(){
+    this.datasetAPI.SaveDataset(this.ProjectId);
+  }
+  
   // CALLBACK ==========================================================================
   
   private successfulGetStatisticsCallback(self: any, response: any){

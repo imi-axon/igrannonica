@@ -17,7 +17,7 @@
     </div>
     
     <div class="dugme-tekst mb-3">
-        <button type="button" class="dugme btn btn-secondary dropdown-toggle" style="width:77%" matTooltip="Enkodiranje" matTooltipPosition="right"
+        <button type="button" class="dugme btn btn-secondary dropdown-toggle" style="width:77%; border-top-left-radius: 0%;border-top-right-radius: 0%;" matTooltip="Enkodiranje" matTooltipPosition="right"
             (click)="VrstePopunjavanja()">
             <i class="bi bi-plus-square-dotted"></i>
         </button>
@@ -26,15 +26,15 @@
 
         <div id="popunjavanjeGrupa" class="" >
 
-            <button type="button" class="dugmeEnc col-12 btn m-2 btn-secondary" style="border-top-left-radius: 0%;border-top-right-radius: 0%;" 
+            <button type="button" class="dugmeEnc col-12 btn m-2 btn-secondary"
                 matTooltip="Popuni redove sa null vrednostima kategorijski" matTooltipPosition="right" (click)="FillNullRowsCat();">
                 Kategorijski
             </button>
-            <button type="button" class="dugmeEnc col-12 btn m-2 btn-secondary" style="border-top-left-radius: 0%;border-top-right-radius: 0%;" 
+            <button type="button" class="dugmeEnc col-12 btn m-2 btn-secondary"
                 matTooltip="Popuni redove sa null vrednostima prosekom" matTooltipPosition="right" (click)="FillNullRowsAverage();">
                 Prosek
             </button>
-            <button type="button" class="dugmeEnc col-12 btn m-2 btn-secondary" style="border-top-left-radius: 0%;border-top-right-radius: 0%;" 
+            <button type="button" class="dugmeEnc col-12 btn m-2 btn-secondary"
                 matTooltip="Popuni redove sa null vrednostima medijanom" matTooltipPosition="right" (click)="FillNullRowsMedian();">
                 Medijana
             </button>

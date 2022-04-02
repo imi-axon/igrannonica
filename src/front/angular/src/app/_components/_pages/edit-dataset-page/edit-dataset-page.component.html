@@ -11,16 +11,15 @@
         
         <div class="col-11 dataset-edit">
             <app-edit-dataset #edit
-            (ChangedField)="HandleFileChange($event);">
-                
+            (ChangedField)="HandleFileChange($event);"
+            (DataUpdateNeeded)="UpdateData();"
+            (SaveDataNeeded)="SaveData();">  
             </app-edit-dataset>
         </div>
         
         <div class="col-1 opcije">
             <app-opcije-dataset></app-opcije-dataset>
-            <!-- 
-                (FillNullRowsClicked)="FillNullRowsWithMean(edit.GetSelectedColumns())" ZAMENITI
-             -->
+            
             <app-opcije-edit-dataset 
                 (RemoveColumnsClicked)="RemoveColumns(edit.GetSelectedColumns())"
                 (RemoveNullRowsClicked)="RemoveNullRows(edit.GetSelectedColumns())"
