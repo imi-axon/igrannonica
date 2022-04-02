@@ -36,7 +36,7 @@ export class DatasetApiService {
   }
   
   
-  public GetStatistics(project_id: number, main: boolean){
+  public GetStatistics(project_id: number, main: boolean) : Observable<HttpResponse<any>>{
     return this.http.get<any>(
       apiProperties.url + '/api/projects/' + project_id + '/dataset/' + main + '/statistics',
       {
@@ -49,12 +49,38 @@ export class DatasetApiService {
   
   // EDIT
   public EditDataset(editJSON: any, project_id: number, main: boolean): Observable<HttpResponse<any>>{
-    return this.http.put<any>(apiProperties.url + '/api/projects/' + project_id + '/dataset/' + main + '/edit',
+    return this.http.put<any>(
+      apiProperties.url + '/api/projects/' + project_id + '/dataset/' + main + '/edit',
       {
         actions: JSON.stringify(editJSON)
       },
       {
         observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    );
+  }
+  
+  // SAVE Dataset
+  // api/projects/{id}/dataset/save
+  public SaveDataset(project_id: number): Observable<HttpResponse<any>>{
+    return this.http.put<any>(
+      apiProperties.url + "/api/projects/" + project_id + "/dataset/save",
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    );
+  }
+  
+  // GET File
+  // api/projects/{id}/dataset/download
+  public GetDatasetAsFile(project_id: number){
+    return this.http.get(
+      apiProperties.url + '/api/projects/' + project_id + '/dataset/download',
+      {
+        observe: 'response',
+        responseType: 'blob',
         headers: HeaderUtil.jwtOnlyHeaders()
       }
     );

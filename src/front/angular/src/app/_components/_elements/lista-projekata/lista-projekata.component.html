@@ -1,4 +1,4 @@
-<h1 *ngIf="projekti.length==0">Nemate projekte</h1>
+<h1 *ngIf="projekti.length==0">{{'lista-projekata.nema'|translate}}</h1>
 <div class="row" *ngIf="projekti.length>0">
 
   <div class="col-md-4" *ngFor="let p of projekti">
@@ -7,7 +7,7 @@
       <p class="imeProjekta">{{p.Name}}</p>
       <p class="opis">{{p.Description}}</p>
     </div>
-      <p class="datum">Created | 22/9/2022</p>
+      <p class="datum">{{'lista-projekata.kreiran'|translate}} | 22/9/2022</p>
     </div>
 
     <!-- <button class="projekat btn-primary" routerLink="/dataset/{{p.ProjectId}}">{{p.Name}}</button> -->

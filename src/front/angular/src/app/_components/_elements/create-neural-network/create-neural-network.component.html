@@ -1,0 +1,14 @@
+<div class="container mt-5">
+<button class="btn btn-secondary" (click)="onClick()">{{'create-neural-network.kreiraj'|translate}}</button>
+<div id="forma" *ngIf="!sakriveno">
+<form #nnf="ngForm" (ngSubmit)="onSubmit(nnf)"  style="max-width: 50em;" > 
+    <div class="mb-3">
+      <label for="nnName">{{'create-neural-network.name'|translate}}</label>
+      <input maxlength="30" type="text" class="form-control" id="nnName" name="nnName" ngModel required #nnName="ngModel"  placeholder="{{'create-neural-network.name'|translate}}">
+      <!-- maksimalan broj karaktera je 30 -->
+      <p class="textarea-info">{{'new-project.poruka'|translate}}</p>
+    </div>
+    <button type="submit" [disabled]="nnf.invalid" class="btn btn-primary mt-3">{{'create-neural-network.submit'|translate}}</button>
+</form>
+</div>
+</div>

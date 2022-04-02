@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { Papa } from 'ngx-papaparse';
 
 @Component({
@@ -26,7 +27,7 @@ export class FileInputComponent implements OnInit {
   @Output() jsonLoaded = new EventEmitter<any>();
 
   
-  constructor(private papa: Papa) { }
+  constructor(private papa: Papa, public translate:TranslateService) { }
   
   ngOnInit(): void {
   }
@@ -51,7 +52,8 @@ export class FileInputComponent implements OnInit {
     }
     
     if(this.inputFile.type != "text/csv" && this.inputFile.type!="application/vnd.ms-excel"){
-      this.message = "Uneti fajl mora biti u .csv formatu!";
+      //this.message = "Uneti fajl mora biti u .csv formatu!";
+      this.translate.stream('csv.format').subscribe((text:string)=>this.message=text);
       this.fileError.emit();
       return;
     }
@@ -70,7 +72,8 @@ export class FileInputComponent implements OnInit {
       //console.log(this.csv);
       
       if(fileContent.trim() === ""){
-        this.message = "Uneti fajl je prazan!";
+        //this.message = "Uneti fajl je prazan!";
+        this.translate.stream('csv.prazan').subscribe((text:string)=>this.message=text);
         this.fileError.emit();
         return;
       }

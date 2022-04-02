@@ -2,7 +2,7 @@
 
     <div class="dugme-tekst ">
         <button type="button" class="btn m-0 btn-secondary"
-            style="border-bottom-right-radius: 0% ; border-bottom-left-radius: 0%;" matTooltip="Izbrisi kolone"
+            style="border-bottom-right-radius: 0% ; border-bottom-left-radius: 0%;" matTooltip="{{'opcije-edit-dataset.izbrisiKol'|translate}}"
             matTooltipPosition="right" (click)="RemoveColumns();">
             <i class="bi bi-trash"></i>
         </button>
@@ -10,29 +10,54 @@
     </div>
     <div class="dugme-tekst ">
         <button type="button" class="btn m-0 btn-secondary" style="border-radius: 0%;"
-            matTooltip="Izbrisi redove sa null vrednostima" matTooltipPosition="right" (click)="RemoveNullRows();">
+            matTooltip="{{'opcije-edit-dataset.nullRedovi'|translate}}" matTooltipPosition="right" (click)="RemoveNullRows();">
             <i class="bi bi-trash"></i>
         </button>
         <!-- Izbrisi redove sa null vrednostima -->
     </div>
+    
     <div class="dugme-tekst mb-3">
-        <button type="button" class="btn btn-secondary" style="border-top-left-radius: 0%;border-top-right-radius: 0%;"
-            matTooltip="Popuni redove sa null vrednostima" matTooltipPosition="right" (click)="FillNullRows();">
+        <!--
+            <button type="button" class="btn btn-secondary" style="border-top-left-radius: 0%;border-top-right-radius: 0%;"
+            matTooltip="{{'opcije-edit-dataset.popuni'|translate}}"  matTooltipPosition="right" (click)="FillNullRows();">
+        -->
+        <button type="button" class="dugme btn btn-secondary dropdown-toggle" style="width:77%; border-top-left-radius: 0%;border-top-right-radius: 0%;" matTooltip="Enkodiranje" matTooltipPosition="right"
+            (click)="VrstePopunjavanja()">
+            
             <i class="bi bi-plus-square-dotted"></i>
         </button>
-        <!-- Popuni redove sa null vrednostima -->
+    </div>
+    <div id="popunjavanje" *ngIf="prikaziPopunjavanje" class="row m-2 ">
+
+        <div id="popunjavanjeGrupa" class="" >
+
+            <button type="button" class="dugmeEnc col-12 btn m-2 btn-secondary"
+                matTooltip="Popuni redove sa null vrednostima kategorijski" matTooltipPosition="right" (click)="FillNullRowsCat();">
+                Kategorijski
+            </button>
+            <button type="button" class="dugmeEnc col-12 btn m-2 btn-secondary"
+                matTooltip="Popuni redove sa null vrednostima prosekom" matTooltipPosition="right" (click)="FillNullRowsAverage();">
+                Prosek
+            </button>
+            <button type="button" class="dugmeEnc col-12 btn m-2 btn-secondary"
+                matTooltip="Popuni redove sa null vrednostima medijanom" matTooltipPosition="right" (click)="FillNullRowsMedian();">
+                Medijana
+            </button>
+            <!-- Popuni redove sa null vrednostima -->
+        </div>
+
     </div>
 
     <div class="dugme-tekst mb-3">
 
-        <button type="button" class="btn btn-secondary" matTooltip="Izbrisi duplikate" matTooltipPosition="right" (click)="RemoveDuplicates();">
+        <button type="button" class="btn btn-secondary" matTooltip="{{'opcije-edit-dataset.duplikati'|translate}}"  matTooltipPosition="right" (click)="RemoveDuplicates();">
             <i class="fas fa-clone"></i>
         </button>
         <!-- Duplikati -->
     </div>
 
     <div class="dugme-tekst mb-3">
-        <button type="button" class="dugme btn btn-secondary dropdown-toggle" style="width:77%" matTooltip="Enkodiranje" matTooltipPosition="right"
+        <button type="button" class="dugme btn btn-secondary dropdown-toggle" style="width:77%" matTooltip="{{'opcije-edit-dataset.enkodiranje'|translate}}"  matTooltipPosition="right"
             (click)="vrsteEnkodiranja()">
             <i class="bi bi-file-binary"></i>
         </button>
@@ -44,10 +69,10 @@
 
             <div id="enkodiranjeGrupa" class="" >
 
-                <button type="button" class="dugmeEnc col-12 btn m-2 btn-secondary" matTooltip="Onehot encoding" matTooltipPosition="right" (click)="OneHotEncoding();">
+                <button type="button" class="dugmeEnc col-12 btn m-2 btn-secondary" matTooltip="{{'opcije-edit-dataset.onehot'|translate}}"  matTooltipPosition="right" (click)="OneHotEncoding();">
                     Onehot
                 </button>
-                <button type="button" class="dugmeEnc col-12 btn m-2 btn-secondary" matTooltip="Label encoding" matTooltipPosition="right" (click)="LabelEncoding();">
+                <button type="button" class="dugmeEnc col-12 btn m-2 btn-secondary" matTooltip="{{'opcije-edit-dataset.label'|translate}}" matTooltipPosition="right" (click)="LabelEncoding();">
                     Label
                 </button>
 

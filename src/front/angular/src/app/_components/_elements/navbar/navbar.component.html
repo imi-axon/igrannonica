@@ -18,27 +18,36 @@
         <ul class="navbar-nav mx-auto">
           
           <li class="nav-item mx-2">
-            <a class="nav-link" routerLink="/home" [routerLinkActive]="['active']"> Home </a>
+            <a class="nav-link" routerLink="/home" [routerLinkActive]="['active']"> {{"navbar.home" | translate }} </a>
           </li>
 
           <li class="nav-item mx-2" *ngIf="!auth.logovan">
-            <a class="nav-link" routerLink="/registration" [routerLinkActive]="['active']" > Registration </a>
+            <a class="nav-link" routerLink="/registration" [routerLinkActive]="['active']" > {{"navbar.registration" | translate}} </a>
           </li>
           
           <li class="nav-item mx-2" *ngIf="!auth.logovan">
-            <a class="nav-link" routerLink="/login" [routerLinkActive]="['active']" > Login </a>
+            <a class="nav-link" routerLink="/login" [routerLinkActive]="['active']" > {{"navbar.login" | translate}} </a>
           </li>
 
           <li class="nav-item mx-2" *ngIf="auth.logovan">
-            <a class="nav-link" routerLink="/my-projects" [routerLinkActive]="['active']"> My Experiments </a>
+            <a class="nav-link" routerLink="/my-projects" [routerLinkActive]="['active']"> {{"navbar.myExperiments"| translate}}</a>
           </li>
           <li class="nav-item mx-2" *ngIf="auth.logovan">
-            <a id="profil" class="nav-link" routerLink="/profil" [routerLinkActive]="['active']">My Account  </a>
+            <a id="profil" class="nav-link" routerLink="/profil" [routerLinkActive]="['active']">{{"navbar.myAccount" | translate}} </a>
             <!-- {{auth.korisnickoIme}} -->
           </li>
           <li class="nav-item mx-2" *ngIf="auth.logovan">
-            <a class="nav-link" routerLink="/login" [routerLinkActive]="['active']" (click)="logout()"> Logout </a>
+            <a class="nav-link" routerLink="/login" [routerLinkActive]="['active']" (click)="logout()"> {{"navbar.logout" | translate}} </a>
           </li>
+
+          <li class="nav-item mx-2 my-2">
+            {{"navbar.select"|translate}}
+          <select #langselect (change)="translate.use(langselect.value)">
+            <option *ngFor="let lang of translate.getLangs()" [value]="lang">
+                {{lang}}
+            </option>
+          </select>
+        </li>
       
           		
         </ul>		  

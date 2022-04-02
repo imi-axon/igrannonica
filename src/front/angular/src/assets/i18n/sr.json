@@ -1,0 +1,116 @@
+{
+
+    "navbar":{
+        "home":"Pocetna",
+        "registration":"Registracija",
+        "login":"Prijava",
+        "myExperiments":"Moji Eksperimenti",
+        "myAccount":"Moj Nalog",
+        "logout":"Odjava",
+        "select":""
+    },
+    "register":{
+        "register":"Registruj se",
+        "firstname_placeholder":"Ime",
+        "lastname_placeholder":"Prezime",
+        "username_placeholder":"Korisnicko ime",
+        "email_placeholder":"E-mail",
+        "password_placeholder":"Lozinka",
+        "password2_placeholder":"Ponovite lozinku",
+        "obavestenje1-1":"*Lozinka mora biti duža od 8 karaktera",
+        "obavestenje1-2":"*Lozinka mora sadržati jedan broj, jedno veliko i jedno malo slovo",
+        "dugme":"Registruj se",
+        "login1":"Vec imate nalog?",
+        "login2":"Ulogujte se ovde"
+    },
+    "login":{
+        "login":"Uloguj se",
+        "username_placeholder":"Korisnicko ime",
+        "password_placeholder":"Lozinka",
+        "zapamti_me":"Zapamti me",
+        "register1":"Nemate nalog? ",
+        "register2":"Registrujte se ovde",
+        "dugme":"Uloguj se"
+    },
+    "csv":{
+        "format":"Uneti fajl mora biti u .csv formatu!",
+        "prazan":"Uneti fajl ne sme biti prazan!"
+    },
+    "data-set-table":{
+        "p1-1":"Strana ",
+        "p1-2":"od ",
+        "jump":"Skoci na"
+    },
+    "lista-projekata":{
+        "kreiran":"Kreiran",
+        "nema":"Nemate eksperimente"
+    },
+    "new-project":{
+        "name":"Naziv eksperimenta",
+        "poruka":"*Maksimalan broj karaktera je 30",
+        "opis":"Opis eksperimenta",
+        "poruka2":"*Maksimalan broj karaktera je 250",
+        "public":"Javno",
+        "submit":"Potvrdi"
+    },
+    "opcije-dataset":{
+        "tabela":"Tabela",
+        "statistika":"Statistika",
+        "izmeni":"Izmeni podatke"
+    },
+    "opcije-edit-dataset":{
+        "izbrisiKol":"Izbrisi kolone",
+        "nullRedovi":"Izbrisi redove sa null vrednostima",
+        "popuni":"Popuni redove sa null vrednostima",
+        "duplikati":"Izbrisi duplikate",
+        "enkodiranje":"Enkodiranje",
+        "onehot1":"Onehot enkodiranje",
+        "label1":"Label enkodiranje"
+    },
+    "profil":{
+        "izmeni":"Izmeni podatke"
+    },
+    "create-neural-network":{
+        "kreiraj":"Nova mreza",
+        "name":"Nziv",
+        "submit":"Potvrdi"
+    },
+
+
+
+
+
+
+    "data-set-page":{
+        "naslov":"Set podataka",
+        "submit":"Potvrdi"
+    },
+    "edit-dataset-page":{
+        "naslov1":" Moji eksperimenti",
+        "naslov2":"Meteoroloska analiza V1"
+    },
+    "my-projects-page":{
+        "projekti":"Eksperimenti",
+        "novi":"Novi eksperiment"
+
+    },
+    "new-project-page":{
+        "novi":"Novi eksperiment"
+    },
+    "profil-page":{
+        "eksperimenti":"Korisnikovi eksperimenti"
+    },
+    "registration-successful":{
+        "uspeh":"Uspesna registracija",
+        "login":"Ulogujte se"
+    },
+    "statistics-page":{
+        "view":"Promeni pogled",
+        "debug":"DEBUG",
+        "dugme":"DUGME"
+    }
+
+
+
+
+}
