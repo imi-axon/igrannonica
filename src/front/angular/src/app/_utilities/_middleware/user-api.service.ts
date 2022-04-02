@@ -37,4 +37,13 @@ export class UserApiService {
   verify(token:any):Observable<any>{
     return this.http.get<any>(apiProperties.url+"/api/users/"+token);
   }
+
+  changepass(token:any, password:string):Observable<any>{
+    const body = {actions: password};
+    return this.http.put<any>(apiProperties.url+"/api/users/"+token+"/editpassword", body);
+  }
+
+  sendemail(username:any):Observable<any>{
+    return this.http.post<any>(apiProperties.url+"/api/users/"+username+"/changepass", null);
+  }
 }

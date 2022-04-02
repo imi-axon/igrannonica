@@ -85,5 +85,23 @@ namespace BackApi.Controllers
                 return Ok(rez);
             else return NotFound("Korisnik sa tim username-om nema projekte");
         }
+        [HttpPost("{username}/changepass")]
+        public async Task<ActionResult<string>> SendEmailForChangePass(string username)
+        {
+            string res = korsrv.ChangePassword(username);
+            return res;
+        }
+
+        [HttpPut("{token}/editpassword")]
+        public async Task<ActionResult<string>> EditPassword(string token, ActionsPut newpassword)
+        {
+            string username = emailsrv.ValidateToken(token);
+            if (username != null)
+            {
+                string message = korsrv.ChangePasswordInDataBase(username, newpassword.actions);
+                return Ok();
+            }
+            return BadRequest();
+        }
     }
 }

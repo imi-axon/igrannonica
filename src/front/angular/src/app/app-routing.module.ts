@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ChangepassPageComponent } from './_components/_pages/changepass-page/changepass-page.component';
 import { DataSetPageComponent } from './_components/_pages/data-set-page/data-set-page.component';
 import { EditDatasetPageComponent } from './_components/_pages/edit-dataset-page/edit-dataset-page.component';
 import { HomePageComponent } from './_components/_pages/home-page/home-page.component';
+import { InputusernamePageComponent } from './_components/_pages/inputusername-page/inputusername-page.component';
 import { LoginPageComponent } from './_components/_pages/login-page/login-page.component';
 import { MyProjectsPageComponent } from './_components/_pages/my-projects-page/my-projects-page.component';
 import { NewProjectPageComponent } from './_components/_pages/new-project-page/new-project-page.component';
@@ -11,7 +13,7 @@ import { ProjectPageComponent } from './_components/_pages/project-page/project-
 import { RegistrationPageComponent } from './_components/_pages/registration-page/registration-page.component';
 import { RegistrationSuccessfulComponent } from './_components/_pages/registration-successful/registration-successful.component';
 import { StatisticsPageComponent } from './_components/_pages/statistics-page/statistics-page.component';
-import { VerificationComponent } from './_components/_pages/verification/verification.component';
+import { VerificationComponent } from './_components/_pages/verification-page/verification.component';
 
 const routes: Routes = [
   {path:'project',component:ProjectPageComponent},
@@ -26,8 +28,9 @@ const routes: Routes = [
   {path:'my-projects',component:MyProjectsPageComponent},
   {path:'profil', component:ProfilPageComponent},
   {path:'verification', component:VerificationComponent},
-  
-  {path:'edit-dataset/:ProjectId', component:EditDatasetPageComponent}
+  {path: 'changepass', component:ChangepassPageComponent},
+  {path:'edit-dataset/:ProjectId', component:EditDatasetPageComponent},
+  {path:'input-username', component:InputusernamePageComponent},
 ];
 
 @NgModule({

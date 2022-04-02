@@ -33,8 +33,14 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 import {MatSelectModule} from '@angular/material/select';
 import { NavbarNoviComponent } from './_components/_elements/navbar-novi/navbar-novi.component';
-import { VerificationComponent } from './_components/_pages/verification/verification.component';
+import { VerificationComponent } from './_components/_pages/verification-page/verification.component';
 import { EditDatasetComponent } from './_components/_elements/edit-dataset/edit-dataset.component';
+
+import { ChangepassFormComponent } from './_components/_elements/changepass-form/changepass-form.component';
+import { ChangepassPageComponent } from './_components/_pages/changepass-page/changepass-page.component';
+import { InputusernameFormComponent } from './_components/_elements/inputusername-form/inputusername-form.component';
+import { InputusernamePageComponent } from './_components/_pages/inputusername-page/inputusername-page.component';
+
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -67,6 +73,12 @@ import { DatasetOptionsComponent } from './_components/_elements/dataset-options
     NavbarNoviComponent,
     VerificationComponent,
     EditDatasetComponent,
+
+    ChangepassFormComponent,
+    ChangepassPageComponent,
+    InputusernamePageComponent,
+    InputusernameFormComponent,
+    
     CreateNeuralNetworkComponent,
     DatasetOptionsComponent
 
