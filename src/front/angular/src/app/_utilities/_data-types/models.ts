@@ -93,4 +93,11 @@ export class Project
     }
 }
 
+export class NewNN{
+    public name:string=""
+    constructor(){
+        this.name=";"
+    }
+}
+
 

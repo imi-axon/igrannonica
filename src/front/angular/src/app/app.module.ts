@@ -38,6 +38,7 @@ import { EditDatasetComponent } from './_components/_elements/edit-dataset/edit-
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { CreateNeuralNetworkComponent } from './_components/_elements/create-neural-network/create-neural-network.component';
 
 
 
@@ -64,7 +65,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
     OpcijeEditDatasetComponent,
     NavbarNoviComponent,
     VerificationComponent,
-    EditDatasetComponent
+    EditDatasetComponent,
+    CreateNeuralNetworkComponent
   ],
   imports: [
     NgxCsvParserModule,
