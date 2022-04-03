@@ -54,6 +54,7 @@ builder.Services.AddScoped<IProjectService,ProjectService>();
 builder.Services.AddScoped<IDatasetService,DatasetService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IStorageService, StorageService>();
+builder.Services.AddScoped<IWSService, WSService>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddCors(options =>
@@ -77,6 +78,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+var webSocketOptions = new WebSocketOptions
+{
+    KeepAliveInterval = TimeSpan.FromMinutes(2)
+};
+
+app.UseWebSockets(webSocketOptions);
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
@@ -92,12 +100,12 @@ app.UseStaticFiles(new StaticFileOptions
     OnPrepareResponse = context =>
     {
         var x = context.Context.Request.Host;
-        if (/*x.ToString() == null  ||*/ x.ToString() != mlhost)
-        {
-            context.Context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+        if (x.ToString() == null  || x.ToString() != mlhost)
+        {       
             context.Context.Response.ContentLength = 0;
             context.Context.Response.Body = Stream.Null;
             context.Context.Response.Headers.Add("Cache-Control", "no-store");
+            context.Context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
         }
 
     },
