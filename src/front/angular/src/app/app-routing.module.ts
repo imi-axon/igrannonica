@@ -12,6 +12,7 @@ import { ProfilPageComponent } from './_components/_pages/profil-page/profil-pag
 import { ProjectPageComponent } from './_components/_pages/project-page/project-page.component';
 import { RegistrationPageComponent } from './_components/_pages/registration-page/registration-page.component';
 import { RegistrationSuccessfulComponent } from './_components/_pages/registration-successful/registration-successful.component';
+import { StatisticsPageNewComponent } from './_components/_pages/statistics-page-new/statistics-page-new.component';
 import { StatisticsPageComponent } from './_components/_pages/statistics-page/statistics-page.component';
 import { VerificationComponent } from './_components/_pages/verification-page/verification.component';
 
@@ -20,7 +21,7 @@ const routes: Routes = [
   {path:'new-project', component:NewProjectPageComponent},
   {path:'dataset/:ProjectId',component:DataSetPageComponent},
   {path:'registration-successful',component:RegistrationSuccessfulComponent},
-  {path:'statistics/:ProjectId', component:StatisticsPageComponent},
+  {path:'statistics/:ProjectId',component:StatisticsPageNewComponent}, 
   {path:'login',component:LoginPageComponent},
   {path:'registration',component:RegistrationPageComponent},
   {path:'home',component:HomePageComponent},
@@ -30,7 +31,7 @@ const routes: Routes = [
   {path:'verification', component:VerificationComponent},
   {path: 'changepass', component:ChangepassPageComponent},
   {path:'edit-dataset/:ProjectId', component:EditDatasetPageComponent},
-  {path:'input-username', component:InputusernamePageComponent},
+  {path:'input-username', component:InputusernamePageComponent}
 ];
 
 @NgModule({
