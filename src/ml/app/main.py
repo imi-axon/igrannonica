@@ -5,7 +5,7 @@ from tempfile import TemporaryFile
 
 # FastAPI
 from fastapi import FastAPI, Response, WebSocketDisconnect, status, WebSocket
-from fastapi.responses import PlainTextResponse
+from fastapi.responses import PlainTextResponse, FileResponse
 
 # Models
 from models import Dataset, DatasetEditActions, Statistics, TempTrainingInstance, WsConn
@@ -14,6 +14,7 @@ from models import Dataset, DatasetEditActions, Statistics, TempTrainingInstance
 from util.csv import csv_is_valid, csv_decode, csv_decode_2
 from util.json import json_encode, json_decode
 import util.http as httpc
+from util.filemngr import FileMngr
 
 # ML
 from middleware.statistics import StatisticsMiddleware
@@ -66,7 +67,7 @@ def convert_csv_to_json(body: Dataset, response: Response):
 
 
 # Edit Dataset
-@app.post('/api/dataset/edit', status_code=200, response_class=PlainTextResponse)
+@app.post('/api/dataset/edit', status_code=200)
 def edit_dataset(body: DatasetEditActions, response: Response):
     
     actions = [{'action':str.split(a['action']), 'column':(a['column'] if 'column' in a.keys() else '')} for a in json_decode(body.actions)]
@@ -77,7 +78,13 @@ def edit_dataset(body: DatasetEditActions, response: Response):
     if res == None:
         response.status_code = status.HTTP_400_BAD_REQUEST
 
-    return res
+    try:
+        f = FileMngr()
+        return FileResponse(f.path())
+    except Exception:
+        pass
+    finally:
+        f.delete()
 
 
 # Get Dataset Statistics
