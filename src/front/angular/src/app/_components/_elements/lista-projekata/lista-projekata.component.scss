@@ -28,3 +28,25 @@
 {
     color: #868686;
 }
+.dugme
+{
+    background-color: #555555;
+    border:none;
+}
+
+hr{
+    background-color:#555555;
+    height: 0.5rem;
+}
+@media (max-width:800px) {
+    .zaVelikeEkrane{
+        display: none;
+    }
+   
+}
+@media (min-width:800px) {
+    .zaMaleEkrane{
+        display: none;
+    }
+}
+

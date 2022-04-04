@@ -43,7 +43,8 @@
     },
     "lista-projekata":{
         "kreiran":"Kreiran",
-        "nema":"Nemate eksperimente"
+        "nema":"Nemate eksperimente",
+        "search":"Pretrazite..."
     },
     "new-project":{
         "name":"Naziv eksperimenta",

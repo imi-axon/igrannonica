@@ -13,6 +13,22 @@ export class ListaProjekataComponent implements OnInit {
   constructor(private projectsService:ProjectsService,private authService:AuthService) { }
   private username:string=this.authService.korisnickoIme;
   public projekti:Project[]=[];
+  public filtriraniProjekti:Project[]=[];
+
+  private _searchTerm:string;
+  get searchTerm():string{
+    return this._searchTerm;
+  }
+  set searchTerm(value:string){
+    this._searchTerm=value;
+    this.filtriraniProjekti=this.filtriraj(value);
+  }
+
+  filtriraj(str:string){
+    return this.projekti.filter(projekti=>
+      projekti.Name.toLowerCase().indexOf(str.toLowerCase())!==-1)
+
+  }
 
 
   ngOnInit(): void {
@@ -21,7 +37,10 @@ export class ListaProjekataComponent implements OnInit {
 
   handleSuccess(self: any, projekti: Project[]) {
     console.log("Tacno jeeeeeee");
-    if(projekti) self.projekti=projekti;
+    if(projekti) {
+      self.projekti=projekti;
+      self.filtriraniProjekti=projekti;
+    }
     //console.log(projekti[0]);
     //console.log(projekti[0].Description);
  
