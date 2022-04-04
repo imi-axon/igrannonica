@@ -1,7 +1,7 @@
 <!--  TRENUTNA STRANICA SAMO ZA TESTIRANJE, OBRISATI JE KASNIJE  -->
 
 
-<div class="container">
+<div class="container p-5">
     <div class="row title-section">
         <p> <span> <a href='/my-projects'>{{'edit-dataset-page.naslov1'|translate}}/ </a> </span>{{'edit-dataset-page.naslov2'|translate}}</p>
         <hr>
@@ -10,20 +10,21 @@
     <div class="row edit-section">
         
         <div class="col-11 dataset-edit">
-            <app-edit-dataset #edit>
-                
+            <app-edit-dataset #edit
+            (ChangedField)="HandleFileChange($event);"
+            (DataUpdateNeeded)="UpdateData();"
+            (SaveDataNeeded)="SaveData();">  
             </app-edit-dataset>
-        </div>
-        
+        </div>       
         <div class="col-1 opcije">
             <app-opcije-dataset></app-opcije-dataset>
-            <!-- 
-                (FillNullRowsClicked)="FillNullRowsWithMean(edit.GetSelectedColumns())" ZAMENITI
-             -->
+            
             <app-opcije-edit-dataset 
                 (RemoveColumnsClicked)="RemoveColumns(edit.GetSelectedColumns())"
                 (RemoveNullRowsClicked)="RemoveNullRows(edit.GetSelectedColumns())"
-                (FillNullRowsClicked)="FillNullRowsWithMean(edit.GetSelectedColumns())"
+                (FillNullRowsCatClicked)="FillNullRowsWithCat(edit.GetSelectedColumns())"
+                (FillNullRowsAverageClicked)="FillNullRowsWithMean(edit.GetSelectedColumns())"
+                (FillNullRowsMedianClicked)="FillNullRowsWithMedian(edit.GetSelectedColumns())"
                 (RemoveDuplicatesClicked)="RemoveDuplicates(edit.GetSelectedColumns())"
                 (EncodeColumnsOneHotClicked)="OneHotEncoding(edit.GetSelectedColumns())"
                 (EncodeColumnsLabelClicked)="LabelEncoding(edit.GetSelectedColumns())">

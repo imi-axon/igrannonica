@@ -42,7 +42,8 @@
         "jump":"Skoci na"
     },
     "lista-projekata":{
-        "kreiran":"Kreiran"
+        "kreiran":"Kreiran",
+        "nema":"Nemate eksperimente"
     },
     "new-project":{
         "name":"Naziv eksperimenta",
@@ -68,6 +69,11 @@
     },
     "profil":{
         "izmeni":"Izmeni podatke"
+    },
+    "create-neural-network":{
+        "kreiraj":"Nova mreza",
+        "name":"Nziv",
+        "submit":"Potvrdi"
     },
 
 

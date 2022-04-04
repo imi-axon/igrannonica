@@ -75,4 +75,30 @@ export class UserService {
       )
     }
 
+    changePass(token:any, password:string)
+    {
+      this.userAPI.changepass(token, password).subscribe(
+        res=>{
+          console.log("Uspesno Promenjen password");
+          this.router.navigate(['login'])
+        },
+        err=>{
+          console.log(err)
+        }
+      )
+    }
+
+    sendEmail(username:string)
+    {
+      this.userAPI.sendemail(username).subscribe(
+        res=>{
+          console.log("Uspesno Verifikovan");
+          this.router.navigate(['login'])
+        },
+        err=>{
+          console.log(err)
+        }
+      )
+    }
+
 }

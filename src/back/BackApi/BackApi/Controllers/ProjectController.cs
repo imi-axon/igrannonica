@@ -48,7 +48,7 @@ namespace BackApi.Controllers
         public async Task<ActionResult<string>> GetProjectById(int projid)
         {
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized("Ulogujte se");
+            if (userid == -1) return "Uloguj se";//Unauthorized("Ulogujte se");
             var rez = service.GetProjById(projid, userid);
             if (rez != "")
                 return Ok(rez);
