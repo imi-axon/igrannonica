@@ -9,7 +9,7 @@
 
     public class DatasetMLPost
     {
-        public string data { get; set; }
+        public string dataset { get; set; }
         public string actions { get; set; }
     }
 

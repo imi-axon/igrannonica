@@ -146,7 +146,7 @@ namespace BackApi.Controllers
             if (dataset.dataset == null)
                 return NotFound();
             DatasetMLPost snd = new DatasetMLPost();
-            snd.data = dataset.dataset;
+            snd.dataset = dataset.dataset;
             snd.actions = act.actions;
             var response = await MLconnection.editDataset(snd);
             if(response.StatusCode == HttpStatusCode.OK)

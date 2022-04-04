@@ -27,7 +27,7 @@ export class DatasetApiService {
   // GET DATASET api/projects/{id}/dataset
   public GetDataset(project_id: number, main: boolean): Observable<HttpResponse<any>>{
     return this.http.get<any>(
-      apiProperties.url + '/api/projects/' + project_id + '/dataset?main=' + main,
+      apiProperties.url + '/api/projects/' + project_id + '/dataset/' + main,
       {
         observe: 'response',
         headers: HeaderUtil.jwtOnlyHeaders()

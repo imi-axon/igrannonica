@@ -2,14 +2,11 @@ import os
 
 class FileMngr():
 
-    fid = 0
-
-    def __init__(self, filepath = f'./temp{fid}'):
-        self.filepath = filepath
-        fid += 1
+    def __init__(self, filepath = f'./temp'):
+        self.filepath = './' + filepath
 
     def create(self, content: bytes):
-        f = open(self.filepath, 'wb')
+        f = open(self.filepath, 'xb')
         f.write(content)
         f.close()
 
