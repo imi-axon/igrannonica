@@ -16,7 +16,7 @@ namespace BackApi.Services
         public Boolean Delete(int projid,int userid);
         public string ListDatasets(int projid);
         public string Read(int projid, Boolean main,int userid,out Boolean owner);
-        public string ProjIdToPath(int projid);
+        public string ProjIdToPath(int projid,Boolean main);
         public Boolean EditHelperset(int projid, int userid, DatasetGetPost model);
         public Boolean UpdateMainDataset(int projid, int userid, out Boolean owner);
     }
@@ -197,9 +197,9 @@ namespace BackApi.Services
             return str; //vraca csvstring, iz kontrolera zove ml deo
         }
         
-        public string ProjIdToPath(int projid)
+        public string ProjIdToPath(int projid,Boolean main)
         {
-            Dataset dset = kontext.Datasets.FirstOrDefault(x => x.ProjectId == projid && x.Main==true);
+            Dataset dset = kontext.Datasets.FirstOrDefault(x => x.ProjectId == projid && x.Main==main);
             if (dset == null) return null;
             return dset.Path;
         }
@@ -229,6 +229,5 @@ namespace BackApi.Services
             File.WriteAllTextAsync(path, temp);
             return true;    
         }
-
     }
 }

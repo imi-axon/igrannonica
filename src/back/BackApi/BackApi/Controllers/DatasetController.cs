@@ -56,7 +56,7 @@ namespace BackApi.Controllers
                 return StatusCode(StatusCodes.Status403Forbidden, new { message = "Vi niste vlasnik projekta" });
             datasrv.New(req, id, userid);          
             DatasetGetPost novi = new DatasetGetPost();
-            novi.dataset= datasrv.ProjIdToPath(id);
+            novi.dataset= datasrv.ProjIdToPath(id,true);
             var response = await MLconnection.validateCSVstring(novi); // ceka se implementacija obrade fajla na ml-u a ne stringa
 
             if (response.StatusCode == HttpStatusCode.Created)
@@ -101,7 +101,7 @@ namespace BackApi.Controllers
             if (!owner)
                 return Forbid();
             DatasetGetPost dataset = new DatasetGetPost();
-            dataset.dataset = datasrv.ProjIdToPath(projid);
+            dataset.dataset = datasrv.ProjIdToPath(projid,main);
             if(dataset.dataset==null)
                 return NotFound("Ne postoji dataset");
             var response = await MLconnection.convertCSVstring(dataset);
@@ -120,7 +120,7 @@ namespace BackApi.Controllers
             owner = projsrv.projectOwnership(userid,id);
             if (!owner)
                 return Forbid();
-            dataset.dataset= datasrv.ProjIdToPath(id);
+            dataset.dataset= datasrv.ProjIdToPath(id,main);
             if (dataset.dataset == null)
                 return NotFound();
 
@@ -142,7 +142,7 @@ namespace BackApi.Controllers
             if (!owner)
                 return Forbid();
             var dataset = new DatasetGetPost();
-            dataset.dataset = datasrv.ProjIdToPath(id);
+            dataset.dataset = datasrv.ProjIdToPath(id,main);
             if (dataset.dataset == null)
                 return NotFound();
             DatasetMLPost snd = new DatasetMLPost();
