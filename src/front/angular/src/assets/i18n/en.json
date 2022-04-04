@@ -43,7 +43,8 @@
     },
     "lista-projekata":{
         "kreiran":"Created",
-        "nema":"You have no experiments"
+        "nema":"You have no experiments",
+        "search":"Search..."
     },
     "new-project":{
         "name":"Experiment name",

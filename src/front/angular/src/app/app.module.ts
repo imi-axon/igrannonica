@@ -50,8 +50,6 @@ import { StatisticsComponent } from './_components/_elements/statistics/statisti
 import { StatisticsPageNewComponent } from './_components/_pages/statistics-page-new/statistics-page-new.component';
 
 
-
-
 @NgModule({
   declarations: [
     AppComponent,
