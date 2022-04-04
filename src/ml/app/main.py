@@ -1,4 +1,5 @@
 import os
+import threading
 from time import sleep
 from typing import Dict, List
 from tempfile import TemporaryFile
@@ -88,16 +89,11 @@ def edit_dataset(body: DatasetEditActions, response: FileResponse):
     print(res.replace('\n', '#').replace('\r', '@'))
     res = res.replace('\r\n', '\n')
 
-    f = FileMngr()
-    try:
-        f.create(res)
-        return FileResponse(f.path())
-    except Exception:
-        pass
-    finally:
-        # f.delete()
-        pass
+    f = FileMngr('csv')
+    f.create(res)
+    f.delete()
 
+    return FileResponse(f.path())
 
 # Get Dataset Statistics
 @app.post('/api/dataset/statistics', status_code=200, response_model=Statistics)
