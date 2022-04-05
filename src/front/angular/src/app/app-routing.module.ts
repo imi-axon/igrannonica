@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { NeuralNetworkDisplayComponent } from './_components/_elements/neural-network-display/neural-network-display.component';
 import { ChangepassPageComponent } from './_components/_pages/changepass-page/changepass-page.component';
 import { DataSetPageComponent } from './_components/_pages/data-set-page/data-set-page.component';
 import { EditDatasetPageComponent } from './_components/_pages/edit-dataset-page/edit-dataset-page.component';
@@ -32,6 +33,9 @@ const routes: Routes = [
   {path: 'changepass', component:ChangepassPageComponent},
   {path:'edit-dataset/:ProjectId', component:EditDatasetPageComponent},
   {path:'input-username', component:InputusernamePageComponent}
+  
+  //TESTIRANJE - OBRISATI KASNIJE
+  , {path:'neural-network-display', component:NeuralNetworkDisplayComponent}
 ];
 
 @NgModule({
@@ -43,4 +47,7 @@ export class AppRoutingModule { }
 //Kada se dodaje nova putanja, dodati je u niz
 export const routingComponents=[ProjectPageComponent, NewProjectPageComponent,
    DataSetPageComponent, StatisticsPageComponent, LoginPageComponent, RegistrationPageComponent,
-   HomePageComponent,MyProjectsPageComponent,ProfilPageComponent,VerificationComponent,EditDatasetPageComponent];
+   HomePageComponent,MyProjectsPageComponent,ProfilPageComponent,VerificationComponent,EditDatasetPageComponent
+   
+  //TESTIRANJE - OBRISATI KASNIJE
+  ,NeuralNetworkDisplayComponent];
