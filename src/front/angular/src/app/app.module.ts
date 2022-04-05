@@ -47,7 +47,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CreateNeuralNetworkComponent } from './_components/_elements/create-neural-network/create-neural-network.component';
 import { DatasetOptionsComponent } from './_components/_elements/dataset-options/dataset-options.component';
 import { StatisticsComponent } from './_components/_elements/statistics/statistics.component';
-import { StatisticsPageNewComponent } from './_components/_pages/statistics-page-new/statistics-page-new.component';
+import { ProjectPageStatisticsEditComponent } from './_components/_pages/project-page-statistics-edit/project-page-statistics-edit.component';
 
 
 @NgModule({
@@ -83,7 +83,7 @@ import { StatisticsPageNewComponent } from './_components/_pages/statistics-page
     CreateNeuralNetworkComponent,
     DatasetOptionsComponent,
     StatisticsComponent,
-    StatisticsPageNewComponent
+    ProjectPageStatisticsEditComponent
   ],
   imports: [
     NgxCsvParserModule,

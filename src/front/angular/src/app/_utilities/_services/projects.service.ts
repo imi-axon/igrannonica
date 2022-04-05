@@ -11,6 +11,7 @@ export class ProjectsService {
 
   constructor(private projectsApi:ProjectsApiService) { }
   @Input() public projekti: Project[] = [];
+  public edit:boolean=false;
 
   userProjects(username:string, self?: any, successCallback?: Function, errorCallback?: Function)
   {

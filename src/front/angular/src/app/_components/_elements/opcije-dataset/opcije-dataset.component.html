@@ -2,12 +2,12 @@
 <!-- <button type="button" class="btn btn-secondary" routerLink="/project/{{ProjectId}}"  matTooltip="{{'opcije-dataset.tabela'|translate}}" matTooltipPosition="right">
     <i class="bi bi-table"></i>
   </button> -->
-  <button type="button" class="btn btn-secondary" routerLink="/statistics/{{ProjectId}}"  matTooltip="{{'opcije-dataset.statistika'|translate}} "
-  matTooltipPosition="right">
+  <button type="button" class="btn btn-secondary"  matTooltip="{{'opcije-dataset.statistika'|translate}} "
+  matTooltipPosition="right" (click)="onClickStatistics()">
     <i class="bi bi-graph-up"></i>
   </button>
-  <button type="button" class="btn btn-secondary" routerLink="/edit-dataset/{{ProjectId}}"  matTooltip="{{'opcije-dataset.izmeni'|translate}} "
-  matTooltipPosition="right">
+  <button type="button" class="btn btn-secondary"  matTooltip="{{'opcije-dataset.izmeni'|translate}} "
+  matTooltipPosition="right" (click)="onClickEdit()">
     <i class="bi bi-pencil"></i>
   </button>
 </div>
