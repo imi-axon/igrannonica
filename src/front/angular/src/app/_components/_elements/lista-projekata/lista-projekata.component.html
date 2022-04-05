@@ -15,10 +15,21 @@
         <h4 id="naslov" class="pt-0">{{'profil-page.eksperimenti'|translate}}</h4>
       </div>
 
-      <div id="cnp" class=" kolona col-4 d-flex justify-content-md-end">
-        <a id="newProjectButton" href="new-project" class="dugme btn btn-primary"
+      <div id="cnp" class=" kolona col-4 ">
+        <div class="row">
+        <div class="col-6 d-flex justify-content-start">
+          <select class="btn btn-primary form-control" id="sort" name="sort" (change)="onChange($event)">
+            <option selected value="sort" >Sort</option>
+            <option value="az">a-z</option>
+            <option value="za">z-a</option>
+          </select>
+        </div>
+        <div class="col-6 d-flex justify-content-end">
+        <a id="newProjectButton" routerLink="/new-project" class="dugme btn btn-primary"
           role="button">{{'my-projects-page.novi'|translate}}
         </a>
+      </div>
+    </div>
       </div>
     </div>
     <div class="zaMaleEkrane">
@@ -27,9 +38,20 @@
           <h4 id="naslov" class="">{{'profil-page.eksperimenti'|translate}}</h4>
         </div>
         <div id="cnp" class="kolona col-6 d-flex justify-content-end p-1 mb-2">
-          <a id="newProjectButton" href="new-project" class="dugme btn btn-primary"
-            role="button">{{'my-projects-page.novi'|translate}}
-          </a>
+          <div class="row">
+            <div class="col-6 d-flex justify-content-start">
+              <select class="btn btn-primary form-control" id="sort" name="sort" (change)="onChange($event)">
+                <option selected value="sort" >Sort</option>
+                <option value="az">a-z</option>
+                <option value="za">z-a</option>
+              </select>
+            </div>
+            <div class="col-6 d-flex justify-content-end">
+            <a id="newProjectButton" routerLink="/new-project" class="dugme btn btn-primary"
+              role="button">{{'my-projects-page.novi'|translate}}
+            </a>
+          </div>
+        </div>
         </div>
       </div>
       <div class="row">
@@ -53,7 +75,7 @@
 <div  class="projekti-lista row" *ngIf="projekti.length>0">
 
   <div class="col-md-4" *ngFor="let p of filtriraniProjekti">
-    <div class="projekat p-2 pb-0 shadow rounded" routerLink="/dataset/{{p.ProjectId}}">
+    <div class="projekat p-3 shadow rounded" routerLink="/dataset/{{p.ProjectId}}">
       <div class="imeIopis">
         <p class="imeProjekta">{{p.Name}}</p>
         <p class="opis">{{p.Description}}</p>

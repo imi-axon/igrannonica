@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm, NgSelectOption } from '@angular/forms';
 import { Project } from 'src/app/_utilities/_data-types/models';
 import { AuthService } from 'src/app/_utilities/_services/auth.service';
 import { ProjectsService } from 'src/app/_utilities/_services/projects.service';
@@ -14,6 +15,7 @@ export class ListaProjekataComponent implements OnInit {
   private username:string=this.authService.korisnickoIme;
   public projekti:Project[]=[];
   public filtriraniProjekti:Project[]=[];
+  public key:string='sort';
 
   private _searchTerm:string;
   get searchTerm():string{
@@ -22,6 +24,9 @@ export class ListaProjekataComponent implements OnInit {
   set searchTerm(value:string){
     this._searchTerm=value;
     this.filtriraniProjekti=this.filtriraj(value);
+    if(this.key=='sort') this.sortSort();
+    else if(this.key=='az') this.sortAZ();
+    else if(this.key=='za') this.sortZA();
   }
 
   filtriraj(str:string){
@@ -51,5 +56,27 @@ export class ListaProjekataComponent implements OnInit {
     // self.errorMessage = message;
     // self.isSignUpFailed = true;
   }
+
+onChange(select:any){
+
+  this.key=select.target.value;
+  console.log(this.key);
+
+  if(this.key=='za') this.sortZA();
+  else if(this.key=='az') this.sortAZ();
+  else if(this.key=='sort') this.sortSort();
+}
+
+sortAZ(){
+  this.filtriraniProjekti.sort((a, b) => a.Name.localeCompare(b.Name));
+}
+
+sortZA(){
+  this.filtriraniProjekti.sort((a, b) => b.Name.localeCompare(a.Name));
+}
+
+sortSort(){
+  this.filtriraniProjekti.sort((a,b)=>a.ProjectId-b.ProjectId);
+}
 
 }
