@@ -1,4 +1,5 @@
 ﻿using System.Net.WebSockets;
+using System.Text;
 
 namespace BackApi.Services
 {
@@ -12,15 +13,24 @@ namespace BackApi.Services
         public async Task MlTraining(WebSocket webSocket)
         {
             var buffer = new byte[1024 * 4];
-            var receiveResult = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+            var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+            var mes = Encoding.UTF8.GetString(buffer, 0, result.Count);
 
-            while (!receiveResult.CloseStatus.HasValue)
-            {
-                await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, receiveResult.Count),receiveResult.MessageType,receiveResult.EndOfMessage,CancellationToken.None);
-                receiveResult = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+            while (!result.CloseStatus.HasValue)
+            {               
+                for(int i=1; i<=10; i++)
+                {
+                    int tmp = int.Parse(mes)*i;
+                    var resp = $"{i} : {tmp}";
+                    var replbuffer= Encoding.UTF8.GetBytes(resp);
+                    await Task.Delay(1000);
+                    await webSocket.SendAsync(new ArraySegment<byte>(replbuffer, 0, resp.Length), result.MessageType, result.EndOfMessage, CancellationToken.None);
+                }
+                result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                mes = Encoding.UTF8.GetString(buffer, 0, result.Count);
             }
 
-            await webSocket.CloseAsync(receiveResult.CloseStatus.Value,receiveResult.CloseStatusDescription,CancellationToken.None);
+            await webSocket.CloseAsync(result.CloseStatus.Value,result.CloseStatusDescription,CancellationToken.None);
         }
     }
 }
