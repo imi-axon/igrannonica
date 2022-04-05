@@ -17,13 +17,13 @@ namespace BackApi.Controllers
         }
 
         [HttpGet("/ws")]
-        public async Task Get()
+        public async Task Get(int projid,int nnid)
         {
             if (HttpContext.WebSockets.IsWebSocketRequest)
             {
                 using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
-                //await wssrv.MlTraining(webSocket);
-                await Echo(webSocket);
+                await wssrv.MlTraining(webSocket);
+                //await Echo(webSocket);
             }
             else
             {
