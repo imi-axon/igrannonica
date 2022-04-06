@@ -1,30 +1,41 @@
-from asyncio import streams
-from codecs import StreamReader
-from fastapi import WebSocket, WebSocketDisconnect
+from threading import Lock
+from time import sleep
+from fastapi import WebSocket
 import pandas as pd
 import tensorflow as tf
+import os
 from tensorflow import keras
 from keras import layers, Sequential
-import numpy
 from typing import List
 
-from typing import Callable
-
+from util.filemngr import FileMngr
+ 
 
 class EpochEndCallback(keras.callbacks.Callback):
 
-    def addMyCallbackFunction(self, cbfn: Callable):
-        print('>>>>>>>>>>>> DODAT CALLBACK')
-        self.myCallbackFunction = cbfn
+    def set_my_params_2(self, ws: WebSocket, buff: List[bytes], lock: Lock):
+        self.ws = ws
+        self.buff = buff
+        self.lock = lock
 
     def on_epoch_end(self, epoch, logs=None):
         print(f'>>>> on epoch end | {epoch}')
-        self.myCallbackFunction(epoch, logs, ['loss', 'mean_absolute_error'])
+        self.lock.acquire(blocking=True)
+        self.buff.append(bytes(f"{logs['loss']} {logs['val_loss']}", encoding='utf-8'))
+        self.lock.release()
+        print(f'>>>> on epoch end | {epoch}')
+        # th = WSThread()
+        # th.set_params(ws=self.ws, data=f"000000000000000000") #{logs['loss']} {logs['val_loss']}
+        # th.start()
+        #print(self.buff)
 
 class TrainingInstance():
 
-    def __init__(self, epcb: Callable = lambda:1):
-        self.epcb = epcb
+    def __init__(self, ws: WebSocket, buff: List[bytes], lock: Lock):
+        self.ws = ws
+        self.buff = buff
+        self.lock = lock
+        
 
     def train(self):
         dataset_path = keras.utils.get_file("auto-mpg.data", "http://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data")
@@ -80,6 +91,7 @@ class TrainingInstance():
                             metrics=['mae','mse'])
             return model
 
+        print('build model')
 
         model: Sequential = build_model()
         
@@ -92,12 +104,23 @@ class TrainingInstance():
 
         EPOCHS = 100
 
-        # cb = EpochEndCallback()
-        # cb.addMyCallbackFunction(self.epcb)
+        print('new cb')
+        cb = EpochEndCallback()
+        cb.set_my_params_2(self.ws, self.buff, self.lock)
+        print('fit begin')
         hist = model.fit(
             normed_train_data, train_labels,
             #epochs = EPOCHS, validation_split = 0.2, verbose=1, callbacks=[cb])
-            epochs = EPOCHS, verbose=1, validation_data=(normed_test_data, test_labels))
+            # epochs = EPOCHS, verbose=1, validation_data=(normed_test_data, test_labels))
+            epochs = EPOCHS, verbose=0, validation_data=(normed_test_data, test_labels), callbacks=[cb])
+
+        self.buff.append(b'')
+
+        f = FileMngr('h5')
+        f.create(b'ranodmpodaci')
+        f.delete()
+
+        self.buff.append(bytes(f.path(), 'utf-8'))
 
         # df = pd.DataFrame(hist.history)
         # print(df)
@@ -107,36 +130,14 @@ class TrainingInstance():
         # print('\n\n>>>>>>>> B <<<<<<<<<')
         # print(model.layers[j].get_weights()[1])
 
-        loss, mae, mse = model.evaluate(normed_test_data, test_labels, verbose=2)
-        print(loss)
-        print(mae)
-        print(mse)
+        # loss, mae, mse = model.evaluate(normed_test_data, test_labels, verbose=2)
+        # print(loss)
+        # print(mae)
+        # print(mse)
 
-        loss, mae, mse = model.evaluate(normed_test_data, test_labels, verbose=2)
-        print(loss)
-        print(mae)
-        print(mse)
-
-
-class WsConn():
-
-    def __init__(self) -> None:
-        self.str: StreamReader = streams.StreamReader()
+        # loss, mae, mse = model.evaluate(normed_test_data, test_labels, verbose=2)
+        # print(loss)
+        # print(mae)
+        # print(mse)
         
-
-    async def set(self, ws: WebSocket):
-        self.ws: WebSocket = ws
-        await self.ws.accept()
-        self.tr: TrainingInstance = TrainingInstance(self.send)
-        self.tr.train()
-
-
-    async def send(self, epoch, log, stats):
-        print(f'<< epoch end >> {epoch}: {log[stats[0]]}')
-        try:
-            await self.ws.send_text(str(log[stats[0]]))
-        except WebSocketDisconnect:
-            pass
-        
-
-TrainingInstance().train()
+# TrainingInstance().train()

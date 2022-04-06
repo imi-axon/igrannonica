@@ -1,6 +1,6 @@
 import os
-import threading
-from time import sleep
+from threading import Lock, Thread
+from time import sleep, time
 from typing import Dict, List
 from tempfile import TemporaryFile
 
@@ -20,6 +20,7 @@ from util.filemngr import FileMngr
 # ML
 from middleware.statistics import StatisticsMiddleware
 from middleware.dataset_editor import DatasetEditor
+from middleware.training import TrainingInstance
 
 
 app = FastAPI()
@@ -112,49 +113,54 @@ def get_statistics(body: Dataset):
     return { 'statistics': stats }
 
 
-# 
-
 
 # ==== WebSockets ====
 
-class TrainManager:
-    def __init__(self):
-        self.conns: Dict[str, WsConn] = {}  # "client_id": { ws: websocket, tr: neki_objekat_vezan_za_treniranje }
-
-    async def connect(self, client_id: str, websocket: WebSocket):
-        await websocket.accept()
-        self.conns[client_id] = WsConn(websocket, TempTrainingInstance())
-
-    def disconnect(self, client_id: str):
-        self.conns.pop(client_id)
-
-    async def send(self, client_id: str) -> bool: # -> Is End
-        message = await self.conns[client_id].tr.get_data()
-        print(f'>>> {message}')
-        
-        if message == None:
-            return True
-        else:
-            await self.conns[client_id].ws.send_text(message)
-            return False
-
-    async def receive(self, client_id: str) -> str:
-        return self.conns[client_id].ws.receive_text()
-
-
-manager = TrainManager()
-
-@app.websocket("/api/nn/train/start/{client_id}")
-async def training_stream(client_id: str, websocket: WebSocket):
-    await manager.connect(client_id, websocket)
-    #rcv = await manager.receive(client_id)
+@app.websocket("/api/nn/train/start")
+async def training_stream(ws: WebSocket):
+    await ws.accept()
+    await ws.receive()
+    buff: List[bytes] = []
+    lock: Lock = Lock()
 
     try:
-        while (await manager.send(client_id)) == False:
-            sleep(1)
+        t = time()
+        print('try')
+        th = Thread(target=TrainingInstance(ws, buff, lock).train, daemon=True)
+        print('new th')
+        th.start()
+        print('th start')
+        # i = 0
+        while True:
+            # print(buff)
+            print('')
+            # if i < 3:
+            #     print('')
+            #     sleep(1)
+            #     i += 1
+            if len(buff) > 0:
+                lock.acquire(blocking=True)
+                b: bytes = buff.pop(0)
+                lock.release()
+                print(b)
+                if b == b'':
+                    while len(buff) == 0:
+                        sleep(0.001)
+                    lock.acquire(blocking=True)
+                    b = buff.pop(0)
+                    lock.release()
+                    await ws.send_text(b)
+                    await ws.close(code=1000)
+                    print(':::: empty')
+                    print(b.decode('utf-8'))
+                    break
+                else:
+                    print('>>> send bytes')
+                    # await ws.send_text(b.decode('utf-8'))
+                    await ws.send_text(b)
+
+        th.join()
+        print(f'time: {time()-t}')
 
     except WebSocketDisconnect:
-        manager.disconnect(client_id)
-
-    finally:
-        manager.disconnect(client_id)
+        pass

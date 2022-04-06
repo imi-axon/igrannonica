@@ -15,10 +15,15 @@ class FileMngr():
 
         self.delete_delay = 15
 
-    def create(self, content: str):
-        f = open(self.filepath, 'w', encoding='UTF-8')
-        f.write(content)
-        f.close()
+    def create(self, content: str | bytes):
+        if isinstance(content, str):
+            f = open(self.filepath, 'w', encoding='UTF-8')
+            f.write(content)
+            f.close()
+        elif isinstance(content, bytes):
+            f = open(self.filepath, 'wb')
+            f.write(content)
+            f.close()
 
     def delete(self, delay: int | None = None):
         def to_delete_file(sleep_time, file_path):
