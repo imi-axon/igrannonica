@@ -8,6 +8,7 @@
         public string CreateDataset(int projid, int datasetid);
         public void DeleteDataset(string path);
         public string GetDataset(string tmp);
+        public string CreateNNFile(int projid, int nnid);
     }
     public class StorageService : IStorageService
     {
@@ -54,6 +55,16 @@
             return path;
         }
 
-
+        public string CreateNNFile(int projid,int nnid)
+        {
+            var path = @"Storage\";
+            var tmp = "proj" + projid;
+            path = Path.Combine(path, tmp);
+            path = Path.Combine(path, "mreze");
+            //tmp = "mreza" + nnid + ".txt";
+            tmp = "mreza" + nnid + ".h5";
+            path = Path.Combine(path,tmp);
+            return path;
+        }
     }
 }
