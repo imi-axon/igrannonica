@@ -5,8 +5,9 @@ from typing import Dict, List
 from tempfile import TemporaryFile
 
 # FastAPI
-from fastapi import FastAPI, Response, WebSocketDisconnect, status, WebSocket
+from fastapi import FastAPI, Request, Response, WebSocketDisconnect, status, WebSocket
 from fastapi.responses import PlainTextResponse, FileResponse
+from models import TrainingRequest
 
 # Models
 from models import Dataset, DatasetEditActions, Statistics, TempTrainingInstance, WsConn
@@ -119,9 +120,23 @@ def get_statistics(body: Dataset):
 @app.websocket("/api/nn/train/start")
 async def training_stream(ws: WebSocket):
     await ws.accept()
-    await ws.receive()
+    await ws.send_bytes(b'')
+    print('Accepted')
+    conf = await ws.receive_text()
+    print('Conf Recieved')
+
+    print(conf)
+
     buff: List[bytes] = []
     lock: Lock = Lock()
+    print('----------')
+
+    await ws.send_bytes('1')
+    await ws.send_bytes('2')
+    await ws.send_bytes('3')
+
+    await ws.close(code=1000)
+    return
 
     try:
         t = time()

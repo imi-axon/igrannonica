@@ -21,6 +21,11 @@ class DatasetEditActions (BaseModel):
     actions: str
     dataset: str
 
+class TrainingRequest (BaseModel):
+    dataset: str # link
+    nn: str      # link
+    conf: str
+
 class WsConn():
 
     def __init__(self, ws: WebSocket, tr: TempTrainingInstance):

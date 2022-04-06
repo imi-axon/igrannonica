@@ -1,6 +1,7 @@
 ﻿using BackApi.Entities;
 using BackApi.Models;
 using Newtonsoft.Json;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.WebSockets;
@@ -33,6 +34,7 @@ namespace BackApi.Services
             var buffer = new byte[1024 * 4];
             var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
             packet.conf = Encoding.UTF8.GetString(buffer, 0, result.Count);
+            Debug.WriteLine(packet.conf);
             var mes = Encoding.UTF8.GetString(buffer, 0, result.Count);
 
             try
@@ -40,11 +42,13 @@ namespace BackApi.Services
                 var resp = JsonConvert.SerializeObject(packet);
                 var replbuffer = Encoding.UTF8.GetBytes(resp);
                 //await webSocket.SendAsync(new ArraySegment<byte>(replbuffer, 0, resp.Length), result.MessageType, result.EndOfMessage, CancellationToken.None);
-
+                
+                Debug.WriteLine("Pre ClientWebSocket");
                 var webSocketMl = new ClientWebSocket();
-                webSocketMl.ConnectAsync(new Uri("wss://localhost:8000/api/nn/train/start"),CancellationToken.None); // proveriti da li ml deo hostuje ws ili wss
+                Debug.WriteLine("Nakon ClientWebSocket");
+                await webSocketMl.ConnectAsync(new Uri("ws://localhost:8000/api/nn/train/start"),CancellationToken.None); // proveriti da li ml deo hostuje ws ili wss
                 await webSocketMl.SendAsync(new ArraySegment<byte>(replbuffer, 0, resp.Length), result.MessageType, result.EndOfMessage, CancellationToken.None);
-                var resultml = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                var resultml = await webSocketMl.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                 while (!resultml.CloseStatus.HasValue)
                 {
                     if (webSocket.CloseStatus.HasValue)
@@ -54,7 +58,8 @@ namespace BackApi.Services
                         await webSocketMl.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
                         webSocketMl.Abort();
                         webSocketMl.Dispose();
-                    }
+                    
+                     }
 
                     resultml = await webSocketMl.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                     var tmp = Encoding.UTF8.GetString(buffer, 0, resultml.Count);
