@@ -103,5 +103,15 @@ namespace BackApi.Controllers
             }
             return BadRequest();
         }
+
+        [HttpPut("{id}/edit/user")]
+        public async Task<ActionResult<string>> EditUser(int userid, UserEdit user)
+        {
+            bool pass = korsrv.CheckPass(userid, user.password);
+            if(!pass)
+                return BadRequest();
+            bool rez = korsrv.EditUser(userid, user);
+            return Ok();
+        }
     }
 }

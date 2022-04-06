@@ -1,0 +1,58 @@
+
+       <div class="container mt-md-5  p-5 bg-white rounded-3 shadow-sm border" style="max-width: 50em;">
+        <h2 class="text-center pb-5">Edit Profile </h2>
+        
+        <form method="POST" novalidate #form="ngForm" (submit)="SubmitRegistracija()" autocomplete="off">
+            
+            
+            <div class="row mb-3">
+                
+                <div class="col form-group">
+                    <input type="text" class="form-control" placeholder="{{'register.firstname_placeholder'|translate}}" name="firstname" #name="ngModel" [(ngModel)]="registration.firstname"
+                        required [class.invalid]="name.touched && registrationCheck.invalidName" (blur)="checkName()" (input)="checkName()">
+                </div>
+                
+                <div class="col form-group">
+                    <input type="text" class="form-control" placeholder="{{'register.lastname_placeholder'|translate}}" name="lastname" #lastName="ngModel" [(ngModel)]="registration.lastname"
+                    required [class.invalid]="lastName.touched && registrationCheck.invalidLastname" (blur)="checkLastname()" (input)="checkLastname()">
+                </div>
+            </div>
+            
+            <div class="form-group mb-3">
+                <input type="text" class="form-control" placeholder="{{'register.username_placeholder'|translate}}" name="username" #username="ngModel" [(ngModel)]="registration.username"
+                required [class.invalid]="username.touched && registrationCheck.invalidUsername" (blur)="checkUsername()" (input)="checkUsername()">
+            </div>
+            
+            <div class="form-group mb-3">
+                <input type="email" class="form-control" placeholder="{{'register.email_placeholder'|translate}}" name="email" #email="ngModel" [(ngModel)]="registration.email"
+                required [class.invalid]="email.touched && registrationCheck.invalidEmail" (blur)="checkEmail()" (input)="checkEmail()">
+            </div>
+            
+            <div class="form-group mb-3">
+                <input type="password" class="form-control" placeholder="{{'register.password_placeholder'|translate}}" name="password" #password="ngModel" [(ngModel)]="registration.password"
+                required [class.invalid]="password.touched && registrationCheck.invalidPassword" (blur)="checkPassword()" (input)="checkPassword()">
+            </div>
+            
+            <div class="form-group mb-3">
+                <input type="password" class="form-control" placeholder="{{'register.password2_placeholder'|translate}}" name="passwordAgain" [(ngModel)]="passwordAgain"
+                required [class.invalid]="password.touched && registrationCheck.invalidPasswordAgain" (blur)="checkPasswordAgain()" (input)="checkPasswordAgain()">
+            </div>
+            
+            <div class="form-group mb-3">
+                <p class="lozinka-info">
+                    {{'register.obavestenje1-1'|translate}} <br> {{'register.obavestenje1-2'|translate}}
+                </p>
+                <p *ngIf="isSignUpFailed" style="color: #FF0000; font-size: 12px;"> {{errorMessage}} </p>
+            </div>
+            
+            
+            <div class="form-group mb-3">
+                <input type="submit" name="submit" class="btn btn-primary" value="Edit" [disabled]="registrationCheck.invalidRegistration">
+            </div>
+            
+        </form>
+        
+        <p>
+            {{'register.login1'|translate}} <a href="/login" class="login-here">{{'register.login2'|translate}}</a>
+        </p>
+    </div>

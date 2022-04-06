@@ -48,6 +48,8 @@ import { CreateNeuralNetworkComponent } from './_components/_elements/create-neu
 import { DatasetOptionsComponent } from './_components/_elements/dataset-options/dataset-options.component';
 import { StatisticsComponent } from './_components/_elements/statistics/statistics.component';
 import { StatisticsPageNewComponent } from './_components/_pages/statistics-page-new/statistics-page-new.component';
+import { EditProfilePageComponent } from './_components/_pages/edit-profile-page/edit-profile-page.component';
+import { EditProfileFormComponent } from './_components/_elements/edit-profile-form/edit-profile-form.component';
 
 
 
@@ -81,11 +83,12 @@ import { StatisticsPageNewComponent } from './_components/_pages/statistics-page
     ChangepassPageComponent,
     InputusernamePageComponent,
     InputusernameFormComponent,
-    
     CreateNeuralNetworkComponent,
     DatasetOptionsComponent,
     StatisticsComponent,
-    StatisticsPageNewComponent
+    StatisticsPageNewComponent,
+    EditProfilePageComponent,
+    EditProfileFormComponent
   ],
   imports: [
     NgxCsvParserModule,
