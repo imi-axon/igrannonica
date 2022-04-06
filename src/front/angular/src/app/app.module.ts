@@ -48,6 +48,7 @@ import { CreateNeuralNetworkComponent } from './_components/_elements/create-neu
 import { DatasetOptionsComponent } from './_components/_elements/dataset-options/dataset-options.component';
 import { StatisticsComponent } from './_components/_elements/statistics/statistics.component';
 import { StatisticsPageNewComponent } from './_components/_pages/statistics-page-new/statistics-page-new.component';
+import { LandingNavComponent } from './_components/_elements/landing-nav/landing-nav.component';
 
 
 
@@ -85,7 +86,8 @@ import { StatisticsPageNewComponent } from './_components/_pages/statistics-page
     CreateNeuralNetworkComponent,
     DatasetOptionsComponent,
     StatisticsComponent,
-    StatisticsPageNewComponent
+    StatisticsPageNewComponent,
+    LandingNavComponent
   ],
   imports: [
     NgxCsvParserModule,

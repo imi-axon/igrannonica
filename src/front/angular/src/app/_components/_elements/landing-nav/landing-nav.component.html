@@ -1,0 +1,62 @@
+<!--
+  navbar-dark - svetli tekst (za tamnu pozadinu)
+  bg-dark - tamna pozadina, bg-primary - plava pozadina
+-->
+<nav class="navbar navbar-expand-sm navbar-dark  sticky-top">
+    <div class="container-fluid">
+              
+      <!--
+        Dugme za prikaz linkova na manjim ekranima / mobilnim uredjajima
+      -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div id="logo">
+          <a>Igrannonica</a>
+        </div>
+      
+        <ul class="navbar-nav">
+          
+          <li class="nav-item mx-2">
+            <a class="nav-link" routerLink="/home" [routerLinkActive]="['active']"> {{"navbar.home" | translate }} </a>
+          </li>
+
+          <li class="nav-item mx-2" *ngIf="!auth.logovan">
+            <a class="nav-link" routerLink="/registration" [routerLinkActive]="['active']" > {{"navbar.registration" | translate}} </a>
+          </li>
+          
+          <li class="nav-item mx-2" *ngIf="!auth.logovan">
+            <a class="nav-link" routerLink="/login" [routerLinkActive]="['active']" > {{"navbar.login" | translate}} </a>
+          </li>
+
+          <li class="nav-item mx-2" *ngIf="auth.logovan">
+            <a class="nav-link" routerLink="/my-projects" [routerLinkActive]="['active']"> {{"navbar.myExperiments"| translate}}</a>
+          </li>
+          <li class="nav-item mx-2" *ngIf="auth.logovan">
+            <a id="profil" class="nav-link" routerLink="/profil" [routerLinkActive]="['active']">{{"navbar.myAccount" | translate}} </a>
+            <!-- {{auth.korisnickoIme}} -->
+          </li>
+          <li class="nav-item mx-2" *ngIf="auth.logovan">
+            <a class="nav-link" routerLink="/login" [routerLinkActive]="['active']" (click)="logout()"> {{"navbar.logout" | translate}} </a>
+          </li>
+
+          <li class="nav-item mx-2 my-2">
+            {{"navbar.select"|translate}}
+          <select #langselect (change)="translate.use(langselect.value)">
+            <option *ngFor="let lang of translate.getLangs()" [value]="lang">
+                {{lang}}
+            </option>
+          </select>
+        </li>
+      
+          		
+        </ul>		  
+      </div>
+      
+      
+    </div>
+  </nav>
+  
