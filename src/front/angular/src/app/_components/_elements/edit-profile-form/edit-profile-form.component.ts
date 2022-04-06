@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { regExp } from 'src/app/_utilities/_constants/regExp';
 import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
-import { RegistrationCheck, UserRegistration } from 'src/app/_utilities/_data-types/models';
+import { EditUser, RegistrationCheck, UserRegistration, UserEditCheck} from 'src/app/_utilities/_data-types/models';
 import { UserService } from 'src/app/_utilities/_services/user.service';
 import { TranslateService } from '@ngx-translate/core';
+import { AuthService } from 'src/app/_utilities/_services/auth.service';
 
 @Component({
   selector: 'app-edit-profile-form',
@@ -12,27 +13,29 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class EditProfileFormComponent implements OnInit {
 
-  public registration:UserRegistration = new UserRegistration();
+  public split:string[];
+  public edit:EditUser = new EditUser();
   public passwordAgain:string = "";
   
-  public registrationCheck:RegistrationCheck = new RegistrationCheck();
+  public registrationCheck:UserEditCheck = new UserEditCheck();
   
   isSuccessful = false;
   isSignUpFailed = false;
   errorMessage = '';
   
-  constructor(private userService: UserService,public translate:TranslateService) { }
+  constructor(private userService: UserService,public translate:TranslateService, public auth:AuthService) { }
   
   
 
   ngOnInit(): void {
+
   }
   
-  public SubmitRegistracija(){
+  public SubmitEdit(){
     if(this.registrationCheck.invalidRegistration)
       return;
     
-    this.userService.Register(this.registration, this, this.handleSuccess, this.handleUsedUsername, this.handleLogedIn);
+    this.userService.editUser(this.edit);
     
   }
   
@@ -55,7 +58,7 @@ export class EditProfileFormComponent implements OnInit {
   public checkName(){
     this.registrationCheck.invalidName = false;
     
-    if(!regExp.pattName.test(this.registration.firstname))
+    if(!regExp.pattName.test(this.edit.firstname))
       this.registrationCheck.invalidName = true;
     
     this.registrationCheck.checkForm();
@@ -64,7 +67,7 @@ export class EditProfileFormComponent implements OnInit {
   public checkLastname(){
     this.registrationCheck.invalidLastname = false;
     
-    if(!regExp.pattName.test(this.registration.lastname))
+    if(!regExp.pattName.test(this.edit.lastname))
       this.registrationCheck.invalidLastname = true;
       
     this.registrationCheck.checkForm();
@@ -73,7 +76,7 @@ export class EditProfileFormComponent implements OnInit {
   public checkUsername(){
     this.registrationCheck.invalidUsername = false;
     
-    if(!regExp.pattUsername.test(this.registration.username))
+    if(!regExp.pattUsername.test(this.edit.username))
       this.registrationCheck.invalidUsername = true;
       
     this.registrationCheck.checkForm();
@@ -82,17 +85,29 @@ export class EditProfileFormComponent implements OnInit {
   public checkEmail(){
     this.registrationCheck.invalidEmail = false;
     
-    if(!regExp.pattEmail.test(this.registration.email))
+    if(!regExp.pattEmail.test(this.edit.email))
       this.registrationCheck.invalidEmail = true;
+    if(this.edit.email=="")
+      this.registrationCheck.invalidEmail = false;
       
     this.registrationCheck.checkForm();
   }
   
+  public checkOldPassword(){
+    this.registrationCheck.invalidOldPassword = false;
+    
+    if(!regExp.pattPass.test(this.edit.oldpassword))
+      this.registrationCheck.invalidOldPassword = true;
+    this.registrationCheck.checkForm();
+  }
+
   public checkPassword(){
     this.registrationCheck.invalidPassword = false;
     
-    if(!regExp.pattPass.test(this.registration.password))
+    if(!regExp.pattPass.test(this.edit.newpassword))
       this.registrationCheck.invalidPassword = true;
+    if(this.edit.newpassword=="")
+      this.registrationCheck.invalidPassword = false;
       
     this.checkPasswordAgain();
     this.registrationCheck.checkForm();
@@ -101,9 +116,12 @@ export class EditProfileFormComponent implements OnInit {
   public checkPasswordAgain(){
     this.registrationCheck.invalidPasswordAgain = false;
     
-    if(this.passwordAgain != this.registration.password || this.passwordAgain.length == 0)
+    if(this.passwordAgain != this.edit.newpassword)
       this.registrationCheck.invalidPasswordAgain = true;
-      
+    if(!regExp.pattPass.test(this.passwordAgain) && this.edit.newpassword!="")
+      this.registrationCheck.invalidPasswordAgain = true;
+    if(this.edit.newpassword=="" && this.passwordAgain != this.edit.newpassword)
+        this.registrationCheck.invalidPasswordAgain = true;
     this.registrationCheck.checkForm();
   }
 

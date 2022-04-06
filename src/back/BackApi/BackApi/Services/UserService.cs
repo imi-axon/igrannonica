@@ -234,7 +234,7 @@ namespace BackApi.Services
         {
             var kor = kontext.Users.FirstOrDefault(x => x.UserId == id);
             CreatePWHash(password, out byte[] pwHash, out byte[] pwSalt);
-            if (pwHash == kor.PasswordHash && pwSalt == kor.PasswordSalt)
+            if (CheckPWHash(password, kor.PasswordHash, kor.PasswordSalt))
                 return true;
             return false;
         }
@@ -244,13 +244,22 @@ namespace BackApi.Services
             var user = kontext.Users.Find(id);
             if (user == null)
                 return false;
-            user.Email = model.email;
+
+            var kor = kontext.Users.FirstOrDefault(x => (x.UserId != id && x.Email==model.email) || (x.UserId != id && x.Username == model.username));
+            if (kor != null)
+                return false;
+
+            if(model.email!="")
+                user.Email = model.email;
             user.Name = model.firstname;
             user.Lastname = model.lastname;
             user.Username = model.username;
-            CreatePWHash(model.password, out byte[] pwHash, out byte[] pwSalt);
-            user.PasswordHash = pwHash;
-            user.PasswordSalt = pwSalt;
+            if (model.newpassword != "")
+            {
+                CreatePWHash(model.newpassword, out byte[] pwHash, out byte[] pwSalt);
+                user.PasswordHash = pwHash;
+                user.PasswordSalt = pwSalt;
+            }
             kontext.SaveChanges();
 
             return true;

@@ -2,6 +2,7 @@ import { HttpClient, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { EditUser } from '../_data-types/models';
 import { JWTUtil } from '../_helpers/jwt-util';
 import { UserApiService } from '../_middleware/user-api.service';
 
@@ -61,7 +62,6 @@ export class UserService {
         }
       
       );
-  
     }
     verifyUser(token:any){
       this.userAPI.verify(token).subscribe(
@@ -94,6 +94,20 @@ export class UserService {
         res=>{
           console.log("Uspesno Verifikovan");
           this.router.navigate(['login'])
+        },
+        err=>{
+          console.log(err)
+        }
+      )
+    }
+
+    editUser(model:EditUser)
+    {
+      console.log(model.lastname);
+      this.userAPI.edituser(model).subscribe(
+        res=>{
+          console.log("Uspesno editovan korisnik");
+          //this.router.navigate(['login'])
         },
         err=>{
           console.log(err)
