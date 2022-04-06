@@ -2,9 +2,10 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { EditDatasetComponent } from './_components/_elements/edit-dataset/edit-dataset.component';
 import { StatisticsComponent } from './_components/_elements/statistics/statistics.component';
+import { NeuralNetworkDisplayComponent } from './_components/_elements/neural-network-display/neural-network-display.component';
 import { ChangepassPageComponent } from './_components/_pages/changepass-page/changepass-page.component';
 import { DataSetPageComponent } from './_components/_pages/data-set-page/data-set-page.component';
-import { EditDatasetPageComponent } from './_components/_pages/edit-dataset-page/edit-dataset-page.component';
+// import { EditDatasetPageComponent } from './_components/_pages/edit-dataset-page/edit-dataset-page.component';
 import { HomePageComponent } from './_components/_pages/home-page/home-page.component';
 import { InputusernamePageComponent } from './_components/_pages/inputusername-page/inputusername-page.component';
 import { LoginPageComponent } from './_components/_pages/login-page/login-page.component';
@@ -32,6 +33,7 @@ const routes: Routes = [
   {path:'profil', component:ProfilPageComponent},
   {path:'verification', component:VerificationComponent},
   {path: 'changepass', component:ChangepassPageComponent},
+
   //{path:'edit-dataset/:ProjectId', component:EditDatasetPageComponent},
   {path:'input-username', component:InputusernamePageComponent},
 
@@ -44,6 +46,8 @@ const routes: Routes = [
       {path:'edit',component:EditDatasetComponent}
     ]
   }
+  //TESTIRANJE - OBRISATI KASNIJE
+  , {path:'neural-network-display', component:NeuralNetworkDisplayComponent}
 ];
 
 @NgModule({
@@ -55,5 +59,11 @@ export class AppRoutingModule { }
 //Kada se dodaje nova putanja, dodati je u niz
 export const routingComponents=[ProjectPageComponent, NewProjectPageComponent,
    DataSetPageComponent, StatisticsPageComponent, LoginPageComponent, RegistrationPageComponent,
-   HomePageComponent,MyProjectsPageComponent,ProfilPageComponent,VerificationComponent,EditDatasetPageComponent,ProjectPageStatisticsEditComponent,
-  StatisticsComponent,EditDatasetComponent];
+
+   HomePageComponent,MyProjectsPageComponent,ProfilPageComponent,VerificationComponent,ProjectPageStatisticsEditComponent,
+  StatisticsComponent,EditDatasetComponent
+
+  // ,EditDatasetPageComponent
+
+  //TESTIRANJE - OBRISATI KASNIJE
+  ,NeuralNetworkDisplayComponent];
