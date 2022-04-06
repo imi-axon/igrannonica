@@ -29,8 +29,10 @@ class TrainingService():
     #actPerLayer -> lista stringova ('relu', 'sigmoid', 'tanh') -> aktivaciona funkcija za svaki sloj
     #nbperlayer -> lista int -> broj neurona za svaki sloj
     #metrics -> lista stringova ('mse', 'mae', 'rmse' -> za regresiju; 'precision', 'recall','accuracy')
-    ##type -> string -> "CLASSIFICATION"/"REGRESSION"
-    def __init__(self, datasetAll,inputs, outputs, epochs, learning_rate, regularization_rate,regularization, actGlobal, actPerLayer, nbperlayer, metrics, type):
+    #type -> string -> "CLASSIFICATION"/"REGRESSION"
+    #batchSize -> int
+    #percentage_training -> float - [0,1] -> koliki procenat celog skupa je training skup
+    def __init__(self, datasetAll,inputs, outputs, epochs, learning_rate, regularization_rate,regularization, actPerLayer, nbperlayer, metrics, batchSize,percentage_training,type):
         self.datasetAll = datasetAll
         self.inputs = inputs
         self.outputs = outputs
@@ -46,12 +48,15 @@ class TrainingService():
         elif (regularization == 'L2'):
             self.REGULARIZATION = regularizers.L2(self.REG_RATE)
 
-        self.ACT_GLOBAL = actGlobal
+        
         self.ACT_PER_LAYER = actPerLayer
         self.NB_PER_LAYER = nbperlayer
 
         self.METRICS = metrics
         self.TYPE = type
+
+        self.BATCH_SIZE = batchSize
+        self.PERCENTAGE_TRAINING = percentage_training
 
         self.REGRESSION_LOSS = 'mse'
         self.CLASSIFICATION_LOSS = 'categorical_crossentropy'
@@ -82,8 +87,8 @@ class TrainingService():
     #f-ja train_test - podela podataka za treniranje i testiranje
     #outputs - lista stringova (nazivi kolona koji su output)
     def train_test(self):
-        train_dataset = self.dataframe.sample(frac=0.8,random_state=0) #80% podataka za treniranje
-        test_dataset = self.dataframe.drop(train_dataset.index) #ostalih 20% podataka za testiranje
+        train_dataset = self.dataframe.sample(frac=self.PERCENTAGE_TRAINING,random_state=0) #podaci za treniranje
+        test_dataset = self.dataframe.drop(train_dataset.index) #ostalak podataka za testiranje
         
         train_labels = train_dataset.loc[:,self.outputs]
         test_labels = test_dataset.loc[:,self.outputs]
@@ -112,26 +117,43 @@ class TrainingService():
 
 
     #regression
-    def build_regression_model(self):
-        model = Sequential()
-        
-        model.add(Dense(self.NB_PER_LAYER[0], kernel_regularizer = self.REGULARIZATION, input_shape=[len(self.inputs)]))
-        model.add(Activation(self.ACT_PER_LAYER[0])) 
-        
-        for i in range(1, len(self.NB_PER_LAYER)):
-            model.add(Dense(self.NB_PER_LAYER[i], kernel_regularizer = self.REGULARIZATION))
-            model.add(Activation(self.ACT_PER_LAYER[i])) 
-        
-        model.add(Dense(1))
-
-        model.compile(loss = self.REGRESSION_LOSS,
-                optimizer = self.OPTIMIZER,
-                metrics = self.METRICS)
-        
-        return model
+    #def build_regression_model(self):
+    #    model = Sequential()
+    #    
+    #    model.add(Dense(self.NB_PER_LAYER[0], kernel_regularizer = self.REGULARIZATION, input_shape=[len(self.inputs)]))
+    #    model.add(Activation(self.ACT_PER_LAYER[0])) 
+    #    
+    #    for i in range(1, len(self.NB_PER_LAYER)):
+    #        model.add(Dense(self.NB_PER_LAYER[i], kernel_regularizer = self.REGULARIZATION))
+    #        model.add(Activation(self.ACT_PER_LAYER[i])) 
+    #    
+    #    model.add(Dense(1))
+    #
+    #    model.compile(loss = self.REGRESSION_LOSS,
+    #            optimizer = self.OPTIMIZER,
+    #            metrics = self.METRICS)
+    #    
+    #    return model
 
     #classification
-    def build_classification_model(self):
+    #def build_classification_model(self):
+    #    model = Sequential()
+    #
+    #    model.add(Dense(self.NB_PER_LAYER[0], kernel_regularizer = self.REGULARIZATION, input_shape=[len(self.inputs)], activation = self.ACT_PER_LAYER[0]))
+    #    
+    #    for i in range(1, len(self.NB_PER_LAYER)):
+    #        model.add(Dense(self.NB_PER_LAYER[i], kernel_regularizer = self.REGULARIZATION, activation=self.ACT_PER_LAYER[i]))
+    #        
+    #    #izlazni sloj
+    #    model.add(Dense(len(self.outputs), activation='softmax'))
+    #
+    #    model.compile(loss = self.CLASSIFICATION_LOSS,
+    #            optimizer = self.OPTIMIZER,
+    #            metrics = self.METRICS)
+    #
+    #    return model
+
+    def build_model(self):
         model = Sequential()
 
         model.add(Dense(self.NB_PER_LAYER[0], kernel_regularizer = self.REGULARIZATION, input_shape=[len(self.inputs)], activation = self.ACT_PER_LAYER[0]))
@@ -140,9 +162,16 @@ class TrainingService():
             model.add(Dense(self.NB_PER_LAYER[i], kernel_regularizer = self.REGULARIZATION, activation=self.ACT_PER_LAYER[i]))
             
         #izlazni sloj
-        model.add(Dense(len(self.outputs), activation='softmax'))
+        if(self.TYPE=="REGRESSION"):
+            model.add(Dense(1))
+        elif(self.TYPE=="CLASSIFICATION"):
+            model.add(Dense(len(self.outputs), activation='softmax'))
 
-        model.compile(loss = self.CLASSIFICATION_LOSS,
+        model_loss = self.REGRESSION_LOSS
+        if(self.TYPE=="CLASSIFICATION"):
+            model_loss = self.CLASSIFICATION_LOSS
+
+        model.compile(loss = model_loss,
                 optimizer = self.OPTIMIZER,
                 metrics = self.METRICS)
 
@@ -153,7 +182,7 @@ class TrainingService():
     #obucavanje modela
     def fit_model(self, model):
         history = model.fit(self.normed_train_dataset, self.train_labels, 
-                            epochs = self.EPOCHS, 
+                            epochs = self.EPOCHS, batch_size = self.BATCH_SIZE, 
                             validation_split = 0.2, 
                             verbose=0)
 
@@ -173,11 +202,13 @@ class TrainingService():
 
 
     def start_training(self):
-        if(self.TYPE=="REGRESSION"):
-            model = self.build_regression_model()
-        elif(self.TYPE=="CLASSIFICATION"):
-            model = self.build_classification_model()
+        #if(self.TYPE=="REGRESSION"):
+        #    model = self.build_regression_model()
+        #elif(self.TYPE=="CLASSIFICATION"):
+        #    model = self.build_classification_model()
         
+        model = self.build_model()
+
         history = self.fit_model(model)
 
         results = self.evaluate_model(model)
