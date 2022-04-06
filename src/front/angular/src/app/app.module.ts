@@ -48,7 +48,7 @@ import { CreateNeuralNetworkComponent } from './_components/_elements/create-neu
 import { DatasetOptionsComponent } from './_components/_elements/dataset-options/dataset-options.component';
 import { StatisticsComponent } from './_components/_elements/statistics/statistics.component';
 import { ProjectPageStatisticsEditComponent } from './_components/_pages/project-page-statistics-edit/project-page-statistics-edit.component';
-import { StatisticsPageNewComponent } from './_components/_pages/statistics-page-new/statistics-page-new.component';
+// import { StatisticsPageNewComponent } from './_components/_pages/statistics-page-new/statistics-page-new.component';
 import { NeuralNetworkDisplayComponent } from './_components/_elements/neural-network-display/neural-network-display.component';
 
 
@@ -88,7 +88,7 @@ import { NeuralNetworkDisplayComponent } from './_components/_elements/neural-ne
     DatasetOptionsComponent,
     StatisticsComponent,
     ProjectPageStatisticsEditComponent,
-    StatisticsPageNewComponent,
+    // StatisticsPageNewComponent,
     NeuralNetworkDisplayComponent
   ],
   imports: [
