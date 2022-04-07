@@ -47,14 +47,14 @@ namespace BackApi.Controllers
         */
         
         [HttpPost("{id}/dataset")]
-        public async Task<ActionResult<string>> NewDataSet(int id,IFormFile req )
+        public async Task<ActionResult<string>> NewDataSet(int id,IFormFile dataset )
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized("Ulogujte se");
             var chk = projsrv.projectOwnership(userid, id);
             if (!chk)
                 return StatusCode(StatusCodes.Status403Forbidden, new { message = "Vi niste vlasnik projekta" });
-            datasrv.New(req, id, userid);          
+            datasrv.New(dataset, id, userid);          
             DatasetGetPost novi = new DatasetGetPost();
             novi.dataset= datasrv.ProjIdToPath(id,true);
             var response = await MLconnection.validateCSVstring(novi); // ceka se implementacija obrade fajla na ml-u a ne stringa

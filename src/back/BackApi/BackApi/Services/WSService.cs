@@ -122,6 +122,7 @@ namespace BackApi.Services
             var nn = new NN();
             nn.ProjectId = projid;
             nn.NNName=name;
+            nn.DataPath = "";
 
             kontext.Add(nn);
             kontext.SaveChanges();
