@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace BackApi.Services
 {
@@ -17,6 +18,7 @@ namespace BackApi.Services
         public string ChangePasswordInDataBase(string username, string password);
         public bool CheckPass(int id, string password);
         public bool EditUser(int id, UserEdit model);
+        public string GetUser(string username);
     }
 
     public class UserService: IUserService
@@ -264,6 +266,27 @@ namespace BackApi.Services
 
             return true;
 
+        }
+
+        public string GetUser(string username)
+        {
+            int id = UsernameToId(username);
+            if (id == -1)
+                return "";
+            var user = kontext.Users.Find(id);
+            if (user == null)
+                return "";
+
+            var rez = new StringBuilder();
+            rez.Append("{");
+            rez.Append("\"" + "firstname" + "\":" + "\"" + user.Name + "\",");
+            rez.Append("\"" + "lastname" + "\":" + "\"" + user.Lastname + "\",");
+            rez.Append("\"" + "username" + "\":" + "\"" + user.Username + "\",");
+            rez.Append("\"" + "email" + "\":" + "\"" + user.Email + "\",");
+            rez.Append("\"" + "password" + "\":" + "\"" + "" + "\"");
+            rez.Append("}");
+
+            return rez.ToString();
         }
     }
 }

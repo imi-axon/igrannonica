@@ -1,16 +1,17 @@
 import { HttpClient, HttpStatusCode } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { EditUser } from '../_data-types/models';
 import { JWTUtil } from '../_helpers/jwt-util';
 import { UserApiService } from '../_middleware/user-api.service';
+import { UserRegistration } from '../_data-types/models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-
+  @Input() user:UserRegistration;
   constructor(private userAPI:UserApiService, private http:HttpClient, private router:Router) { }
   
   
@@ -113,6 +114,26 @@ export class UserService {
           console.log(err)
         }
       )
+    }
+    getInfo(username:string, self?: any, successCallback?: Function, errorCallback?: Function)
+    {
+        this.userAPI.getinfo(username).subscribe(
+      
+          (response) => {
+            if (response.status== HttpStatusCode.Ok) { 
+                if(response.body!=null)
+                  this.user=response.body;
+                if (self && successCallback) 
+                  successCallback(self,this.user);
+            }
+            if(response.status==HttpStatusCode.NotFound)
+            {
+              console.log("NETACNO");
+              if (self && errorCallback) errorCallback(self, response.status);
+            }
+          }
+        
+        );
     }
 
 }
