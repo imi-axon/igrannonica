@@ -43,9 +43,9 @@ namespace BackApi.Controllers
                 packet.conf = req.conf;
                 packet.dataset= datasrv.ProjIdToPath(id,true);
                 packet.dataset=packet.dataset.Replace('\\', '/');
-                //packet.nn=wssrv.NNIdToPath(nnid);
-                //packet.nn= packet.nn.Replace('\\', '/');
-                packet.nn = "placeholder";
+                packet.nn=wssrv.NNIdToPath(nnid);
+                packet.nn= packet.nn.Replace('\\', '/');
+                //packet.nn = "placeholder";
 
                 await wssrv.MlTraining(webSocketfront,packet);
             }
