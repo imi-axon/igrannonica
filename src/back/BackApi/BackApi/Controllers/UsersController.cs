@@ -103,5 +103,18 @@ namespace BackApi.Controllers
             }
             return BadRequest();
         }
+
+        [HttpPut("edituser")]
+        public async Task<ActionResult<string>> EditUser(UserEdit user)
+        {
+            Debug.WriteLine(user.oldpassword);
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            bool pass = korsrv.CheckPass(userid, user.oldpassword);
+            if (!pass)
+                return "nESTO NIJE U REDU";
+            bool rez = korsrv.EditUser(userid, user);
+            return Ok();
+        }
     }
 }

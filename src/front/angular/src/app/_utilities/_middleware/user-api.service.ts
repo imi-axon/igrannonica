@@ -46,4 +46,14 @@ export class UserApiService {
   sendemail(username:any):Observable<any>{
     return this.http.post<any>(apiProperties.url+"/api/users/"+username+"/changepass", null);
   }
+
+  edituser(model:any):Observable<any>{
+    //return this.http.put<any>(apiProperties.url+"/api/users/edit-user", model);
+    let response = this.http.put<any>(apiProperties.url + "/api/users/edituser", model,
+      {
+        observe: "response",
+        headers: HeaderUtil.jwtOnlyHeaders()
+      });
+    return response
+  }
 }

@@ -15,6 +15,8 @@ namespace BackApi.Services
         public int EmailToId(string email);
         public string ChangePassword(string username);
         public string ChangePasswordInDataBase(string username, string password);
+        public bool CheckPass(int id, string password);
+        public bool EditUser(int id, UserEdit model);
     }
 
     public class UserService: IUserService
@@ -179,14 +181,12 @@ namespace BackApi.Services
                         jwtoken = CreateToken(kor);
                         uspeh = true;
                         return jwtoken;
-
                 }
             else
             {
                 uspeh = false;
                 return "Pogresan username ili password ili korisnik nije verifikovan";
             }
- 
         }
 
         public string ChangePassword(string username)
@@ -228,6 +228,42 @@ namespace BackApi.Services
             if (kor != null)
                 return kor.UserId;
             return -1;
+        }
+
+        public bool CheckPass(int id, string password)
+        {
+            var kor = kontext.Users.FirstOrDefault(x => x.UserId == id);
+            CreatePWHash(password, out byte[] pwHash, out byte[] pwSalt);
+            if (CheckPWHash(password, kor.PasswordHash, kor.PasswordSalt))
+                return true;
+            return false;
+        }
+
+        public bool EditUser(int id, UserEdit model)
+        {
+            var user = kontext.Users.Find(id);
+            if (user == null)
+                return false;
+
+            var kor = kontext.Users.FirstOrDefault(x => (x.UserId != id && x.Email==model.email) || (x.UserId != id && x.Username == model.username));
+            if (kor != null)
+                return false;
+
+            if(model.email!="")
+                user.Email = model.email;
+            user.Name = model.firstname;
+            user.Lastname = model.lastname;
+            user.Username = model.username;
+            if (model.newpassword != "")
+            {
+                CreatePWHash(model.newpassword, out byte[] pwHash, out byte[] pwSalt);
+                user.PasswordHash = pwHash;
+                user.PasswordSalt = pwSalt;
+            }
+            kontext.SaveChanges();
+
+            return true;
+
         }
     }
 }

@@ -6,6 +6,7 @@ import { NeuralNetworkDisplayComponent } from './_components/_elements/neural-ne
 import { ChangepassPageComponent } from './_components/_pages/changepass-page/changepass-page.component';
 import { DataSetPageComponent } from './_components/_pages/data-set-page/data-set-page.component';
 // import { EditDatasetPageComponent } from './_components/_pages/edit-dataset-page/edit-dataset-page.component';
+import { EditProfilePageComponent } from './_components/_pages/edit-profile-page/edit-profile-page.component';
 import { HomePageComponent } from './_components/_pages/home-page/home-page.component';
 import { InputusernamePageComponent } from './_components/_pages/inputusername-page/inputusername-page.component';
 import { LoginPageComponent } from './_components/_pages/login-page/login-page.component';
@@ -48,6 +49,7 @@ const routes: Routes = [
   }
   //TESTIRANJE - OBRISATI KASNIJE
   , {path:'neural-network-display', component:NeuralNetworkDisplayComponent}
+  , {path:'edit-profile', component:EditProfilePageComponent}
 ];
 
 @NgModule({

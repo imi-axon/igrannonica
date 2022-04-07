@@ -51,6 +51,8 @@ import { ProjectPageStatisticsEditComponent } from './_components/_pages/project
 // import { StatisticsPageNewComponent } from './_components/_pages/statistics-page-new/statistics-page-new.component';
 import { NeuralNetworkDisplayComponent } from './_components/_elements/neural-network-display/neural-network-display.component';
 import { LandingNavComponent } from './_components/_elements/landing-nav/landing-nav.component';
+import { EditProfilePageComponent } from './_components/_pages/edit-profile-page/edit-profile-page.component';
+import { EditProfileFormComponent } from './_components/_elements/edit-profile-form/edit-profile-form.component';
 
 
 
@@ -84,14 +86,15 @@ import { LandingNavComponent } from './_components/_elements/landing-nav/landing
     ChangepassPageComponent,
     InputusernamePageComponent,
     InputusernameFormComponent,
-    
     CreateNeuralNetworkComponent,
     DatasetOptionsComponent,
     StatisticsComponent,
     ProjectPageStatisticsEditComponent,
     // StatisticsPageNewComponent,
     NeuralNetworkDisplayComponent,
-    LandingNavComponent
+    LandingNavComponent,
+    EditProfilePageComponent,
+    EditProfileFormComponent
   ],
   imports: [
     NgxCsvParserModule,

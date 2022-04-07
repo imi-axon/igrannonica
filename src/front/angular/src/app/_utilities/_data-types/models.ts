@@ -22,13 +22,43 @@ export class RegistrationCheck
   }
   
   public checkForm(){
-      if(this.invalidName || this.invalidLastname || this.invalidUsername || this.invalidEmail || this.invalidPassword || this.invalidPasswordAgain)
+      if(this.invalidName || this.invalidPassword || this.invalidLastname || this.invalidUsername || this.invalidEmail || this.invalidPasswordAgain)
           this.invalidRegistration = true;
       else
           this.invalidRegistration = false;
   }
 }
 
+export class UserEditCheck
+{
+  public invalidRegistration = true;
+  
+  public invalidName:boolean = true;
+  public invalidLastname:boolean = true;
+  public invalidUsername:boolean = true;
+  public invalidEmail:boolean = false;
+  public invalidOldPassword: boolean = true;
+  public invalidPassword:boolean = false;
+  public invalidPasswordAgain:boolean = false;
+  
+  constructor() {
+      this.invalidRegistration = true;
+      this.invalidName = true;
+      this.invalidLastname = true;
+      this.invalidUsername = true;
+      this.invalidEmail = false;
+      this.invalidOldPassword =true;
+      this.invalidPassword = false;
+      this.invalidPasswordAgain = false;
+  }
+  
+  public checkForm(){
+      if(this.invalidName || this.invalidOldPassword || this.invalidLastname || this.invalidUsername || this.invalidEmail || this.invalidPassword || this.invalidPasswordAgain)
+          this.invalidRegistration = true;
+      else
+          this.invalidRegistration = false;
+  }
+}
 export class UserRegistration
 {
     public firstname:string = "";
@@ -42,6 +72,25 @@ export class UserRegistration
         this.lastname = "";
         this.username = "";
         this.password = "";
+        this.email = "";
+    }
+}
+
+export class EditUser
+{
+    public firstname:string = "";
+    public lastname:string = "";
+    public username: string = "";
+    public oldpassword: string="";
+    public newpassword: string = "";
+    public email: string = "";
+    
+    constructor() {
+        this.firstname = "";
+        this.lastname = "";
+        this.username = "";
+        this.oldpassword = "";
+        this.newpassword = "";
         this.email = "";
     }
 }
