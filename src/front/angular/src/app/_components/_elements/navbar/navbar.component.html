@@ -42,8 +42,9 @@
 
           <li class="nav-item mx-2 my-2">
             {{"navbar.select"|translate}}
-          <select #langselect (change)="translate.use(langselect.value)">
-            <option *ngFor="let lang of translate.getLangs()" [value]="lang">
+          <select #langselect (change)="changeLang(langselect.value)"> 
+            <!-- translate.use(langselect.value) -->
+            <option *ngFor="let lang of translate.getLangs()" [selected]="lang1==lang" [value]="lang">
                 {{lang}}
             </option>
           </select>
