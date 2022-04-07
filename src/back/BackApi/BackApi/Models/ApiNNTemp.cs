@@ -2,7 +2,7 @@
 {
     public class ApiNNTempCreate
     {
-        public string Name;
+        public string Name { get; set; }
     }
 
     public class ApiNNCfg

@@ -114,6 +114,16 @@ def get_statistics(body: Dataset):
     return { 'statistics': stats }
 
 
+# Get Dataset Statistics
+@app.get('/api/nn/new/default', status_code=200)
+def get_default_nn():
+    
+    f = FileMngr('h5')
+    f.create(b'tempdata')
+    f.delete()
+
+    return FileResponse(f.path())
+
 
 # ==== WebSockets ====
 
