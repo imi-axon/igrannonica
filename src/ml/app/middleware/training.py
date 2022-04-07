@@ -77,7 +77,7 @@ class TrainingInstance():
         f.delete()
 
         # self.buff.append(bytes(('{ "path": "' + f.path() + '"}'), 'utf-8'))
-        self.buff.append(b'nekibezvezetekst')
+        self.buff.append(b'poslednja poruka, sadrzace rezultate treniranja')
 
 
     # def train(self):
