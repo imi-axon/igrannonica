@@ -2,17 +2,17 @@
 {
     public class ApiNNTempCreate
     {
-        public string Name;
+        public string Name { get; set; }
     }
 
     public class ApiNNCfg
     {
-        public string conf;//json string
+        public string conf { get; set; }//json string
     }
     public class ApiNNTrain
     {
-        public string dataset;
-        public string nn;
-        public string conf;
+        public string dataset { get; set; }
+        public string nn { get; set; }
+        public string conf { get; set; }
     }
 }
