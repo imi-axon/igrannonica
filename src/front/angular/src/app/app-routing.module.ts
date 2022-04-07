@@ -21,7 +21,7 @@ import { StatisticsPageComponent } from './_components/_pages/statistics-page/st
 import { VerificationComponent } from './_components/_pages/verification-page/verification.component';
 
 const routes: Routes = [
-  {path:'project',component:ProjectPageComponent},
+  {path:'train/:ProjectId/:Inputs/:Outputs',component:ProjectPageComponent},
   {path:'new-project', component:NewProjectPageComponent},
   {path:'dataset/:ProjectId',component:DataSetPageComponent},
   {path:'registration-successful',component:RegistrationSuccessfulComponent},
