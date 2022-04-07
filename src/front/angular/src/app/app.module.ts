@@ -50,6 +50,7 @@ import { StatisticsComponent } from './_components/_elements/statistics/statisti
 import { ProjectPageStatisticsEditComponent } from './_components/_pages/project-page-statistics-edit/project-page-statistics-edit.component';
 // import { StatisticsPageNewComponent } from './_components/_pages/statistics-page-new/statistics-page-new.component';
 import { NeuralNetworkDisplayComponent } from './_components/_elements/neural-network-display/neural-network-display.component';
+import { LandingNavComponent } from './_components/_elements/landing-nav/landing-nav.component';
 
 
 
@@ -89,7 +90,8 @@ import { NeuralNetworkDisplayComponent } from './_components/_elements/neural-ne
     StatisticsComponent,
     ProjectPageStatisticsEditComponent,
     // StatisticsPageNewComponent,
-    NeuralNetworkDisplayComponent
+    NeuralNetworkDisplayComponent,
+    LandingNavComponent
   ],
   imports: [
     NgxCsvParserModule,

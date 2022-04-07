@@ -1,0 +1,63 @@
+#threeCanvas{
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 2;
+    pointer-events: none;
+}
+
+
+#title{
+    margin-top: 20px;
+    font-size: 184px;
+    font-weight: bold;
+    color: #FFFFFF;
+    width: 100%;
+    text-align: center;
+    letter-spacing: 0.05em;
+    cursor: default;
+    user-select: none;
+    transition: 0.75s ease-in;
+    
+    &:hover{
+        transition: 0.75s ease-in;
+        font-size: 190px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+.blob{
+    position: absolute;
+    top: 20%;
+    left: 20%;
+    width: 500px;
+    height: 500px;
+    
+    background: radial-gradient(50% 50% at 50% 50%, #00A2ff55 0%, #004CFf00 80%);
+    filter: blur(50px);
+}
+*/
