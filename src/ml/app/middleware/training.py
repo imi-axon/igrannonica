@@ -15,8 +15,7 @@ from services.trainingmodel import TrainingService
 
 class EpochEndCallback(keras.callbacks.Callback):
 
-    def set_custom_params(self, ws: WebSocket, buff: List[bytes], lock: Lock):
-        self.ws = ws
+    def set_custom_params(self, buff: List[bytes], lock: Lock):
         self.buff = buff
         self.lock = lock
 
@@ -26,46 +25,59 @@ class EpochEndCallback(keras.callbacks.Callback):
         self.buff.append(bytes(f"{logs['loss']} {logs['val_loss']}", encoding='utf-8'))
         self.lock.release()
         print(f'>>>> on epoch end | {epoch}')
-        # th = WSThread()
-        # th.set_params(ws=self.ws, data=f"000000000000000000") #{logs['loss']} {logs['val_loss']}
-        # th.start()
-        #print(self.buff)
 
 class TrainingInstance():
 
-    def __init__(self, ws: WebSocket, buff: List[bytes], lock: Lock):
+    def __init__(self, buff: List[bytes], lock: Lock):
+        self.buff = buff
+        self.lock = lock
         self.callback = EpochEndCallback()
-        self.callback.set_custom_params(ws, buff, lock)
+        self.callback.set_custom_params(buff, lock)
         
 
-    def train(self, datasetUrl: str, colnames: List[str]):
+    def train(self, datasetUrl: str, nnUrl: str, inputNames: List[str], outputNames: List[str]):
 
         # Create file
         datasetStr: str = httpc.get(datasetUrl)
         f = FileMngr('csv')
         f.create(datasetStr)
         
+        print('csv file created')
+
+        print(f.path())
         # Dataframe setup
-        dataframe = pandas.read_csv(
-            filepath = f.path(),
-            sep = ';',
-            names = colnames
-        )
+        dataframe = pandas.read_csv(f.path(), sep = ';')
 
         print(dataframe)
 
 
-        # TrainingService()
+        ts = TrainingService(dataframe, inputNames, outputNames
+            , epochs=10
+            , learning_rate=0.01
+            , regularization_rate=0.1
+            , regularization='L1'
+            , nbperlayer=[10,10,10]
+            , actPerLayer=['relu', 'relu', 'relu']
+            , metrics=['mse']
+            , batchSize=1
+            , percentage_training=0.3
+            , type='REGRESSION'
+            , callbacks=[self.callback]
+        )
+
+        ts.start_training()
 
         # training end
         self.buff.append(b'')
+        f.delete(1)
 
         # file
         f = FileMngr('h5')
         f.create(b'ranodmpodaci')
         f.delete()
 
-        self.buff.append(bytes(f.path(), 'utf-8'))
+        # self.buff.append(bytes(('{ "path": "' + f.path() + '"}'), 'utf-8'))
+        self.buff.append(b'nekibezvezetekst')
 
 
     # def train(self):

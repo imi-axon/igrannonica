@@ -32,10 +32,12 @@ class TrainingService():
     #type -> string -> "CLASSIFICATION"/"REGRESSION"
     #batchSize -> int
     #percentage_training -> float - [0,1] -> koliki procenat celog skupa je training skup
-    def __init__(self, datasetAll,inputs, outputs, epochs, learning_rate, regularization_rate,regularization, actPerLayer, nbperlayer, metrics, batchSize,percentage_training,type):
+    def __init__(self, datasetAll,inputs, outputs, epochs, learning_rate, regularization_rate,regularization, actPerLayer, nbperlayer, metrics, batchSize,percentage_training,type,callbacks):
         self.datasetAll = datasetAll
         self.inputs = inputs
         self.outputs = outputs
+
+        self.CALLBACKS = callbacks
 
         self.EPOCHS = epochs
         
@@ -184,7 +186,7 @@ class TrainingService():
         history = model.fit(self.normed_train_dataset, self.train_labels, 
                             epochs = self.EPOCHS, batch_size = self.BATCH_SIZE, 
                             validation_split = 0.2, 
-                            verbose=0)
+                            verbose=0, callbacks=self.CALLBACKS)
 
         return history.history
 
@@ -211,7 +213,7 @@ class TrainingService():
 
         history = self.fit_model(model)
 
-        results = self.evaluate_model(model)
-        predictions = self.predict_model(model)
+        # results = self.evaluate_model(model)
+        # predictions = self.predict_model(model)
 
-        return history, results, predictions
+        return history#, results, predictions

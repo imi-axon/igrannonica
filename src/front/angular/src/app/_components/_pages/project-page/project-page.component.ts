@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TrainingApiService } from 'src/app/_utilities/_middleware/training-api.service';
 
 @Component({
   selector: 'app-project-page',
@@ -7,9 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProjectPageComponent implements OnInit {
 
-  constructor() { }
+  constructor(private wsService: TrainingApiService) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void 
+  {
+    
+  }
+
+  public test() {
+
+    let conf: any = {inputs:["n1","n2"], outputs:["out"]};
+    this.wsService.test(4, conf);
   }
 
 }

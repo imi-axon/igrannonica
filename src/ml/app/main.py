@@ -120,35 +120,38 @@ def get_statistics(body: Dataset):
 @app.websocket("/api/nn/train/start")
 async def training_stream(ws: WebSocket):
     await ws.accept()
-    await ws.send_bytes(b'')
+    await ws.send_bytes(b'') # confirm
     print('Accepted')
-    conf = await ws.receive_text()
-    print('Conf Recieved')
+    
+    data = await ws.receive_json()
 
-    print(conf)
+    print(data)
+    print(data['conf'])
+    datasetlink = data['dataset']
+    nnlink = data['nn']
+    conf = json_decode(data['conf'])
 
     buff: List[bytes] = []
     lock: Lock = Lock()
-    print('----------')
 
-    await ws.send_bytes('1')
-    await ws.send_bytes('2')
-    await ws.send_bytes('3')
+    # await ws.send_bytes('1')
+    # await ws.send_bytes('2')
+    # await ws.send_bytes('3')
 
-    await ws.close(code=1000)
-    return
+    # await ws.close(code=1000)
+    # return
 
     try:
         t = time()
         print('try')
-        th = Thread(target=TrainingInstance(ws, buff, lock).train, daemon=True)
+        th = Thread(target=TrainingInstance(buff, lock).train, args=(datasetlink, nnlink, conf['inputs'], conf['outputs']))
         print('new th')
         th.start()
         print('th start')
         # i = 0
         while True:
             # print(buff)
-            print('')
+            print('>>')
             # if i < 3:
             #     print('')
             #     sleep(1)
@@ -159,6 +162,7 @@ async def training_stream(ws: WebSocket):
                 lock.release()
                 print(b)
                 if b == b'':
+                    print(':::: empty')
                     while len(buff) == 0:
                         sleep(0.001)
                     lock.acquire(blocking=True)
@@ -166,7 +170,6 @@ async def training_stream(ws: WebSocket):
                     lock.release()
                     await ws.send_text(b)
                     await ws.close(code=1000)
-                    print(':::: empty')
                     print(b.decode('utf-8'))
                     break
                 else:
