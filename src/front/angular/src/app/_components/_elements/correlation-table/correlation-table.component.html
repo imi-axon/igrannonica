@@ -12,7 +12,7 @@
                         
                     </th>
                     
-                    <th scope="col" *ngFor="let column of headers"> 
+                    <th scope="col" *ngFor="let column of statisticsService.headers"> 
                         {{column}}
                     </th> 
                 </tr>
@@ -20,7 +20,7 @@
             
             <tbody>
                 
-                <tr *ngFor="let row of headers; let i = index">
+                <tr *ngFor="let row of statisticsService.headers; let i = index">
                     
                     <!-- CELIJE ZA NAZIV REDOVA -->
                     <td class="">
@@ -28,7 +28,7 @@
                     </td>
                     
                     <!-- CELIJE IZ KORELACIONE TABELE -->
-                    <td class="" *ngFor="let cell of correlationMatrix[i]" [ngStyle]="GetCorrelationColor(cell)" >
+                    <td class="" *ngFor="let cell of statisticsService.correlationMatrix[i]" [ngStyle]="statisticsService.GetCorrelationColor(cell)" >
                         {{cell}}
                     </td>
                     

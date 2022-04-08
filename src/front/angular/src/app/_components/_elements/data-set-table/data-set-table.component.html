@@ -10,7 +10,7 @@
 
                     </th>
 
-                    <th scope="col" class="prvi" *ngFor="let column of columns">
+                    <th scope="col" class="prvi" *ngFor="let column of statisticsService.columns">
                         {{column}}
                     </th>
                 </tr>
@@ -26,7 +26,7 @@
                     </td>
 
                     <!-- CELIJE IZ SETA-->
-                    <td  *ngFor="let column of columns">
+                    <td  *ngFor="let column of statisticsService.columns">
                         {{row[column]}}
                     </td>
 
@@ -39,12 +39,12 @@
                 <!-- CELIJA PRVE KOLONE -->
                 <th class="">
                     <!-- id="statistics-switch-button" -->
-                    <button class="btn btn-primary" style="background-color: #0d6efd;"  type="button" (click)="shiftTroughStatisticsOptions()">
-                        {{statisticsOptions[selectedOption]}}
+                    <button class="btn btn-primary" style="background-color: #0d6efd;"  type="button" (click)="statisticsService.shiftTroughStatisticsOptions()">
+                        {{statisticsService.statisticsOptions[statisticsService.selectedOption]}}
                     </button>
                 </th>
                 
-                <th *ngFor="let stat of statisticsArrays[selectedOption]" class="statistics-cell"> 
+                <th *ngFor="let stat of statisticsService.statisticsArrays[statisticsService.selectedOption]" class="statistics-cell"> 
                     {{stat}}
                 </th> 
             </tr>

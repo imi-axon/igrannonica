@@ -44,7 +44,7 @@ export class DataSetPageComponent implements OnInit {
   private handleSuccess(self:any){
     console.log("Uspesan POST dataseta."+self.ProjectId);
  //   self.router.navigate(['edit-dataset/'+self.ProjectId]);
-      self.router.navigate(['project/'+self.ProjectId+'/statistics']);
+ self.router.navigate(['project/'+self.ProjectId+'/statistics']);
   }
   
   
