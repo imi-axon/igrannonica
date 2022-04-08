@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { apiProperties } from '../_constants/api-properties';
 import { HeaderUtil } from '../_helpers/http-util';
+import { UserRegistration } from '../_data-types/models';
 
 @Injectable({
   providedIn: 'root'
@@ -55,5 +56,14 @@ export class UserApiService {
         headers: HeaderUtil.jwtOnlyHeaders()
       });
     return response
+  }
+  getinfo(username:any):Observable<HttpResponse<UserRegistration>>
+  {
+    let response = this.http.get<UserRegistration>(apiProperties.url+"/api/users/"+`${username}`+"/getuser",
+      {
+        observe:"response",
+        headers:HeaderUtil.jwtOnlyHeaders()
+      });
+      return response;
   }
 }

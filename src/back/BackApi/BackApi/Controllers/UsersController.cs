@@ -67,9 +67,9 @@ namespace BackApi.Controllers
             if (uspeh)
                 return Ok(new
                 {
-                     v = rez
+                    v = rez
 
-                });   
+                });
             else
                 return BadRequest(rez);
         }
@@ -80,7 +80,7 @@ namespace BackApi.Controllers
             var pubuserid = korsrv.UsernameToId(username);
             if (pubuserid == -1)
                 return NotFound("Korisnik sa tim username-om ne postoji");
-            var rez = projsrv.ListProjects(userid,pubuserid);
+            var rez = projsrv.ListProjects(userid, pubuserid);
             if (rez != "[]")
                 return Ok(rez);
             else return NotFound("Korisnik sa tim username-om nema projekte");
@@ -107,7 +107,6 @@ namespace BackApi.Controllers
         [HttpPut("edituser")]
         public async Task<ActionResult<string>> EditUser(UserEdit user)
         {
-            Debug.WriteLine(user.oldpassword);
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
             bool pass = korsrv.CheckPass(userid, user.oldpassword);
@@ -115,6 +114,18 @@ namespace BackApi.Controllers
                 return "nESTO NIJE U REDU";
             bool rez = korsrv.EditUser(userid, user);
             return Ok();
+        }
+        [HttpGet("{username}/getuser")]
+        public async Task<ActionResult<string>> GetUser(string username)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+
+            string rez = korsrv.GetUser(username);
+            if(rez=="")
+                return BadRequest();
+
+            return rez;
         }
     }
 }

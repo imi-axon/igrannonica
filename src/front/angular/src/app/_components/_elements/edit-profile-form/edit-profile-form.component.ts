@@ -13,6 +13,9 @@ import { AuthService } from 'src/app/_utilities/_services/auth.service';
 })
 export class EditProfileFormComponent implements OnInit {
 
+  private username:string=this.auth.korisnickoIme;
+  public user:UserRegistration;
+
   public split:string[];
   public edit:EditUser = new EditUser();
   public passwordAgain:string = "";
@@ -28,7 +31,7 @@ export class EditProfileFormComponent implements OnInit {
   
 
   ngOnInit(): void {
-
+    this.userService.getInfo(this.username,this,this.handleUserSuccess,this.handleError);
   }
   
   public SubmitEdit(){
@@ -49,7 +52,23 @@ export class EditProfileFormComponent implements OnInit {
   }
   
   handleLogedIn(self: any, message: string){
-    
+  }
+
+  handleUserSuccess(self: any, user: UserRegistration) {
+    console.log("Tacno jeeeeeee");
+    if(user) self.user=user;
+    self.edit.firstname=user.firstname;
+    self.edit.lastname=user.lastname;
+    self.edit.username=user.username;
+    self.edit.email=user.email;
+    //console.log(projekti[0]);
+    //console.log(projekti[0].Description);
+ 
+  }
+  handleError(self: any, message: string) {
+    console.log("GRESKA")
+    // self.errorMessage = message;
+    // self.isSignUpFailed = true;
   }
   
   
