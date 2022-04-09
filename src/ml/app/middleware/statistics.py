@@ -132,7 +132,7 @@ class StatisticsMiddleware:
     def __init__(self,csvString):
 
         self.dataframe = read_str_to_df(csvString)
-        self.stat = StatisticsService(self.dataframe)
+        self.stat = StatisticsService(self.dataframe)        
         self.dictionary = dictionary()
 
     def add_cormat(self):
@@ -156,45 +156,64 @@ class StatisticsMiddleware:
 
     def add_colstats(self):
         lista = []
-        number_of_columns = self.dataframe.shape[1]
-        columns = self.dataframe.columns
-        col_min = self.stat.stat_min()
-        col_max = self.stat.stat_max()
-        col_avg = self.stat.stat_mean()
-        col_med = self.stat.stat_median()
-        col_null = self.stat.stat_null()
+        #number_of_columns = self.dataframe.shape[1]
+        #columns = self.dataframe.columns
+        #col_min = self.stat.stat_min()
+        #col_max = self.stat.stat_max()
+        #col_avg = self.stat.stat_mean()
+        #col_med = self.stat.stat_median()
+        #col_null = self.stat.stat_null()
 
-        for i in range(0,number_of_columns):
+        #for i in range(0,number_of_columns):
+        #    dict_col = dictionary()
+        #    dict_col.add("col", columns[i])
+        #    dict_col.add("min", col_min[i])
+        #    dict_col.add("max", col_max[i])
+        #    dict_col.add("avg", col_avg[i])
+        #    dict_col.add("med", col_med[i])
+        #    dict_col.add("nul", col_null[i])
+        #    lista.append(dict_col)
+        
+        numeric_columns = self.dataframe.select_dtypes(exclude=['object']).columns.tolist()
+        for column in numeric_columns:
             dict_col = dictionary()
-            dict_col.add("col", columns[i])
-            dict_col.add("min", col_min[i])
-            dict_col.add("max", col_max[i])
-            dict_col.add("avg", col_avg[i])
-            dict_col.add("med", col_med[i])
-            dict_col.add("nul", col_null[i])
-            lista.append(dict_col)
+            dict_col.add("col", column)
+            dict_col.add("min", self.stat.stat_min(column))
+            dict_col.add("max", self.stat.stat_max(column))
+            dict_col.add("avg", self.stat.stat_mean(column))
+            dict_col.add("med", self.stat.stat_median(column))
+            lista.append(dict_col)    
+        
         return lista
 
     def add_rownulls(self):
         return self.stat.stat_row_null().to_list()
+
+    def add_colnulls(self):
+        columns = self.dataframe.columns.to_list()
+        col_null = self.stat.stat_null().to_list()
+        
+        collnulls_dict = dictionary()
+        collnulls_dict.add("cols", columns)
+        collnulls_dict.add("nulls", col_null)
+        return collnulls_dict
 
 
     def statistics_json(self):
         self.dictionary.add("cormat",self.add_cormat())
         self.dictionary.add("colstats", self.add_colstats())
         self.dictionary.add("rownulls", self.add_rownulls())
+        self.dictionary.add("colnulls", self.add_colnulls())
 
         json_object = json.dumps(self.dictionary, cls=NpEncoder)
+
+        json_object = json_object.replace('NaN','"nan"')
+
         return json_object
 
 
 #sm = StatisticsMiddleware(csvString)
 #json_obj = sm.statistics_json()
-
-
-
-
-
 
 
 #PROBA
