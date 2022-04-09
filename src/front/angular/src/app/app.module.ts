@@ -53,6 +53,8 @@ import { NeuralNetworkDisplayComponent } from './_components/_elements/neural-ne
 import { LandingNavComponent } from './_components/_elements/landing-nav/landing-nav.component';
 import { EditProfilePageComponent } from './_components/_pages/edit-profile-page/edit-profile-page.component';
 import { EditProfileFormComponent } from './_components/_elements/edit-profile-form/edit-profile-form.component';
+import { KonfiguracijaComponent } from './_components/_elements/konfiguracija/konfiguracija.component';
+import { TrainingPageComponent } from './_components/_pages/training-page/training-page.component';
 
 
 
@@ -94,7 +96,9 @@ import { EditProfileFormComponent } from './_components/_elements/edit-profile-f
     NeuralNetworkDisplayComponent,
     LandingNavComponent,
     EditProfilePageComponent,
-    EditProfileFormComponent
+    EditProfileFormComponent,
+    KonfiguracijaComponent,
+    TrainingPageComponent
   ],
   imports: [
     NgxCsvParserModule,

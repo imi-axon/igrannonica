@@ -19,9 +19,11 @@ import { RegistrationPageComponent } from './_components/_pages/registration-pag
 import { RegistrationSuccessfulComponent } from './_components/_pages/registration-successful/registration-successful.component';
 import { StatisticsPageComponent } from './_components/_pages/statistics-page/statistics-page.component';
 import { VerificationComponent } from './_components/_pages/verification-page/verification.component';
+import { TrainingPageComponent } from './_components/_pages/training-page/training-page.component';
 
 const routes: Routes = [
-  {path:'train/:ProjectId/:Inputs/:Outputs',component:ProjectPageComponent},
+ // {path:'train/:ProjectId/:Inputs/:Outputs',component:ProjectPageComponent},
+ {path:'train/:ProjectId', component:TrainingPageComponent},
   {path:'new-project', component:NewProjectPageComponent},
   {path:'dataset/:ProjectId',component:DataSetPageComponent},
   {path:'registration-successful',component:RegistrationSuccessfulComponent},
@@ -63,7 +65,7 @@ export const routingComponents=[ProjectPageComponent, NewProjectPageComponent,
    DataSetPageComponent, StatisticsPageComponent, LoginPageComponent, RegistrationPageComponent,
 
    HomePageComponent,MyProjectsPageComponent,ProfilPageComponent,VerificationComponent,ProjectPageStatisticsEditComponent,
-  StatisticsComponent,EditDatasetComponent
+  StatisticsComponent,EditDatasetComponent,TrainingPageComponent
 
   //TESTIRANJE - OBRISATI KASNIJE
   ,NeuralNetworkDisplayComponent];
