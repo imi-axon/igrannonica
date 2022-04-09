@@ -62,7 +62,5 @@ export const routingComponents=[ProjectPageComponent, NewProjectPageComponent,
 
    HomePageComponent,MyProjectsPageComponent,ProfilPageComponent,VerificationComponent,ProjectPageStatisticsEditComponent,EditDatasetComponent
 
-  // ,EditDatasetPageComponent
-
   //TESTIRANJE - OBRISATI KASNIJE
   ,NeuralNetworkDisplayComponent];

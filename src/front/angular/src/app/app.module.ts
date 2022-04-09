@@ -9,11 +9,7 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './_components/_elements/navbar/navbar.component';
 import { SidebarComponent } from './_components/_elements/sidebar/sidebar.component';
-import { DataSetPageComponent } from './_components/_pages/data-set-page/data-set-page.component';
-import { DataSetTableComponent } from './_components/_elements/data-set-table/data-set-table.component';
-import { observable } from 'rxjs';
 import { RegistrationFormComponent } from './_components/_elements/registration-form/registration-form.component';
-import { RegistrationPageComponent } from './_components/_pages/registration-page/registration-page.component';
 import { FileInputComponent } from './_components/_elements/file-input/file-input.component';
 import { FormsModule } from '@angular/forms';
 import { RegistrationSuccessfulComponent } from './_components/_pages/registration-successful/registration-successful.component';
@@ -52,6 +48,7 @@ import { LandingNavComponent } from './_components/_elements/landing-nav/landing
 import { EditProfilePageComponent } from './_components/_pages/edit-profile-page/edit-profile-page.component';
 import { EditProfileFormComponent } from './_components/_elements/edit-profile-form/edit-profile-form.component';
 import { StatisticsComponent } from './_components/_elements/statistics/statistics.component';
+import { DataSetTableComponent } from './_components/_elements/data-set-table/data-set-table.component';
 
 
 
@@ -62,7 +59,6 @@ import { StatisticsComponent } from './_components/_elements/statistics/statisti
     FileInputComponent,
     NavbarComponent, 
     SidebarComponent,
-    DataSetTableComponent,
     LoginFormComponent,
     RegistrationFormComponent, 
     RegistrationSuccessfulComponent,
@@ -78,7 +74,8 @@ import { StatisticsComponent } from './_components/_elements/statistics/statisti
     NavbarNoviComponent,
     VerificationComponent,
     EditDatasetComponent,
-
+    DataSetTableComponent,
+    
     ChangepassFormComponent,
     ChangepassPageComponent,
     InputusernamePageComponent,

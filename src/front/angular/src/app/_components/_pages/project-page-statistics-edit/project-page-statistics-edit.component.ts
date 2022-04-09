@@ -1,98 +1,213 @@
-import { Component, OnInit, Output, ViewChild } from '@angular/core';
-import { ProjectsService } from 'src/app/_utilities/_services/projects.service';
-import { CorrelationTableComponent } from '../../_elements/correlation-table/correlation-table.component';
-import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
-import { DataSetTableComponent } from '../../_elements/data-set-table/data-set-table.component';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { StatisticsService } from 'src/app/_utilities/_services/statistics.service';
+import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
+import { ProjectsService } from 'src/app/_utilities/_services/projects.service';
+import { EditDatasetComponent } from '../../_elements/edit-dataset/edit-dataset.component';
+
 @Component({
   selector: 'app-project-page-statistics-edit',
   templateUrl: './project-page-statistics-edit.component.html',
   styleUrls: ['./project-page-statistics-edit.component.scss']
 })
 export class ProjectPageStatisticsEditComponent implements OnInit {
+  public ProjectId: number;
 
-  constructor(public projectsService: ProjectsService, private datasetService: DatasetService, private activatedRoute: ActivatedRoute,
-    public statisticsService:StatisticsService) { }
-
-  projectid: number = 0
-  projectMain: boolean = true
-  public visible: boolean = false;
-
-
-  @Output() onBind: boolean = false;
+  public showsEditOptions: boolean;
+  public dataset: any;
+  public statistics: any;
+  
+  
+  // TEST, ZAMENITI KASNIJE
+  main: boolean = false;
+  
+  editComponent: EditDatasetComponent;
+  
+  constructor(private datasetAPI: DatasetService, public activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
-
-    let proj = this.activatedRoute.snapshot.paramMap.get('ProjectId')
-    if (proj != null)
-      this.projectid = Number.parseInt(proj);
-
-    console.log('>>>>>>>>> PARAMETAR:' + this.projectid)
-
-    this.LoadDataFromAPI();
+    
+    setTimeout(() => {
+      this.checkProjectId();
+    
+      this.datasetAPI.GetDataset(this.ProjectId, false, this, this.successfulGetDatasetCallback);
+    }, 0);
+    
   }
-
-  // DATASET
-  public LoadDataFromAPI() {
-    this.datasetService.GetDataset(this.projectid, true, this, this.handleDataSuccessfulLoad, this.handleDataNotLoggedIn, this.handleDataForbidden, this.handleDataNotFound);
-
+  
+  public OnActivate(component: any){
+    if(!(component instanceof EditDatasetComponent)){
+      this.showsEditOptions = false;
+      return;
+    }
+    this.editComponent = component;
+    
+    this.editComponent.ChangedField.subscribe( change => this.HandleFieldChange(change) );
+      this.editComponent.DataUpdateNeeded.subscribe( event => this.UpdateData() );
+      this.editComponent.SaveDataNeeded.subscribe( event =>this.SaveData() );
+      
+      this.showsEditOptions = true;
   }
-
-  public handleDataNotLoggedIn(self: any, message: string) {
-
+  
+  
+  
+  
+  // UZIMAMAMO projectId
+  private checkProjectId(){
+    let p = this.activatedRoute.snapshot.paramMap.get("ProjectId");
+    if (p != null) 
+      this.ProjectId = p as unknown as number;
   }
-
-  public handleDataForbidden(self: any, message: string) {
-
+  
+  
+  // PRAVIMO LISTU AKCIJA ZA SVE IZABRANE KOLONE
+  private getActionsJSON(selectedColumns: string[], selectedAction: string) : any{
+    let editJSON = []
+    for(let i = 0; i < selectedColumns.length; i++)
+      editJSON.push({
+          action: selectedAction,
+          column: selectedColumns[i]
+      });
+    return editJSON;
   }
+  
+  
+  // PONOVO KUPIMO PODATKE
+  public UpdateData(){
 
-  public handleDataNotFound(self: any, message: string) {
-
+    this.datasetAPI.GetDataset(this.ProjectId, true, this, this.successfulGetDatasetCallback);
   }
-
-  public handleDataSuccessfulLoad(self: any, data: any) {
-    console.log(data);
-    self.dataset = JSON.parse(data.dataset);
-    console.log(self.dataset)
-    console.log("uspeh dataset")
-    self.LoadStatisticsFromAPI();
+  
+  // CUVAMO TRENUTNU IZMENU KAO TRAJNU
+  public SaveData(){
+    this.datasetAPI.SaveDataset(this.ProjectId);
   }
-
-  // STATISTIKA
-  public LoadStatisticsFromAPI() {
-    console.log('Load Statistics From API')
-    this.datasetService.GetStatistics(this.projectid, this.projectMain, this, this.handleStatisticsSuccessfulLoad, this.handleStatisticsUnauthorized, this.handleStatisticsForbidden, this.handleStatisticsNotFound);
+  
+  // CALLBACK ==========================================================================
+  
+  private successfulGetStatisticsCallback(self: any, response: any){
+    self.statistics = JSON.parse(response.statistics);
   }
-
-  public handleStatisticsSuccessfulLoad(self: any, statisticsSet: any) {
-    console.log('HANDLER')
-    console.log(statisticsSet)
-
-    self.statisticsSet = JSON.parse(statisticsSet.statistics);
-    console.log(self.statisticsSet);
-
-    self.correlation = self.statisticsSet.cormat;
-    self.statistics = self.statisticsSet.colstats;
-    console.log(self.statistics);
-    self.rowNulls = self.statisticsSet.rownulls;
-
-    self.statisticsService.ParseCorrelationData(self.correlation);
-    self.statisticsService.LoadDataAndStatistics(self.dataset,self.statistics,self.rowNulls);
-
-    console.log("zavrseno");
-    self.visible = true;
+  
+  private successfulGetDatasetCallback(self: any, response: any){
+    self.dataset = JSON.parse(response.dataset);
+    self.datasetAPI.GetStatistics(self.ProjectId, false, self, self.successfulGetStatisticsCallback);
+    self.editDataset.LoadDataAndRowNulls(self.dataset, self.statistics.rownulls);
   }
-
-  public handleStatisticsUnauthorized(self: any, message: string) {
+  
+  private successfulEditCallback(self: any){
+    self.datasetAPI.GetDataset(self.ProjectId, false, self, self.successfulGetDatasetCallback);
   }
-
-  public handleStatisticsForbidden(self: any, message: string) {
-
+  
+  
+  
+  // KOMANDE  =========================================================================
+  
+  // IZMENI KOLONU
+  public HandleFieldChange(event: any){
+    let command = [{ action: "put", col: event.col, row: event.row, value: event.value }]
+    
+    console.log(command);
+    
+    // Ispod kao novi parametar bi isao callback za gresku gde bi mogli da revert-ujemo vrednost u polju (za to bi morali da posaljemo startu vrednost ovoj f-ji)
+    this.datasetAPI.EditDataset(command, this.ProjectId, false, this);
   }
-
-  public handleStatisticsNotFound(self: any, message: string) {
-
+  
+  // BRISI KOLONE
+  public RemoveColumns(){
+    let selectedColumns: string[] = this.editComponent.GetSelectedColumns();
+    
+    if(selectedColumns.length <= 0)
+      return;
+      
+    let editJSON = this.getActionsJSON(selectedColumns, 'del col');
+    
+    this.datasetAPI.EditDataset(editJSON, this.ProjectId, false, this, this.successfulEditCallback);
+  }
+  
+  // BRISI REDOVE SA NULL
+  public RemoveNullRows(){
+    let selectedColumns: string[] = this.editComponent.GetSelectedColumns();
+    
+    if(selectedColumns.length <= 0)
+      return;
+      
+    let editJSON = this.getActionsJSON(selectedColumns, 'del nullrows');
+    
+    this.datasetAPI.EditDataset(editJSON, this.ProjectId, false, this, this.successfulEditCallback);
+  }
+  
+  // POPUNI REDOVE SA NULL KATEGORIJSKI
+  public FillNullRowsWithCat(){
+    let selectedColumns: string[] = this.editComponent.GetSelectedColumns();
+    
+    if(selectedColumns.length <= 0)
+      return;
+    
+    let editJSON = this.getActionsJSON(selectedColumns, 'ins nullrows cat');
+    
+    this.datasetAPI.EditDataset(editJSON, this.ProjectId, false, this, this.successfulEditCallback);
+  }
+  
+  // POPUNI REDOVE SA NULL PROSEKOM
+  public FillNullRowsWithMean(){
+    let selectedColumns: string[] = this.editComponent.GetSelectedColumns();
+    
+    if(selectedColumns.length <= 0)
+      return;
+    
+    let editJSON = this.getActionsJSON(selectedColumns, 'ins nullrows mean');
+    
+    this.datasetAPI.EditDataset(editJSON, this.ProjectId, false, this, this.successfulEditCallback);
+  }
+  
+  // POPUNI REDOVE SA NULL MEDIJANOM
+  public FillNullRowsWithMedian(){
+    let selectedColumns: string[] = this.editComponent.GetSelectedColumns();
+    
+    if(selectedColumns.length <= 0)
+      return;
+    
+    let editJSON = this.getActionsJSON(selectedColumns, 'ins nullrows median');
+    
+    this.datasetAPI.EditDataset(editJSON, this.ProjectId, false, this, this.successfulEditCallback);
+  }
+  
+  // OBRISI REDOVE DUPLIKATE
+  public RemoveDuplicates(){
+    let selectedColumns: string[] = this.editComponent.GetSelectedColumns();
+    
+    if(selectedColumns.length != 1)
+      return;
+      
+    let editJSON = [{ action: 'del duplicates' }];
+    
+    
+    this.datasetAPI.EditDataset(editJSON, this.ProjectId, false, this, this.successfulEditCallback);
+  }
+  
+  // ONEHOT NAD IZABRANIM KOLONAMA
+  public OneHotEncoding(){
+    let selectedColumns: string[] = this.editComponent.GetSelectedColumns();
+    
+    if(selectedColumns.length <= 0)
+      return;
+      
+    let editJSON = this.getActionsJSON(selectedColumns, 'enc onehot');
+    
+    this.datasetAPI.EditDataset(editJSON, this.ProjectId, false, this, this.successfulEditCallback);
+  }
+  
+  // LABEL NAD IZABRANIM KOLONAMA
+  public LabelEncoding(){
+    let selectedColumns: string[] = this.editComponent.GetSelectedColumns();
+    
+    if(selectedColumns.length <= 0)
+      return;
+      
+    let editJSON = this.getActionsJSON(selectedColumns, 'enc label');
+    
+    this.datasetAPI.EditDataset(editJSON, this.ProjectId, false, this, this.successfulEditCallback);
   }
 
 }
+

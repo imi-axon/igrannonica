@@ -10,18 +10,20 @@ import { StatisticsService } from 'src/app/_utilities/_services/statistics.servi
 })
 export class DataSetTableComponent implements OnInit, OnChanges{
   
-  datasetHidden:boolean = true;
-  dataset: any;
+  datasetHidden: boolean = true;
+  hasPages: boolean = true;
+  
+  data: any;
   columns: string[];
-  statistics: any;
-  rowNulls: number[];
-  public pageInput: number;
+  // AKO IMAMO STATISTIKU
+  public statisticOptions: string[] = ['Minimum', 'Maximum', 'Average', 'Mediana', 'Nulls'];
+  
+  pageInput: number;
   
   // Stranicenje za prikaz podataka
   dataPages: any[][] = [];
   rowsPerPage: number = 20;
   currentPage: number = 0;
-  rowNullsPages: any[][] = [];
   
   // Sada se koristi samo na stranici za input fajla
   @Output() loadingStartedEvent = new EventEmitter<null>();
@@ -30,8 +32,6 @@ export class DataSetTableComponent implements OnInit, OnChanges{
   @Output() loadedEvent = new EventEmitter<null>();
   
   public visible: boolean = false;
-  
-  showsStatistics: boolean = true;
   
   ngOnInit(): void {
     
@@ -46,29 +46,80 @@ export class DataSetTableComponent implements OnInit, OnChanges{
   
   
   public EmptyDataset(){
-    this.dataset = null;
+    this.data = null;
     this.columns = [];
-    this.statistics = null;
-    this.rowNulls = [];
+    this.visible = false;
   }
+  
+  
+  public LoadStatisticsData(statistics: any){
+    this.loadingStartedEvent.emit();
+    
+    console.log(statistics)
+    
+    this.columns = this.getColumnsFromStatistics(statistics);
+    this.data = this.parseStatisticsData(statistics);
+    
+    console.log(this.data)
+    
+    this.visible = true;
+    this.loadedEvent.emit();
+  }
+  
+  private getColumnsFromStatistics(statistics: any){
+    let columnsCount = statistics.length;
+    let columns = [];
+    
+    for(let i = 0; i < columnsCount; i++)
+      columns.push(statistics[i].col)
+      
+    return columns;
+  }
+  
+  private parseStatisticsData(statistics: any){
+    let statisticsData = [];
+    let columnsCount = statistics.length;
+    
+    let minRows = [];
+    let maxRows = [];
+    let avgRows = [];
+    let medRows = [];
+    let nulRows = [];
+    
+    for(let i = 0; i < columnsCount; i++){
+      minRows.push(statistics[i].min)
+      maxRows.push(statistics[i].max)
+      avgRows.push(statistics[i].avg)
+      medRows.push(statistics[i].med)
+      nulRows.push(statistics[i].nul)
+    }
+    
+    statisticsData.push(minRows);
+    statisticsData.push(maxRows);
+    statisticsData.push(avgRows);
+    statisticsData.push(medRows);
+    statisticsData.push(nulRows);
+    
+    return statisticsData;
+  }
+  
   
   // Ovo se koristi samo na dataset stranici da bi se prikazala tabela pre nego sto je posaljemo na back
   public LoadDataDirectlyFromInput(data:Event){
     this.loadingStartedEvent.emit();
     
-    this.dataset = data;
+    this.data = data;
     console.log("Dataset iz input-a:");
-    console.log(this.dataset);
+    console.log(this.data);
     
-    this.columns = Object.keys(this.dataset[0]);
+    this.columns = Object.keys(this.data[0]);
     
-    this.splitData(this.dataset);
+    this.splitData(this.data);
     this.currentPage = 0;
     
     this.loadedEvent.emit();
     
     this.visible = true;
-    this.showsStatistics = false;
   }
   
   private splitData(data: any){

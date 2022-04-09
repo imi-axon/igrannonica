@@ -8,11 +8,9 @@
                 <tr class=""> 
                     
                     <!-- DODATNA KOLONA-->
-                    <th class="">
-                        
-                    </th>
+                    <th style="font-weight: bold; border-right: solid 2px black;"></th>
                     
-                    <th scope="col" *ngFor="let column of statisticsService.headers"> 
+                    <th scope="col" *ngFor="let column of columns"> 
                         {{column}}
                     </th> 
                 </tr>
@@ -20,15 +18,15 @@
             
             <tbody>
                 
-                <tr *ngFor="let row of statisticsService.headers; let i = index">
+                <tr *ngFor="let row of columns; let i = index">
                     
                     <!-- CELIJE ZA NAZIV REDOVA -->
-                    <td class="">
+                    <td style="font-weight: bold; border-right: solid 2px black;">
                         {{row}}
                     </td>
                     
                     <!-- CELIJE IZ KORELACIONE TABELE -->
-                    <td class="" *ngFor="let cell of statisticsService.correlationMatrix[i]" [ngStyle]="statisticsService.GetCorrelationColor(cell)" >
+                    <td class="" *ngFor="let cell of correlationMatrix[i]" [ngStyle]="GetCorrelationColor(cell)" >
                         {{cell}}
                     </td>
                     

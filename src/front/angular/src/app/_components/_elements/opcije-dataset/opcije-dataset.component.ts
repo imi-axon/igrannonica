@@ -20,16 +20,13 @@ export class OpcijeDatasetComponent implements OnInit {
   }
 
   onClickStatistics(){
-    this.projectsService.edit=false;
     this.router.navigate(['statistics'],{relativeTo:this.activatedRoute});
-    console.log(this.projectsService.edit);
   }
 
   onClickEdit(){
-    this.projectsService.edit=true;
     this.router.navigate(['edit'],{relativeTo:this.activatedRoute});
-    console.log(this.projectsService.edit);
   }
+
 
 
 }

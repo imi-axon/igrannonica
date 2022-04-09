@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
-import { StatisticsService } from 'src/app/_utilities/_services/statistics.service';
 
 @Component({
   selector: 'correlation-table',
@@ -9,11 +7,28 @@ import { StatisticsService } from 'src/app/_utilities/_services/statistics.servi
 })
 export class CorrelationTableComponent implements OnInit {
   
+  constructor() { }
 
-  constructor(public statisticsService:StatisticsService) { }
-
+  public columns: string[];
+  public correlationMatrix: number[][];
+  
   ngOnInit(): void {
     
   }
   
+  public LoadCorrelationMatrix(columns: string[], correlationMatrix: number[][]){
+    this.columns = columns;
+    this.correlationMatrix = correlationMatrix;
+  }
+  
+  
+  public GetCorrelationColor(value: number){
+    if(value >= 0.75)
+      return {'color': 'rgb( 0, 150, 0)', 'font-weight': 'bold'}
+    
+    if(value <= 0.25)
+      return {'color': 'rgb( 150, 0, 0)', 'font-weight': 'bold'}
+      
+    return {'color': 'rgb( 70, 70, 70)', 'font-weight': 'bold'};
+  }
 }
