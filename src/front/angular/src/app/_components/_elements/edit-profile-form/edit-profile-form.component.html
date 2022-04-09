@@ -1,86 +1,79 @@
-
+<navbar ></navbar>
     <div class="container mt-md-5  p-5 bg-white rounded-3 shadow-sm border" style="max-width: 50em;">
-        <h2 class="text-center pb-5">Edit Profile</h2>
+        <h2 class="text-center pb-5">{{"edit-profile.title1"|translate}}</h2>
         
-        <form method="POST" novalidate #form="ngForm" (submit)="SubmitEdit()" autocomplete="off">
+        <form method="POST" novalidate #form="ngForm" (submit)="SubmitEdit1()" autocomplete="off">
             
             
             <div class="row mb-3">
                 
                 <div class="col form-group">
-                    <input type="text" class="form-control"  placeholder="{{'register.firstname_placeholder'|translate}}" name="firstname" #name="ngModel" [(ngModel)]="edit.firstname"
+                    <input type="text" class="form-control" name="firstname" #name="ngModel" [(ngModel)]="edit.firstname"
                         required [class.invalid]="name.touched && registrationCheck.invalidName" (blur)="checkName()" (input)="checkName()">
                 </div>
                 
                 <div class="col form-group">
-                    <input type="text" class="form-control" placeholder="{{'register.lastname_placeholder'|translate}}" name="lastname" #lastName="ngModel" [(ngModel)]="edit.lastname"
+                    <input type="text" class="form-control" name="lastname" #lastName="ngModel" [(ngModel)]="edit.lastname"
                     required [class.invalid]="lastName.touched && registrationCheck.invalidLastname" (blur)="checkLastname()" (input)="checkLastname()">
                 </div>
             </div>
             
             <div class="form-group mb-3">
-                <input type="text" class="form-control" placeholder="{{'register.username_placeholder'|translate}}" name="username" #username="ngModel" [(ngModel)]="edit.username"
+                <input type="text" class="form-control" name="username" #username="ngModel" [(ngModel)]="edit.username"
                 required [class.invalid]="username.touched && registrationCheck.invalidUsername" (blur)="checkUsername()" (input)="checkUsername()">
             </div>
 
             <div class="form-group mb-3">
-                <input type="password" class="form-control" placeholder="{{'register.password_placeholder'|translate}}" name="oldpassword1" #oldpassword1="ngModel" [(ngModel)]="edit.oldpassword1"
+                <input type="password" class="form-control" placeholder="{{'edit-profile.pass1'|translate}}" name="oldpassword1" #oldpassword1="ngModel" [(ngModel)]="edit.oldpassword1"
                 required [class.invalid]="oldpassword1.touched && registrationCheck.invalidOldPassword1" (blur)="checkOldPassword1()" (input)="checkOldPassword1()">
             </div>
 
             <div class="form-group mb-3">
-                <p class="lozinka-info">
-                    {{'register.obavestenje1-1'|translate}} <br> {{'register.obavestenje1-2'|translate}}
-                </p>
-                <p *ngIf="isSignUpFailed" style="color: #FF0000; font-size: 12px;"> {{errorMessage}} </p>
-            </div>
-
-            <div class="form-group mb-3">
-                <input type="submit" name="EditProfile" class="btn btn-primary" value="Edit" [disabled]="registrationCheck.invalidRegistration1">
+                <input type="submit" name="EditProfile" class="btn btn-primary" value="{{'edit-profile.submit1'|translate}}" [disabled]="registrationCheck.invalidRegistration1">
             </div>
             
         </form>
     </div>
 
         <div class="container mt-md-5  p-5 bg-white rounded-3 shadow-sm border" style="max-width: 50em;">
-            <h2 class="text-center pb-5">Edit email</h2>
-            <form method="POST" novalidate #form="ngForm" (submit)="SubmitEdit()" autocomplete="off">
+            <h2 class="text-center pb-5">{{"edit-profile.title2"|translate}}</h2>
+            <form method="POST" novalidate #form="ngForm" (submit)="SubmitEdit2()" autocomplete="off">
                 <div class="form-group mb-3">
-                    <input type="email" class="form-control" placeholder="{{'register.email_placeholder'|translate}}" name="email" #email="ngModel" [(ngModel)]="edit.email"
+                    <input type="email" class="form-control" name="email" #email="ngModel" [(ngModel)]="edit.email"
                     required [class.invalid]="email.touched && registrationCheck.invalidEmail" (blur)="checkEmail()" (input)="checkEmail()">
                 </div>
 
                 <div class="form-group mb-3">
-                    <input type="password" class="form-control" placeholder="{{'register.password_placeholder'|translate}}" name="oldpassword2" #oldpassword2="ngModel" [(ngModel)]="edit.oldpassword2"
+                    <input type="password" class="form-control" placeholder="{{'edit-profile.pass2'|translate}}" name="oldpassword2" #oldpassword2="ngModel" [(ngModel)]="edit.oldpassword2"
                     required [class.invalid]="oldpassword2.touched && registrationCheck.invalidOldPassword2" (blur)="checkOldPassword2()" (input)="checkOldPassword2()">
                 </div>
 
                 <div class="form-group mb-3">
-                    <input type="submit" name="EditEmail" class="btn btn-primary" value="Edit" [disabled]="registrationCheck.invalidRegistration2">
+                    <input type="submit" name="EditEmail" class="btn btn-primary" value="{{'edit-profile.submit2'|translate}}" [disabled]="registrationCheck.invalidRegistration2">
                 </div>
             </form>
         </div>
         <div class="container mt-md-5  p-5 bg-white rounded-3 shadow-sm border" style="max-width: 50em;">
-            <h2 class="text-center pb-5">Edit password</h2>
-            <form method="POST" novalidate #form="ngForm" (submit)="SubmitEdit()" autocomplete="off">
+            <h2 class="text-center pb-5">{{"edit-profile.title3"|translate}}</h2>
+            <form method="POST" novalidate #form="ngForm" (submit)="SubmitEdit3()" autocomplete="off">
 
                 <div class="form-group mb-3">
-                    <input type="password" class="form-control" placeholder="{{'register.password_placeholder'|translate}}" name="newpassword" #newpassword="ngModel" [(ngModel)]="edit.newpassword"
+                    <input type="password" class="form-control" placeholder="{{'edit-profile.newpass1'|translate}}" name="newpassword" #newpassword="ngModel" [(ngModel)]="edit.newpassword"
                     required [class.invalid]="newpassword.touched && registrationCheck.invalidPassword" (blur)="checkPassword()" (input)="checkPassword()">
                 </div>
                 
                 <div class="form-group mb-3">
-                    <input type="password" class="form-control" placeholder="{{'register.password2_placeholder'|translate}}" name="passwordAgain" [(ngModel)]="passwordAgain"
+                    <input type="password" class="form-control" placeholder="{{'edit-profile.newpass2'|translate}}" name="passwordAgain" [(ngModel)]="passwordAgain"
                     required [class.invalid]="newpassword.touched && registrationCheck.invalidPasswordAgain" (blur)="checkPasswordAgain()" (input)="checkPasswordAgain()">
                 </div>
 
                 <div class="form-group mb-3">
-                    <input type="password" class="form-control" placeholder="{{'register.password_placeholder'|translate}}" name="oldpassword3" #oldpassword3="ngModel" [(ngModel)]="edit.oldpassword3"
+                    <input type="password" class="form-control" placeholder="{{'edit-profile.pass3'|translate}}" name="oldpassword3" #oldpassword3="ngModel" [(ngModel)]="edit.oldpassword3"
                     required [class.invalid]="oldpassword3.touched && registrationCheck.invalidOldPassword3" (blur)="checkOldPassword3()" (input)="checkOldPassword3()">
                 </div>
 
                 <div class="form-group mb-3">
-                    <input type="submit" name="EditPassword" class="btn btn-primary" value="Edit" [disabled]="registrationCheck.invalidRegistration3">
+                    <input type="submit" name="EditPassword" class="btn btn-primary" value="{{'edit-profile.submit3'|translate}}" [disabled]="registrationCheck.invalidRegistration3">
                 </div>
             </form>
         </div>

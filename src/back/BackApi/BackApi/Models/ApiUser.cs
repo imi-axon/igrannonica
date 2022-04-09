@@ -22,7 +22,9 @@
         public string lastname { get; set; }
         public string email { get; set; }
         public string username { get; set; }
-        public string oldpassword { get; set; }
+        public string oldpassword1 { get; set; }
+        public string oldpassword2 { get; set; }
+        public string oldpassword3 { get; set; }
         public string newpassword { get; set; }
 
     }

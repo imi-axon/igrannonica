@@ -19,6 +19,8 @@ namespace BackApi.Services
         public bool CheckPass(int id, string password);
         public bool EditUser(int id, UserEdit model);
         public string GetUser(string username);
+        public bool EditEmail(int id, UserEdit model);
+        public bool EditPassword(int id, UserEdit model);
     }
 
     public class UserService: IUserService
@@ -247,27 +249,54 @@ namespace BackApi.Services
             if (user == null)
                 return false;
 
-            var kor = kontext.Users.FirstOrDefault(x => (x.UserId != id && x.Email==model.email) || (x.UserId != id && x.Username == model.username));
+            var kor = kontext.Users.FirstOrDefault(x => x.UserId != id && x.Username == model.username);
             if (kor != null)
                 return false;
 
-            if(model.email!="")
-                user.Email = model.email;
             user.Name = model.firstname;
             user.Lastname = model.lastname;
             user.Username = model.username;
-            if (model.newpassword != "")
-            {
-                CreatePWHash(model.newpassword, out byte[] pwHash, out byte[] pwSalt);
-                user.PasswordHash = pwHash;
-                user.PasswordSalt = pwSalt;
-            }
+
             kontext.SaveChanges();
 
             return true;
 
         }
 
+        public bool EditEmail(int id, UserEdit model)
+        {
+            var user = kontext.Users.Find(id);
+            if (user == null)
+                return false;
+
+            var kor = kontext.Users.FirstOrDefault(x => x.UserId != id && x.Email==model.email);
+            if (kor != null)
+                return false;
+
+            user.Email = model.email;
+            user.Verified = false;
+            string jwtoken = CreateEmailToken(user.Username, int.Parse(configuration.GetSection("AppSettings2:EmailToken").Value.ToString()));
+            user.EmailToken = jwtoken;
+
+            kontext.SaveChanges();
+            emailService.SendEmail("Kliknite na link za potvrdu registracije:http://localhost:4200/verification?token=" + jwtoken, "Potvrda registracije", model.email);
+            return true;
+
+        }
+        public bool EditPassword(int id, UserEdit model)
+        {
+            var user = kontext.Users.Find(id);
+            if (user == null)
+                return false;
+
+            CreatePWHash(model.newpassword, out byte[] pwHash, out byte[] pwSalt);
+            user.PasswordHash = pwHash;
+            user.PasswordSalt = pwSalt;
+            kontext.SaveChanges();
+
+            return true;
+
+        }
         public string GetUser(string username)
         {
             int id = UsernameToId(username);

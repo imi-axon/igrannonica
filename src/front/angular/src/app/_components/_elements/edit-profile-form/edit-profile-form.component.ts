@@ -34,14 +34,24 @@ export class EditProfileFormComponent implements OnInit {
     this.userService.getInfo(this.username,this,this.handleUserSuccess,this.handleError);
   }
   
-  public SubmitEdit(){
-    if(this.registrationCheck.invalidRegistration1 && this.registrationCheck.invalidRegistration2 && this.registrationCheck.invalidRegistration3)
+  public SubmitEdit1(){
+    if(this.registrationCheck.invalidRegistration1)
       return;
     
-    this.userService.editUser(this.edit);
-    
+    this.userService.editUser1(this.edit);
   }
-  
+  public SubmitEdit2(){
+    if(this.registrationCheck.invalidRegistration2)
+      return;
+    
+    this.userService.editUser2(this.edit);
+  }
+  public SubmitEdit3(){
+    if(this.registrationCheck.invalidRegistration3)
+      return;
+    
+    this.userService.editUser3(this.edit);
+  }
   handleSuccess(self: any) {
     self.router.navigate(RedirectRoutes.ON_REGISTER_SUCCESSFUL);
   }
@@ -79,7 +89,6 @@ export class EditProfileFormComponent implements OnInit {
   // Validacije
   
   public checkName(){
-    console.log("NE IDE GASSSSSSSSSSSSSSSSSSSSSSSSSS");
     this.registrationCheck.invalidName = false;
     
     if(!regExp.pattName.test(this.edit.firstname))
