@@ -24,6 +24,7 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
   
   constructor(private datasetAPI: DatasetService, public activatedRoute: ActivatedRoute, public projectsService: ProjectsService) { }
 
+
   ngOnInit(): void {
     
     setTimeout(() => {
@@ -209,3 +210,4 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
   }
 
 }
+

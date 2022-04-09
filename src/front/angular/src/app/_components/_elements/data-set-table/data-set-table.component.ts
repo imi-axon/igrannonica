@@ -1,5 +1,7 @@
 import { Component, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { EventEmitter } from '@angular/core';
+import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
+import { StatisticsService } from 'src/app/_utilities/_services/statistics.service';
 
 @Component({
   selector: 'data-set-table',
@@ -8,17 +10,20 @@ import { EventEmitter } from '@angular/core';
 })
 export class DataSetTableComponent implements OnInit, OnChanges{
   
-  datasetHidden:boolean = true;
-  dataset: any;
+  datasetHidden: boolean = true;
+  hasPages: boolean = true;
+  
+  data: any;
   columns: string[];
-  statistics: any;
-  rowNulls: number[];
+  // AKO IMAMO STATISTIKU
+  public statisticOptions: string[] = ['Minimum', 'Maximum', 'Average', 'Mediana', 'Nulls'];
+  
+  pageInput: number;
   
   // Stranicenje za prikaz podataka
   dataPages: any[][] = [];
   rowsPerPage: number = 20;
   currentPage: number = 0;
-  rowNullsPages: any[][] = [];
   
   // Sada se koristi samo na stranici za input fajla
   @Output() loadingStartedEvent = new EventEmitter<null>();
@@ -26,25 +31,14 @@ export class DataSetTableComponent implements OnInit, OnChanges{
   // Koristi se na stranici za input fajla i statistics stranici
   @Output() loadedEvent = new EventEmitter<null>();
   
-  
-  
-  
-  
-  public statisticsOptions: string[] = ["Minimum","Maximum", "Average", "Median", "Null"];
-  public statisticsArrays: number[][] = [];
-  public selectedOption: number = 0;
-  public pageInput: number;
-  
   public visible: boolean = false;
-  
-  showsStatistics: boolean = true;
   
   ngOnInit(): void {
     
   }
 
   
-  constructor() {}
+  constructor(public statisticsService:StatisticsService) {}
   
   ngOnChanges(): void {
     
@@ -52,76 +46,80 @@ export class DataSetTableComponent implements OnInit, OnChanges{
   
   
   public EmptyDataset(){
-    this.dataset = null;
+    this.data = null;
     this.columns = [];
-    this.statistics = null;
-    this.rowNulls = [];
+    this.visible = false;
   }
+  
+  
+  public LoadStatisticsData(statistics: any){
+    this.loadingStartedEvent.emit();
+    
+    console.log(statistics)
+    
+    this.columns = this.getColumnsFromStatistics(statistics);
+    this.data = this.parseStatisticsData(statistics);
+    
+    console.log(this.data)
+    
+    this.visible = true;
+    this.loadedEvent.emit();
+  }
+  
+  private getColumnsFromStatistics(statistics: any){
+    let columnsCount = statistics.length;
+    let columns = [];
+    
+    for(let i = 0; i < columnsCount; i++)
+      columns.push(statistics[i].col)
+      
+    return columns;
+  }
+  
+  private parseStatisticsData(statistics: any){
+    let statisticsData = [];
+    let columnsCount = statistics.length;
+    
+    let minRows = [];
+    let maxRows = [];
+    let avgRows = [];
+    let medRows = [];
+    let nulRows = [];
+    
+    for(let i = 0; i < columnsCount; i++){
+      minRows.push(statistics[i].min)
+      maxRows.push(statistics[i].max)
+      avgRows.push(statistics[i].avg)
+      medRows.push(statistics[i].med)
+      nulRows.push(statistics[i].nul)
+    }
+    
+    statisticsData.push(minRows);
+    statisticsData.push(maxRows);
+    statisticsData.push(avgRows);
+    statisticsData.push(medRows);
+    statisticsData.push(nulRows);
+    
+    return statisticsData;
+  }
+  
   
   // Ovo se koristi samo na dataset stranici da bi se prikazala tabela pre nego sto je posaljemo na back
   public LoadDataDirectlyFromInput(data:Event){
     this.loadingStartedEvent.emit();
     
-    this.dataset = data;
+    this.data = data;
     console.log("Dataset iz input-a:");
-    console.log(this.dataset);
+    console.log(this.data);
     
-    this.columns = Object.keys(this.dataset[0]);
+    this.columns = Object.keys(this.data[0]);
     
-    this.splitData(this.dataset);
+    this.splitData(this.data);
     this.currentPage = 0;
     
     this.loadedEvent.emit();
     
     this.visible = true;
-    this.showsStatistics = false;
-  }
-  
-  public LoadDataAndStatistics(dataset: any, statistics: any, rowNulls: any){    
-    
-    this.dataset = dataset;
-    console.log("Dataset iz statistics stranice:");
-    console.log(this.dataset);
-    
-    this.columns = Object.keys(this.dataset[0]);
-    this.statistics = statistics;
-    this.rowNulls = rowNulls;
-    
-    this.datasetHidden = false;
-    
-    this.splitDataAndNulls(this.dataset, this.rowNulls);
-    this.currentPage = 0;
-    
-    this.createStatisticsArrays(this.statistics);
-    
-    this.loadedEvent.emit();
-  }
-  
-  
-  private createStatisticsArrays(statistics: any){
-    this.statisticsArrays = [];
-    this.selectedOption = 0;
-    
-    console.log(this.statistics)
-    // Iteracija kroz sve moguce opcije (pravimo po niz za min, max, avg, ...)
-    for(let i = 0; i < this.statisticsOptions.length; i++)
-      this.statisticsArrays.push([]);
-    
-    // Iteracija kroz sve primljene kolone i njihove statistike (upisujemo u svaki od napravljenih nizova)
-    for(let i = 0; i < this.statistics.length; i++){
-      this.statisticsArrays[0].push(this.statistics[i]['min']);
-      this.statisticsArrays[1].push(this.statistics[i]['max']);
-      this.statisticsArrays[2].push(this.statistics[i]['avg']);
-      this.statisticsArrays[3].push(this.statistics[i]['med']);
-      this.statisticsArrays[4].push(this.statistics[i]['nul']);
-    }
-    
-  }
-  public shiftTroughStatisticsOptions(){
-    if(this.selectedOption == (this.statisticsOptions.length - 1))
-      this.selectedOption = 0;
-    else
-      this.selectedOption++;
   }
   
   private splitData(data: any){
@@ -143,38 +141,6 @@ export class DataSetTableComponent implements OnInit, OnChanges{
       sectionCounter++;
     }
   }
-  
-  private splitDataAndNulls(data: any, rowNulls: any){
-    this.dataPages = [];
-    this.rowNulls = [];
-    
-    let arrayCounter = 0;
-    
-    this.dataPages.push([]);
-    this.rowNullsPages.push([]);
-    
-    let sectionCounter = 0;
-    
-    for(let i = 0; i < data.length; i++){
-      if(sectionCounter < this.rowsPerPage){
-        this.dataPages[arrayCounter].push(data[i]);
-        
-        this.rowNullsPages[arrayCounter].push(rowNulls[i]);
-      }
-      else{
-        sectionCounter = 0;
-        
-        this.dataPages.push([]);
-        this.dataPages[++arrayCounter].push(data[i]);
-        
-        this.rowNullsPages.push([]);
-        this.rowNullsPages[arrayCounter].push(rowNulls[i]);
-      }
-      sectionCounter++;
-    }
-  }
-  
-  
   public previousPage(){
     if(this.currentPage < 1)
       return;
@@ -203,5 +169,10 @@ export class DataSetTableComponent implements OnInit, OnChanges{
       
     this.currentPage = this.pageInput - 1;
   }
+  
+  
+  
+  
+
   
 }
