@@ -35,7 +35,7 @@ export class EditProfileFormComponent implements OnInit {
   }
   
   public SubmitEdit(){
-    if(this.registrationCheck.invalidRegistration)
+    if(this.registrationCheck.invalidRegistration1 && this.registrationCheck.invalidRegistration2 && this.registrationCheck.invalidRegistration3)
       return;
     
     this.userService.editUser(this.edit);
@@ -61,6 +61,10 @@ export class EditProfileFormComponent implements OnInit {
     self.edit.lastname=user.lastname;
     self.edit.username=user.username;
     self.edit.email=user.email;
+    self.checkEmail();
+    self.checkName();
+    self.checkLastname();
+    self.checkUsername();
     //console.log(projekti[0]);
     //console.log(projekti[0].Description);
  
@@ -75,12 +79,13 @@ export class EditProfileFormComponent implements OnInit {
   // Validacije
   
   public checkName(){
+    console.log("NE IDE GASSSSSSSSSSSSSSSSSSSSSSSSSS");
     this.registrationCheck.invalidName = false;
     
     if(!regExp.pattName.test(this.edit.firstname))
       this.registrationCheck.invalidName = true;
     
-    this.registrationCheck.checkForm();
+    this.registrationCheck.checkForm1();
   }
   
   public checkLastname(){
@@ -89,7 +94,7 @@ export class EditProfileFormComponent implements OnInit {
     if(!regExp.pattName.test(this.edit.lastname))
       this.registrationCheck.invalidLastname = true;
       
-    this.registrationCheck.checkForm();
+    this.registrationCheck.checkForm1();
   }
   
   public checkUsername(){
@@ -98,7 +103,7 @@ export class EditProfileFormComponent implements OnInit {
     if(!regExp.pattUsername.test(this.edit.username))
       this.registrationCheck.invalidUsername = true;
       
-    this.registrationCheck.checkForm();
+    this.registrationCheck.checkForm1();
   }
   
   public checkEmail(){
@@ -109,15 +114,29 @@ export class EditProfileFormComponent implements OnInit {
     if(this.edit.email=="")
       this.registrationCheck.invalidEmail = false;
       
-    this.registrationCheck.checkForm();
+    this.registrationCheck.checkForm2();
   }
   
-  public checkOldPassword(){
-    this.registrationCheck.invalidOldPassword = false;
+  public checkOldPassword1(){
+    this.registrationCheck.invalidOldPassword1 = false;
     
-    if(!regExp.pattPass.test(this.edit.oldpassword))
-      this.registrationCheck.invalidOldPassword = true;
-    this.registrationCheck.checkForm();
+    if(!regExp.pattPass.test(this.edit.oldpassword1))
+      this.registrationCheck.invalidOldPassword1 = true;
+    this.registrationCheck.checkForm1();
+  }
+  public checkOldPassword2(){
+    this.registrationCheck.invalidOldPassword2 = false;
+    
+    if(!regExp.pattPass.test(this.edit.oldpassword2))
+      this.registrationCheck.invalidOldPassword2 = true;
+    this.registrationCheck.checkForm2();
+  }
+  public checkOldPassword3(){
+    this.registrationCheck.invalidOldPassword3 = false;
+    
+    if(!regExp.pattPass.test(this.edit.oldpassword3))
+      this.registrationCheck.invalidOldPassword3 = true;
+    this.registrationCheck.checkForm3();
   }
 
   public checkPassword(){
@@ -125,23 +144,18 @@ export class EditProfileFormComponent implements OnInit {
     
     if(!regExp.pattPass.test(this.edit.newpassword))
       this.registrationCheck.invalidPassword = true;
-    if(this.edit.newpassword=="")
-      this.registrationCheck.invalidPassword = false;
       
     this.checkPasswordAgain();
-    this.registrationCheck.checkForm();
+    this.registrationCheck.checkForm3();
   }
   
   public checkPasswordAgain(){
     this.registrationCheck.invalidPasswordAgain = false;
     
-    if(this.passwordAgain != this.edit.newpassword)
+    if(this.passwordAgain != this.edit.newpassword || this.passwordAgain.length == 0)
       this.registrationCheck.invalidPasswordAgain = true;
-    if(!regExp.pattPass.test(this.passwordAgain) && this.edit.newpassword!="")
-      this.registrationCheck.invalidPasswordAgain = true;
-    if(this.edit.newpassword=="" && this.passwordAgain != this.edit.newpassword)
-        this.registrationCheck.invalidPasswordAgain = true;
-    this.registrationCheck.checkForm();
+
+    this.registrationCheck.checkForm3();
   }
 
 }

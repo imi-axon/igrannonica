@@ -22,27 +22,12 @@
                 <input type="text" class="form-control" placeholder="{{'register.username_placeholder'|translate}}" name="username" #username="ngModel" [(ngModel)]="edit.username"
                 required [class.invalid]="username.touched && registrationCheck.invalidUsername" (blur)="checkUsername()" (input)="checkUsername()">
             </div>
-            
-            <div class="form-group mb-3">
-                <input type="email" class="form-control" placeholder="{{'register.email_placeholder'|translate}}" name="email" #email="ngModel" [(ngModel)]="edit.email"
-                required [class.invalid]="email.touched && registrationCheck.invalidEmail" (blur)="checkEmail()" (input)="checkEmail()">
-            </div>
 
             <div class="form-group mb-3">
-                <input type="password" class="form-control" placeholder="{{'register.password_placeholder'|translate}}" name="oldpassword" #oldpassword="ngModel" [(ngModel)]="edit.oldpassword"
-                required [class.invalid]="oldpassword.touched && registrationCheck.invalidOldPassword" (blur)="checkOldPassword()" (input)="checkOldPassword()">
+                <input type="password" class="form-control" placeholder="{{'register.password_placeholder'|translate}}" name="oldpassword1" #oldpassword1="ngModel" [(ngModel)]="edit.oldpassword1"
+                required [class.invalid]="oldpassword1.touched && registrationCheck.invalidOldPassword1" (blur)="checkOldPassword1()" (input)="checkOldPassword1()">
             </div>
 
-            <div class="form-group mb-3">
-                <input type="password" class="form-control" placeholder="{{'register.password_placeholder'|translate}}" name="newpassword" #newpassword="ngModel" [(ngModel)]="edit.newpassword"
-                required [class.invalid]="newpassword.touched && registrationCheck.invalidPassword" (blur)="checkPassword()" (input)="checkPassword()">
-            </div>
-            
-            <div class="form-group mb-3">
-                <input type="password" class="form-control" placeholder="{{'register.password2_placeholder'|translate}}" name="passwordAgain" [(ngModel)]="passwordAgain"
-                required [class.invalid]="newpassword.touched && registrationCheck.invalidPasswordAgain" (blur)="checkPasswordAgain()" (input)="checkPasswordAgain()">
-            </div>
-            
             <div class="form-group mb-3">
                 <p class="lozinka-info">
                     {{'register.obavestenje1-1'|translate}} <br> {{'register.obavestenje1-2'|translate}}
@@ -51,9 +36,51 @@
             </div>
 
             <div class="form-group mb-3">
-                <input type="submit" name="submit" class="btn btn-primary" value="Edit" [disabled]="registrationCheck.invalidRegistration">
+                <input type="submit" name="EditProfile" class="btn btn-primary" value="Edit" [disabled]="registrationCheck.invalidRegistration1">
             </div>
             
         </form>
-        
     </div>
+
+        <div class="container mt-md-5  p-5 bg-white rounded-3 shadow-sm border" style="max-width: 50em;">
+            <h2 class="text-center pb-5">Edit email</h2>
+            <form method="POST" novalidate #form="ngForm" (submit)="SubmitEdit()" autocomplete="off">
+                <div class="form-group mb-3">
+                    <input type="email" class="form-control" placeholder="{{'register.email_placeholder'|translate}}" name="email" #email="ngModel" [(ngModel)]="edit.email"
+                    required [class.invalid]="email.touched && registrationCheck.invalidEmail" (blur)="checkEmail()" (input)="checkEmail()">
+                </div>
+
+                <div class="form-group mb-3">
+                    <input type="password" class="form-control" placeholder="{{'register.password_placeholder'|translate}}" name="oldpassword2" #oldpassword2="ngModel" [(ngModel)]="edit.oldpassword2"
+                    required [class.invalid]="oldpassword2.touched && registrationCheck.invalidOldPassword2" (blur)="checkOldPassword2()" (input)="checkOldPassword2()">
+                </div>
+
+                <div class="form-group mb-3">
+                    <input type="submit" name="EditEmail" class="btn btn-primary" value="Edit" [disabled]="registrationCheck.invalidRegistration2">
+                </div>
+            </form>
+        </div>
+        <div class="container mt-md-5  p-5 bg-white rounded-3 shadow-sm border" style="max-width: 50em;">
+            <h2 class="text-center pb-5">Edit password</h2>
+            <form method="POST" novalidate #form="ngForm" (submit)="SubmitEdit()" autocomplete="off">
+
+                <div class="form-group mb-3">
+                    <input type="password" class="form-control" placeholder="{{'register.password_placeholder'|translate}}" name="newpassword" #newpassword="ngModel" [(ngModel)]="edit.newpassword"
+                    required [class.invalid]="newpassword.touched && registrationCheck.invalidPassword" (blur)="checkPassword()" (input)="checkPassword()">
+                </div>
+                
+                <div class="form-group mb-3">
+                    <input type="password" class="form-control" placeholder="{{'register.password2_placeholder'|translate}}" name="passwordAgain" [(ngModel)]="passwordAgain"
+                    required [class.invalid]="newpassword.touched && registrationCheck.invalidPasswordAgain" (blur)="checkPasswordAgain()" (input)="checkPasswordAgain()">
+                </div>
+
+                <div class="form-group mb-3">
+                    <input type="password" class="form-control" placeholder="{{'register.password_placeholder'|translate}}" name="oldpassword3" #oldpassword3="ngModel" [(ngModel)]="edit.oldpassword3"
+                    required [class.invalid]="oldpassword3.touched && registrationCheck.invalidOldPassword3" (blur)="checkOldPassword3()" (input)="checkOldPassword3()">
+                </div>
+
+                <div class="form-group mb-3">
+                    <input type="submit" name="EditPassword" class="btn btn-primary" value="Edit" [disabled]="registrationCheck.invalidRegistration3">
+                </div>
+            </form>
+        </div>
