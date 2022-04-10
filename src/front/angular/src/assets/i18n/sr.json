@@ -30,7 +30,9 @@
         "zapamti_me":"Zapamti me",
         "register1":"Nemate nalog? ",
         "register2":"Registrujte se ovde",
-        "dugme":"Uloguj se"
+        "dugme":"Uloguj se",
+        "forgot1":"Zavboravio si lozinku?",
+        "forgot2":"Promeni je"
     },
     "csv":{
         "format":"Uneti fajl mora biti u .csv formatu!",
@@ -109,8 +111,31 @@
         "view":"Promeni pogled",
         "debug":"DEBUG",
         "dugme":"DUGME"
+    },
+    "input-username":{
+        "place":"Korisnicko ime",
+        "button":"Posalji email",
+        "title":"Unesite korisnicko ime"
+    },
+    "changepass":{
+        "title":"Promeni lozinku",
+        "pass1":"Nova lozinka",
+        "pass2":"Ponovi lozinku",
+        "button":"Izmeni"
+    },
+    "edit-profile":{
+        "title1":"Izmeni profil",
+        "pass1":"Lozinka",
+        "submit1":"Izmeni",
+        "title2":"Izmeni email",
+        "pass2":"Lozinka",
+        "submit2":"Izmeni",
+        "title3":"Izmeni lozinku",
+        "newpass1":"Nova lozinka",
+        "newpass2":"Ponovi lozinku",
+        "pass3":"Unesi trenutnu lozinku",
+        "submit3":"Izmeni"
     }
-
 
 
 

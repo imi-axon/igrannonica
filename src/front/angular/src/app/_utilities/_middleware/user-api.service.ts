@@ -48,9 +48,27 @@ export class UserApiService {
     return this.http.post<any>(apiProperties.url+"/api/users/"+username+"/changepass", null);
   }
 
-  edituser(model:any):Observable<any>{
+  edituser1(model:any):Observable<any>{
     //return this.http.put<any>(apiProperties.url+"/api/users/edit-user", model);
-    let response = this.http.put<any>(apiProperties.url + "/api/users/edituser", model,
+    let response = this.http.put<any>(apiProperties.url + "/api/users/edit/user", model,
+      {
+        observe: "response",
+        headers: HeaderUtil.jwtOnlyHeaders()
+      });
+    return response
+  }
+  edituser2(model:any):Observable<any>{
+    //return this.http.put<any>(apiProperties.url+"/api/users/edit-user", model);
+    let response = this.http.put<any>(apiProperties.url + "/api/users/edit/email", model,
+      {
+        observe: "response",
+        headers: HeaderUtil.jwtOnlyHeaders()
+      });
+    return response
+  }
+  edituser3(model:any):Observable<any>{
+    //return this.http.put<any>(apiProperties.url+"/api/users/edit-user", model);
+    let response = this.http.put<any>(apiProperties.url + "/api/users/edit/password", model,
       {
         observe: "response",
         headers: HeaderUtil.jwtOnlyHeaders()

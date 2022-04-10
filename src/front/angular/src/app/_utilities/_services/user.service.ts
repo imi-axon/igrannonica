@@ -6,13 +6,14 @@ import { EditUser } from '../_data-types/models';
 import { JWTUtil } from '../_helpers/jwt-util';
 import { UserApiService } from '../_middleware/user-api.service';
 import { UserRegistration } from '../_data-types/models';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
   @Input() user:UserRegistration;
-  constructor(private userAPI:UserApiService, private http:HttpClient, private router:Router) { }
+  constructor(private userAPI:UserApiService, private http:HttpClient, private router:Router, public auth:AuthService) { }
   
   
     Register(applicantData: any, self?: any, successCallback?: Function, badRequestCallback?: Function, forbiddenCallback?: Function) {
@@ -102,13 +103,42 @@ export class UserService {
       )
     }
 
-    editUser(model:EditUser)
+    editUser1(model:EditUser)
     {
       console.log(model.lastname);
-      this.userAPI.edituser(model).subscribe(
+      this.userAPI.edituser1(model).subscribe(
+        res=>{
+          JWTUtil.delete();
+          this.auth.logovan=false;
+          this.auth.korisnickoIme='';
+          console.log("Uspesno editovan korisnik");
+          this.router.navigate(['login'])
+        },
+        err=>{
+          console.log(err)
+        }
+      )
+    }
+    editUser2(model:EditUser)
+    {
+      console.log(model.lastname);
+      this.userAPI.edituser2(model).subscribe(
         res=>{
           console.log("Uspesno editovan korisnik");
-          //this.router.navigate(['login'])
+          this.router.navigate(['login'])
+        },
+        err=>{
+          console.log(err)
+        }
+      )
+    }
+    editUser3(model:EditUser)
+    {
+      console.log(model.lastname);
+      this.userAPI.edituser3(model).subscribe(
+        res=>{
+          console.log("Uspesno editovan korisnik");
+          this.router.navigate(['login'])
         },
         err=>{
           console.log(err)

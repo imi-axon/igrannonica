@@ -104,15 +104,39 @@ namespace BackApi.Controllers
             return BadRequest();
         }
 
-        [HttpPut("edituser")]
+        [HttpPut("edit/user")]
         public async Task<ActionResult<string>> EditUser(UserEdit user)
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
-            bool pass = korsrv.CheckPass(userid, user.oldpassword);
+            bool pass = korsrv.CheckPass(userid, user.oldpassword1);
             if (!pass)
                 return "nESTO NIJE U REDU";
             bool rez = korsrv.EditUser(userid, user);
+            return Ok();
+        }
+
+        [HttpPut("edit/email")]
+        public async Task<ActionResult<string>> EditEmail(UserEdit user)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            bool pass = korsrv.CheckPass(userid, user.oldpassword2);
+            if (!pass)
+                return "NESTO NIJE U REDU";
+            bool rez = korsrv.EditEmail(userid, user);
+            return Ok();
+        }
+
+        [HttpPut("edit/password")]
+        public async Task<ActionResult<string>> EditPass(UserEdit user)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            bool pass = korsrv.CheckPass(userid, user.oldpassword3);
+            if (!pass)
+                return "NESTO NIJE U REDU";
+            bool rez = korsrv.EditPassword(userid, user);
             return Ok();
         }
         [HttpGet("{username}/getuser")]

@@ -31,32 +31,53 @@ export class RegistrationCheck
 
 export class UserEditCheck
 {
-  public invalidRegistration = true;
-  
+  public invalidRegistration1 = true;
+  public invalidRegistration2 = true;
+  public invalidRegistration3 = true;
   public invalidName:boolean = true;
   public invalidLastname:boolean = true;
   public invalidUsername:boolean = true;
-  public invalidEmail:boolean = false;
-  public invalidOldPassword: boolean = true;
-  public invalidPassword:boolean = false;
-  public invalidPasswordAgain:boolean = false;
+  public invalidEmail:boolean = true;
+  public invalidOldPassword1: boolean = true;
+  public invalidOldPassword2: boolean = true;
+  public invalidOldPassword3: boolean = true;
+  public invalidPassword:boolean = true;
+  public invalidPasswordAgain:boolean = true;
   
   constructor() {
-      this.invalidRegistration = true;
+      this.invalidRegistration1 = true;
+      this.invalidRegistration2 = true;
+      this.invalidRegistration3 = true;
       this.invalidName = true;
       this.invalidLastname = true;
       this.invalidUsername = true;
-      this.invalidEmail = false;
-      this.invalidOldPassword =true;
-      this.invalidPassword = false;
-      this.invalidPasswordAgain = false;
+      this.invalidEmail = true;
+      this.invalidOldPassword1 =true;
+      this.invalidOldPassword2 =true;
+      this.invalidOldPassword3 =true;
+      this.invalidPassword = true;
+      this.invalidPasswordAgain = true;
   }
   
-  public checkForm(){
-      if(this.invalidName || this.invalidOldPassword || this.invalidLastname || this.invalidUsername || this.invalidEmail || this.invalidPassword || this.invalidPasswordAgain)
-          this.invalidRegistration = true;
+  public checkForm1(){
+      if(this.invalidName || this.invalidOldPassword1 || this.invalidLastname || this.invalidUsername)
+          this.invalidRegistration1 = true;
       else
-          this.invalidRegistration = false;
+          this.invalidRegistration1 = false;
+  }
+
+  public checkForm2(){
+    if(this.invalidOldPassword2 || this.invalidEmail)
+        this.invalidRegistration2 = true;
+    else
+        this.invalidRegistration2 = false;
+  }
+
+  public checkForm3(){
+    if(this.invalidOldPassword3 || this.invalidPassword || this.invalidPasswordAgain)
+        this.invalidRegistration3 = true;
+    else
+        this.invalidRegistration3 = false;
   }
 }
 export class UserRegistration
@@ -81,7 +102,9 @@ export class EditUser
     public firstname:string = "";
     public lastname:string = "";
     public username: string = "";
-    public oldpassword: string="";
+    public oldpassword1: string="";
+    public oldpassword2: string="";
+    public oldpassword3: string="";
     public newpassword: string = "";
     public email: string = "";
     
@@ -89,7 +112,9 @@ export class EditUser
         this.firstname = "";
         this.lastname = "";
         this.username = "";
-        this.oldpassword = "";
+        this.oldpassword1 = "";
+        this.oldpassword2 = "";
+        this.oldpassword3 = "";
         this.newpassword = "";
         this.email = "";
     }
