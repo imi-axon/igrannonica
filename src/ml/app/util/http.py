@@ -1,13 +1,22 @@
 import httpx
 
-baseurl = 'https://localhost:7057/'
+baseURL = 'https://localhost:7057/'
+baseHeaders = {'Host':'localhost:8000'}
+sslVerify = False
 
-def get(filepath: str, binary: bool = False) -> str | bytes:
-    path = baseurl + filepath
-    path = path.replace('\\', '/')
-    response = httpx.get(path, verify=False, headers = {'Host':'localhost:8000'})
+def get(filepath: str, decode: bool = True) -> str | bytes:
     
-    # print(f'>||||>>>>> {response.read().decode()}')
-    # for (hk, hv) in response.headers.multi_items():
-    #     print(f'{hk}: {hv}')
-    return response.read() if binary else response.read().decode()
+    path = baseURL + filepath
+    path = path.replace('\\', '/')
+    response = httpx.get(path, verify = sslVerify, headers = baseHeaders)
+
+    return response.read() if (not decode) else response.read().decode()
+
+
+def put(filepath: str) -> bool:
+
+    path = baseURL + filepath
+    path = path.replace('\\', '/')
+    response = httpx.put(path, verify = sslVerify, headers = {'Host':'localhost:8000'})
+
+    return response.status_code == 200 or response.status_code == 201

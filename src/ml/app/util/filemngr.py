@@ -26,6 +26,15 @@ class FileMngr():
             f.write(content)
             f.close()
 
+    def read_b(self) -> bytes:
+        f = open(self.filepath, 'rb')
+        return f.read()
+
+    def read_s(self) -> str:
+        f = open(self.filepath, 'r')
+        return f.read()
+
+
     def delete(self, delay: int | None = None):
         def to_delete_file(sleep_time, file_path):
             print(f'to delete file begin | {self.filename}')
