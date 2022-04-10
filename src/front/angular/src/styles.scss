@@ -66,6 +66,16 @@ body{
     height: 100%;
     background-color: #00020A;
     
+    overflow-y: hidden;
+    
+    // SAKRIVANJE SCROLLBAR-A
+    &::-webkit-scrollbar{
+        display: none;
+    }
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;
+    
+    
 }
 
 

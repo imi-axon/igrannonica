@@ -49,6 +49,7 @@ import { EditProfilePageComponent } from './_components/_pages/edit-profile-page
 import { EditProfileFormComponent } from './_components/_elements/edit-profile-form/edit-profile-form.component';
 import { StatisticsComponent } from './_components/_elements/statistics/statistics.component';
 import { DataSetTableComponent } from './_components/_elements/data-set-table/data-set-table.component';
+import { LandingPageSelectorComponent } from './_components/_elements/landing-page-selector/landing-page-selector.component';
 
 
 
@@ -88,7 +89,8 @@ import { DataSetTableComponent } from './_components/_elements/data-set-table/da
     LandingNavComponent,
     EditProfilePageComponent,
     EditProfileFormComponent,
-    StatisticsComponent
+    StatisticsComponent,
+    LandingPageSelectorComponent
 
   ],
   imports: [

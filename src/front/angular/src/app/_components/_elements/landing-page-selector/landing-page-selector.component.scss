@@ -1,0 +1,40 @@
+#selector{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    height: 100%;
+}
+
+svg{
+    cursor: pointer;
+}
+
+.optionDotSelected{
+    fill:#FFFFFF;
+    stroke:#FFFFFF;
+    stroke-width:0.5px;
+}
+
+.optionDot{
+    fill:#ffffff88;
+    stroke:#FFFFFF88;
+    stroke-width:0.5px;
+}
+
+.optionBorderSelected{
+    fill: none;
+    stroke:#FFFFFF;
+    stroke-width:0.5px;
+    
+    transition: 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+    
+    transform-origin: center center;
+    transform: scale(1, 1);
+}
+
+.optionBorder{
+    transition: 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+    transform-origin: center center;
+    transform: scale(0, 0);
+}

@@ -29,6 +29,7 @@
     "bootstrap-select": "^1.13.18",
     "crypto-js": "^4.1.1",
     "d3": "^7.4.3",
+    "gsap": "^3.10.2",
     "js-sha512": "^0.8.0",
     "ngx-csv-parser": "^0.0.7",
     "ngx-papaparse": "^5.1.0",
