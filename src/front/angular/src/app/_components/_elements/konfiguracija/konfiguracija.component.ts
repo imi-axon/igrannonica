@@ -15,6 +15,7 @@ export class KonfiguracijaComponent implements OnInit {
   public regularization: string='None';
   public regularizationRate: number=0;
   public epoch: number;
+  public activation:string='Tanh';
   private selektovano: any;
   private idSelektovanog: any;
   public batchSize: number = 15;
@@ -64,6 +65,9 @@ export class KonfiguracijaComponent implements OnInit {
         break;
       case "batchSlider":
         this.batchSize = this.selektovano;
+        break;
+      case "Activation":
+        this.activation = this.selektovano;
         break;
     }
   }

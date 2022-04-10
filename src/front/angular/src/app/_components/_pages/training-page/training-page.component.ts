@@ -27,8 +27,26 @@ export class TrainingPageComponent implements OnInit {
 
   public treniraj() {
     console.log("pokrecem treniranje projekta" + this.projectId);
-    console.log("podaci:" + this.konfiguracija.learningRate + this.konfiguracija.regularization + this.konfiguracija.regularizationRate + this.konfiguracija.batchSize + this.konfiguracija.inputs + this.konfiguracija.outputs);
-     let conf: any = {learningRate:this.konfiguracija.learningRate, regularization:this.konfiguracija.regularization, regularizationRate:this.konfiguracija.regularizationRate, batchSize:this.konfiguracija.batchSize, inputs:this.konfiguracija.inputs,outputs:this.konfiguracija.outputs};
-     this.wsService.train(this.projectId,conf);
+    console.log("podaci:"
+      + "\n" + this.konfiguracija.learningRate
+      + "\n" + this.konfiguracija.regularization
+      + "\n" + this.konfiguracija.regularizationRate
+      + "\n" + this.konfiguracija.batchSize
+      + "\n" + this.konfiguracija.inputs
+      + "\n" + this.konfiguracija.outputs
+      + "\n" + this.konfiguracija.activation);
+      
+    let conf: any = {
+
+      inputs: this.konfiguracija.inputs, //str[]
+      outputs: this.konfiguracija.outputs, //str[]
+      neuronsPerLayer: [1, 2], //int[]
+      actPerLayer: ['Sigmoid', 'Sigmoid'], //str[]
+      learningRate: this.konfiguracija.learningRate, //float
+      reg: this.konfiguracija.regularization, //REG ,str?
+      regularizationRate: this.konfiguracija.regularizationRate, //float
+      batchSize: this.konfiguracija.batchSize //int
+    };
+    this.wsService.train(this.projectId, conf);
   }
 }
