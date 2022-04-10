@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net.WebSockets;
 using System.Net;
 using System.Text;
+using System.Diagnostics;
 
 namespace BackApi.Controllers
 {
@@ -72,6 +73,15 @@ namespace BackApi.Controllers
                 return BadRequest();
             if (rez.StatusCode == HttpStatusCode.OK) return Ok(new {id=nnid});
             return BadRequest();        
+        }
+
+        [HttpGet("{id}/nn")]
+        public async Task<ActionResult<string>> ListNN(int id)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized("Ulogujte se");
+            string rez = nnsrv.ListNN(userid, id);
+            return rez;
         }
     }
 }
