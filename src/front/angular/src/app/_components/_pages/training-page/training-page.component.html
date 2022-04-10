@@ -1,1 +1,4 @@
-<app-konfiguracija></app-konfiguracija>
+<app-konfiguracija #konf></app-konfiguracija>
+<div class="d-flex justify-content-center mt-5">
+    <button class="btn btn-primary" (click)="treniraj()" [disabled]="!konf.gotovoOutputi">TRENIRAJ</button>
+</div>

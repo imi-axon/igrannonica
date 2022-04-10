@@ -64,19 +64,34 @@
         <button class="btn btn-primary" (click)="prikaziOutput()" [disabled]="!gotovoInputi || gotovoOutputi">Izaberi output-e</button>
     </div>
 
-    <div id="inputs" *ngIf="prikaziInpute">
-        <div class="container" *ngFor="let c of columns ; index as i">
-            inp
+    <div class="checkBoxovi mt-3" *ngIf="prikaziInpute">
+        <div class="form-check form-check-inline" *ngFor="let c of columns ; index as i">
            <input type="checkbox" id="input{{i}}" (click)="inputClick($event)" [value]="c"> {{c}}
         </div>
-        <button class="btn btn-primary" (click)="potvrdiInp()" [disabled]="inputs.length==0">Potvrdi</button>
+        <button class="btn btn-sm btn-primary" (click)="potvrdiInp()" [disabled]="inputs.length==0">Potvrdi</button>
     </div>
 
-    <div id="inputs" *ngIf="prikaziOutpute">
-        <div class="container" *ngFor="let c of columns ; index as i">
-            out
+    <div class="checkBoxovi mt-3" *ngIf="prikaziOutpute">
+        <div class="checkBoxovi form-check form-check-inline" *ngFor="let c of slobodneKolone ; index as i">
            <input type="checkbox" id="output{{i}}" (click)="outputClick($event)" [value]="c"> {{c}}
         </div>
-        <button class="btn btn-primary" (click)="potvrdiOut()" [disabled]="outputs.length==0">Potvrdi</button>
+        <button class="btn btn-sm btn-primary" (click)="potvrdiOut()" [disabled]="outputs.length==0">Potvrdi</button>
     </div>
+    <div class="">
+        <div *ngIf="gotovoInputi">
+            Izabrani inputi: 
+            <div class="inout d-inline" *ngFor="let i of inputs">
+                {{i}}
+            </div>
+        </div>
+      
+        <div *ngIf="gotovoOutputi">
+            Izabrani outputi:
+            <div *ngFor="let o of outputs" class="inout d-inline">
+                {{o}}
+            </div>
+        </div>
+
+    </div>
+
 </div>

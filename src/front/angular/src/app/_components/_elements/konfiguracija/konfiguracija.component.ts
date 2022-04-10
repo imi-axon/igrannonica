@@ -11,22 +11,24 @@ export class KonfiguracijaComponent implements OnInit {
 
   constructor(private datasetService: DatasetService, private activatedRoute: ActivatedRoute) { }
 
-  private learningRate: number;
-  private regularization: string;
-  private regularizationRate: number;
-  private epoch: number;
+  public learningRate: number=0.003;
+  public regularization: string='None';
+  public regularizationRate: number=0;
+  public epoch: number;
   private selektovano: any;
   private idSelektovanog: any;
   public batchSize: number = 15;
   private projectID: any;
   public dataset: any;
   public columns: any = [];
+  public slobodneKolone:any=[];
   public inputs: string[];
   public outputs: string[];
   public prikaziInpute = false;
   public prikaziOutpute = false;
   public gotovoInputi = false;
   public gotovoOutputi = false;
+  public trenutneVr:any=[];
 
   ngOnInit(): void {
     this.projectID = this.activatedRoute.snapshot.paramMap.get("ProjectId");
@@ -35,10 +37,10 @@ export class KonfiguracijaComponent implements OnInit {
 
     //ZAMENITI F-JOM KOJA DOVLACI SAMO KOLONE
     this.datasetService.GetDataset(this.projectID, true, this, this.successCallback);
-
   }
 
   successCallback(self: any, data: any) {
+    console.log("uso");
     console.log(data);
     self.dataset = JSON.parse(data.dataset);
     self.columns = Object.keys(self.dataset[0]);
@@ -126,23 +128,11 @@ export class KonfiguracijaComponent implements OnInit {
     };
   }
 
-  // public prikaziInput(){
-  //   if(this.prikaziInpute==false) {
-  //     if(this.prikaziOutpute==true) this.prikaziOutpute=false;
-  //     this.prikaziInpute=true;
-  //   }
-  //   else this.prikaziInpute=false;
-  // }
-
-  // public prikaziOutput(){
-  //   if(this.prikaziOutpute==false){
-  //     if(this.prikaziInpute==true) this.prikaziInpute=false;
-  //     this.prikaziOutpute=true;}
-  //   else this.prikaziOutpute=false;
-  // }
-
   public potvrdiInp() {
     this.prikaziInpute = false;
+    this.slobodneKolone=this.columns.filter((i: string)=>!this.inputs.includes(i));
+    // ((element: string)=>{this.inputs.indexOf(element)==-1;});
+    console.log(this.slobodneKolone);
     this.gotovoInputi = true;
     this.prikaziOutpute = true;
   }
