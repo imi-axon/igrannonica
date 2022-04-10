@@ -1,5 +1,5 @@
 import os
-from threading import Lock, Thread
+from threading import Lock, Thread, current_thread
 from time import sleep, time
 from typing import Dict, List
 from tempfile import TemporaryFile
@@ -114,8 +114,8 @@ def get_statistics(body: Dataset):
     return { 'statistics': stats }
 
 
-# Get Dataset Statistics
-@app.get('/api/nn/new/default', status_code=200)
+# Get Default NN file
+@app.get('/api/nn/model/default', status_code=200)
 def get_default_nn():
     
     f = FileMngr('h5')
@@ -124,71 +124,89 @@ def get_default_nn():
 
     return FileResponse(f.path())
 
+# Get Default NN Config
+@app.get('/api/nn/conf/default', status_code=200)
+def get_default_nn():
+    
+    def_conf = {
+        'inputs' :          [],
+        'outputs' :         [],
+        'neuronsPerLayer' : [3, 2],
+        'actPerLayer' :     ['relu', 'relu'],
+        'learningRate' :    0.1,
+        'reg' :             'L1',
+        'regRate' :         0.1,
+        'batchSize' :       1,
+        'trainSplit' :      0.8,
+        'valSplit' :        0.2
+    }
+
+    return def_conf
+
 
 # ==== WebSockets ====
 
 @app.websocket("/api/nn/train/start")
 async def training_stream(ws: WebSocket):
+    start_time = time()
+
     await ws.accept()
     await ws.send_bytes(b'') # confirm
     print('Accepted')
     
     data = await ws.receive_json()
 
-    print(data)
+    # print(data)
     print(data['conf'])
     datasetlink = data['dataset']
     nnlink = data['nn']
     conf = json_decode(data['conf'])
 
+    # TEMP
+    conf['actPerLayer'] = ['relu' for _ in range(3)]
+    conf['neuronsPerLayer'] = [3 for _ in range(3)]
+
     buff: List[bytes] = []
     lock: Lock = Lock()
 
-    # await ws.send_bytes('1')
-    # await ws.send_bytes('2')
-    # await ws.send_bytes('3')
-
-    # await ws.close(code=1000)
-    # return
-
     try:
-        t = time()
-        print('try')
-        th = Thread(target=TrainingInstance(buff, lock).train, args=(datasetlink, nnlink, conf['inputs'], conf['outputs']))
-        print('new th')
+        th = Thread(target=TrainingInstance(buff, lock).train, args=(datasetlink, nnlink, conf))
         th.start()
-        print('th start')
+
+        finished = False
+
         # i = 0
-        while True:
-            # print(buff)
-            print('>>')
-            # if i < 3:
-            #     print('')
-            #     sleep(1)
-            #     i += 1
+        while not finished:
+            
+            lock.acquire(blocking=True) # [ X ]
             if len(buff) > 0:
-                lock.acquire(blocking=True)
-                b: bytes = buff.pop(0)
-                lock.release()
+                b = buff.pop(0)
+                lock.release() # [   ]
                 print(b)
-                if b == b'':
-                    print(':::: empty')
-                    while len(buff) == 0:
-                        sleep(0.001)
-                    lock.acquire(blocking=True)
+                
+                if b == b'': 
+                    await ws.send_text(b) # >>>>
+                    while True:
+                        lock.acquire(blocking=True) # [ X ]
+                        if len(buff) > 0:
+                            break
+                        lock.release() # [   ]
+
                     b = buff.pop(0)
-                    lock.release()
-                    await ws.send_text(b)
-                    await ws.close(code=1000)
-                    print(b.decode('utf-8'))
-                    break
+                    lock.release() # [   ]
+
+                    await ws.send_text(b) # >>>>
+                    finished = True
+                    
                 else:
                     print('>>> send bytes')
-                    # await ws.send_text(b.decode('utf-8'))
-                    await ws.send_text(b)
+                    await ws.send_text(b) # >>>>
 
-        th.join()
-        print(f'time: {time()-t}')
+            else:
+                lock.release() # [   ]
+
+        print(f'time: { time() - start_time }')
+        await ws.close(code = 1000)
 
     except WebSocketDisconnect:
         pass
