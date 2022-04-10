@@ -40,10 +40,10 @@ export class TrainingPageComponent implements OnInit {
 
       inputs: this.konfiguracija.inputs, //str[]
       outputs: this.konfiguracija.outputs, //str[]
-      neuronsPerLayer: [1, 2], //int[]
-      actPerLayer: ['Sigmoid', 'Sigmoid'], //str[]
+      neuronsPerLayer: [3, 3], //int[]
+      actPerLayer: ['sigmoid', 'sigmoid'], //str[]
       learningRate: this.konfiguracija.learningRate, //float
-      reg: this.konfiguracija.regularization, //REG ,str?
+      reg: this.konfiguracija.regularization, //str
       regularizationRate: this.konfiguracija.regularizationRate, //float
       batchSize: this.konfiguracija.batchSize //int
     };
