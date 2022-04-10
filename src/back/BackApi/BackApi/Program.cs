@@ -54,7 +54,7 @@ builder.Services.AddScoped<IProjectService,ProjectService>();
 builder.Services.AddScoped<IDatasetService,DatasetService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IStorageService, StorageService>();
-builder.Services.AddScoped<IWSService, WSService>();
+builder.Services.AddScoped<INNservice, NNservice>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddCors(options =>
