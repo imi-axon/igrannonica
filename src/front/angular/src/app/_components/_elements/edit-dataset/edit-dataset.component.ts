@@ -42,7 +42,7 @@ export class EditDatasetComponent implements OnInit {
   
   ngOnInit(): void {
     // Moze se ukljuciti za testiranje prikaza
-     this.LoadTestData();
+    this.LoadTestData();
   }
   
   

@@ -9,17 +9,12 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './_components/_elements/navbar/navbar.component';
 import { SidebarComponent } from './_components/_elements/sidebar/sidebar.component';
-import { DataSetPageComponent } from './_components/_pages/data-set-page/data-set-page.component';
-import { DataSetTableComponent } from './_components/_elements/data-set-table/data-set-table.component';
-import { observable } from 'rxjs';
 import { RegistrationFormComponent } from './_components/_elements/registration-form/registration-form.component';
-import { RegistrationPageComponent } from './_components/_pages/registration-page/registration-page.component';
 import { FileInputComponent } from './_components/_elements/file-input/file-input.component';
 import { FormsModule } from '@angular/forms';
 import { RegistrationSuccessfulComponent } from './_components/_pages/registration-successful/registration-successful.component';
 import { LoginFormComponent } from './_components/_elements/login-form/login-form.component';
 import { NewProjectComponent } from './_components/_elements/new-project/new-project.component';
-import { StatisticsPageComponent } from './_components/_pages/statistics-page/statistics-page.component';
 import { DatasetService } from './_utilities/_services/dataset.service';
 import { NgxCsvParserModule } from 'ngx-csv-parser';
 import { HomeComponent } from './_components/_elements/home/home.component';
@@ -46,14 +41,14 @@ import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CreateNeuralNetworkComponent } from './_components/_elements/create-neural-network/create-neural-network.component';
 import { DatasetOptionsComponent } from './_components/_elements/dataset-options/dataset-options.component';
-import { StatisticsComponent } from './_components/_elements/statistics/statistics.component';
 import { ProjectPageStatisticsEditComponent } from './_components/_pages/project-page-statistics-edit/project-page-statistics-edit.component';
 // import { StatisticsPageNewComponent } from './_components/_pages/statistics-page-new/statistics-page-new.component';
 import { NeuralNetworkDisplayComponent } from './_components/_elements/neural-network-display/neural-network-display.component';
 import { LandingNavComponent } from './_components/_elements/landing-nav/landing-nav.component';
 import { EditProfilePageComponent } from './_components/_pages/edit-profile-page/edit-profile-page.component';
 import { EditProfileFormComponent } from './_components/_elements/edit-profile-form/edit-profile-form.component';
-
+import { StatisticsComponent } from './_components/_elements/statistics/statistics.component';
+import { DataSetTableComponent } from './_components/_elements/data-set-table/data-set-table.component';
 
 
 
@@ -64,13 +59,11 @@ import { EditProfileFormComponent } from './_components/_elements/edit-profile-f
     FileInputComponent,
     NavbarComponent, 
     SidebarComponent,
-    DataSetTableComponent,
     LoginFormComponent,
     RegistrationFormComponent, 
     RegistrationSuccessfulComponent,
     LoginFormComponent,
     NewProjectComponent,
-    StatisticsPageComponent,
     HomeComponent,
     LoaderComponent,
     ListaProjekataComponent,
@@ -81,20 +74,22 @@ import { EditProfileFormComponent } from './_components/_elements/edit-profile-f
     NavbarNoviComponent,
     VerificationComponent,
     EditDatasetComponent,
-
+    DataSetTableComponent,
+    
     ChangepassFormComponent,
     ChangepassPageComponent,
     InputusernamePageComponent,
     InputusernameFormComponent,
     CreateNeuralNetworkComponent,
     DatasetOptionsComponent,
-    StatisticsComponent,
     ProjectPageStatisticsEditComponent,
     // StatisticsPageNewComponent,
     NeuralNetworkDisplayComponent,
     LandingNavComponent,
     EditProfilePageComponent,
-    EditProfileFormComponent
+    EditProfileFormComponent,
+    StatisticsComponent
+
   ],
   imports: [
     NgxCsvParserModule,

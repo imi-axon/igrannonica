@@ -96,6 +96,7 @@ export class EditUser
 }
 /* REGISTRACIJA */
 
+
 /*LOGIN*/
 export class UserLogin
 {
@@ -109,6 +110,8 @@ export class UserLogin
 } 
 /*LOGIN*/ 
 
+
+/* PROJEKAT */
 export class NewProject
 {
     public name:string="";
@@ -148,5 +151,24 @@ export class NewNN{
         this.name=";"
     }
 }
+/* PROJEKAT */
 
 
+/* MREZA */
+/*
+class Neuron{
+    weights: number[] = [];
+    bias: number;
+}
+class Layer{
+    neurons: Neuron[] = [];
+}
+class Network{
+    layers: Layer[] = [];
+}
+export class NeuralNetwork{
+    network: Network = new Network();
+    configuration: any;
+}
+*/
+/* MREZA */

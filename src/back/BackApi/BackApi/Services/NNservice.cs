@@ -9,7 +9,7 @@ using System.Text;
 
 namespace BackApi.Services
 {
-    public interface IWSService
+    public interface INNservice
     {
         public Task MlTraining(WebSocket webSocket, ApiNNTrain packet);
         public Task<HttpResponseMessage> NNCreateTemp(int id,string name);
@@ -17,13 +17,13 @@ namespace BackApi.Services
         public string NNIdToPath(int nnid);
     }
 
-    public class WSService: IWSService
+    public class NNservice: INNservice
     {
         private DataBaseContext kontext;
         private readonly IConfiguration configuration;
         private static IStorageService storageService = new StorageService();
 
-        public WSService(DataBaseContext datasetContext, IConfiguration configuration)
+        public NNservice(DataBaseContext datasetContext, IConfiguration configuration)
         {
             kontext = datasetContext;
             this.configuration = configuration;
@@ -55,7 +55,7 @@ namespace BackApi.Services
                     {
                         webSocket.Abort();
                         webSocket.Dispose();
-                        await webSocketMl.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
+                        await webSocketMl.CloseAsync(resultml.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
                         webSocketMl.Abort();
                         webSocketMl.Dispose();
                     

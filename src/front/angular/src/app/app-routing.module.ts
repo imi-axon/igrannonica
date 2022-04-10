@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { EditDatasetComponent } from './_components/_elements/edit-dataset/edit-dataset.component';
-import { StatisticsComponent } from './_components/_elements/statistics/statistics.component';
 import { NeuralNetworkDisplayComponent } from './_components/_elements/neural-network-display/neural-network-display.component';
 import { ChangepassPageComponent } from './_components/_pages/changepass-page/changepass-page.component';
 import { DataSetPageComponent } from './_components/_pages/data-set-page/data-set-page.component';
@@ -17,9 +16,8 @@ import { ProjectPageStatisticsEditComponent } from './_components/_pages/project
 import { ProjectPageComponent } from './_components/_pages/project-page/project-page.component';
 import { RegistrationPageComponent } from './_components/_pages/registration-page/registration-page.component';
 import { RegistrationSuccessfulComponent } from './_components/_pages/registration-successful/registration-successful.component';
-import { StatisticsPageComponent } from './_components/_pages/statistics-page/statistics-page.component';
 import { VerificationComponent } from './_components/_pages/verification-page/verification.component';
-
+import { StatisticsComponent } from './_components/_elements/statistics/statistics.component';
 const routes: Routes = [
   {path:'train/:ProjectId/:Inputs/:Outputs',component:ProjectPageComponent},
   {path:'new-project', component:NewProjectPageComponent},
@@ -59,13 +57,12 @@ const routes: Routes = [
 export class AppRoutingModule { }
 
 //Kada se dodaje nova putanja, dodati je u niz
-export const routingComponents=[ProjectPageComponent, NewProjectPageComponent,
-   DataSetPageComponent, StatisticsPageComponent, LoginPageComponent, RegistrationPageComponent,
-
-   HomePageComponent,MyProjectsPageComponent,ProfilPageComponent,VerificationComponent,ProjectPageStatisticsEditComponent,
-  StatisticsComponent,EditDatasetComponent
-
-  // ,EditDatasetPageComponent
-
+export const routingComponents=[
+  ProjectPageComponent, NewProjectPageComponent,
+  DataSetPageComponent, LoginPageComponent, RegistrationPageComponent,
+  
+  HomePageComponent,MyProjectsPageComponent,ProfilPageComponent,VerificationComponent,ProjectPageStatisticsEditComponent,
+  StatisticsComponent,EditDatasetComponent,
+  
   //TESTIRANJE - OBRISATI KASNIJE
-  ,NeuralNetworkDisplayComponent];
+  NeuralNetworkDisplayComponent];

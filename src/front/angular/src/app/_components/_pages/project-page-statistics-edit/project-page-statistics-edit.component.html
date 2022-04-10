@@ -1,3 +1,4 @@
+<navbar></navbar>
 <div class="container p-5">
     <div class="row title-section">
         <p> <span> <a href='/my-projects'>{{'edit-dataset-page.naslov1'|translate}}/ </a>
@@ -6,11 +7,22 @@
     </div>
     <div class="row">
         <div class="col-11">
-            <router-outlet></router-outlet>
+            <router-outlet (activate)="OnActivate($event)"> </router-outlet>
         </div>
         <div class="col-1">
             <app-opcije-dataset></app-opcije-dataset>
-            <app-opcije-edit-dataset *ngIf="projectsService.edit"></app-opcije-edit-dataset>
+            <app-opcije-edit-dataset *ngIf="showsEditOptions"
+                (RemoveColumnsClicked)="RemoveColumns()"
+                (RemoveNullRowsClicked)="RemoveNullRows()"
+                (FillNullRowsCatClicked)="FillNullRowsWithCat()"
+                (FillNullRowsAverageClicked)="FillNullRowsWithMean()"
+                (FillNullRowsMedianClicked)="FillNullRowsWithMedian()"
+                (RemoveDuplicatesClicked)="RemoveDuplicates()"
+                (EncodeColumnsOneHotClicked)="OneHotEncoding()"
+                (EncodeColumnsLabelClicked)="LabelEncoding()">
+            </app-opcije-edit-dataset>
         </div>
     </div>
+    
+    <!-- <loader #loader class="loader"></loader> -->
 </div>
