@@ -51,8 +51,8 @@ class DatasetCreator():
         self.gen_dataset(False)
         return self.join_cols()
 
-    def create_file(self, path = './', name = 'dataset', ext = '.csv'):
-        fullpath = path + name + ext
+    def create_file(self, path = './', name = 'dataset', ext = 'csv'):
+        fullpath = path + name + '.' + ext
         s = self.create()
         f = open(fullpath, 'w')
         f.write(s)

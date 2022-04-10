@@ -6,24 +6,28 @@ from typing import Callable, Coroutine, List
 from os import SEEK_SET
 from tempfile import TemporaryFile
 import time
+import threading
 
-def f():
-    # zahtev za fajl
-    t1 = time.time()
-    resp = httpx.get('https://localhost:7057/Storage/csv2.csv', verify = False, headers = {'Host':'localhost:8000'})
-    t1 = time.time() - t1
 
-    # postojeci fajl
-    t2 = time.time()
-    new_file = open('./csv2.csv', 'wb')
-    new_file.write(resp.read())
 
-    new_file.close()
-    t2 = time.time() - t2
 
-    print(f'request: {t1}s, write: {t2}s')
+# def f():
+#     # zahtev za fajl
+#     t1 = time.time()
+#     resp = httpx.get('https://localhost:7057/Storage/csv2.csv', verify = False, headers = {'Host':'localhost:8000'})
+#     t1 = time.time() - t1
 
-f()
+#     # postojeci fajl
+#     t2 = time.time()
+#     new_file = open('./csv2.csv', 'wb')
+#     new_file.write(resp.read())
+
+#     new_file.close()
+#     t2 = time.time() - t2
+
+#     print(f'request: {t1}s, write: {t2}s')
+
+# f()
 
 # # privremeni prazan
 # temp_file = TemporaryFile()
