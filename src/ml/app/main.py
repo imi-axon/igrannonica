@@ -7,10 +7,9 @@ from tempfile import TemporaryFile
 # FastAPI
 from fastapi import FastAPI, Request, Response, WebSocketDisconnect, status, WebSocket
 from fastapi.responses import PlainTextResponse, FileResponse
-from models import TrainingRequest
 
 # Models
-from models import Dataset, DatasetEditActions, Statistics, TempTrainingInstance, WsConn
+from models import Dataset, DatasetEditActions, Statistics, TempTrainingInstance, WsConn, NNCreate
 
 # Utils
 from util.csv import csv_is_valid, csv_decode, csv_decode_2
@@ -115,9 +114,14 @@ def get_statistics(body: Dataset):
     return { 'statistics': stats }
 
 
-# Get Default NN file
+# Update NN and CONF
 @app.put('/api/nn/default', status_code=200)
-def get_default_nn():
+def update_with_default_nn(body: NNCreate):
+
+    print(body)
+
+    headers = csv_decode(body.headers)[0]
+    print(headers)
 
     # TEMP --
     inputs = ['A']
@@ -128,6 +132,7 @@ def get_default_nn():
     nnmodel.new_default_model(inputs, outputs)
     fm = FileMngr('h5')
     nnmodel.save_model(fm.directory(), fm.name())
+    print(f'PUT NN: {httpc.put(body.nn, fm.path())}')
     fm.delete()
 
     def_conf = {
@@ -146,6 +151,7 @@ def get_default_nn():
 
     fc = FileMngr('json')
     fc.create(json_encode(def_conf))
+    print(f'PUT CONF: {httpc.put(body.conf, fc.path())}')
     fc.delete()
     
 
