@@ -1,54 +1,46 @@
-<div class=" c1 mt-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-6 d-flex justify-content-center">
-                <div class="input-group input-group-sm pe-5">
-                    <button type="button" class=" dugme btn btn-primary input-group-text">
-                        <i class="fas fa-search"></i>
-                    </button>
-                    <input type="text" class="form-control" placeholder="{{'lista-mreza.search'|translate}}"
-                        aria-label="Small" [(ngModel)]="searchTerm" aria-describedby="inputGroup-sizing-sm" />
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-6 d-flex justify-content-start">
+                    <div class="input-group input-group-sm pe-5">
+                        <button type="button" class=" dugme btn btn-primary input-group-text">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <input type="text" class="form-control" placeholder="{{'lista-mreza.search'|translate}}"
+                            aria-label="Small" [(ngModel)]="searchTerm" aria-describedby="inputGroup-sizing-sm" />
+                    </div>
+                </div>
+                <div class="col-6 d-flex justify-content-end">
+
+                    <select class="btn btn-primary btn-sm form-control" id="sort" name="sort"
+                        (change)="onChange($event)" style="width:50%">
+                        <option selected value="sort">Sort</option>
+                        <option value="az">a-z</option>
+                        <option value="za">z-a</option>
+                    </select>
                 </div>
             </div>
-
-            <div class=" col-6 ">
+            <hr>
+            <div>
+                <h1 *ngIf="mreze.length==0">{{'lista-mreza.nema'|translate}}</h1>
                 <div class="row">
-                    <div class="col-6 d-flex justify-content-start">
-                        <select class="btn btn-primary form-control" id="sort" name="sort" (change)="onChange($event)">
-                            <option selected value="sort">Sort</option>
-                            <option value="az">a-z</option>
-                            <option value="za">z-a</option>
-                        </select>
-                    </div>
-                    <div class="col-6 d-flex justify-content-end">
-
+                    <div *ngIf="mreze.length>0">
+                        <div class="col-md-12" *ngFor="let m of filtriraneMreze">
+                            <div class="mreza p-3 shadow rounded">
+                                <div class="">
+                                    <p class="imeMreze" style="color: black;font-size: 20px;">{{m.name}}</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+
             </div>
         </div>
-    </div>
-    <hr class="mt-2 mb-5 ">
-</div>
-
-
-<h1 *ngIf="mreze.length==0">{{'lista-mreza.nema'|translate}}</h1>
-<div class="row">
-    <div class="col-md-6" *ngIf="mreze.length>0">
-        <div class="col-md-4" *ngFor="let m of filtriraneMreze">
-            <div class="p-3 shadow rounded">
-                <div class="">
-                    <p style="color: black;font-size: 20px;">{{m.name}}</p>
-                </div>
-            </div>
-
-            <!-- <button class="projekat btn-primary" routerLink="/dataset/{{p.ProjectId}}">{{p.Name}}</button> -->
-            <!-- <a id="openProj" href="/dataset/{{p.ProjectId}}" class="btn btn-dark btn-sm" role="button">Open project</a>     -->
+        <div class="col-md-6 d-flex justify-content-center mt-0">
+            <app-create-neural-network></app-create-neural-network>
         </div>
     </div>
-    <div class="col-md-6">
-        <app-create-neural-network></app-create-neural-network>
-    </div>
-
-
-
 </div>

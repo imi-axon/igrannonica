@@ -21,6 +21,10 @@ export class CreateNeuralNetworkComponent implements OnInit {
     this.sakriveno=false;
   }
 
+  closeClick(){
+    this.sakriveno=true;
+  }
+
   onSubmit(f:NgForm){
     this.newNN.Name=f.value.nnName;
     this.newNNservice.newNN(this.newNN,this.ProjectId,this,this.handleSuccess,this.handleError);
