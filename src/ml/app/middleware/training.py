@@ -1,5 +1,6 @@
-from typing import List
+from typing import Dict, List
 from threading import Lock
+from venv import create
 from fastapi import WebSocket
 
 # import pandas as pd
@@ -8,76 +9,102 @@ from pandas import DataFrame
 import tensorflow as tf
 from tensorflow import keras
 from keras import layers, Sequential
+from keras.callbacks import Callback
 
-from util.filemngr import FileMngr
 import util.http as httpc
+from util.filemngr import FileMngr
+from util.json import json_encode
+import util.http as httpc
+
 from services.trainingmodel import TrainingService
 
-class EpochEndCallback(keras.callbacks.Callback):
+
+class TrainingCallback(Callback):
 
     def set_custom_params(self, buff: List[bytes], lock: Lock):
         self.buff = buff
         self.lock = lock
 
+    def on_epoch_begin(self, epoch, logs=None):
+        self.lock.acquire(blocking=True) # [ LOCK ]
+        print(f'>>>> {epoch}. epoch end [ LOCK ]')
+        
     def on_epoch_end(self, epoch, logs=None):
-        print(f'>>>> on epoch end | {epoch}')
-        self.lock.acquire(blocking=True)
-        self.buff.append(bytes(f"{logs['loss']} {logs['val_loss']}", encoding='utf-8'))
-        self.lock.release()
-        print(f'>>>> on epoch end | {epoch}')
+        data = { 'epoch' : epoch, 't_loss' : logs['loss'], 'v_loss' : logs['val_loss'] }
+        self.buff.append(bytes(json_encode(data), encoding='utf-8'))
+        print(f'>>>> {epoch}. epoch end [ UNLOCK ]')
+        self.lock.release() # [ UNLOCK ]
+
+    def on_train_end(self, logs=None):
+        self.lock.acquire(blocking=True) # [ LOCK ]
+
+    
 
 class TrainingInstance():
 
     def __init__(self, buff: List[bytes], lock: Lock):
         self.buff = buff
         self.lock = lock
-        self.callback = EpochEndCallback()
+        self.callback = TrainingCallback()
         self.callback.set_custom_params(buff, lock)
+        self.service = None
+        self.lock.acquire(blocking=True) # [ LOCK ]
         
 
-    def train(self, datasetUrl: str, nnUrl: str, inputNames: List[str], outputNames: List[str]):
-
+    def create_dataset(self, datasetUrl: str):
         # Create file
         datasetStr: str = httpc.get(datasetUrl)
         f = FileMngr('csv')
         f.create(datasetStr)
-        
-        print('csv file created')
-
-        print(f.path())
-        # Dataframe setup
+        # Create dataframe
         dataframe = pandas.read_csv(f.path(), sep = ';')
-
-        print(dataframe)
-
-
-        ts = TrainingService(dataframe, inputNames, outputNames
-            , epochs=10
-            , learning_rate=0.01
-            , regularization_rate=0.1
-            , regularization='L1'
-            , nbperlayer=[10,10,10]
-            , actPerLayer=['relu', 'relu', 'relu']
-            , metrics=['mse']
-            , batchSize=1
-            , percentage_training=0.3
-            , type='REGRESSION'
-            , callbacks=[self.callback]
-        )
-
-        ts.start_training()
-
-        # training end
-        self.buff.append(b'')
-        f.delete(1)
-
-        # file
-        f = FileMngr('h5')
-        f.create(b'ranodmpodaci')
         f.delete()
+        return dataframe
 
-        # self.buff.append(bytes(('{ "path": "' + f.path() + '"}'), 'utf-8'))
-        self.buff.append(b'poslednja poruka, sadrzace rezultate treniranja')
+    def create_service(self, dataframe, trainConf: Dict):
+        self.service = TrainingService(dataframe, trainConf['inputs'], trainConf['outputs'], trainConf['actPerLayer'], trainConf['neuronsPerLayer']
+            # , learning_rate = trainConf['learningRate']
+            # , regularization_rate = trainConf['regRate']
+            # , regularization = trainConf['reg']
+            # , nbperlayer = trainConf['neuronsPerLayer']
+            # , actPerLayer = trainConf['actPerLayer']
+            # , batchSize = trainConf['batchSize']
+            # , percentage_training = trainConf['trainSplit']
+            , callbacks=[self.callback]
+            # , callbacks=[]
+        
+        ) if self.service == None else self.service
+
+    def new_model(self, trainConf: Dict):
+        self.create_service(None, trainConf)
+        return self.service.new_model()
+
+    def train(self, datasetUrl: str, nnUrl: str, trainConf: Dict):
+
+        # -- Inicijalni setup --
+
+        dataframe = self.create_dataset(datasetUrl)     # dataframe
+        self.create_service(dataframe, trainConf)       # service
+        self.service.new_model()                        # poziva se odvojeno od start_training da bi bilo iznad UNLOCK-a, zbog performansi
+        self.lock.release()                             # zbog lock-a u konstruktoru # [   ]
+
+        # -- Treniranje --
+
+        self.service.start_training(1, 0.2)                                 # na kraju treninga ima lock.acquire() # [ X ]
+        fm_model = FileMngr('h5')                                           # menadzera za sa random filepath u ./temp
+        self.service.save_model(fm_model.directory(), fm_model.name())      # h5 fajl sa putanjom za koju je vezan fm_model FileMngr
+        self.lock.release()                                                 # zbog lock-a na kraju treniranja # [   ]
+        
+        # -- Poslednje poruke za buffer --
+
+        self.lock.acquire(blocking=True)    # [ X ]
+        self.buff.append(b'')               # indikator za kraj treniranja 
+        self.lock.release()                 # [   ]
+
+        # -- POST Request, cuvanje h5 modela --
+
+        # httpc.put(nnUrl) # PRIVREMENO ZAKOMENTARISANO DOK BACK NE URADI PODRSKU
+
 
 
     # def train(self):
