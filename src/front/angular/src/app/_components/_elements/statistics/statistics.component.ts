@@ -45,7 +45,7 @@ export class StatisticsComponent implements OnInit {
   }
   
   public LoadAndUpdate(self: any, response: any){
-    let statistics = JSON.parse(response);
+    let statistics = JSON.parse(response.statistics);
     self.columns = statistics.cormat.cols;
     self.correlationMatrix = self.ParseCorrelationData(statistics.cormat.cols, statistics.cormat.cors);
     self.columnStats = statistics.colstats;

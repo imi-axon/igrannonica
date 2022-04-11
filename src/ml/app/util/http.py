@@ -10,7 +10,7 @@ def get(filepath: str, decode: bool = True) -> str | bytes:
     path = path.replace('\\', '/')
     response = httpx.get(path, verify = sslVerify, headers = baseHeaders)
 
-    return response.read() if (not decode) else response.read().decode()
+    return response.read().decode() if decode else response.read()
 
 
 def put(filepath: str) -> bool:
