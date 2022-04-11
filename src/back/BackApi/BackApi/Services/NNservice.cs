@@ -128,7 +128,7 @@ namespace BackApi.Services
             var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
             var byteContent = new ByteArrayContent(buffer);
             byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            response = await client.PutAsync("http://localhost:8000/api/nn/new/default",byteContent);
+            response = await client.PutAsync("http://localhost:8000/api/nn/default",byteContent);
 
             /*if (response.StatusCode == HttpStatusCode.OK)
             {       

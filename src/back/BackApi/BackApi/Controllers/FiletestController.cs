@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace BackApi.Controllers
 {
@@ -48,6 +49,7 @@ namespace BackApi.Controllers
         [HttpPut("Storage/proj{pid}/mreze/mreza{nnid}.h5")]
         public async Task<ActionResult> PutNNFile(int pid, int nnid, IFormFile file ) 
         {
+            Debug.WriteLine("PUT NN");
             var path = storsrv.CreateNNFile(pid, nnid);
             storsrv.SaveFile(path, file);
             return Ok();
@@ -56,6 +58,7 @@ namespace BackApi.Controllers
         [HttpPut("Storage/proj{pid}/mreze/cfg{nnid}.json")]
         public async Task<ActionResult> PutNNCfg(int pid, int nnid, IFormFile file)
         {
+            Debug.WriteLine("PUT CFG");
             var path = storsrv.CreateNNCfg(pid, nnid);
             storsrv.SaveFile(path, file);
             return Ok();
