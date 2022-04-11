@@ -48,6 +48,11 @@
         "nema":"Nemate eksperimente",
         "search":"Pretrazite..."
     },
+    "lista-mreza":{
+        "nema":"Nemate ni jednu neuronsku mrezu",
+        "search":"Search...",
+        "nova":"Nova mreza"
+    },
     "new-project":{
         "name":"Naziv eksperimenta",
         "poruka":"*Maksimalan broj karaktera je 30",

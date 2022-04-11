@@ -48,6 +48,11 @@
         "nema":"You have no experiments",
         "search":"Search..."
     },
+    "lista-mreza":{
+        "nema":"There is no neural network for this project",
+        "search":"Search...",
+        "nova":"New NN"
+    },
     "new-project":{
         "name":"Experiment name",
         "poruka":"*The maximum number of characters is 30",

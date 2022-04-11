@@ -53,6 +53,7 @@ import { KonfiguracijaComponent } from './_components/_elements/konfiguracija/ko
 import { TrainingPageComponent } from './_components/_pages/training-page/training-page.component';
 
 import { LandingPageSelectorComponent } from './_components/_elements/landing-page-selector/landing-page-selector.component';
+import { ListaMrezaComponent } from './_components/_elements/lista-mreza/lista-mreza.component';
 
 
 
@@ -96,7 +97,8 @@ import { LandingPageSelectorComponent } from './_components/_elements/landing-pa
     LandingPageSelectorComponent,
 
     KonfiguracijaComponent,
-    TrainingPageComponent
+    TrainingPageComponent,
+    ListaMrezaComponent
   ],
   imports: [
     NgxCsvParserModule,

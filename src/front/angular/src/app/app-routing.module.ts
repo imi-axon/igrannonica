@@ -18,6 +18,7 @@ import { RegistrationSuccessfulComponent } from './_components/_pages/registrati
 import { VerificationComponent } from './_components/_pages/verification-page/verification.component';
 import { StatisticsComponent } from './_components/_elements/statistics/statistics.component';
 import { TrainingPageComponent } from './_components/_pages/training-page/training-page.component';
+import { CreateNeuralNetworkComponent } from './_components/_elements/create-neural-network/create-neural-network.component';
 
 const routes: Routes = [
  // {path:'train/:ProjectId/:Inputs/:Outputs',component:ProjectPageComponent},
@@ -49,7 +50,8 @@ const routes: Routes = [
   }
   //TESTIRANJE - OBRISATI KASNIJE
   , {path:'neural-network-display', component:NeuralNetworkDisplayComponent}
-  , {path:'edit-profile', component:EditProfilePageComponent}
+  , {path:'edit-profile', component:EditProfilePageComponent},
+  {path:'new-nn',component:CreateNeuralNetworkComponent}
 ];
 
 @NgModule({
@@ -64,7 +66,7 @@ export const routingComponents=[
   DataSetPageComponent, LoginPageComponent, RegistrationPageComponent,
   
   HomePageComponent,MyProjectsPageComponent,ProfilPageComponent,VerificationComponent,ProjectPageStatisticsEditComponent,
-  StatisticsComponent,EditDatasetComponent,TrainingPageComponent,
+  StatisticsComponent,EditDatasetComponent,TrainingPageComponent,CreateNeuralNetworkComponent,
 
   //TESTIRANJE - OBRISATI KASNIJE
   NeuralNetworkDisplayComponent];

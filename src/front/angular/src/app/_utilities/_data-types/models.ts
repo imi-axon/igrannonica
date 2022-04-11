@@ -169,17 +169,24 @@ export class Project
         this.ProjectId=-1;
     }
 }
-
-export class NewNN{
-    public name:string=""
-    constructor(){
-        this.name=";"
-    }
-}
 /* PROJEKAT */
 
 
 /* MREZA */
+
+export class NewNN{
+    public name:string="";
+    constructor(){
+        this.name="";
+    }
+}
+
+export class NN{
+    public name:string='';
+    constructor(){
+        this.name='';
+    }
+}
 /*
 class Neuron{
     weights: number[] = [];
