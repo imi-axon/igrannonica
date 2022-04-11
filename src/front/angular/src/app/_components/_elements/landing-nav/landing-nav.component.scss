@@ -24,7 +24,13 @@
 }
 */
 
+.navbar{
+    height: 18vh;
+    margin: 0px;
+}
+
 @media (max-width: 575px) { 
+    
     .nav-item a{
         font-size: 20px;
         line-height: 23px;
@@ -41,8 +47,14 @@
     }
 }
 @media (min-width: 576px) { 
+    
+    .nav-link{
+        user-select: none;
+    }
+    
     .navbar-nav
     {
+        top: 0px;
         height: 150px;
         width: 500px;
         display: flex;

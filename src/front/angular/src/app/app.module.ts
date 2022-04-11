@@ -52,6 +52,7 @@ import { DataSetTableComponent } from './_components/_elements/data-set-table/da
 import { KonfiguracijaComponent } from './_components/_elements/konfiguracija/konfiguracija.component';
 import { TrainingPageComponent } from './_components/_pages/training-page/training-page.component';
 
+import { LandingPageSelectorComponent } from './_components/_elements/landing-page-selector/landing-page-selector.component';
 
 
 
@@ -92,6 +93,7 @@ import { TrainingPageComponent } from './_components/_pages/training-page/traini
     EditProfilePageComponent,
     EditProfileFormComponent,
     StatisticsComponent,
+    LandingPageSelectorComponent,
 
     KonfiguracijaComponent,
     TrainingPageComponent

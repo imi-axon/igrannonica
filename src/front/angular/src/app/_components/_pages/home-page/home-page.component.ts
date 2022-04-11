@@ -1,6 +1,13 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { fromEvent, Subscription } from 'rxjs';
+import { fromEvent, Subscription, windowWhen } from 'rxjs';
+
 import * as THREE from 'three';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/all';
+import { LandingPageSelectorComponent } from '../../_elements/landing-page-selector/landing-page-selector.component';
+
+
+gsap.registerPlugin(ScrollTrigger);
 
 @Component({
   selector: 'app-home-page',
@@ -20,14 +27,13 @@ export class HomePageComponent implements OnInit, AfterViewInit {
     return this.canvas.clientWidth / this.canvas.clientHeight
   }
   
-  
   // Camera
   private camera!: THREE.PerspectiveCamera;
   private cameraX: number = 0;
-  private cameraZ: number = 3.5;
-  private cameraY: number = 0.1;
+  private cameraZ: number = 7;
+  private cameraY: number = -5;
   
-  private fov: number = 80;
+  private fov: number = 50;
   private nearClippingPlane: number = 0.1;
   private farClippingPlane: number = 1000;
   
@@ -35,17 +41,17 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   // Light
   private ambientLight: THREE.AmbientLight = new THREE.AmbientLight(new THREE.Color(0x003FB9), 0.5);
   private pointLight: THREE.PointLight = new THREE.PointLight(new THREE.Color(0xFFFFFF), 1.5, Infinity);
-
   
   // Icosahedron
   private icosahedron: THREE.Mesh = new THREE.Mesh( new THREE.IcosahedronGeometry(1, 0), new THREE.MeshStandardMaterial({color: 0x009DF5}) );
   
-  // Backgroudn Icosahedron
-  private icosahedronsCount: number = 8;
-  private icosahedronsSpreadX: number = 500;
-  private icosahedronsSpreadY: number = 300;
-  private icosahedronsSpreadZ: number = -100;
-  private icosahedronScale: number = 5;
+  
+  // Backgroudn Icosahedrons
+  private icosahedronsCount: number = 30;
+  private icosahedronsSpreadX: number = 1500;
+  private icosahedronsSpreadY: number = 1500;
+  private icosahedronsSpreadZ: number = -600;
+  private icosahedronScale: number = 10;
   private backgroundIcosahedrons: THREE.Mesh[] = [];
   
   // Renderer
@@ -54,33 +60,33 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   // Scene
   private scene!: THREE.Scene;
   
-  
-  
-  
-  
-  
-  /*
-  private resizeCanvasToDisplaySize() {
-    let canvas = this.renderer.domElement;
+  private threeOnLoad(){
+    window.scrollTo({top: 0})
     
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-  
-    if (canvas.width !== width || canvas.height !== height) {
-      // you must pass false here or three.js sadly fights the browser
-      this.renderer.setSize(width, height, false);
-      this.camera.aspect = width / height;
-      this.camera.updateProjectionMatrix();
-    }
+    gsap.to(this.camera.position, {
+      duration: 2,
+      y: 0,
+      ease: "Power1.easeInOut",
+      onStart: () =>{
+        this.movable = false;
+        document.body.style.overflowY = 'hidden';
+      },
+      onComplete: () =>{
+        this.movable = true;
+        document.body.style.overflowY = 'scroll';
+      }
+    });
+    
   }
-  */
+  
+  
   
   private setBackgroudnIcosahedrons(){
     this.backgroundIcosahedrons = [];
     for(let i = 0; i < this.icosahedronsCount; i++){
       let x = Math.random() * this.icosahedronsSpreadX - this.icosahedronsSpreadX / 2;
       let y = Math.random() * this.icosahedronsSpreadY - this.icosahedronsSpreadY / 2;
-      let z = Math.random() * this.icosahedronsSpreadZ - 100;
+      let z = Math.random() * this.icosahedronsSpreadZ - 400;
       let scale = Math.random() * this.icosahedronScale;
       this.backgroundIcosahedrons.push( new THREE.Mesh( new THREE.IcosahedronGeometry(1, 0), new THREE.MeshPhongMaterial({color: 0x009DF5})) );
       this.backgroundIcosahedrons[i].position.set(x, y, z);
@@ -102,19 +108,17 @@ export class HomePageComponent implements OnInit, AfterViewInit {
     this.setBackgroudnIcosahedrons();
     
     
-    this.pointLight.position.set(10, 10, 10);
+    this.pointLight.position.set(100, 100, 100);
     this.scene.add(this.pointLight);
     
     this.scene.add(this.ambientLight);
   }
-  
   
   private setCamera(){
     let aspectRatio = this.getAspectRatio();
     this.camera = new THREE.PerspectiveCamera( this.fov, aspectRatio, this.nearClippingPlane, this.farClippingPlane);
     this.camera.position.set(this.cameraX, this.cameraY, this.cameraZ);
   }
-  
   
   private startRenderingLoop(){
     this.renderer = new THREE.WebGLRenderer( 
@@ -128,7 +132,7 @@ export class HomePageComponent implements OnInit, AfterViewInit {
     
     this.renderer.setPixelRatio(devicePixelRatio);
     this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
-    
+      
     let component: HomePageComponent = this;
     (
       function render(){
@@ -141,16 +145,19 @@ export class HomePageComponent implements OnInit, AfterViewInit {
         component.icosahedron.rotation.z += 0.001;
         
         for(let i = 0; i < component.icosahedronsCount; i++){
-          component.backgroundIcosahedrons[i].rotation.x += (0.002 + i / 1000);
-          component.backgroundIcosahedrons[i].rotation.y += (0.002 - i / 1000);
-          component.backgroundIcosahedrons[i].rotation.z += (0.002 + i / 1000);
+          component.backgroundIcosahedrons[i].rotation.x += (0.001 + (i * 0.2) / 1000);
+          component.backgroundIcosahedrons[i].rotation.y += (0.001 - (i * 0.2) / 1000);
+          component.backgroundIcosahedrons[i].rotation.z += (0.001 + (i * 0.2) / 1000);
         }
+        
+        
+        //console.log(component.camera.position.y)
+        
         
         component.renderer.render(component.scene, component.camera);
       }()
     )
   }
-  
   
   ngAfterViewInit(){
     this.createScene();
@@ -160,12 +167,116 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   
   
   
+  // STRANICENJE
+  @ViewChild("selector", {static: true}) selector: LandingPageSelectorComponent;
+  @ViewChild("page1", {static: true}) page1: ElementRef<HTMLDivElement>;
+  @ViewChild("page2", {static: true}) page2: ElementRef<HTMLDivElement>;
+  @ViewChild("page3", {static: true}) page3: ElementRef<HTMLDivElement>;
+  @ViewChild("page4", {static: true}) page4: ElementRef<HTMLDivElement>;
+  
+  public movable: boolean = false;
+  private pageHeight: number = 50;
+  
+  public ChangePage(pageNumber: number){
+    if(!this.movable)  
+      return;
+      
+    gsap.to(this.camera.position, {
+      duration: 2,
+      y: -this.pageHeight * pageNumber,
+      ease: "Power1.easeInOut",
+      onStart: () =>{
+        document.body.style.overflowY = 'hidden';
+        this.movable = false;
+      },
+      onComplete: () =>{
+        this.movable = true;
+        document.body.style.overflowY = 'scroll';
+        this.oldScrollY = window.scrollY;
+      }
+    });
+    
+    switch(pageNumber){
+      case 0:
+        window.scrollTo({ top: 0 })
+        this.selector.selectedOption = 0;
+        break;
+        
+      case 1:
+        window.scrollTo({ top: document.body.clientHeight * 2})
+        this.selector.selectedOption = 1;
+        break;
+      case 2:
+        
+        window.scrollTo({ top: document.body.clientHeight * 4})
+        this.selector.selectedOption = 2;
+        break;
+        
+      case 3:
+        window.scrollTo({ top: document.body.clientHeight * 6})
+        this.selector.selectedOption = 3;
+        break;
+        
+      default:
+        {};
+    }
+  }
   
   
   
   
   
-  // Mouse movement
+  
+  
+
+  // SCROLL ==================================================================================
+  private oldScrollY: number = 0;
+  
+  private onScroll(e: any){
+    if(!this.movable)
+      return;
+      
+    let deltaScrollY = this.oldScrollY - window.scrollY;
+    
+    console.log(deltaScrollY * this.pageHeight / (window.innerHeight * 2))
+    
+    this.camera.position.y += deltaScrollY * this.pageHeight / (window.innerHeight * 2);
+    
+    //console.log(this.camera.position.y)
+    
+    //console.log("Window: " + window.innerHeight + " | Current: " + window.scrollY)
+    
+    // STRANA 1
+    if(window.scrollY < window.innerHeight - (window.innerHeight / 2))
+      this.selector.selectedOption = 0;
+      
+    // STRANA 2
+    if(window.scrollY > 2 * window.innerHeight - (window.innerHeight / 2) && window.scrollY < 3 * window.innerHeight - (window.innerHeight / 2))
+      this.selector.selectedOption = 1;
+    
+    // STRANA 3
+    if(window.scrollY > 4 * window.innerHeight - (window.innerHeight / 2) && window.scrollY < 5 * window.innerHeight - (window.innerHeight / 2))
+      this.selector.selectedOption = 2;
+    
+    // STRANA 3
+    if(window.scrollY > 6 * window.innerHeight - (window.innerHeight / 2) && window.scrollY < 7 * window.innerHeight - (window.innerHeight / 2))
+      this.selector.selectedOption = 3;
+    
+    
+    this.oldScrollY = window.scrollY;
+  }
+  
+  // RESIZE ==================================================================================
+  private onResize(e: any){
+    //this.canvas.width = e.srcElement.innerWidth;
+    //this.canvas.height = e.srcElement.innerHeight;
+    
+    this.renderer.setSize(e.srcElement.innerWidth, e.srcElement.innerHeight);
+    this.camera.aspect = e.srcElement.innerWidth / e.srcElement.innerHeight
+    this.camera.updateProjectionMatrix();
+  }
+  
+  // MOUSE MOVEMENT ==========================================================================
   private oldMouseX: number = 0;
   private oldMouseY: number = 0;
   
@@ -176,8 +287,6 @@ export class HomePageComponent implements OnInit, AfterViewInit {
     let mouseDeltaX = e.clientX - this.oldMouseX;
     let mouseDeltaY = e.clientY - this.oldMouseY;
     
-    //console.log(mouseDeltaX + " " + mouseDelteY);
-    
     this.icosahedron.rotation.x += mouseDeltaY * this.mouseStabilizerY;
     this.icosahedron.rotation.y += mouseDeltaX * this.mouseStabilizerX;
     this.icosahedron.rotation.z += (mouseDeltaX + mouseDeltaY) * this.mouseStabilizerX;
@@ -187,10 +296,28 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   }
   
   ngOnInit() {
-    this.subscription = fromEvent(document, 'mousemove').subscribe(
-      e => {
-        this.onMouseMove(e as MouseEvent);
+    
+    setTimeout(() => {
+      
+      this.subscription = fromEvent(document, 'scroll').subscribe(
+        e => {
+          this.onScroll(e);
       });
+      
+      this.subscription = fromEvent(document, 'mousemove').subscribe(
+        e => {
+          this.onMouseMove(e as MouseEvent);
+      });
+        
+      this.subscription = fromEvent(window, 'resize').subscribe(
+        e => {
+          this.onResize(e);
+        }
+      );
+          
+      this.threeOnLoad();
+          
+    }, 0);
   }
   
   ngOnDestroy(){ 

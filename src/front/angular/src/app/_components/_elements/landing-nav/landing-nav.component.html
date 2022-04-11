@@ -15,7 +15,7 @@
       
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <div id="logo">
-          <a>Igrannonica</a>
+          <a style="user-select: none;">Igrannonica</a>
         </div>
       
         <ul class="navbar-nav">
@@ -45,7 +45,7 @@
 
           <li class="nav-item mx-2 my-2">
             {{"navbar.select"|translate}}
-          <select #langselect (change)="translate.use(langselect.value)">
+          <select #langselect (change)="translate.use(langselect.value)" style="user-select: none;">
             <option *ngFor="let lang of translate.getLangs()" [value]="lang">
                 {{lang}}
             </option>
