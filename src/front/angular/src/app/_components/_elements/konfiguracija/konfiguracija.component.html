@@ -1,0 +1,125 @@
+<div class="container">
+    <div class="row mx-auto">
+        <div class="col-md-3">
+            <label for="epoch">Epoch</label>
+            <p id="epoch">000.000</p>
+        </div>
+        <div class="col-md-3">
+            <label for="LearningRate">Learning rate</label>
+            <div class="select">
+                <select id="LearningRate" (change)="onChange($event)">
+                    <option>0.00001</option>
+                    <option>0.0001</option>
+                    <option>0.001</option>
+                    <option selected>0.003</option>
+                    <option>0.01</option>
+                    <option>0.03</option>
+                    <option>0.1</option>
+                    <option>0.3</option>
+                    <option>1</option>
+                    <option>3</option>
+                    <option>10</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <label for="Regularization">Regularization</label>
+            <div class="select">
+                <select id="Regularization" (change)="onChange($event)">
+                    <option selected>None</option>
+                    <option>L1</option>
+                    <option>L2</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <label for="RegularizationRate">RegularizationRate</label>
+            <div class="select">
+                <select id="RegularizationRate" (change)="onChange($event)">
+                    <option selected>0</option>
+                    <option>0.001</option>
+                    <option>0.003</option>
+                    <option>0.01</option>
+                    <option>0.03</option>
+                    <option>0.1</option>
+                    <option>0.3</option>
+                    <option>1</option>
+                    <option>3</option>
+                    <option>10</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div id="input/output" class="col-4 mt-3">
+            <button class="btn btn-primary mx-2" (click)="prikaziInput()" [disabled]="gotovoInputi">Izaberi
+                input-e</button>
+            <button class="btn btn-primary" (click)="prikaziOutput()"
+                [disabled]="!gotovoInputi || gotovoOutputi">Izaberi output-e</button>
+        </div>
+
+        <div id="batchSize" class="col-4 ">
+            <div class="" style="width:50%">
+                <label for="batchSlider" class="form-label">Batch size: <span
+                        id="batchSizeNum">{{batchSize}}</span></label>
+                <input type="range" class="form-range" id="batchSlider" min="0" max="30" step="1" value="15"
+                    (input)="onChange($event)">
+            </div>
+        </div>
+        <div class="col-md-4">
+            <label for="Activation">Activation **za sve skrivene slojeve</label>
+            <div class="select">
+                <select id="Activation" (change)="onChange($event)">
+                    <option>ReLU</option>
+                    <option selected>Tanh</option>
+                    <option>Sigmoid</option>
+                    <option>Linear</option>
+                </select>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+
+            <div class="checkBoxovi mt-3" *ngIf="prikaziInpute">
+                <div class="form-check form-check-inline" *ngFor="let c of columns ; index as i">
+                    <input type="checkbox" id="input{{i}}" (click)="inputClick($event)" [value]="c"> {{c}}
+                </div><br>
+                <button class="btn btn-sm btn-primary" (click)="potvrdiInp()"
+                    [disabled]="inputs.length==0">Potvrdi</button>
+            </div>
+
+            <div class="checkBoxovi mt-3" *ngIf="prikaziOutpute">
+                <div class="form-check form-check-inline" *ngFor="let c of slobodneKolone ; index as i">
+                    <input type="checkbox" id="output{{i}}" (click)="outputClick($event)" [value]="c"> {{c}}
+                </div><br>
+                <button class="btn btn-sm btn-primary" (click)="potvrdiOut()"
+                    [disabled]="outputs.length==0">Potvrdi</button>
+            </div>
+            <div class="">
+                <div *ngIf="gotovoInputi">
+                    Izabrani inputi:
+                    <div class="inout d-inline" *ngFor="let i of inputs">
+                        {{i}}
+                    </div>
+                </div>
+
+                <div *ngIf="gotovoOutputi">
+                    Izabrani outputi:
+                    <div *ngFor="let o of outputs" class="inout d-inline">
+                        {{o}}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-4">
+
+        </div>
+        <div class="col-md-4">
+
+        </div>
+    </div>
+
+</div>

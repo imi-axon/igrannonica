@@ -13,13 +13,15 @@ import { MyProjectsPageComponent } from './_components/_pages/my-projects-page/m
 import { NewProjectPageComponent } from './_components/_pages/new-project-page/new-project-page.component';
 import { ProfilPageComponent } from './_components/_pages/profil-page/profil-page.component';
 import { ProjectPageStatisticsEditComponent } from './_components/_pages/project-page-statistics-edit/project-page-statistics-edit.component';
-import { ProjectPageComponent } from './_components/_pages/project-page/project-page.component';
 import { RegistrationPageComponent } from './_components/_pages/registration-page/registration-page.component';
 import { RegistrationSuccessfulComponent } from './_components/_pages/registration-successful/registration-successful.component';
 import { VerificationComponent } from './_components/_pages/verification-page/verification.component';
 import { StatisticsComponent } from './_components/_elements/statistics/statistics.component';
+import { TrainingPageComponent } from './_components/_pages/training-page/training-page.component';
+
 const routes: Routes = [
-  {path:'train/:ProjectId/:Inputs/:Outputs',component:ProjectPageComponent},
+ // {path:'train/:ProjectId/:Inputs/:Outputs',component:ProjectPageComponent},
+ {path:'train/:ProjectId', component:TrainingPageComponent},
   {path:'new-project', component:NewProjectPageComponent},
   {path:'dataset/:ProjectId',component:DataSetPageComponent},
   {path:'registration-successful',component:RegistrationSuccessfulComponent},
@@ -58,11 +60,11 @@ export class AppRoutingModule { }
 
 //Kada se dodaje nova putanja, dodati je u niz
 export const routingComponents=[
-  ProjectPageComponent, NewProjectPageComponent,
+  NewProjectPageComponent,
   DataSetPageComponent, LoginPageComponent, RegistrationPageComponent,
   
   HomePageComponent,MyProjectsPageComponent,ProfilPageComponent,VerificationComponent,ProjectPageStatisticsEditComponent,
-  StatisticsComponent,EditDatasetComponent,
-  
+  StatisticsComponent,EditDatasetComponent,TrainingPageComponent,
+
   //TESTIRANJE - OBRISATI KASNIJE
   NeuralNetworkDisplayComponent];

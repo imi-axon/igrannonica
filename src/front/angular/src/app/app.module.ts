@@ -49,6 +49,9 @@ import { EditProfilePageComponent } from './_components/_pages/edit-profile-page
 import { EditProfileFormComponent } from './_components/_elements/edit-profile-form/edit-profile-form.component';
 import { StatisticsComponent } from './_components/_elements/statistics/statistics.component';
 import { DataSetTableComponent } from './_components/_elements/data-set-table/data-set-table.component';
+import { KonfiguracijaComponent } from './_components/_elements/konfiguracija/konfiguracija.component';
+import { TrainingPageComponent } from './_components/_pages/training-page/training-page.component';
+
 
 
 
@@ -88,8 +91,10 @@ import { DataSetTableComponent } from './_components/_elements/data-set-table/da
     LandingNavComponent,
     EditProfilePageComponent,
     EditProfileFormComponent,
-    StatisticsComponent
+    StatisticsComponent,
 
+    KonfiguracijaComponent,
+    TrainingPageComponent
   ],
   imports: [
     NgxCsvParserModule,
