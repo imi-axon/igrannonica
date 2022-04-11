@@ -32,24 +32,24 @@ class StatisticsService:
         return self.dataset.describe().transpose()
 
     #f-ja stat_mean za svaku kolonu racuna mean - srednju vrednost
-    #povratna vrednost je Series ('pandas.core.series.Series')
-    def stat_mean(self):
-        return self.dataset.mean()
+    #povratna vrednost je float
+    def stat_mean(self,column):
+        return self.dataset[column].mean()
     
     #f-ja stat_median za svaku kolonu racuna medijanu
-    #povratna vrednost je Series
-    def stat_median(self):
-        return self.dataset.median()
+    #povratna vrednost je float
+    def stat_median(self,column):
+        return self.dataset[column].median()
 
     #f-ja stat_min za svaku kolonu racuna minimum
-    #povratna vrednost je Series
-    def stat_min(self):
-        return self.dataset.min()
+    #povratna vrednost je float
+    def stat_min(self,column):
+        return self.dataset[column].min()
     
     #f-ja stat_max za svaku kolonu racuna maksimum
-    #povratna vrednost je Series
-    def stat_max(self):
-        return self.dataset.max()
+    #povratna vrednost je float
+    def stat_max(self,column):
+        return self.dataset[column].max()
 
     #f-ja stat_null za svaku kolonu racuna broj null vrednosti
     #povratna vrednost je Series
