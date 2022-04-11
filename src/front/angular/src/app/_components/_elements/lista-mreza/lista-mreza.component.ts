@@ -48,7 +48,7 @@ export class ListaMrezaComponent implements OnInit {
       self.filtriraneMreze=mreze;
     }
 
-    console.log(mreze[0].name);
+  //  console.log(mreze[0].name);
     //console.log(projekti[0]);
     //console.log(projekti[0].Description);
  

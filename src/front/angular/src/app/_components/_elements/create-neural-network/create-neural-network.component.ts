@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { NewNN } from 'src/app/_utilities/_data-types/models';
 import { NewNnService } from 'src/app/_utilities/_services/new-nn.service';
 
@@ -11,9 +12,9 @@ import { NewNnService } from 'src/app/_utilities/_services/new-nn.service';
 export class CreateNeuralNetworkComponent implements OnInit {
 
   public newNN= new NewNN();
-  private ProjectId:number=1;//treba da bude id trenutnog projekta
+  private ProjectId:number=-1;
 
-  constructor(private newNNservice:NewNnService) { }
+  constructor(private newNNservice:NewNnService, private activatedRoute:ActivatedRoute) { }
   sakriveno:boolean=true;
 
   onClick(){
@@ -21,7 +22,7 @@ export class CreateNeuralNetworkComponent implements OnInit {
   }
 
   onSubmit(f:NgForm){
-    this.newNN.name=f.value.nnName;
+    this.newNN.Name=f.value.nnName;
     this.newNNservice.newNN(this.newNN,this.ProjectId,this,this.handleSuccess,this.handleError);
   }
 
@@ -34,6 +35,9 @@ export class CreateNeuralNetworkComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    let p = this.activatedRoute.snapshot.paramMap.get("ProjectId");
+    if (p != null) this.ProjectId=Number.parseInt(p);
   }
 
 }

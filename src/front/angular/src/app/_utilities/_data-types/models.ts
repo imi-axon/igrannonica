@@ -175,9 +175,9 @@ export class Project
 /* MREZA */
 
 export class NewNN{
-    public name:string="";
+    public Name:string="";
     constructor(){
-        this.name="";
+        this.Name="";
     }
 }
 
