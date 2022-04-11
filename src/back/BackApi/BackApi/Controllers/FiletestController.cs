@@ -43,5 +43,22 @@ namespace BackApi.Controllers
 
             return File(bytes, "text/csv", Path.GetFileName(path));
         }
+
+
+        [HttpPut("Storage/proj{pid}/mreze/mreza{nnid}.h5")]
+        public async Task<ActionResult> PutNNFile(int pid, int nnid, IFormFile file ) 
+        {
+            var path = storsrv.CreateNNFile(pid, nnid);
+            storsrv.SaveFile(path, file);
+            return Ok();
+        }
+
+        [HttpPut("Storage/proj{pid}/mreze/cfg{nnid}.json")]
+        public async Task<ActionResult> PutNNCfg(int pid, int nnid, IFormFile file)
+        {
+            var path = storsrv.CreateNNCfg(pid, nnid);
+            storsrv.SaveFile(path, file);
+            return Ok();
+        }
     }
 }

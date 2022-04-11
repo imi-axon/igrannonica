@@ -133,16 +133,22 @@ namespace BackApi.Services
         public string GetProjById(int projid, int userid)
         {
             var rez = new StringBuilder();
-            var proj = context.Projects.Where(x => x.UserId == userid && x.ProjectId == projid);
-            foreach (Project p in proj) 
-            {
-                rez.Append("{");
-                rez.Append("\"" + "ProjectId" + "\":" + "\"" + p.ProjectId + "\",");
-                rez.Append("\"" + "Name" + "\":" + "\"" + p.Name + "\",");
-                rez.Append("\"" + "Public" + "\":" + "\"" + p.Public + "\",");
-                rez.Append("\"" + "Description" + "\":" + "\"" + p.Description + "\"");
-                rez.Append("}");
-            }
+            Boolean tmp;
+            var proj = context.Projects.FirstOrDefault(x => x.UserId == userid && x.ProjectId == projid);
+            if (proj == null)
+                return null;
+            var dset=context.Datasets.FirstOrDefault(x=> x.ProjectId == projid);
+            if (dset != null)
+                tmp = true;
+            else tmp = false;
+
+            rez.Append("{");
+            rez.Append("\"" + "ProjectId" + "\":" + "\"" + proj.ProjectId + "\",");
+            rez.Append("\"" + "Name" + "\":" + "\"" + proj.Name + "\",");
+            rez.Append("\"" + "Public" + "\":" + "\"" + proj.Public + "\",");
+            rez.Append("\"" + "Description" + "\":" + "\"" + proj.Description + "\",");
+            rez.Append("\"" + "hasDataset" + "\":" + "\"" + tmp + "\"");
+            rez.Append("}");
 
             return rez.ToString();
         }
