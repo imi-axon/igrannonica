@@ -8,6 +8,8 @@ namespace BackApi.Controllers
 {
     [Route("api/files")]
     [ApiController]
+    [RequestFormLimits(MultipartBodyLengthLimit = 209715200)]
+    [RequestSizeLimit(209715200)]
     public class FiletestController : ControllerBase
     {
         private IStorageService storsrv;
@@ -51,7 +53,7 @@ namespace BackApi.Controllers
         {
             Debug.WriteLine("PUT NN");
             var path = storsrv.CreateNNFile(pid, nnid);
-            storsrv.SaveFile(path, file);
+            await storsrv.SaveFile(path, file);
             return Ok();
         }
 
@@ -60,7 +62,7 @@ namespace BackApi.Controllers
         {
             Debug.WriteLine("PUT CFG");
             var path = storsrv.CreateNNCfg(pid, nnid);
-            storsrv.SaveFile(path, file);
+            await storsrv.SaveFile(path, file);
             return Ok();
         }
     }

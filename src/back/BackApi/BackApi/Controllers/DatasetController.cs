@@ -11,6 +11,8 @@ namespace BackApi.Controllers
     [Route("api/projects")]
     [ApiController]
     [Authorize]
+    [RequestFormLimits(MultipartBodyLengthLimit = 209715200)]
+    [RequestSizeLimit(209715200)]
     public class DatasetController : ControllerBase
     {
         private IDatasetService datasrv;
