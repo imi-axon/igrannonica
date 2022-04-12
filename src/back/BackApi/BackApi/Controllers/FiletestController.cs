@@ -38,7 +38,7 @@ namespace BackApi.Controllers
         [HttpGet("Storage/proj{pid}/data/data{did}.csv"),Host("localhost:7057","localhost:8000")] //adresa ml mikroserivsa
         public async Task<ActionResult> PassDatasetToML(int pid,int did)
         {
-            var path = storsrv.GetDataset(datasrv.ProjIdToPath(pid, false));
+            var path = storsrv.GetDataset(datasrv.ProjIdToPath(pid, true));
             var bytes = await System.IO.File.ReadAllBytesAsync(path);
 
             return File(bytes, "text/csv", Path.GetFileName(path));
