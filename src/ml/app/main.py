@@ -117,13 +117,17 @@ def get_statistics(body: Dataset):
 
 
 # Convert NN to JSON
-@app.put('/api/nn/convert/json', status_code=200, response_model=NNOnly)
+@app.post('/api/nn/convert/json', status_code=200, response_model=NNOnly)
 def nn_to_json(body: NNOnly):
+
+    print(f'GET NN: body.nn: {body.nn}')
 
     h5bytes: bytes = httpc.get(body.nn, decode=False)
     h5mngr = FileMngr('h5')
     h5mngr.create(h5bytes)
     h5path = h5mngr.path()
+
+    print(f'GET NN: h5 path: {h5path}')
 
     conv = NNJsonConverter(h5path)
     h5mngr.delete()
