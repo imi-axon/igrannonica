@@ -55,6 +55,7 @@ builder.Services.AddScoped<IDatasetService,DatasetService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IStorageService, StorageService>();
 builder.Services.AddScoped<INNservice, NNservice>();
+builder.Services.AddSingleton<IWSQueue, WSQueue>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddCors(options =>

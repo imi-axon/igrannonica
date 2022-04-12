@@ -11,7 +11,7 @@ namespace BackApi.Services
 {
     public interface INNservice
     {
-        public Task MlTraining(WebSocket webSocket, ApiNNTrain packet);
+        public Task<Boolean> MlTraining(WebSocket webSocket, ApiNNTrain packet, WebSocket webSocketMl);
         public Task<HttpResponseMessage> NNCreateTemp(int id,string name,string datapath);
         public int GetNNid(int projid, string name);
         public string NNIdToPath(int nnid);
@@ -31,69 +31,68 @@ namespace BackApi.Services
             this.configuration = configuration;
         }
 
-        public async Task MlTraining(WebSocket webSocket,ApiNNTrain packet)
+        public async Task<Boolean> MlTraining(WebSocket webSocket,ApiNNTrain packet,WebSocket webSocketMl)
         {
+            //prosledjivanje pocetne konfiguracije ml delu, za pocetak treniranja se "ceka play"
             var buffer = new byte[1024 * 4];
-            var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-            packet.newconf = Encoding.UTF8.GetString(buffer, 0, result.Count);
-            //Debug.WriteLine(packet.newconf);
-            var mes = Encoding.UTF8.GetString(buffer, 0, result.Count);
+            var fromFrontconf = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+            packet.newconf = Encoding.UTF8.GetString(buffer, 0, fromFrontconf.Count);
+            var MlJson = JsonConvert.SerializeObject(packet);
+            var toMLconf = Encoding.UTF8.GetBytes(MlJson);
+            await webSocketMl.SendAsync(new ArraySegment<byte>(toMLconf, 0, MlJson.Length), WebSocketMessageType.Text , true, CancellationToken.None);
+            var resultml = await webSocketMl.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
 
-            try
+            while (!resultml.CloseStatus.HasValue)
             {
-                var resp = JsonConvert.SerializeObject(packet);
-                var replbuffer = Encoding.UTF8.GetBytes(resp);
-                //await webSocket.SendAsync(new ArraySegment<byte>(replbuffer, 0, resp.Length), result.MessageType, result.EndOfMessage, CancellationToken.None);
-                
-                //Debug.WriteLine("Pre ClientWebSocket");
-                var webSocketMl = new ClientWebSocket();
-                //Debug.WriteLine("Nakon ClientWebSocket");
-                await webSocketMl.ConnectAsync(new Uri("ws://localhost:8000/api/nn/train/start"),CancellationToken.None); // proveriti da li ml deo hostuje ws ili wss
-                await webSocketMl.SendAsync(new ArraySegment<byte>(replbuffer, 0, resp.Length), result.MessageType, result.EndOfMessage, CancellationToken.None);
-                var resultml = await webSocketMl.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-
-                //var playstopres=await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                //var playstop = Encoding.UTF8.GetString(buffer, 0, playstopres.Count);
-                while (!resultml.CloseStatus.HasValue)
+                if (webSocket.CloseStatus.HasValue)//ako korisnik brzo otkaze trening
                 {
-                    if (webSocket.CloseStatus.HasValue)
-                    {
-                        webSocket.Abort();
-                        webSocket.Dispose();
-                        await webSocketMl.CloseAsync(resultml.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
-                        webSocketMl.Abort();
-                        webSocketMl.Dispose();
-                    
-                     }
-
+                    await webSocketMl.CloseAsync(WebSocketCloseStatus.NormalClosure, "Client closing w handshake", CancellationToken.None);
+                    await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure,"Client closing w handshake", CancellationToken.None);
+                    return true;
+                }
+                var fromFronttrain = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                var playstop = Encoding.UTF8.GetString(buffer, 0, fromFronttrain.Count);
+                while (playstop == "play")//sve dok sa fronta stize "play" salju im se rezultati sledece epohe
+                {
+                    var toMLtrain= Encoding.UTF8.GetBytes(playstop);
+                    await webSocketMl.SendAsync(new ArraySegment<byte>(toMLtrain, 0, playstop.Length), WebSocketMessageType.Text, true, CancellationToken.None);
                     resultml = await webSocketMl.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                     var tmp = Encoding.UTF8.GetString(buffer, 0, resultml.Count);
-                    var tofront = Encoding.UTF8.GetBytes(tmp);
-                    await webSocket.SendAsync(new ArraySegment<byte>(tofront, 0, tmp.Length), resultml.MessageType, resultml.EndOfMessage, CancellationToken.None);
-                }
-                await webSocketMl.CloseAsync(resultml.CloseStatus.Value, resultml.CloseStatusDescription, CancellationToken.None);
-            }
-            catch (Exception ex)
-            {
-                webSocket.Abort();
-                webSocket.Dispose();
-            }
+                    if(tmp == "end") //ako se trening zavrsio do kraja bez stop, posalji json mreze i zatvori sockete
+                    {
+                        resultml = await webSocketMl.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                        tmp = Encoding.UTF8.GetString(buffer, 0, resultml.Count);
+                        var toFrontJson = Encoding.UTF8.GetBytes(tmp);
+                        await webSocket.SendAsync(new ArraySegment<byte>(toFrontJson, 0, tmp.Length), resultml.MessageType, resultml.EndOfMessage, CancellationToken.None);
 
-            /*while (!result.CloseStatus.HasValue)
-            {
-                result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                for (int i=1; i<=10; i++)
-                {
-                    int tmp = int.Parse(mes)*i;
-                    var resp = $"{i} : {tmp}";
-                    var replbuffer= Encoding.UTF8.GetBytes(resp);
-                    //await Task.Delay(50);
-                    await webSocket.SendAsync(new ArraySegment<byte>(replbuffer, 0, resp.Length), result.MessageType, result.EndOfMessage, CancellationToken.None);
+                        await webSocketMl.CloseAsync(WebSocketCloseStatus.NormalClosure, "Client closing w handshake", CancellationToken.None);
+                        await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Client closing w handshake", CancellationToken.None);
+                        return true;
+                    }
+                    var toFronttrain= Encoding.UTF8.GetBytes(tmp);
+                    await webSocket.SendAsync(new ArraySegment<byte>(toFronttrain, 0, tmp.Length), resultml.MessageType, resultml.EndOfMessage, CancellationToken.None);
+
+                    fromFronttrain = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                    playstop = Encoding.UTF8.GetString(buffer, 0, fromFronttrain.Count);
                 }
-                result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                mes = Encoding.UTF8.GetString(buffer, 0, result.Count);
-            }*/
-            await webSocket.CloseAsync(result.CloseStatus.Value,result.CloseStatusDescription,CancellationToken.None);
+                if (playstop == "stop")//kad sa fronta stigne stop, zaustavlja se treniranje, i salje se json mreze i zatvaraju se socketi
+                {
+                    var toMLtrain = Encoding.UTF8.GetBytes(playstop);
+                    await webSocketMl.SendAsync(new ArraySegment<byte>(toMLtrain, 0, playstop.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+                    resultml = await webSocketMl.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                    var tmp = Encoding.UTF8.GetString(buffer, 0, resultml.Count);
+                    var toFronttrain = Encoding.UTF8.GetBytes(tmp);
+                    await webSocket.SendAsync(new ArraySegment<byte>(toFronttrain, 0, tmp.Length), resultml.MessageType, resultml.EndOfMessage, CancellationToken.None);
+
+                    await webSocketMl.CloseAsync(WebSocketCloseStatus.NormalClosure, "Client stopped training", CancellationToken.None);
+                    await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Client stopped training", CancellationToken.None);
+                    return true;
+                }
+                    
+            }
+            await webSocketMl.CloseAsync(WebSocketCloseStatus.NormalClosure, "Client closing w handshake", CancellationToken.None);
+            await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Client closing w handshake", CancellationToken.None);
+            return true;
         }
 
         public async Task<HttpResponseMessage> NNCreateTemp(int id,string name,string datapath)
@@ -130,38 +129,6 @@ namespace BackApi.Services
             byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             response = await client.PutAsync("http://localhost:8000/api/nn/default",byteContent);
 
-            /*if (response.StatusCode == HttpStatusCode.OK)
-            {       
-                using (Stream streamToReadFrom = await response.Content.ReadAsStreamAsync())
-                {
-                    int nnid;
-                    string path = CreateNN(id, name,out nnid);
-                    if(path == null)
-                    {
-                        response.StatusCode = HttpStatusCode.NotFound;
-                        return response;
-                    }
-
-                    using (Stream stream = File.Open(path, FileMode.Create))
-                    {
-                        await streamToReadFrom.CopyToAsync(stream);
-                    }
-                    //zakomentarisano dok se ne implementira dobijanje cfg fajla od ml dela, link izmeniti po implementaciji na ml
-                    var cfg = await client.GetAsync("http://localhost:8000/api/nn/cfg/default", HttpCompletionOption.ResponseHeadersRead);
-                    if (cfg.StatusCode == HttpStatusCode.OK)
-                    {
-                        using (Stream cfgStream = await cfg.Content.ReadAsStreamAsync())
-                        {
-                            string cfgpath = NNAddConfig(nnid);
-
-                            using (Stream stream = File.Open(cfgpath, FileMode.Create))
-                            {
-                                await cfgStream.CopyToAsync(stream);
-                            }
-                        }
-                    }
-                }
-            }*/
             return response;
         }
         public string CreateNN(int projid,string name,out int nnid)
@@ -190,7 +157,6 @@ namespace BackApi.Services
 
             return path;
         }
-
         public int GetNNid(int projid,string name)
         {
             var tmp = kontext.NNs.FirstOrDefault(x => x.ProjectId==projid && x.NNName==name);
@@ -198,7 +164,6 @@ namespace BackApi.Services
                 return tmp.NNId;
             return -1;
         }
-
         public string NNIdToPath(int nnid)
         {
             NN nn = kontext.NNs.FirstOrDefault(x => x.NNId == nnid);
@@ -206,7 +171,6 @@ namespace BackApi.Services
                 return nn.DataPath;
             return null;
         }
-
         public string ListNN(int userid, int projid)
         {
             var tmp = kontext.Projects.FirstOrDefault(x => x.ProjectId == projid && x.UserId == userid);
@@ -226,22 +190,6 @@ namespace BackApi.Services
             rez.Append("]");
             return rez.ToString();
         }
-
-        /*public ApiNNTrain MlPacket(ApiNNCfg cfg,int nnid,int projid)
-        {
-            HttpClient client = new HttpClient();
-            var novi = new ApiNNTrain();
-
-            var myContent = JsonConvert.SerializeObject(novi);
-            var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
-            var byteContent = new ByteArrayContent(buffer);
-            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-            var result = await client.PostAsync("http://localhost:8000/api/dataset/edit", byteContent);
-
-            return result;
-        }*/
-
         public string NNAddConfig(int nnid)
         {
             var nn = kontext.NNs.FirstOrDefault(x => x.NNId == nnid);
@@ -256,7 +204,6 @@ namespace BackApi.Services
 
             return path;
         }
-
         public string NNIdToCfg(int nnid)
         {
             NN nn = kontext.NNs.FirstOrDefault(x => x.NNId == nnid);

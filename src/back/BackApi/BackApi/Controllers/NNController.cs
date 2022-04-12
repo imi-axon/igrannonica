@@ -21,17 +21,20 @@ namespace BackApi.Controllers
         private IProjectService projsrv;
         private IDatasetService datasrv;
         private IStorageService storsrv;
-        public NNController(INNservice nnService, IJwtService jwtServis, IProjectService projectService,IDatasetService datasetService, IStorageService storageService)
+        private IWSQueue wsq;
+        public NNController(INNservice nnService, IJwtService jwtServis, IProjectService projectService,IDatasetService datasetService, IStorageService storageService,
+            IWSQueue wsQueue)
         {
             this.nnsrv = nnService;
             this.jwtsrv = jwtServis;
             this.projsrv = projectService;
             this.datasrv = datasetService;
             this.storsrv = storageService;
+            this.wsq = wsQueue;
         }
 
         [HttpGet("{id}/nn/{nnid}/train/start")/*,AllowAnonymous*/]
-        public async Task<ActionResult> Train(int id,int nnid)
+        public async Task<ActionResult> Train(int id, int nnid)
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized("Ulogujte se");
@@ -50,14 +53,34 @@ namespace BackApi.Controllers
             if (packet.conf == null) return BadRequest("Ne postoji Config");
             packet.conf = packet.nn.Replace('\\', '/');
 
-            if (HttpContext.WebSockets.IsWebSocketRequest)
+            if (!wsq.CheckInDict(nnid)) 
             {
-                var webSocketfront = await HttpContext.WebSockets.AcceptWebSocketAsync();
-                await nnsrv.MlTraining(webSocketfront,packet);
+                if (HttpContext.WebSockets.IsWebSocketRequest)
+                {
+                    var webSocketfront = await HttpContext.WebSockets.AcceptWebSocketAsync();
+                    wsq.AddToDict(nnid, webSocketfront);
+                    var webSocketMl = new ClientWebSocket();
+                    await webSocketMl.ConnectAsync(new Uri("ws://localhost:8000/api/nn/train/start"), CancellationToken.None);
+                    try
+                    {
+                        var finished=await nnsrv.MlTraining(webSocketfront, packet,webSocketMl);
+                        if(finished)
+                            wsq.DeleteFromDict(nnid);// pitanje je da li ce ga zatvoriti nakon prve poruke ili nakon sto se ws
+                    }
+                    catch (Exception ex)
+                    {
+                        wsq.DeleteFromDict(nnid);
+                        await webSocketMl.CloseAsync(WebSocketCloseStatus.NormalClosure,"Client Disconnect", CancellationToken.None);
+                    }                
+                }
+                else
+                {
+                    HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+                }
             }
             else
             {
-                HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+                return BadRequest("Na toj Mrezi se vec vrsi treniranje");
             }
             return Ok();
         }
