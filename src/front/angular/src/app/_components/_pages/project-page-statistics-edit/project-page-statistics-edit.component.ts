@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
 import { ProjectsService } from 'src/app/_utilities/_services/projects.service';
+import { StatisticsService } from 'src/app/_utilities/_services/statistics.service';
 import { EditDatasetComponent } from '../../_elements/edit-dataset/edit-dataset.component';
 
 @Component({
@@ -22,7 +23,7 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
   
   editComponent: EditDatasetComponent;
   
-  constructor(private datasetAPI: DatasetService, public activatedRoute: ActivatedRoute, public projectsService: ProjectsService) { }
+  constructor(private datasetAPI: DatasetService, private statisticsAPI: StatisticsService, public activatedRoute: ActivatedRoute, public projectsService: ProjectsService) { }
 
 
   ngOnInit(): void {
@@ -32,6 +33,10 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
     
       this.datasetAPI.GetDataset(this.ProjectId, false, this, this.successfulGetDatasetCallback);
     }, 0);
+
+    // this.checkProjectId();
+    
+    // this.datasetAPI.GetDataset(this.ProjectId, false, this, this.successfulGetDatasetCallback);
     
   }
   
@@ -43,10 +48,10 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
     this.editComponent = component;
     
     this.editComponent.ChangedField.subscribe( change => this.HandleFieldChange(change) );
-      this.editComponent.DataUpdateNeeded.subscribe( event => this.UpdateData() );
-      this.editComponent.SaveDataNeeded.subscribe( event =>this.SaveData() );
-      
-      this.showsEditOptions = true;
+    this.editComponent.DataUpdateNeeded.subscribe( event => this.UpdateData() );
+    this.editComponent.SaveDataNeeded.subscribe( event =>this.SaveData() );
+    
+    this.showsEditOptions = true;
   }
   
   
@@ -55,8 +60,11 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
   // UZIMAMAMO projectId
   private checkProjectId(){
     let p = this.activatedRoute.snapshot.paramMap.get("ProjectId");
-    if (p != null) 
-      this.ProjectId = p as unknown as number;
+    if (p != null)  {
+      this.ProjectId = Number.parseInt(p);
+      console.log('ProjectId')
+      console.log(this.ProjectId)
+    }
   }
   
   
@@ -90,8 +98,11 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
   
   private successfulGetDatasetCallback(self: any, response: any){
     self.dataset = JSON.parse(response.dataset);
-    self.datasetAPI.GetStatistics(self.ProjectId, false, self, self.successfulGetStatisticsCallback);
-    self.editDataset.LoadDataAndRowNulls(self.dataset, self.statistics.rownulls);
+    // self.datasetAPI.GetStatistics(self.ProjectId, false, self, self.successfulGetStatisticsCallback);
+    console.log('Get Dataset Callback')
+    console.log('ProjectId' + self.ProjectId)
+    self.statisticsAPI.GetStatistics(self.ProjectId, false, self, self.successfulGetStatisticsCallback);
+    self.editComponent.LoadDataAndRowNulls(self.dataset, self.statistics.rownulls);
   }
   
   private successfulEditCallback(self: any){
