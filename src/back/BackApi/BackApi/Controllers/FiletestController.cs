@@ -53,7 +53,7 @@ namespace BackApi.Controllers
         {
             Debug.WriteLine("PUT NN");
             var path = storsrv.CreateNNFile(pid, nnid);
-            await storsrv.SaveFile(path, file);
+            storsrv.SaveFile(path, file);
             return Ok();
         }
 
@@ -62,7 +62,7 @@ namespace BackApi.Controllers
         {
             Debug.WriteLine("PUT CFG");
             var path = storsrv.CreateNNCfg(pid, nnid);
-            await storsrv.SaveFile(path, file);
+            storsrv.SaveFile(path, file);
             return Ok();
         }
     }

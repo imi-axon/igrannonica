@@ -11,7 +11,7 @@
         public string CreateNNFile(int projid, int nnid);
         public string CreateNNCfg(int projid, int nnid);
         public string ReadCfg(string path);
-        public Task<Boolean> SaveFile(string path, IFormFile file);
+        public void SaveFile(string path, IFormFile file);
     }
     public class StorageService : IStorageService
     {
@@ -75,7 +75,6 @@
             var path = @"Storage\";
             var tmp = "proj" + projid;
             path = Path.Combine(path, tmp);
-            path = Path.Combine(path, "mreze");
             tmp = "cfg" + nnid + ".json";
             path = Path.Combine(path, tmp);
             return path;
@@ -83,18 +82,15 @@
 
         public string ReadCfg(string path)
         {
-            var rez =File.ReadAllText(path);
+            var rez=File.ReadAllText(path);
             return rez;
         }
 
-        public async Task<Boolean> SaveFile(string path,IFormFile file)
+        public void SaveFile(string path,IFormFile file)
         {
-            using(FileStream stream = File.Open(path, FileMode.Create))
+            using(Stream stream = File.Open(path, FileMode.Create))
             {
-                await file.CopyToAsync(stream);
-                stream.Close();
-                stream.Dispose();
-                return true;
+                file.CopyTo(stream);           
             }
         }
     }
