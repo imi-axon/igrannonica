@@ -65,5 +65,21 @@ namespace BackApi.Controllers
             storsrv.SaveFile(path, file);
             return Ok();
         }
+        [HttpGet("Storage/proj{pid}/mreze/mreza{nnid}.h5"), Host("localhost:7057", "localhost:8000")] //adresa ml mikroserivsa
+        public async Task<ActionResult> PassNNToML(int pid, int nnid)
+        {
+            var path = storsrv.CreateNNFile(pid, nnid);
+            var bytes = await System.IO.File.ReadAllBytesAsync(path);
+
+            return File(bytes, "text/csv", Path.GetFileName(path));
+        }
+        [HttpGet("Storage/proj{pid}/mreze/cfg{nnid}.json"), Host("localhost:7057", "localhost:8000")] //adresa ml mikroserivsa
+        public async Task<ActionResult> PassCfgToML(int pid, int nnid)
+        {
+            var path = storsrv.CreateNNCfg(pid, nnid);
+            var bytes = await System.IO.File.ReadAllBytesAsync(path);
+
+            return File(bytes, "text/csv", Path.GetFileName(path));
+        }
     }
 }
