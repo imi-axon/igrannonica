@@ -1,6 +1,7 @@
+import { BLACK_ON_WHITE_CSS_CLASS } from '@angular/cdk/a11y/high-contrast-mode/high-contrast-mode-detector';
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
-import { interval } from 'd3';
+import { gray, interval } from 'd3';
 
 @Component({
   selector: 'app-chart-training',
@@ -30,7 +31,12 @@ export class ChartTrainingComponent implements OnInit {
             display: true,
             text: 'TITLE'
           }
-        }
+        },
+        elements: {
+          point:{
+              radius: 0
+          }
+      }
       },
       data: {
         labels: [],
@@ -39,20 +45,28 @@ export class ChartTrainingComponent implements OnInit {
             label: 'Test loss',
             data: [],
             // data: [1],
-            tension: 0.5
+            tension: 0.5,
+            borderWidth:2,
+            borderColor:"#000000",
+            backgroundColor:"	#000000"
+           
           },
           {
             label: 'Training loss',
             data: [],
             //data: [1],
-            tension: 0.5
+            tension: 0.5,
+            borderWidth:2,
+            borderColor:"#606060",
+            backgroundColor:"#606060"
+        
           },
         ]
 
       }
     })
 
-    this.dataUpdate();
+   // this.dataUpdate();
 
 
   }
@@ -65,8 +79,8 @@ export class ChartTrainingComponent implements OnInit {
 
 
     console.log("uso");
-    this.brojTest = Math.floor(Math.random() * 8);
-    this.brojTrain = Math.floor(Math.random() * 8); // * (max-min)+min da bude izmedju max i min
+    this.brojTest = Math.random();
+    this.brojTrain =Math.random(); // * (max-min)+min da bude izmedju max i min
     this.br++;
     this.labela = 'epoha' + this.br;
     // this.test.push(this.brojTest);
