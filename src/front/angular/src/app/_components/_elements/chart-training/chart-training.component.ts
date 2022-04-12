@@ -21,16 +21,6 @@ export class ChartTrainingComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.dataUpdate();
-
-
-  }
-
-  //TESTNA F-JA
-  dataUpdate() {
-    if(this.chart) 
-      this.chart.destroy();
-
     this.chart = new Chart('lineChart', {
       type: 'line',
       options: {
@@ -62,29 +52,44 @@ export class ChartTrainingComponent implements OnInit {
       }
     })
 
+    this.dataUpdate();
+
+
+  }
+
+  //TESTNA F-JA
+  dataUpdate() {
+    // if(this.chart) 
+    //   this.chart.destroy();
+
+
+
     console.log("uso");
     this.brojTest = Math.floor(Math.random() * 8);
     this.brojTrain = Math.floor(Math.random() * 8); // * (max-min)+min da bude izmedju max i min
     this.br++;
     this.labela = 'epoha' + this.br;
-    this.test.push(this.brojTest);
-    this.train.push(this.brojTrain);
-    this.labele.push(this.labela);
+    // this.test.push(this.brojTest);
+    // this.train.push(this.brojTrain);
+    // this.labele.push(this.labela);
 
 
     console.log(this.brojTest);
     console.log(this.brojTrain);
 
-    this.chart.data.datasets[0].data = this.test;
-    this.chart.data.datasets[1].data = this.train;
-    this.chart.data.labels = this.labele;
+    // this.chart.data.datasets[0].data = this.test;
+    // this.chart.data.datasets[1].data = this.train;
+    // this.chart.data.labels = this.labele;
 
+    this.chart.data.labels.push(this.labela);
+    this.chart.data.datasets[0].data.push(this.brojTest);
+    this.chart.data.datasets[1].data.push(this.brojTrain);
     this.chart.update();
 
     if(this.br<100)
-{
-  this.delay(2000).then(() => this.ngOnInit());
-}
+    {
+      this.delay(200).then(() => this.dataUpdate());
+    }
 
 
   
