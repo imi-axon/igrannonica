@@ -34,6 +34,7 @@ app = FastAPI()
 def validate_csv(body: Dataset, response: Response):
 
     # print('Pocetak kontrolera (za Add Dataset)')
+    print(f'{body.dataset}')
     csvstring = httpc.get(body.dataset)
 
     print(f'>>>>>>>>>> {csvstring}')

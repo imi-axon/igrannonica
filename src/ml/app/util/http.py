@@ -13,6 +13,7 @@ def get(filepath: str, decode: bool = True) -> str | bytes:
     print(f'GET {path}')
 
     response = httpx.get(path, verify = sslVerify, headers = headers)
+    print(response.status_code)
 
     return response.read().decode() if decode else response.read()
 
@@ -29,7 +30,7 @@ def put(filepath: str, local_filepath: str, sendHost: bool = True) -> bool:
     print(f'PUT {path}')
 
     f = open(local_filepath, 'rb')
-    files = {'upload-file': f}
+    files = {'file': f}
     response = httpx.put(path, verify = sslVerify, files = files, headers = headers)
 
     print('REQUEST\n Headers:')
