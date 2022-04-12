@@ -11,9 +11,9 @@ namespace BackApi.Services
 {
     public interface IDatasetService
     {
-        public Boolean New(IFormFile model,int projid,int userid);
+        public Task<Boolean> New(IFormFile model,int projid,int userid);
         public dynamic IsExist(int projectID, out Boolean uspeh, int userid, out Boolean owner);
-        public Boolean Delete(int projid,int userid);
+        public Boolean Delete(int projid);
         public string ListDatasets(int projid);
         public string Read(int projid, Boolean main,int userid,out Boolean owner);
         public string ProjIdToPath(int projid,Boolean main);
@@ -33,11 +33,11 @@ namespace BackApi.Services
             this.configuration = configuration;
         }
 
-        public Boolean New(IFormFile model,int projid,int userid)
+        public async Task<Boolean> New(IFormFile model,int projid,int userid)
         {
-            var tmp= kontext.Projects.FirstOrDefault(x=> x.ProjectId==projid && x.UserId==userid); // provera vlasnistva projekta pre dodavanja dataset-a
-            if (tmp == null)
-                return false;
+            var existing = kontext.Datasets.FirstOrDefault(x=> x.ProjectId==projid);
+            if(existing != null)
+                Delete(projid);
 
             var Dataset = new Dataset();
             Dataset.Name = "Default"; //moze se promeniti ukoliko bude implementovano vise dataseta po projektu
@@ -76,13 +76,15 @@ namespace BackApi.Services
             //string xd= "n1;n2;n3;out\r1; 1; 0; 1\r1; 0; 0; 1\r0; 0; 1; 1\r1; 0; 1; 1\r0; 0; 0; 0\r";
             //File.WriteAllTextAsync(path, model.dataset);
             //File.WriteAllTextAsync(pathalt,model.dataset);
-            using (var stream = System.IO.File.Create(Dataset.Path))
+            using (FileStream stream = System.IO.File.Create(Dataset.Path))
             {
-                model.CopyToAsync(stream);
+                model.CopyTo(stream);
+                stream.Flush();
             }
-            using (var stream = System.IO.File.Create(Temp.Path))
+            using (FileStream stream2 = System.IO.File.Create(Temp.Path))
             {
-                model.CopyToAsync(stream);
+                model.CopyTo(stream2);
+                stream2.Flush();
             }
 
             return true;
@@ -129,12 +131,8 @@ namespace BackApi.Services
             }
         }
 
-        public Boolean Delete(int projid,int userid)
+        public Boolean Delete(int projid)
         {
-            var tmp = kontext.Projects.FirstOrDefault(x => x.ProjectId == projid && x.UserId == userid); // provera vlasnistva projekta pre brisanja dataset-a
-            if (tmp == null)
-                return false;
-
             List<Dataset> lista= kontext.Datasets.Where(x=> x.ProjectId == projid).ToList();
             var ifempty = lista[0];
             if (ifempty == null)

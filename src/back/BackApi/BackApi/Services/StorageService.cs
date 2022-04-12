@@ -91,7 +91,8 @@
         {
             using(Stream stream = File.Open(path, FileMode.Create))
             {
-                await file.CopyToAsync(stream);           
+                file.CopyTo(stream);
+                return;
             }
         }
     }

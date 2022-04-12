@@ -79,7 +79,7 @@ namespace BackApi.Services
                 List<Dataset> datasets = context.Datasets.Where(x => x.ProjectId == projid).ToList();
                 foreach (Dataset dataset in datasets)
                 {
-                    datasetService.Delete(projid,userid);
+                    datasetService.Delete(projid);
                 }
 
                 List<NN> NNs = context.NNs.Where(x => x.ProjectId == projid).ToList();
