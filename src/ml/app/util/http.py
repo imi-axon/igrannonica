@@ -17,10 +17,12 @@ def get(filepath: str, decode: bool = True) -> str | bytes:
     return response.read().decode() if decode else response.read()
 
 
-def put(filepath: str, local_filepath: str) -> bool:
+def put(filepath: str, local_filepath: str, sendHost: bool = True) -> bool:
 
     headers = baseHeaders.copy()
     #headers['Content-Type']
+    if not sendHost:
+        headers.pop('Host')
 
     path = baseURL + filepath
     path = path.replace('\\', '/')
