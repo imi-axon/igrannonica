@@ -112,14 +112,14 @@ namespace BackApi.Services
                 response.StatusCode = HttpStatusCode.NotFound;
                 return response;
             }
-            File.Create(xd.nn);
+            //File.Create(xd.nn);
             xd.conf = NNAddConfig(nnid);
             if (xd.conf == null)
             {
                 response.StatusCode = HttpStatusCode.NotFound;
                 return response;
             }
-            File.Create(xd.conf);
+            //File.Create(xd.conf);
 
             xd.nn = xd.nn.Replace('\\', '/');
             xd.conf = xd.conf.Replace('\\', '/');

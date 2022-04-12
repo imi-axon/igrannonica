@@ -25,7 +25,7 @@ def put(filepath: str, local_filepath: str, sendHost: bool = True) -> bool:
     if not sendHost:
         headers.pop('Host')
 
-    path = baseURL + filepath
+    path = baseURL + 'api/files/' + filepath
     path = path.replace('\\', '/')
     print(f'PUT {path}')
 
