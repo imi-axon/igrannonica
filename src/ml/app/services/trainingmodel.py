@@ -35,8 +35,8 @@ class TrainingService():
     #percentage_training -> float - [0,1] -> koliki procenat celog skupa je training skup
     def __init__(self, datasetAll, inputs, outputs, actPerLayer, nbperlayer, 
                 metrics = ['mse'], learning_rate = 0.1, regularization_rate = 0.1, regularization = 'L1', 
-                batchSize = 1, percentage_training = 0.2, problem_type = 'REGRESSION', callbacks = []):
-        self.model = None
+                batchSize = 1, percentage_training = 0.2, problem_type = 'REGRESSION', callbacks = [], model = None):
+        self.model = model
         self.inputs = inputs
         self.outputs = outputs
 
@@ -222,17 +222,10 @@ class TrainingService():
         self.model = self.build_model()
         return self.model
 
-    def load_model(self, path = './', name = None):
-        model_path = path + name + '.h5'
-        self.model = tf.keras.models.load_model(model_path)
-
+    def load_model(self, filepath: str):
+        self.model = tf.keras.models.load_model(filepath)
 
     def save_model(self, path: str, name: str):
-        # if name == None:
-        #     s = ''
-        #     for _ in range(24):
-        #         s += str(random.randint(0,9))
-        #     name = s
         model_path = path + name
         self.model.save(model_path)
         return model_path

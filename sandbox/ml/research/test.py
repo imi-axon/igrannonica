@@ -8,6 +8,18 @@ from tempfile import TemporaryFile
 import time
 import threading
 
+from typing import Dict, List
+from threading import Lock
+from venv import create
+from fastapi import WebSocket
+
+# import pandas as pd
+import pandas as pd
+from pandas import DataFrame
+import tensorflow as tf
+from tensorflow import keras
+from keras import layers, Sequential
+from keras.callbacks import Callback
 
 
 
@@ -93,3 +105,98 @@ import threading
 # sleep(5)
 
 # print(a)
+
+class TrainingInstance():
+    def train(self):
+        dataset_path = keras.utils.get_file("auto-mpg.data", "http://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data")
+
+
+        column_names = ['MPG','Cylinders','Displacement','Horsepower','Weight',
+                        'Acceleration', 'Model Year', 'Origin']
+        raw_dataset = pd.read_csv(dataset_path, names=column_names,
+                            na_values = "?", comment='\t',
+                            sep=" ", skipinitialspace=True)
+        dataset = raw_dataset.copy()
+
+        dataset = dataset.dropna() #brisanje null vrednosti
+
+        horsepowerKol = dataset['Horsepower'] #popunjavanje null vrednosti mean-om 
+        horsepower_mean = horsepowerKol.mean()
+        horsepowerKol.fillna(horsepower_mean,inplace=True)
+
+        dataset['Origin'] = dataset['Origin'].map({1:'USA', 2:'Europe', 3:'Japan'}) #elemente kolone menjamo drugim vrednostima u zavisnosti od mapiranja koje prosledimo
+
+        dataset = pd.get_dummies(dataset, prefix='', prefix_sep='') #vrsimo dummy enkodiranje kategorijske promenljive
+
+        # Podela podataka na trening i test
+        train_dataset = dataset.sample(frac=0.8,random_state=0) #80% podataka za treniranje
+        test_dataset = dataset.drop(train_dataset.index) #ostalih 20% podataka za tesiranje
+
+
+
+        train_stats = train_dataset.describe() #opsta statistika
+        train_stats.pop("MPG") #ovaj atribut ignorisemo jer je ciljna promenljiva (ona koja se prediktuje)
+        train_stats = train_stats.transpose()
+
+        train_labels = train_dataset.pop('MPG') #izdvajanje ciljne promenljive
+        test_labels = test_dataset.pop('MPG')
+
+        def norm(x): #standardizacija podataka - podaci su na razlicitim skalama, pa ima smisla izvrsiti njihovu strandardizaciju
+            return (x-train_stats['mean']) / train_stats['std'] 
+        
+        normed_train_data = norm(train_dataset)
+        normed_test_data = norm(test_dataset)
+
+        def build_model():
+            model = keras.Sequential([
+                layers.Dense(10, activation='relu', input_shape=[len(train_dataset.keys())]),
+                layers.Dense(5, activation = 'relu'),
+                layers.Dense(1, activation='linear')
+            ])
+
+            optimizer = tf.keras.optimizers.RMSprop(0.001)
+
+            model.compile(loss='mse',
+                            optimizer = optimizer,
+                            metrics=['mae','mse'])
+            return model
+
+        print('build model')
+
+        model: Sequential = build_model()
+        
+        j = 1
+
+        # print('\n\n>>>>>>>> W <<<<<<<<<')
+        # print(model.layers[j].get_weights()[0])
+        # print('\n\n>>>>>>>> B <<<<<<<<<')
+        # print(model.layers[j].get_weights()[1])
+
+        EPOCHS = 10
+
+        print('fit begin')
+        hist = model.fit(
+            normed_train_data, train_labels,
+            #epochs = EPOCHS, validation_split = 0.2, verbose=1, callbacks=[cb])
+            # epochs = EPOCHS, verbose=1, validation_data=(normed_test_data, test_labels))
+            epochs = EPOCHS, verbose=1, validation_data=(normed_test_data, test_labels))
+
+        # df = pd.DataFrame(hist.history)
+        # print(df)
+
+        # print('\n\n>>>>>>>> W <<<<<<<<<')
+        # print(model.layers[j].get_weights()[0])
+        # print('\n\n>>>>>>>> B <<<<<<<<<')
+        # print(model.layers[j].get_weights()[1])
+
+        # loss, mae, mse = model.evaluate(normed_test_data, test_labels, verbose=2)
+        # print(loss)
+        # print(mae)
+        # print(mse)
+
+        # loss, mae, mse = model.evaluate(normed_test_data, test_labels, verbose=2)
+        # print(loss)
+        # print(mae)
+        # print(mse)
+        
+TrainingInstance().train()
