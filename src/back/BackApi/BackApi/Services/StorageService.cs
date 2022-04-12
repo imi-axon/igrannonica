@@ -89,9 +89,11 @@
 
         public async Task<Boolean> SaveFile(string path,IFormFile file)
         {
-            using(Stream stream = File.Open(path, FileMode.Create))
+            using(FileStream stream = File.Open(path, FileMode.Create))
             {
                 await file.CopyToAsync(stream);
+                stream.Close();
+                stream.Dispose();
                 return true;
             }
         }
