@@ -11,6 +11,8 @@ namespace BackApi.Controllers
     [Route("api/projects")]
     [ApiController]
     [Authorize]
+    [RequestFormLimits(MultipartBodyLengthLimit = 209715200)]
+    [RequestSizeLimit(209715200)]
     public class DatasetController : ControllerBase
     {
         private IDatasetService datasrv;
@@ -47,6 +49,8 @@ namespace BackApi.Controllers
         */
         
         [HttpPost("{id}/dataset")]
+        [RequestFormLimits(MultipartBodyLengthLimit = 209715200)]
+        [RequestSizeLimit(209715200)]
         public async Task<ActionResult<string>> NewDataSet(int id,IFormFile dataset )
         {
             int userid = jwtsrv.GetUserId();
@@ -54,10 +58,12 @@ namespace BackApi.Controllers
             var chk = projsrv.projectOwnership(userid, id);
             if (!chk)
                 return StatusCode(StatusCodes.Status403Forbidden, new { message = "Vi niste vlasnik projekta" });
-            datasrv.New(dataset, id, userid);          
+            var time = await datasrv.New(dataset, id, userid);
+            if(!time)
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Greska pri pisanju fajla." });
             DatasetGetPost novi = new DatasetGetPost();
             novi.dataset= datasrv.ProjIdToPath(id,true);
-            var response = await MLconnection.validateCSVstring(novi); // ceka se implementacija obrade fajla na ml-u a ne stringa
+            /*var response = await MLconnection.validateCSVstring(novi); // ceka se implementacija obrade fajla na ml-u a ne stringa
 
             if (response.StatusCode == HttpStatusCode.Created)
             {
@@ -65,10 +71,10 @@ namespace BackApi.Controllers
             }
             else
             {
-                datasrv.Delete(id, userid);
+                datasrv.Delete(id);
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Ne valja CSV." });
-            }
-            
+            }*/
+            return Ok();
         }
 
         [HttpDelete("{projid}")]
@@ -76,10 +82,13 @@ namespace BackApi.Controllers
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized("Ulogujte se");
-            var rez = datasrv.Delete(projid,userid);
+            var chk = projsrv.projectOwnership(userid, projid);
+            if (!chk)
+                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Vi niste vlasnik projekta" });
+            var rez = datasrv.Delete(projid);
             if (rez)
                 return Ok("Uspesno Obrisan");
-            else return BadRequest("Vec obrisan ili vi niste vlasnik projekta");
+            else return BadRequest("Vec obrisan ");
         }
 
         /*[HttpGet("{projid}")]

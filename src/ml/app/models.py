@@ -22,9 +22,17 @@ class DatasetEditActions (BaseModel):
     dataset: str
 
 class TrainingRequest (BaseModel):
-    dataset: str # link
-    nn: str      # link
+    dataset: str    # link
+    nn: str         # link
     conf: str
+
+class NNCreate (BaseModel):
+    headers: str
+    nn: str
+    conf: str
+
+class NNOnly (BaseModel):
+    nn: str
 
 class WsConn():
 

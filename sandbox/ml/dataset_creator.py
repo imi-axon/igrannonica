@@ -1,10 +1,10 @@
-from random import random
+from random import random, randint
 from typing import List
 
 class DatasetCreator():
 
-    def __init__(self, colnames, numrows, separator = ';'):
-        self.colnames = colnames
+    def __init__(self, numcols, numrows, numouts=1, separator = ';'):
+        self.colnames = [f'Col{i+1}' for i in range(numcols - numouts)] + [f'Out{i+1}' for i in range(numouts)]
         self.numrows = numrows
         self.sep = separator
         self.dataset = None
@@ -38,12 +38,28 @@ class DatasetCreator():
 
     def rand_col(self) -> List:
         return [random() for _ in range(self.numrows)]
+
+    def rand_multiply_col(self, col, mul):
+        print(f'multiply {col} * {mul}')
+        r = lambda: randint(-100, 100) / 100 / 8
+        newcol = []
+        for x in col[1:]:
+            print(f'x: {x}')
+            newcol.append(x * mul)
+        return newcol
+
     
 
     def gen_dataset(self, regenerate = True):
         if regenerate == False and self.dataset != None:
             return
-        self.dataset = [[colname] + self.rand_col() for colname in self.colnames]
+
+        self.dataset = [[self.colnames[0]] + self.rand_col()]
+        print(self.dataset)
+        for i in range(1, len(self.colnames)):
+            input()
+            self.dataset.append([self.colnames[i]] + self.rand_multiply_col(self.dataset[-1], 1.5))
+            print(self.dataset)
 
     # -- Create --
 

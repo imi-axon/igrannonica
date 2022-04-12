@@ -7,6 +7,7 @@ using System.Net.WebSockets;
 using System.Net;
 using System.Text;
 using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace BackApi.Controllers
 {
@@ -19,17 +20,18 @@ namespace BackApi.Controllers
         private IJwtService jwtsrv;
         private IProjectService projsrv;
         private IDatasetService datasrv;
-
-        public NNController(INNservice nnService, IJwtService jwtServis, IProjectService projectService,IDatasetService datasetService)
+        private IStorageService storsrv;
+        public NNController(INNservice nnService, IJwtService jwtServis, IProjectService projectService,IDatasetService datasetService, IStorageService storageService)
         {
             this.nnsrv = nnService;
             this.jwtsrv = jwtServis;
             this.projsrv = projectService;
             this.datasrv = datasetService;
+            this.storsrv = storageService;
         }
 
         [HttpGet("{id}/nn/{nnid}/train/start")/*,AllowAnonymous*/]
-        public async Task<ActionResult> Get(int id,int nnid)
+        public async Task<ActionResult> Train(int id,int nnid)
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized("Ulogujte se");
@@ -38,14 +40,15 @@ namespace BackApi.Controllers
                 return StatusCode(StatusCodes.Status403Forbidden, new { message = "Vi niste vlasnik projekta" });
 
             var packet = new ApiNNTrain();
-            var req = new ApiNNCfg();
-            packet.conf = req.conf;
             packet.dataset = datasrv.ProjIdToPath(id, true);
             if (packet.dataset == null) return BadRequest("Ne postoji dataset");
             packet.dataset = packet.dataset.Replace('\\', '/');
             packet.nn = nnsrv.NNIdToPath(nnid);
             if (packet.nn == null) return BadRequest("Ne postoji Mreza");
             packet.nn = packet.nn.Replace('\\', '/');
+            packet.conf = nnsrv.NNIdToCfg(nnid);
+            if (packet.conf == null) return BadRequest("Ne postoji Config");
+            packet.conf = packet.nn.Replace('\\', '/');
 
             if (HttpContext.WebSockets.IsWebSocketRequest)
             {
@@ -67,7 +70,9 @@ namespace BackApi.Controllers
             var chk = projsrv.projectOwnership(userid, id);
             if (!chk)
                 return StatusCode(StatusCodes.Status403Forbidden, new { message = "Vi niste vlasnik projekta" });
-            var rez = await nnsrv.NNCreateTemp(id, req.Name);
+            var datapath = datasrv.ProjIdToPath(id, true);
+            if (datapath == null) return BadRequest();
+            var rez = await nnsrv.NNCreateTemp(id, req.Name,datapath);
             int nnid = nnsrv.GetNNid(id, req.Name);
             if (nnid == -1)
                 return BadRequest();
@@ -82,6 +87,41 @@ namespace BackApi.Controllers
             if (userid == -1) return Unauthorized("Ulogujte se");
             string rez = nnsrv.ListNN(userid, id);
             return rez;
+        }
+
+        [HttpGet("{id}/nn/{nnid}")]
+        public async Task<ActionResult> GetNN(int id,int nnid)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized("Ulogujte se");
+            var chk = projsrv.projectOwnership(userid, id);
+            if (!chk)
+                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Vi niste vlasnik projekta" });
+
+            var sent = new ApiNNPost();
+            sent.nn = storsrv.CreateNNFile (id, nnid);
+            if (sent.nn == null)
+                return BadRequest();
+            var resp = await MLconnection.GetNNJson(sent);
+            if(resp.StatusCode == HttpStatusCode.OK)
+            {
+                var packet = new ApiNNGet();
+                packet.nn = await resp.Content.ReadAsStringAsync();
+                var tmp = storsrv.CreateNNCfg(id, nnid);
+                packet.conf = storsrv.ReadCfg(tmp);
+
+                var result= JsonConvert.SerializeObject(packet);
+                return Ok(result);
+
+            }
+            return BadRequest();
+
+        }
+
+        [HttpGet("/wstest/{nnid}"),AllowAnonymous]
+        public async Task<ActionResult> WsTesting(int nnid)
+        {
+            return Ok();
         }
     }
 }

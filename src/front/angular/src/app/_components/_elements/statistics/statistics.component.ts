@@ -33,7 +33,7 @@ export class StatisticsComponent implements OnInit {
     setTimeout(() => {
       this.checkProjectId();
       
-      this.statisticsAPI.GetStatistics(this.ProjectId, true, this, this.LoadAndUpdate);
+      // this.statisticsAPI.GetStatistics(this.ProjectId, true, this, this.LoadAndUpdate);
     }, 0);
   }
   

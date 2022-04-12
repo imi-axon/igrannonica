@@ -12,5 +12,6 @@ namespace BackApi.Entities
         public int ProjectId { get; set; }
         public string NNName { get; set; }
         public string DataPath { get; set; }
+        public string ConfPath { get; set; }
     }
 }

@@ -72,6 +72,18 @@ namespace BackApi
 
             return result;
         }
+        public static async Task<HttpResponseMessage> GetNNJson(ApiNNPost req)
+        {
+            HttpClient client = new HttpClient();
+
+            var myContent = JsonConvert.SerializeObject(req);
+            var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+            var byteContent = new ByteArrayContent(buffer);
+            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            var result = await client.PostAsync("http://localhost:8000/api/nn/convert/json", byteContent);
+
+            return result;
+        }
 
         /*public static async Task<dynamic> getRequest(string tekst)
         {

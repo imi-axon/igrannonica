@@ -7,10 +7,9 @@ from tempfile import TemporaryFile
 # FastAPI
 from fastapi import FastAPI, Request, Response, WebSocketDisconnect, status, WebSocket
 from fastapi.responses import PlainTextResponse, FileResponse
-from models import TrainingRequest
 
 # Models
-from models import Dataset, DatasetEditActions, Statistics, TempTrainingInstance, WsConn
+from models import Dataset, DatasetEditActions, Statistics, TempTrainingInstance, NNOnly, NNCreate
 
 # Utils
 from util.csv import csv_is_valid, csv_decode, csv_decode_2
@@ -22,6 +21,8 @@ from util.filemngr import FileMngr
 from middleware.statistics import StatisticsMiddleware
 from middleware.dataset_editor import DatasetEditor
 from middleware.training import TrainingInstance
+from middleware.model import NNModelMiddleware
+from middleware.NN import NN_Middleware as NNJsonConverter
 
 
 app = FastAPI()
@@ -33,6 +34,7 @@ app = FastAPI()
 def validate_csv(body: Dataset, response: Response):
 
     # print('Pocetak kontrolera (za Add Dataset)')
+    print(f'{body.dataset}')
     csvstring = httpc.get(body.dataset)
 
     print(f'>>>>>>>>>> {csvstring}')
@@ -114,25 +116,52 @@ def get_statistics(body: Dataset):
     return { 'statistics': stats }
 
 
-# Get Default NN file
-@app.get('/api/nn/model/default', status_code=200)
-def get_default_nn():
-    
-    f = FileMngr('h5')
-    f.create(b'tempdata')
-    f.delete()
+# Convert NN to JSON
+@app.post('/api/nn/convert/json', status_code=200, response_model=NNOnly)
+def nn_to_json(body: NNOnly):
 
-    return FileResponse(f.path())
+    print(f'GET NN: body.nn: {body.nn}')
 
-# Get Default NN Config
-@app.get('/api/nn/conf/default', status_code=200)
-def get_default_nn():
+    h5bytes: bytes = httpc.get(body.nn, decode=False)
+    h5mngr = FileMngr('h5')
+    h5mngr.create(h5bytes)
+    h5path = h5mngr.path()
+
+    print(f'GET NN: h5 path: {h5path}')
+
+    conv = NNJsonConverter(h5path)
+    h5mngr.delete()
+    s = conv.NN_json()
+
+    return {'nn': s}
+
+# Update NN and CONF
+@app.put('/api/nn/default', status_code=200)
+def update_with_default_nn(body: NNCreate):
+
+    print(body)
+
+    headers = csv_decode(body.headers)[0]
+    print(headers)
+
+    # TEMP --
+    inputs = ['A']
+    outputs = ['B']
+    # TEMP --
     
+    nnmodel = NNModelMiddleware()
+    nnmodel.new_default_model(inputs, outputs)
+    fm = FileMngr('h5')
+    nnmodel.save_model(fm.directory(), fm.name())
+    print(f'PUT NN: {httpc.put(body.nn, fm.path())}')
+    fm.delete()
+
     def_conf = {
-        'inputs' :          [],
-        'outputs' :         [],
+        'inputs' :          inputs,
+        'outputs' :         outputs,
         'neuronsPerLayer' : [3, 2],
         'actPerLayer' :     ['relu', 'relu'],
+        'actOut' :          'linear',
         'learningRate' :    0.1,
         'reg' :             'L1',
         'regRate' :         0.1,
@@ -141,7 +170,57 @@ def get_default_nn():
         'valSplit' :        0.2
     }
 
-    return def_conf
+    fc = FileMngr('json')
+    fc.create(json_encode(def_conf))
+    print(f'PUT CONF: {httpc.put(body.conf, fc.path())}')
+    fc.delete()
+    
+
+# Get Default NN file
+@app.get('/api/nn/new/default', status_code=200)
+def get_default_nn_model():
+    
+    # TEMP --
+    inputs = ['A']
+    outputs = ['B']
+    # TEMP --
+    
+    nnmodel = NNModelMiddleware()
+    nnmodel.new_default_model(inputs, outputs)
+    fm = FileMngr('h5')
+    nnmodel.save_model(fm.directory(), fm.name())
+    fm.delete()
+
+    return FileResponse(fm.path())
+
+# Get Default NN Config
+@app.get('/api/nn/conf/default', status_code=200)
+def get_default_nn_conf():
+    
+    # TEMP --
+    inputs = ['A']
+    outputs = ['B']
+    # TEMP --
+
+    def_conf = {
+        'inputs' :          [],
+        'outputs' :         [],
+        'neuronsPerLayer' : [3, 2],
+        'actPerLayer' :     ['relu', 'relu'],
+        'actOut' :          'linear',
+        'learningRate' :    0.1,
+        'reg' :             'L1',
+        'regRate' :         0.1,
+        'batchSize' :       1,
+        'trainSplit' :      0.8,
+        'valSplit' :        0.2
+    }
+
+    f = FileMngr('json')
+    f.create(json_encode(def_conf))
+    f.delete()
+
+    return FileResponse(f.path())
 
 
 # ==== WebSockets ====

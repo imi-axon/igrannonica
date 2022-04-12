@@ -12,10 +12,11 @@ namespace BackApi.Services
     public interface INNservice
     {
         public Task MlTraining(WebSocket webSocket, ApiNNTrain packet);
-        public Task<HttpResponseMessage> NNCreateTemp(int id,string name);
+        public Task<HttpResponseMessage> NNCreateTemp(int id,string name,string datapath);
         public int GetNNid(int projid, string name);
         public string NNIdToPath(int nnid);
         public string ListNN(int userid, int projid);
+        public string NNIdToCfg(int nnid);
     }
 
     public class NNservice: INNservice
@@ -34,8 +35,8 @@ namespace BackApi.Services
         {
             var buffer = new byte[1024 * 4];
             var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-            packet.conf = Encoding.UTF8.GetString(buffer, 0, result.Count);
-            Debug.WriteLine(packet.conf);
+            packet.newconf = Encoding.UTF8.GetString(buffer, 0, result.Count);
+            //Debug.WriteLine(packet.newconf);
             var mes = Encoding.UTF8.GetString(buffer, 0, result.Count);
 
             try
@@ -44,12 +45,15 @@ namespace BackApi.Services
                 var replbuffer = Encoding.UTF8.GetBytes(resp);
                 //await webSocket.SendAsync(new ArraySegment<byte>(replbuffer, 0, resp.Length), result.MessageType, result.EndOfMessage, CancellationToken.None);
                 
-                Debug.WriteLine("Pre ClientWebSocket");
+                //Debug.WriteLine("Pre ClientWebSocket");
                 var webSocketMl = new ClientWebSocket();
-                Debug.WriteLine("Nakon ClientWebSocket");
+                //Debug.WriteLine("Nakon ClientWebSocket");
                 await webSocketMl.ConnectAsync(new Uri("ws://localhost:8000/api/nn/train/start"),CancellationToken.None); // proveriti da li ml deo hostuje ws ili wss
                 await webSocketMl.SendAsync(new ArraySegment<byte>(replbuffer, 0, resp.Length), result.MessageType, result.EndOfMessage, CancellationToken.None);
                 var resultml = await webSocketMl.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+
+                //var playstopres=await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                //var playstop = Encoding.UTF8.GetString(buffer, 0, playstopres.Count);
                 while (!resultml.CloseStatus.HasValue)
                 {
                     if (webSocket.CloseStatus.HasValue)
@@ -92,15 +96,46 @@ namespace BackApi.Services
             await webSocket.CloseAsync(result.CloseStatus.Value,result.CloseStatusDescription,CancellationToken.None);
         }
 
-        public async Task<HttpResponseMessage> NNCreateTemp(int id,string name)
+        public async Task<HttpResponseMessage> NNCreateTemp(int id,string name,string datapath)
         {
             HttpClient client = new HttpClient();
-            var response = await client.GetAsync("http://localhost:8000/api/nn/new/default", HttpCompletionOption.ResponseHeadersRead);
-            if (response.StatusCode == HttpStatusCode.OK)
+            HttpResponseMessage response= new HttpResponseMessage();
+            var xd = new NNCreate();
+            int nnid;
+            using (StreamReader reader = new StreamReader(datapath))
+            {
+                xd.headers = reader.ReadLine() ?? "";
+            }
+            xd.nn = CreateNN(id, name, out nnid);
+            if(xd.nn==null)
+            {
+                response.StatusCode = HttpStatusCode.NotFound;
+                return response;
+            }
+            //File.Create(xd.nn);
+            xd.conf = NNAddConfig(nnid);
+            if (xd.conf == null)
+            {
+                response.StatusCode = HttpStatusCode.NotFound;
+                return response;
+            }
+            //File.Create(xd.conf);
+
+            xd.nn = xd.nn.Replace('\\', '/');
+            xd.conf = xd.conf.Replace('\\', '/');
+
+            var myContent = JsonConvert.SerializeObject(xd);
+            var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+            var byteContent = new ByteArrayContent(buffer);
+            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            response = await client.PutAsync("http://localhost:8000/api/nn/default",byteContent);
+
+            /*if (response.StatusCode == HttpStatusCode.OK)
             {       
                 using (Stream streamToReadFrom = await response.Content.ReadAsStreamAsync())
                 {
-                    string path = CreateNN(id, name);
+                    int nnid;
+                    string path = CreateNN(id, name,out nnid);
                     if(path == null)
                     {
                         response.StatusCode = HttpStatusCode.NotFound;
@@ -111,24 +146,42 @@ namespace BackApi.Services
                     {
                         await streamToReadFrom.CopyToAsync(stream);
                     }
+                    //zakomentarisano dok se ne implementira dobijanje cfg fajla od ml dela, link izmeniti po implementaciji na ml
+                    var cfg = await client.GetAsync("http://localhost:8000/api/nn/cfg/default", HttpCompletionOption.ResponseHeadersRead);
+                    if (cfg.StatusCode == HttpStatusCode.OK)
+                    {
+                        using (Stream cfgStream = await cfg.Content.ReadAsStreamAsync())
+                        {
+                            string cfgpath = NNAddConfig(nnid);
+
+                            using (Stream stream = File.Open(cfgpath, FileMode.Create))
+                            {
+                                await cfgStream.CopyToAsync(stream);
+                            }
+                        }
+                    }
                 }
-            }
+            }*/
             return response;
         }
-        public string CreateNN(int projid,string name)
+        public string CreateNN(int projid,string name,out int nnid)
         {
             var tmp = kontext.NNs.FirstOrDefault(x=>x.NNName==name && x.ProjectId==projid);
             if (tmp != null)
+            {
+                nnid = -1;
                 return null;
+            }
             var nn = new NN();
             nn.ProjectId = projid;
             nn.NNName=name;
             nn.DataPath = "";
+            nn.ConfPath = "";
 
             kontext.Add(nn);
             kontext.SaveChanges();
 
-            int nnid = nn.NNId;
+            nnid = nn.NNId;
             var path = storageService.CreateNNFile(projid, nnid);
             nn.DataPath=path;
 
@@ -188,5 +241,28 @@ namespace BackApi.Services
 
             return result;
         }*/
+
+        public string NNAddConfig(int nnid)
+        {
+            var nn = kontext.NNs.FirstOrDefault(x => x.NNId == nnid);
+            if(nn == null)
+                return null;
+
+            var path = storageService.CreateNNCfg(nn.ProjectId, nnid);
+            nn.ConfPath = path;
+
+            kontext.Entry(nn).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            kontext.SaveChanges();
+
+            return path;
+        }
+
+        public string NNIdToCfg(int nnid)
+        {
+            NN nn = kontext.NNs.FirstOrDefault(x => x.NNId == nnid);
+            if (nn != null)
+                return nn.ConfPath;
+            return null;
+        }
     }
 }
