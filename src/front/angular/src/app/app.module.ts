@@ -54,6 +54,8 @@ import { TrainingPageComponent } from './_components/_pages/training-page/traini
 
 import { LandingPageSelectorComponent } from './_components/_elements/landing-page-selector/landing-page-selector.component';
 import { ListaMrezaComponent } from './_components/_elements/lista-mreza/lista-mreza.component';
+import { ChartTrainingComponent } from './_components/_elements/chart-training/chart-training.component';
+import { NgChartsModule } from 'ng2-charts';
 
 
 
@@ -98,7 +100,8 @@ import { ListaMrezaComponent } from './_components/_elements/lista-mreza/lista-m
 
     KonfiguracijaComponent,
     TrainingPageComponent,
-    ListaMrezaComponent
+    ListaMrezaComponent,
+    ChartTrainingComponent
   ],
   imports: [
     NgxCsvParserModule,
@@ -109,6 +112,7 @@ import { ListaMrezaComponent } from './_components/_elements/lista-mreza/lista-m
     NoopAnimationsModule,
     MatTooltipModule,
     MatSelectModule,
+    NgChartsModule,
     TranslateModule.forRoot({
       loader:{
         provide:TranslateLoader,
