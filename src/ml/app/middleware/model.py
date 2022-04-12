@@ -63,11 +63,6 @@ class NNModelMiddleware():
 
 
     def save_model(self, path: str, name: str):
-        # if name == None:
-        #     s = ''
-        #     for _ in range(24):
-        #         s += str(random.randint(0,9))
-        #     name = s
         model_path = path + name
         self.model.save(model_path)
         return model_path

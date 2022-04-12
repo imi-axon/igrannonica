@@ -137,17 +137,21 @@ def nn_to_json(body: NNOnly):
 
 # Update NN and CONF
 @app.put('/api/nn/default', status_code=200)
-def update_with_default_nn(body: NNCreate):
+def update_with_default_nn(body: NNCreate, response: Response):
 
     print(body)
 
     headers = csv_decode(body.headers)[0]
     print(headers)
+    if len(headers) < 2:
+        response.status_code = 400
+        return
 
-    # TEMP --
-    inputs = ['A']
-    outputs = ['B']
-    # TEMP --
+    # MOZE DRUGACIJE !!! 
+    # = 2 kolone =>  in: [c0]      out: [c1]
+    # > 2 kolone =>  in: [c0, c1]  out: [c2]
+    inputs = [headers[0]] + ([headers[1]] if len(headers) > 2 else [])
+    outputs = [headers[2 if len(headers) > 2 else 1]]
     
     nnmodel = NNModelMiddleware()
     nnmodel.new_default_model(inputs, outputs)
@@ -239,32 +243,46 @@ async def training_stream(ws: WebSocket):
     print(data['conf'])
     datasetlink = data['dataset']
     nnlink = data['nn']
-    conf = json_decode(data['conf'])
+    conflink = data['conf']
+    conf = json_decode(data['newconf'])
 
     # TEMP
-    conf['actPerLayer'] = ['relu' for _ in range(3)]
-    conf['neuronsPerLayer'] = [3 for _ in range(3)]
+    # conf['actPerLayer'] = ['relu' for _ in range(3)]
+    # conf['neuronsPerLayer'] = [3 for _ in range(3)]
 
     buff: List[bytes] = []
     lock: Lock = Lock()
+    flags = {'stop': False}
 
     try:
-        th = Thread(target=TrainingInstance(buff, lock).train, args=(datasetlink, nnlink, conf))
+        th = Thread(target=TrainingInstance(buff, lock, flags).train, args=(datasetlink, nnlink, conf))
         th.start()
 
         finished = False
 
-        # i = 0
         while not finished:
             
+            print(f'finished: {finished}')
+            print(f'flag stop: {flags["stop"]}')
+            print(f'locked: {lock}')
+
+
+            #rcv = await ws.receive_text()
+            rcv = 'play'
+            
             lock.acquire(blocking=True) # [ X ]
+            
+            if rcv == 'stop':
+                flags['stop'] = True
+                finished = True
+
             if len(buff) > 0:
                 b = buff.pop(0)
                 lock.release() # [   ]
                 print(b)
                 
                 if b == b'': 
-                    await ws.send_text(b) # >>>>
+                    await ws.send_text(b.decode()) # >>>>
                     while True:
                         lock.acquire(blocking=True) # [ X ]
                         if len(buff) > 0:
@@ -274,12 +292,12 @@ async def training_stream(ws: WebSocket):
                     b = buff.pop(0)
                     lock.release() # [   ]
 
-                    await ws.send_text(b) # >>>>
+                    await ws.send_text(b.decode()) # >>>>
                     finished = True
                     
                 else:
                     print('>>> send bytes')
-                    await ws.send_text(b) # >>>>
+                    await ws.send_text(b.decode()) # >>>>
 
             else:
                 lock.release() # [   ]
@@ -289,3 +307,5 @@ async def training_stream(ws: WebSocket):
 
     except WebSocketDisconnect:
         pass
+
+    print('KKKKRRRRAAAAAJJJJJJJ')
