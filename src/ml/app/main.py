@@ -9,7 +9,7 @@ from fastapi import FastAPI, Request, Response, WebSocketDisconnect, status, Web
 from fastapi.responses import PlainTextResponse, FileResponse
 
 # Models
-from models import Dataset, DatasetEditActions, Statistics, TempTrainingInstance, WsConn, NNCreate
+from models import Dataset, DatasetEditActions, Statistics, TempTrainingInstance, NNOnly, NNCreate
 
 # Utils
 from util.csv import csv_is_valid, csv_decode, csv_decode_2
@@ -22,6 +22,7 @@ from middleware.statistics import StatisticsMiddleware
 from middleware.dataset_editor import DatasetEditor
 from middleware.training import TrainingInstance
 from middleware.model import NNModelMiddleware
+from middleware.NN import NN_Middleware as NNJsonConverter
 
 
 app = FastAPI()
@@ -113,6 +114,21 @@ def get_statistics(body: Dataset):
 
     return { 'statistics': stats }
 
+
+# Convert NN to JSON
+@app.put('/api/nn/convert/json', status_code=200, response_model=NNOnly)
+def nn_to_json(body: NNOnly):
+
+    h5bytes: bytes = httpc.get(body.nn, decode=False)
+    h5mngr = FileMngr('h5')
+    h5mngr.create(h5bytes)
+    h5path = h5mngr.path()
+
+    conv = NNJsonConverter(h5path)
+    h5mngr.delete()
+    s = conv.NN_json()
+
+    return {'nn': s}
 
 # Update NN and CONF
 @app.put('/api/nn/default', status_code=200)

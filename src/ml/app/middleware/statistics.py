@@ -108,8 +108,8 @@ from services.util import object_to_json
 
 import json
 import numpy as np
-from util import dictionary
-from util import NpEncoder
+from .util import dictionary
+from .util import NpEncoder
 
 class StatisticsMiddleware:
 

@@ -31,6 +31,9 @@ class NNCreate (BaseModel):
     nn: str
     conf: str
 
+class NNOnly (BaseModel):
+    nn: str
+
 class WsConn():
 
     def __init__(self, ws: WebSocket, tr: TempTrainingInstance):

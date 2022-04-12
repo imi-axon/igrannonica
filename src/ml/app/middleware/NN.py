@@ -4,8 +4,8 @@ import numpy as np
 import pandas as pd
 import json
 
-from util import dictionary
-from util import NpEncoder
+from .util import dictionary
+from .util import NpEncoder
 
 class NN_Middleware():
 
