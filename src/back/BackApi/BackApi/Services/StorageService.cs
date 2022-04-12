@@ -75,6 +75,7 @@
             var path = @"Storage\";
             var tmp = "proj" + projid;
             path = Path.Combine(path, tmp);
+            path = Path.Combine(path, "mreze");
             tmp = "cfg" + nnid + ".json";
             path = Path.Combine(path, tmp);
             return path;
