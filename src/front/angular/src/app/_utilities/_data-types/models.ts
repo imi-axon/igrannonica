@@ -185,8 +185,10 @@ export class NewNN{
 
 export class NN{
     public name:string='';
+    public id:number=-1;
     constructor(){
         this.name='';
+        this.id=-1;
     }
 }
 /*

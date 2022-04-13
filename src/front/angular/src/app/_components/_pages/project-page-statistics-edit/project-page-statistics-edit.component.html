@@ -1,9 +1,14 @@
 <navbar></navbar>
 <div class="container p-5">
     <div class="row title-section">
+        <div class="col-md-10">
         <p> <span> <a href='/my-projects'>{{'edit-dataset-page.naslov1'|translate}}/ </a>
             </span>{{'edit-dataset-page.naslov2'|translate}}</p>
-        <hr>
+        </div>
+        <div class="col-md-2 d-flex justify-content-end">
+        <button class="btn btn-primary" (click)="train()">Train</button>
+    </div>
+        <hr class="mt-2">
     </div>
     <div class="row">
         <div class="col-11">

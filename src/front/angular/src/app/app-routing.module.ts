@@ -19,10 +19,11 @@ import { VerificationComponent } from './_components/_pages/verification-page/ve
 import { StatisticsComponent } from './_components/_elements/statistics/statistics.component';
 import { TrainingPageComponent } from './_components/_pages/training-page/training-page.component';
 import { CreateNeuralNetworkComponent } from './_components/_elements/create-neural-network/create-neural-network.component';
+import { NnPageComponent } from './_components/_pages/nn-page/nn-page.component';
 
 const routes: Routes = [
  // {path:'train/:ProjectId/:Inputs/:Outputs',component:ProjectPageComponent},
- {path:'train/:ProjectId', component:TrainingPageComponent},
+ {path:'train/:ProjectId/nn/:NNName', component:TrainingPageComponent},
   {path:'new-project', component:NewProjectPageComponent},
   {path:'dataset/:ProjectId',component:DataSetPageComponent},
   {path:'registration-successful',component:RegistrationSuccessfulComponent},
@@ -38,6 +39,7 @@ const routes: Routes = [
 
   //{path:'edit-dataset/:ProjectId', component:EditDatasetPageComponent},
   {path:'input-username', component:InputusernamePageComponent},
+  {path:'project/:ProjectId/nns',component:NnPageComponent},
 
   {
     path:'project/:ProjectId',
@@ -66,7 +68,7 @@ export const routingComponents=[
   DataSetPageComponent, LoginPageComponent, RegistrationPageComponent,
   
   HomePageComponent,MyProjectsPageComponent,ProfilPageComponent,VerificationComponent,ProjectPageStatisticsEditComponent,
-  StatisticsComponent,EditDatasetComponent,TrainingPageComponent,CreateNeuralNetworkComponent,
+  StatisticsComponent,EditDatasetComponent,TrainingPageComponent,CreateNeuralNetworkComponent,NnPageComponent,
 
   //TESTIRANJE - OBRISATI KASNIJE
   NeuralNetworkDisplayComponent];
