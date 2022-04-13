@@ -33,15 +33,15 @@ namespace BackApi.Controllers
             this.wsq = wsQueue;
         }
 
-        [HttpGet("{id}/nn/{nnid}/train/start")/*,AllowAnonymous*/]
+        [HttpGet("{id}/nn/{nnid}/train/start"),AllowAnonymous]
         public async Task<ActionResult> Train(int id, int nnid)
-        {
+        {/*
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized("Ulogujte se");
             var chk = projsrv.projectOwnership(userid, id);
             if (!chk)
                 return StatusCode(StatusCodes.Status403Forbidden, new { message = "Vi niste vlasnik projekta" });
-
+            */
             var packet = new ApiNNTrain();
             packet.dataset = datasrv.ProjIdToPath(id, true);
             if (packet.dataset == null) return BadRequest("Ne postoji dataset");

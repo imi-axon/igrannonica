@@ -1,4 +1,4 @@
-<div class="container" style="width:100%">
+<div class="container p-0" style="width:100%">
 <button *ngIf="sakriveno" class="btn btn-secondary" (click)="onClick()">{{'create-neural-network.kreiraj'|translate}}</button>
 <div id="forma" *ngIf="!sakriveno">
 <form #nnf="ngForm" (ngSubmit)="onSubmit(nnf)"> 

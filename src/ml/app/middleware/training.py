@@ -36,10 +36,11 @@ class TrainingCallback(Callback):
 
         print(f'>>>> {epoch}. epoch end [ UNLOCK ]')
         to_stop = self.flags['stop']
-        self.lock.release() # [ UNLOCK ]
         
         if to_stop:
             self.model.stop_training = True
+        
+        self.lock.release() # [ UNLOCK ]
 
 
     def on_train_end(self, logs=None):
@@ -51,6 +52,7 @@ class TrainingCallback(Callback):
 class TrainingInstance():
 
     def __init__(self, buff: List[bytes], lock: Lock, flags):
+        print('Train Instance Construcotor : BEGIN')
         self.buff = buff
         self.lock = lock
         self.flags = flags
@@ -58,6 +60,7 @@ class TrainingInstance():
         self.callback.set_custom_params(buff, lock, flags)
         self.service = None
         self.lock.acquire(blocking=True) # [ LOCK ]
+        print('Train Instance Construcotor : END')
         
 
     def create_dataset(self, datasetUrl: str):
@@ -93,7 +96,10 @@ class TrainingInstance():
 
     def train(self, datasetUrl: str, nnUrl: str, trainConf: Dict):
 
+        print('Train Function : BEGIN')
+
         # -- Inicijalni setup --
+        print('-- Inicijalni setup --')
 
         dataframe = self.create_dataset(datasetUrl)     # dataframe
         fm_model = self.create_model(nnUrl)             # h5 FileMngr
@@ -103,12 +109,14 @@ class TrainingInstance():
         self.lock.release()                             # zbog lock-a u konstruktoru # [   ]
 
         # -- Treniranje --
+        print('-- Treniranje --')
 
         self.service.start_training(10, trainConf['valSplit'])              # na kraju treninga ima lock.acquire() # [ X ]
         self.service.save_model(fm_model.directory(), fm_model.name())      # h5 fajl sa putanjom za koju je vezan fm_model FileMngr
         self.lock.release()                                                 # zbog lock-a na kraju treniranja # [   ]
         
-        # -- Poslednje poruke za buffer --
+        # -- Poruka za kraj treniranja --
+        print('-- Poruka za kraj treniranja --')
 
         self.lock.acquire(blocking=True)    # [ X ]
         self.buff.append(b'end')            # indikator za kraj treniranja 
@@ -117,6 +125,15 @@ class TrainingInstance():
         # -- POST Request, cuvanje h5 modela --
 
         # httpc.put(nnUrl) # PRIVREMENO ZAKOMENTARISANO DOK BACK NE URADI PODRSKU
+
+        # -- Poruka za kraj Thread-a --
+        print('-- Poruka za kraj Thread-a --')
+
+        self.lock.acquire(blocking=True)    # [ X ]
+        self.buff.append(b'')               # indikator za kraj Thread-a
+        self.lock.release()                 # [   ]
+
+
 
 
 
