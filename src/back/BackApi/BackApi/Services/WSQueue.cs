@@ -13,16 +13,10 @@ namespace BackApi.Services
     }
     public class WSQueue: IWSQueue
     {
-        private Dictionary<int,WebSocket> WSDict = new Dictionary<int,WebSocket>();
-
-        private DataBaseContext kontext;
-        private readonly IConfiguration configuration;
-        private static IStorageService storageService = new StorageService();
-
-        public WSQueue(DataBaseContext datasetContext, IConfiguration configuration)
+        private Dictionary<int,WebSocket> WSDict;
+        public WSQueue()
         {
-            kontext = datasetContext;
-            this.configuration = configuration;
+            this.WSDict=new Dictionary<int,WebSocket>();
         }
         public Boolean CheckInDict(int nnid)
         {
