@@ -80,11 +80,11 @@ sortZA(){
 }
 
 sortSort(){
-  //this.filtriraneMreze.sort((a,b)=>a.id-b.id);
+  this.filtriraneMreze.sort((a,b)=>a.id-b.id);
 }
 
-onClick(name:any){
-  this.router.navigate(['train/'+this.projectID+'/nn/'+name]);
+onClick(id:any){
+  this.router.navigate(['train/'+this.projectID+'/nn/'+id]);
 }
 
 }

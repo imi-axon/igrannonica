@@ -16,7 +16,6 @@ export class CreateNeuralNetworkComponent implements OnInit {
 
   public newNN= new NewNN();
   private ProjectId:number=-1;
-  private nnId:number=-1;
 
   constructor(private newNNservice:NewNnService, private activatedRoute:ActivatedRoute) { }
   sakriveno:boolean=true;

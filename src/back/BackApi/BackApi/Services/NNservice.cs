@@ -188,6 +188,7 @@ namespace BackApi.Services
             foreach (NN n in listNNs)
             {
                 rez.Append("{");
+                rez.Append("\"" + "id" + "\":" + "\"" + n.NNId + "\",");
                 rez.Append("\"" + "name" + "\":" + "\"" + n.NNName + "\"");
                 rez.Append("},");
             }
