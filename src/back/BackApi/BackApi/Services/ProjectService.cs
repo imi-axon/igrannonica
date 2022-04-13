@@ -111,6 +111,11 @@ namespace BackApi.Services
                 rez.Append("\"" + "Name" + "\":" + "\"" + p.Name + "\",");
                 rez.Append("\"" + "Public" + "\":" + "\"" + p.Public + "\",");
                 rez.Append("\"" + "Creationdate" + "\":" + "\"" + p.CreationDate + "\",");
+                var pom = context.Datasets.FirstOrDefault(x => x.ProjectId == p.ProjectId);
+                if(pom != null)
+                    rez.Append("\"" + "hasDataset" + "\":" + "\"" + "true" + "\",");
+                else
+                    rez.Append("\"" + "hasDataset" + "\":" + "\"" + "false" + "\",");
                 rez.Append("\"" + "Description" + "\":" + "\"" + p.Description + "\"");
                 rez.Append("},");
             }
@@ -122,6 +127,11 @@ namespace BackApi.Services
                 rez.Append("\"" + "Name" + "\":" + "\"" + p.Name + "\",");
                 rez.Append("\"" + "Public" + "\":" + "\"" + p.Public + "\",");
                 rez.Append("\"" + "Creationdate" + "\":" + "\"" + p.CreationDate + "\",");
+                var pom = context.Datasets.FirstOrDefault(x => x.ProjectId == p.ProjectId);
+                if (pom != null)
+                    rez.Append("\"" + "hasDataset" + "\":" + "\"" + "true" + "\",");
+                else
+                    rez.Append("\"" + "hasDataset" + "\":" + "\"" + "false" + "\",");
                 rez.Append("\"" + "Description" + "\":" + "\"" + p.Description + "\"");
                 rez.Append("},");
             }
