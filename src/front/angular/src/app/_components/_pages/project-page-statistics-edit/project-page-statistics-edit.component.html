@@ -10,7 +10,7 @@
             <router-outlet (activate)="OnActivate($event)"> </router-outlet>
         </div>
         <div class="col-1">
-            <app-opcije-dataset></app-opcije-dataset>
+            <app-opcije-dataset ></app-opcije-dataset>
             <app-opcije-edit-dataset *ngIf="showsEditOptions"
                 (RemoveColumnsClicked)="RemoveColumns()"
                 (RemoveNullRowsClicked)="RemoveNullRows()"

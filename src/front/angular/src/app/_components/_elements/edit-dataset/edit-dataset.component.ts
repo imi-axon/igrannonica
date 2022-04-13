@@ -10,13 +10,11 @@ export class EditDatasetComponent implements OnInit {
 
   dataset: any;
   columns: string[];
-  rowNulls: number[];
   
   // Stranicenje za prikaz podataka
   dataPages: any[][] = [];
   rowsPerPage: number = 13;
   currentPage: number = 0;
-  rowNullsPages: any[][] = [];
   pageInput: number;
   
   // Za editovanje
@@ -42,7 +40,7 @@ export class EditDatasetComponent implements OnInit {
   
   ngOnInit(): void {
     // Moze se ukljuciti za testiranje prikaza
-    this.LoadTestData();
+    //this.LoadTestData();
   }
   
   
@@ -51,7 +49,7 @@ export class EditDatasetComponent implements OnInit {
     
     let testStatistics = JSON.parse('{"cormat":{"cols":["Kolona1","Kolona2","Kolona3","Kolona4","Kolona5"],"cors":[0.533,0.644,0,0,0.751,1,0,0.151,0.253,0.26]},"colstats":[{"col":"Kolona1","min":0.6,"max":1.85,"avg":1.2,"med":1,"nul":0},{"col":"Kolona2","min":0.3,"max":3.25,"avg":1.98,"med":1.56,"nul":1},{"col":"Kolona3","min":1.6,"max":2.15,"avg":3.67,"med":1.23,"nul":0},{"col":"Kolona4","min":3.23,"max":6.42,"avg":2.41,"med":4.2,"nul":2},{"col":"Kolona5","min":1.72,"max":4.88,"avg":3.2,"med":2,"nul":0},{"col":"Kolona1","min":0.6,"max":1.85,"avg":1.2,"med":1,"nul":0},{"col":"Kolona2","min":0.3,"max":3.25,"avg":1.98,"med":1.56,"nul":1},{"col":"Kolona3","min":1.6,"max":2.15,"avg":3.67,"med":1.23,"nul":0},{"col":"Kolona4","min":3.23,"max":6.42,"avg":2.41,"med":4.2,"nul":2},{"col":"Kolona5","min":1.72,"max":4.88,"avg":3.2,"med":2,"nul":0},{"col":"Kolona1","min":0.6,"max":1.85,"avg":1.2,"med":1,"nul":0},{"col":"Kolona2","min":0.3,"max":3.25,"avg":1.98,"med":1.56,"nul":1},{"col":"Kolona3","min":1.6,"max":2.15,"avg":3.67,"med":1.23,"nul":0},{"col":"Kolona4","min":3.23,"max":6.42,"avg":2.41,"med":4.2,"nul":2},{"col":"Kolona5","min":1.72,"max":4.88,"avg":3.2,"med":2,"nul":0}],"rownulls":[0,1,0,1,1,0,0,2,2,0,1,2,0,2,2,3,3,2,1,2,2,2,0,1,0,0,2,1,2,3,1,0,2,2,1,3,0,1,2,0,0,0,1,3,1,2,1,0,1,0]}');
      
-    this.LoadDataAndRowNulls(testDataset, testStatistics.rownulls);
+    this.LoadData(testDataset);
   }
   
   
@@ -106,45 +104,36 @@ export class EditDatasetComponent implements OnInit {
   }
   
   // Ucitavanje
-  public LoadDataAndRowNulls(dataset: any, rowNulls: any){    
+  public LoadData(dataset: any){    
     
     this.dataset = dataset;
-    
     this.columns = Object.keys(this.dataset[0]);
-    this.rowNulls = rowNulls;
     
     this.setSelectedColumns();
     
-    this.splitDataAndNulls(this.dataset, this.rowNulls);
+    this.splitData(this.dataset);
     this.currentPage = 0;
     
     this.LoadedEvent.emit();
   }
-  private splitDataAndNulls(data: any, rowNulls: any){
+  private splitData(data: any){
     this.dataPages = [];
-    this.rowNulls = [];
     
     let arrayCounter = 0;
     
     this.dataPages.push([]);
-    this.rowNullsPages.push([]);
     
     let sectionCounter = 0;
     
     for(let i = 0; i < data.length; i++){
       if(sectionCounter < this.rowsPerPage){
         this.dataPages[arrayCounter].push(data[i]);
-        
-        this.rowNullsPages[arrayCounter].push(rowNulls[i]);
       }
       else{
         sectionCounter = 0;
         
         this.dataPages.push([]);
         this.dataPages[++arrayCounter].push(data[i]);
-        
-        this.rowNullsPages.push([]);
-        this.rowNullsPages[arrayCounter].push(rowNulls[i]);
       }
       sectionCounter++;
     }

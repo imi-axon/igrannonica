@@ -30,7 +30,7 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   // Camera
   private camera!: THREE.PerspectiveCamera;
   private cameraX: number = 0;
-  private cameraZ: number = 7;
+  private cameraZ: number = 6;
   private cameraY: number = -5;
   
   private fov: number = 50;
