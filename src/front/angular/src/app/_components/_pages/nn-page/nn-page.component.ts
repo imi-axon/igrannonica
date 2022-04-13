@@ -15,7 +15,6 @@ export class NnPageComponent implements OnInit {
   
   }
 
-  //OVAJ NACIN NE VALJA JER SE FJA NE POZIVE ON HANDLE SUCCESS!!!!!!!!!
   receiveMessage() {
     window.location.reload();
 

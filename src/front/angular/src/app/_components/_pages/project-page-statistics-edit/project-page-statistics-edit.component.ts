@@ -221,6 +221,7 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
   }
 
   public train(){
+    console.log(this.ProjectId);
     this.router.navigate(['/project/'+this.ProjectId+'/nns']);
   }
 

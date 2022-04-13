@@ -80,7 +80,7 @@ sortZA(){
 }
 
 sortSort(){
-  //this.filtriraneMreze.sort((a,b)=>a.idNN-b.idNN);
+  //this.filtriraneMreze.sort((a,b)=>a.id-b.id);
 }
 
 onClick(name:any){

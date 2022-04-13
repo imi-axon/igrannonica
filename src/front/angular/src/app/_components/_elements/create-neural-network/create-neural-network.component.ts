@@ -16,6 +16,7 @@ export class CreateNeuralNetworkComponent implements OnInit {
 
   public newNN= new NewNN();
   private ProjectId:number=-1;
+  private nnId:number=-1;
 
   constructor(private newNNservice:NewNnService, private activatedRoute:ActivatedRoute) { }
   sakriveno:boolean=true;
@@ -31,11 +32,13 @@ export class CreateNeuralNetworkComponent implements OnInit {
   onSubmit(f:NgForm){
     this.newNN.Name=f.value.nnName;
     this.newNNservice.newNN(this.newNN,this.ProjectId,this,this.handleSuccess,this.handleError);
-   this.messageEvent.emit();
   }
 
-  handleSuccess(self: any) {
+  handleSuccess(self: any,response:any) {
     console.log("Tacno");
+    self.nnId=response.id;
+    console.log(response.id);
+    self.messageEvent.emit();
   
   }
 

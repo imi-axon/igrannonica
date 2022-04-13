@@ -15,8 +15,7 @@ export class NnApiService {
   private url:string=apiProperties.url +'/api/projects/';
 
   projectsNN(projectID:number):Observable<HttpResponse<NN[]>>{
-    this.url+=projectID+'/nn';
-    let response = this.http.get<NN[]>(this.url,
+    let response = this.http.get<NN[]>(this.url+projectID+'/nn',
     {
       observe:"response",
       headers:HeaderUtil.jwtOnlyHeaders()
