@@ -124,6 +124,9 @@ export class UserService {
       console.log(model.lastname);
       this.userAPI.edituser2(model).subscribe(
         res=>{
+          JWTUtil.delete();
+          this.auth.logovan=false;
+          this.auth.korisnickoIme='';
           console.log("Uspesno editovan korisnik");
           this.router.navigate(['login'])
         },
@@ -137,6 +140,9 @@ export class UserService {
       console.log(model.lastname);
       this.userAPI.edituser3(model).subscribe(
         res=>{
+          JWTUtil.delete();
+          this.auth.logovan=false;
+          this.auth.korisnickoIme='';
           console.log("Uspesno editovan korisnik");
           this.router.navigate(['login'])
         },
