@@ -9,16 +9,18 @@ export class TrainingApiService {
 
   url = apiProperties.wsurl;
 
-  public train(projectId:number,conf:any){
-    let url=this.url+'/api/projects/'+projectId+'/nn/1/train/start'
-    let ws = webSocket<any>({url:url,deserializer:(msg)=>msg})
+  public train(projectId:number, nnId: number ,conf:any){
+    let url=this.url+'/api/projects/'+projectId+'/nn/'+nnId+'/train/start'
+    let ws = webSocket<any>({url:url})
 
     ws.subscribe((val:any)=>{
       console.log("WS MESSAGE")
       console.log(val)
+      ws.next('play');
     })
 
     ws.next(conf);
+    ws.next('play');
 
   }
 

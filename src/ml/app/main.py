@@ -234,13 +234,13 @@ async def training_stream(ws: WebSocket):
     start_time = time()
 
     await ws.accept()
+    data = await ws.receive_json()
     await ws.send_bytes(b'') # confirm
     print('Accepted')
     
-    data = await ws.receive_json()
 
     # print(data)
-    print(data['conf'])
+    print(data)
     datasetlink = data['dataset']
     nnlink = data['nn']
     conflink = data['conf']
@@ -259,6 +259,7 @@ async def training_stream(ws: WebSocket):
         th.start()
 
         finished = False
+        await_play = True
 
         while not finished:
             
@@ -266,23 +267,31 @@ async def training_stream(ws: WebSocket):
             print(f'flag stop: {flags["stop"]}')
             print(f'locked: {lock}')
 
-
-            #rcv = await ws.receive_text()
-            rcv = 'play'
+            if await_play:
+                print('> AWAIT BACK PLAY')
+                rcv = await ws.receive_text()
+                await_play = False
+                print('> RECIEVED: ' + rcv)
+            # rcv = 'play'
             
             lock.acquire(blocking=True) # [ X ]
             
             if rcv == 'stop':
+                print(f'> RCV = stop')
                 flags['stop'] = True
                 finished = True
 
             if len(buff) > 0:
+                await_play = True
                 b = buff.pop(0)
+                print(f'> BUFFER POP -> {b.decode()}')
                 lock.release() # [   ]
-                print(b)
+                # print(b)
                 
-                if b == b'': 
+                if b == b'end': 
+                    print(f'> END BLOCK')
                     await ws.send_text(b.decode()) # >>>>
+                    print(f'> Poslat Backu END Message')
                     while True:
                         lock.acquire(blocking=True) # [ X ]
                         if len(buff) > 0:
@@ -292,7 +301,7 @@ async def training_stream(ws: WebSocket):
                     b = buff.pop(0)
                     lock.release() # [   ]
 
-                    await ws.send_text(b.decode()) # >>>>
+                    # await ws.send_text(b.decode()) # >>>>
                     finished = True
                     
                 else:

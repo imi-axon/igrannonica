@@ -66,7 +66,7 @@ export class ChartTrainingComponent implements OnInit {
       }
     })
 
-   // this.dataUpdate();
+   this.dataUpdate();
 
 
   }
