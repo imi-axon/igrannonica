@@ -1,6 +1,7 @@
 ﻿using BackApi.Entities;
 using BackApi.Models;
 using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -21,35 +22,38 @@ namespace BackApi.Services
         public string GetUser(string username);
         public bool EditEmail(int id, UserEdit model);
         public bool EditPassword(int id, UserEdit model);
+        public bool addPhoto(int id, IFormFile photo);
     }
 
-    public class UserService: IUserService
+    public class UserService : IUserService
     {
         private DataBaseContext kontext;
         private readonly IConfiguration configuration;
         private IEmailService emailService;
+        private IStorageService storageService;
 
-        public UserService(DataBaseContext korisnikContext,IConfiguration configuration, IEmailService emailService)
+        public UserService(DataBaseContext korisnikContext, IConfiguration configuration, IEmailService emailService, IStorageService storageService)
         {
             kontext = korisnikContext;
             this.configuration = configuration;
             this.emailService = emailService;
+            this.storageService = storageService;
         }
 
         private void CreatePWHash(string password, out byte[] pwHash, out byte[] pwSalt)
         {
-            using(var hmac=new HMACSHA512())
+            using (var hmac = new HMACSHA512())
             {
                 pwSalt = hmac.Key;
                 pwHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
         }
 
-        private Boolean CheckPWHash(string password,byte[] pwHash,byte[] pwSalt)
+        private Boolean CheckPWHash(string password, byte[] pwHash, byte[] pwSalt)
         {
             using (var hmac = new HMACSHA512(pwSalt))
             {
-                var izrHash=hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                var izrHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 return izrHash.SequenceEqual(pwHash);
             }
         }
@@ -72,8 +76,8 @@ namespace BackApi.Services
                 claims: claims,
                 expires: DateTime.UtcNow.AddDays(1),
                 signingCredentials: cred);
-            var jwt=new JwtSecurityTokenHandler().WriteToken(token);
-                return jwt;
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+            return jwt;
         }
 
         private string CreateEmailToken(string username, int expiretime)
@@ -108,9 +112,9 @@ namespace BackApi.Services
                 int id2 = EmailToId(model.email);
                 int ind1 = 0;
                 int ind2 = 0;
-                foreach(var user in kontext.Users)
+                foreach (var user in kontext.Users)
                 {
-                    if(user.UserId == id1)
+                    if (user.UserId == id1)
                     {
                         string pom = emailService.ValidateToken(user.EmailToken);
                         if (pom != "")
@@ -124,7 +128,7 @@ namespace BackApi.Services
                     }
                 }
 
-                if(ind1 == 1)
+                if (ind1 == 1)
                 {
                     var user = kontext.Users.Find(id1);
                     kontext.Users.Remove(user);
@@ -153,20 +157,21 @@ namespace BackApi.Services
                     kontext.SaveChanges();
                 }
             }
-            var korisnik= new User();
+            var korisnik = new User();
             korisnik.Username = model.username;
             korisnik.Lastname = model.lastname;
-            korisnik.Name=model.firstname;
-            korisnik.Email=model.email;
+            korisnik.Name = model.firstname;
+            korisnik.Email = model.email;
             korisnik.Verified = false;
             string jwtoken = CreateEmailToken(korisnik.Username, int.Parse(configuration.GetSection("AppSettings2:EmailToken").Value.ToString()));
-            korisnik.EmailToken = jwtoken; 
+            korisnik.EmailToken = jwtoken;
 
             CreatePWHash(model.password, out byte[] pwHash, out byte[] pwSalt);
 
-            korisnik.PasswordHash=pwHash;
-            korisnik.PasswordSalt=pwSalt;
+            korisnik.PasswordHash = pwHash;
+            korisnik.PasswordSalt = pwSalt;
 
+            //var path = storageService.CreateDataset(projid, Dataset.DatasetId);
             kontext.Users.Add(korisnik);
             kontext.SaveChanges();
             //rez = "Korisnik uspesno registrovan";
@@ -175,6 +180,25 @@ namespace BackApi.Services
             return "Proverite vas email i verifikujte se";
         }
 
+        public bool addPhoto(int id, IFormFile photo)
+        {
+            var user = kontext.Users.FirstOrDefault(x => x.UserId == id);
+            var path = storageService.CreatePhoto(id);
+            //user.PhotoPath= path;
+            kontext.SaveChanges();
+
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            path = path + "\\" + photo.FileName;
+            using (FileStream stream = System.IO.File.Create(path))
+            {
+                photo.CopyTo(stream);
+                stream.Flush();
+            }
+            return true;
+        }
         public string Login(UserLogin model,out Boolean uspeh)
         {
             var kor =kontext.Users.FirstOrDefault(x => x.Username == model.username && x.Verified==true);

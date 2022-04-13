@@ -39,11 +39,13 @@ namespace BackApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> Register(UserRegister req)
+        public async Task<ActionResult<string>> Register(UserRegister req/*, IFormFile photo*/)
         {
             int userid = jwtsrv.GetUserId();
             if (userid != -1) return Forbid();
             string tmp = korsrv.Register(req);
+            int id = korsrv.UsernameToId(req.username);
+            //korsrv.addPhoto(1, photo);
             string rez = "";
             if (tmp != "")
             {
@@ -56,6 +58,7 @@ namespace BackApi.Controllers
                 rez = "Korisnik sa tim Username-om vec postoji!";
                 return BadRequest(rez);
             }
+            return rez;
         }
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login(UserLogin req)

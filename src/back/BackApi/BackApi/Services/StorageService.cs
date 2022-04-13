@@ -12,6 +12,7 @@
         public string CreateNNCfg(int projid, int nnid);
         public string ReadCfg(string path);
         public void SaveFile(string path, IFormFile file);
+        public string CreatePhoto(int userid);
     }
     public class StorageService : IStorageService
     {
@@ -44,6 +45,16 @@
             var filename = "data" + datasetid + ".csv";   //trenutno samo csv ubuduce ce se dodavati Ext property-podrzani fajltipovi
             var datafile = Path.Combine(datapath, filename);
             return datafile;
+        }
+
+        public string CreatePhoto(int userid)
+        {
+            var basepath = @"Storage\";
+            var imgfolder = "Images";
+            var imgpath = Path.Combine(basepath, imgfolder);
+            var image = "img" + userid;
+            var datapath = Path.Combine(imgpath, image);
+            return datapath;
         }
         public void DeleteDataset(string path)
         {

@@ -6,6 +6,11 @@
         public string password { get; set; }
     }
 
+    public class UserPhoto
+    {
+        public IFormFile photo { get; set; }
+    }
+
     public class UserRegister
     {
         public string firstname { get; set; }
@@ -13,7 +18,6 @@
         public string email { get; set; }
         public string username { get; set; }
         public string password { get; set; }
-
     }
 
     public class UserEdit
