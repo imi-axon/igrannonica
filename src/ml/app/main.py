@@ -263,24 +263,27 @@ async def training_stream(ws: WebSocket):
 
         while not finished:
             
-            print(f'finished: {finished}')
-            print(f'flag stop: {flags["stop"]}')
-            print(f'locked: {lock}')
+            # print(f'finished: {finished}')
+            # print(f'flag stop: {flags["stop"]}')
+            # print(f'locked: {lock}')
+
+            rcv = 'play'
 
             if await_play:
                 print('> AWAIT BACK PLAY')
                 rcv = await ws.receive_text()
                 await_play = False
                 print('> RECIEVED: ' + rcv)
-            # rcv = 'play'
-            
-            lock.acquire(blocking=True) # [ X ]
             
             if rcv == 'stop':
                 print(f'> RCV = stop')
                 flags['stop'] = True
                 finished = True
+            
+            lock.acquire(blocking=True) # [ X ]
+            
 
+            # print(len(buff))
             if len(buff) > 0:
                 await_play = True
                 b = buff.pop(0)

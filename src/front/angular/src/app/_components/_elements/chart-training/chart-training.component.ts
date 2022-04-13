@@ -29,7 +29,7 @@ export class ChartTrainingComponent implements OnInit {
         plugins: {
           title: {
             display: true,
-            text: 'TITLE'
+            text: 'Treniranje'
           }
         },
         elements: {
@@ -42,7 +42,7 @@ export class ChartTrainingComponent implements OnInit {
         labels: [],
         datasets: [
           {
-            label: 'Test loss',
+            label: 'Training loss',
             data: [],
             // data: [1],
             tension: 0.5,
@@ -52,13 +52,13 @@ export class ChartTrainingComponent implements OnInit {
            
           },
           {
-            label: 'Training loss',
+            label: 'Validation loss',
             data: [],
             //data: [1],
             tension: 0.5,
             borderWidth:2,
-            borderColor:"#606060",
-            backgroundColor:"#606060"
+            borderColor:"#dd6060",
+            backgroundColor:"#dd6060"
         
           },
         ]
@@ -66,63 +66,19 @@ export class ChartTrainingComponent implements OnInit {
       }
     })
 
-   this.dataUpdate();
+  //  this.dataUpdate();
 
 
   }
 
   //TESTNA F-JA
-  dataUpdate() {
-    // if(this.chart) 
-    //   this.chart.destroy();
-
-
-
-    console.log("uso");
-    this.brojTest = Math.random();
-    this.brojTrain =Math.random(); // * (max-min)+min da bude izmedju max i min
-    this.br++;
-    this.labela = 'epoha' + this.br;
-    // this.test.push(this.brojTest);
-    // this.train.push(this.brojTrain);
-    // this.labele.push(this.labela);
-
-
-    console.log(this.brojTest);
-    console.log(this.brojTrain);
-
-    // this.chart.data.datasets[0].data = this.test;
-    // this.chart.data.datasets[1].data = this.train;
-    // this.chart.data.labels = this.labele;
-
-    this.chart.data.labels.push(this.labela);
-    this.chart.data.datasets[0].data.push(this.brojTest);
-    this.chart.data.datasets[1].data.push(this.brojTrain);
+  public dataUpdate(epoch: number, tLoss: number, vLoss: number) {
+ 
+    this.chart.data.labels.push('epoch ' + epoch);
+    this.chart.data.datasets[0].data.push(vLoss);
+    this.chart.data.datasets[1].data.push(tLoss);
     this.chart.update();
 
-    if(this.br<100)
-    {
-      this.delay(200).then(() => this.dataUpdate());
-    }
-
-
-  
-    // chart.data.datasets[0].data.push(this.brojTest);
-    // chart.update();
-
-    // chart.data.datasets[0].data.push(this.brojTrain);
-    // chart.update();
-
-    // if (chart.data.labels)
-    //   chart.data.labels.push('labela' + this.br);
-
-    // chart.update();
-
-
-  }
-
-   delay(time:number) {
-    return new Promise(resolve => setTimeout(resolve, time));
   }
   
 

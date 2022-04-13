@@ -64,7 +64,7 @@ export class KonfiguracijaComponent implements OnInit {
         this.regularization = this.selektovano;
         break;
       case "batchSlider":
-        this.batchSize = this.selektovano;
+        this.batchSize = Number.parseInt(this.selektovano);
         break;
       case "Activation":
         this.activation = this.selektovano;

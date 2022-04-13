@@ -23,7 +23,7 @@ import { NnPageComponent } from './_components/_pages/nn-page/nn-page.component'
 
 const routes: Routes = [
  // {path:'train/:ProjectId/:Inputs/:Outputs',component:ProjectPageComponent},
- {path:'train/:ProjectId/nn/:NNName', component:TrainingPageComponent},
+ {path:'train/:ProjectId/nn/:NNId', component:TrainingPageComponent},
   {path:'new-project', component:NewProjectPageComponent},
   {path:'dataset/:ProjectId',component:DataSetPageComponent},
   {path:'registration-successful',component:RegistrationSuccessfulComponent},
