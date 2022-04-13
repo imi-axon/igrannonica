@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NewNN } from 'src/app/_utilities/_data-types/models';
 import { NewNnService } from 'src/app/_utilities/_services/new-nn.service';
+import { ListaMrezaComponent } from '../lista-mreza/lista-mreza.component';
 
 @Component({
   selector: 'app-create-neural-network',
@@ -10,6 +11,8 @@ import { NewNnService } from 'src/app/_utilities/_services/new-nn.service';
   styleUrls: ['./create-neural-network.component.scss']
 })
 export class CreateNeuralNetworkComponent implements OnInit {
+
+  @Output() messageEvent = new EventEmitter<any>();
 
   public newNN= new NewNN();
   private ProjectId:number=-1;
@@ -28,10 +31,12 @@ export class CreateNeuralNetworkComponent implements OnInit {
   onSubmit(f:NgForm){
     this.newNN.Name=f.value.nnName;
     this.newNNservice.newNN(this.newNN,this.ProjectId,this,this.handleSuccess,this.handleError);
+   this.messageEvent.emit();
   }
 
   handleSuccess(self: any) {
     console.log("Tacno");
+  
   }
 
   handleError(self: any, message: string) {

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NN } from 'src/app/_utilities/_data-types/models';
 import { AuthService } from 'src/app/_utilities/_services/auth.service';
 import { NnService } from 'src/app/_utilities/_services/nn.service';
@@ -11,7 +11,8 @@ import { NnService } from 'src/app/_utilities/_services/nn.service';
 })
 export class ListaMrezaComponent implements OnInit {
 
-  constructor(private authService:AuthService,private nnService:NnService, private activatedRoute:ActivatedRoute) { }
+  constructor(private authService:AuthService,private nnService:NnService, private activatedRoute:ActivatedRoute, private router:Router) { }
+
   private projectID:number=-1;
   public mreze:NN[]=[];
   public filtriraneMreze:NN[]=[];
@@ -82,5 +83,8 @@ sortSort(){
   //this.filtriraneMreze.sort((a,b)=>a.idNN-b.idNN);
 }
 
+onClick(name:any){
+  this.router.navigate(['train/'+this.projectID+'/nn/'+name]);
+}
 
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
 import { ProjectsService } from 'src/app/_utilities/_services/projects.service';
 import { StatisticsService } from 'src/app/_utilities/_services/statistics.service';
@@ -23,7 +23,7 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
   
   editComponent: EditDatasetComponent;
   
-  constructor(private datasetAPI: DatasetService, private statisticsAPI: StatisticsService, public activatedRoute: ActivatedRoute, public projectsService: ProjectsService) { }
+  constructor(private datasetAPI: DatasetService, private statisticsAPI: StatisticsService, public activatedRoute: ActivatedRoute, public projectsService: ProjectsService,public router:Router) { }
 
 
   ngOnInit(): void {
@@ -218,6 +218,10 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
     let editJSON = this.getActionsJSON(selectedColumns, 'enc label');
     
     this.datasetAPI.EditDataset(editJSON, this.ProjectId, false, this, this.successfulEditCallback);
+  }
+
+  public train(){
+    this.router.navigate(['/project/'+this.ProjectId+'/nns']);
   }
 
 }
