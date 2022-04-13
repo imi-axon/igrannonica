@@ -49,24 +49,7 @@
                 </select>
             </div>
         </div>
-    </div>
-    <div class="row mt-5">
-        <div id="input/output" class="col-4 mt-3">
-            <button class="btn btn-primary mx-2" (click)="prikaziInput()" [disabled]="gotovoInputi">Izaberi
-                input-e</button>
-            <button class="btn btn-primary" (click)="prikaziOutput()"
-                [disabled]="!gotovoInputi || gotovoOutputi">Izaberi output-e</button>
-        </div>
-
-        <div id="batchSize" class="col-4 ">
-            <div class="" style="width:50%">
-                <label for="batchSlider" class="form-label">Batch size: <span
-                        id="batchSizeNum">{{batchSize}}</span></label>
-                <input type="range" class="form-range" id="batchSlider" min="0" max="30" step="1" value="15"
-                    (input)="onChange($event)">
-            </div>
-        </div>
-        <div class="col-md-4">
+        <div class="col-md-4 mt-5">
             <label for="Activation">Activation **za sve skrivene slojeve</label>
             <div class="select">
                 <select id="Activation" (change)="onChange($event)">
@@ -77,49 +60,57 @@
                 </select>
             </div>
         </div>
-
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-
-            <div class="checkBoxovi mt-3" *ngIf="prikaziInpute">
-                <div class="form-check form-check-inline" *ngFor="let c of columns ; index as i">
-                    <input type="checkbox" id="input{{i}}" (click)="inputClick($event)" [value]="c"> {{c}}
-                </div><br>
-                <button class="btn btn-sm btn-primary" (click)="potvrdiInp()"
-                    [disabled]="inputs.length==0">Potvrdi</button>
+        <div id="batchSize" class="col-4 mt-5 ">
+            <div class="" style="width:100%">
+                <label for="batchSlider" class="form-label">Batch size: <span
+                        id="batchSizeNum">{{batchSize}}</span></label>
+                <input type="range" class="form-range" id="batchSlider" min="0" max="30" step="1" value="15"
+                    (input)="onChange($event)">
             </div>
-
-            <div class="checkBoxovi mt-3" *ngIf="prikaziOutpute">
-                <div class="form-check form-check-inline" *ngFor="let c of slobodneKolone ; index as i">
-                    <input type="checkbox" id="output{{i}}" (click)="outputClick($event)" [value]="c"> {{c}}
-                </div><br>
-                <button class="btn btn-sm btn-primary" (click)="potvrdiOut()"
-                    [disabled]="outputs.length==0">Potvrdi</button>
-            </div>
-            <div class="">
-                <div *ngIf="gotovoInputi">
-                    Izabrani inputi:
-                    <div class="inout d-inline" *ngFor="let i of inputs">
-                        {{i}}
-                    </div>
-                </div>
-
-                <div *ngIf="gotovoOutputi">
-                    Izabrani outputi:
-                    <div *ngFor="let o of outputs" class="inout d-inline">
-                        {{o}}
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        <div class="col-md-4">
-
-        </div>
-        <div class="col-md-4">
-
         </div>
     </div>
+    <div class="row mt-5 ml-0">
+        <div id="input/output" class="col-6 mt-3">
+            <div class="btn-group">
+                <button class="btn btn-primary" (click)="prikaziInput()" [disabled]="gotovoInputi">Izaberi
+                    input-e</button>
+                <button class="btn btn-primary" (click)="prikaziOutput()"
+                    [disabled]="!gotovoInputi || gotovoOutputi">Izaberi output-e</button>
+            </div>
+            <div class="boxovi">
 
+                <div class="checkBoxovi mt-3" *ngIf="prikaziInpute">
+                    <div class="form-check form-check-inline" *ngFor="let c of columns ; index as i">
+                        <input type="checkbox" id="input{{i}}" (click)="inputClick($event)" [value]="c"> {{c}}
+                    </div><br>
+                    <button class="btn btn-sm btn-primary" (click)="potvrdiInp()"
+                        [disabled]="inputs.length==0">Potvrdi</button>
+                </div>
+
+                <div class="checkBoxovi mt-3" *ngIf="prikaziOutpute">
+                    <div class="form-check form-check-inline" *ngFor="let c of slobodneKolone ; index as i">
+                        <input type="checkbox" id="output{{i}}" (click)="outputClick($event)" [value]="c"> {{c}}
+                    </div><br>
+                    <button class="btn btn-sm btn-primary" (click)="potvrdiOut()"
+                        [disabled]="outputs.length==0">Potvrdi</button>
+                </div>
+                <div class="">
+                    <div *ngIf="gotovoInputi">
+                        Izabrani inputi:
+                        <div class="inout d-inline" *ngFor="let i of inputs">
+                            {{i}}
+                        </div>
+                    </div>
+
+                    <div *ngIf="gotovoOutputi">
+                        Izabrani outputi:
+                        <div *ngFor="let o of outputs" class="inout d-inline">
+                            {{o}}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
