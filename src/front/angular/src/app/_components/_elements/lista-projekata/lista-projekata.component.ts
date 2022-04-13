@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm, NgSelectOption } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Project } from 'src/app/_utilities/_data-types/models';
 import { AuthService } from 'src/app/_utilities/_services/auth.service';
 import { ProjectsService } from 'src/app/_utilities/_services/projects.service';
@@ -11,7 +12,7 @@ import { ProjectsService } from 'src/app/_utilities/_services/projects.service';
 })
 export class ListaProjekataComponent implements OnInit {
 
-  constructor(private projectsService:ProjectsService,private authService:AuthService) { }
+  constructor(private projectsService:ProjectsService,private authService:AuthService,private router:Router) { }
   private username:string=this.authService.korisnickoIme;
   public projekti:Project[]=[];
   public filtriraniProjekti:Project[]=[];
@@ -77,6 +78,18 @@ sortZA(){
 
 sortSort(){
   this.filtriraniProjekti.sort((a,b)=>a.ProjectId-b.ProjectId);
+}
+
+onClick(projId:any, hasDataset:any){
+  console.log(projId);
+  console.log(hasDataset);
+
+  if(hasDataset=='true'){
+    this.router.navigate(['/project/'+projId]);
+  }
+  else if(hasDataset=='false'){
+  this.router.navigate(['/dataset/'+projId]);
+  }
 }
 
 }

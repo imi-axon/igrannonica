@@ -75,7 +75,7 @@
 <div  class="projekti-lista row" *ngIf="projekti.length>0">
 
   <div class="col-md-4" *ngFor="let p of filtriraniProjekti">
-    <div class="projekat p-3 shadow rounded" routerLink="/dataset/{{p.ProjectId}}">
+    <div class="projekat p-3 shadow rounded" (click)="onClick(p.ProjectId, p.hasDataset)" > 
       <div class="imeIopis">
         <p class="imeProjekta">{{p.Name}}</p>
         <p class="opis">{{p.Description}}</p>
