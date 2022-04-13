@@ -52,10 +52,14 @@ namespace BackApi.Services
                 }
                 var fromFronttrain = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                 var playstop = Encoding.UTF8.GetString(buffer, 0, fromFronttrain.Count);
-                while (playstop == "play")//sve dok sa fronta stize "play" salju im se rezultati sledece epohe
+                Debug.WriteLine(">>>>>>>>>>>> " + playstop);
+                while (playstop == "\"play\"")//sve dok sa fronta stize "play" salju im se rezultati sledece epohe
                 {
+                    Debug.WriteLine(" >>>>>> While Loop <<<<< ");
                     var toMLtrain= Encoding.UTF8.GetBytes(playstop);
+                    Debug.WriteLine(">>>>>>>>>>>> Send To ML" + playstop);
                     await webSocketMl.SendAsync(new ArraySegment<byte>(toMLtrain, 0, playstop.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+                    Debug.WriteLine(">>>>>>>>>>>> Wait From ML");
                     resultml = await webSocketMl.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                     var tmp = Encoding.UTF8.GetString(buffer, 0, resultml.Count);
                     if(tmp == "end") //ako se trening zavrsio do kraja bez stop, posalji json mreze i zatvori sockete
@@ -71,6 +75,7 @@ namespace BackApi.Services
                     }
                     var toFronttrain= Encoding.UTF8.GetBytes(tmp);
                     await webSocket.SendAsync(new ArraySegment<byte>(toFronttrain, 0, tmp.Length), resultml.MessageType, resultml.EndOfMessage, CancellationToken.None);
+
 
                     fromFronttrain = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                     playstop = Encoding.UTF8.GetString(buffer, 0, fromFronttrain.Count);

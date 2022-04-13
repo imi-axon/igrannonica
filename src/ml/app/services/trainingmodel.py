@@ -236,9 +236,10 @@ class TrainingService():
         if self.model == None:
             self.new_model()
 
-        for i in range(10):
-            print(f'TRAIN {i}')
-            self.fit_model(self.model, epoch, val_split)
+        self.fit_model(self.model, epoch, val_split)
+        # for i in range(10):
+        #     print(f'TRAIN {i}')
+        #     self.fit_model(self.model, epoch, val_split)
 
         print('TRAINING FINISHED')
 

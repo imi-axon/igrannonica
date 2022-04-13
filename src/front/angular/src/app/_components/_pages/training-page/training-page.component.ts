@@ -41,12 +41,15 @@ export class TrainingPageComponent implements OnInit {
       inputs: this.konfiguracija.inputs, //str[]
       outputs: this.konfiguracija.outputs, //str[]
       neuronsPerLayer: [3, 3], //int[]
+      actOut: 'sigmoid',
       actPerLayer: ['sigmoid', 'sigmoid'], //str[]
       learningRate: this.konfiguracija.learningRate, //float
       reg: this.konfiguracija.regularization, //str
-      regularizationRate: this.konfiguracija.regularizationRate, //float
-      batchSize: this.konfiguracija.batchSize //int
+      regRate: this.konfiguracija.regularizationRate, //float
+      batchSize: this.konfiguracija.batchSize, //int
+      trainSplit: 0.3,
+      valSplit: 0.2
     };
-    this.wsService.train(this.projectId, conf);
+    this.wsService.train(this.projectId, 35, conf);
   }
 }
