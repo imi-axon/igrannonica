@@ -157,7 +157,8 @@ def update_with_default_nn(body: NNCreate, response: Response):
     nnmodel.new_default_model(inputs, outputs)
     fm = FileMngr('h5')
     nnmodel.save_model(fm.directory(), fm.name())
-    # print(f'PUT NN: {httpc.put(body.nn, fm.path())}')
+    r = httpc.put(body.nn, fm.path())
+    # print(f'PUT NN: {r}')
     fm.delete()
 
     def_conf = {
