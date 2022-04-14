@@ -52,13 +52,13 @@ export class DataSetTableComponent implements OnInit, OnChanges{
   }
   
   
-  public LoadStatisticsData(statistics: any){
+  public LoadStatisticsData(statistics: any, colnulls: any){
     this.loadingStartedEvent.emit();
     
     console.log(statistics)
     
     this.columns = this.getColumnsFromStatistics(statistics);
-    this.data = this.parseStatisticsData(statistics);
+    this.data = this.parseStatisticsData(statistics, colnulls);
     
     console.log(this.data)
     
@@ -76,7 +76,7 @@ export class DataSetTableComponent implements OnInit, OnChanges{
     return columns;
   }
   
-  private parseStatisticsData(statistics: any){
+  private parseStatisticsData(statistics: any, colnulls: any){
     let statisticsData = [];
     let columnsCount = statistics.length;
     
@@ -91,7 +91,7 @@ export class DataSetTableComponent implements OnInit, OnChanges{
       maxRows.push(statistics[i].max)
       avgRows.push(statistics[i].avg)
       medRows.push(statistics[i].med)
-      nulRows.push(statistics[i].nul)
+      nulRows.push(colnulls.nulls[i])
     }
     
     statisticsData.push(minRows);

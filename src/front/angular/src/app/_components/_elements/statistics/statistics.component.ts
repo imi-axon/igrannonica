@@ -20,7 +20,8 @@ export class StatisticsComponent implements OnInit {
   public columns: string[];
   public correlationMatrix: number[][];
   public columnStats: any;
-  public rowNulls: number[];
+  
+  private colnulls: any;
   
   // Komponente
   @ViewChild('correlationTable')
@@ -44,18 +45,20 @@ export class StatisticsComponent implements OnInit {
       this.ProjectId = p as unknown as number;
   }
   
-  public LoadAndUpdate(self: any, response: any){
-    let statistics = JSON.parse(response.statistics);
-    self.columns = statistics.cormat.cols;
-    self.correlationMatrix = self.ParseCorrelationData(statistics.cormat.cols, statistics.cormat.cors);
-    self.columnStats = statistics.colstats;
-    self.rowNulls = statistics.rownulls;
+  public LoadStatisticsAndUpdate(statisticsResponse: any){
+    let statistics = statisticsResponse;
+    this.columns = statistics.cormat.cols;
     
-    self.correlationTable.LoadCorrelationMatrix(self.columns, self.correlationMatrix);
+    this.correlationMatrix = this.ParseCorrelationData(statistics.cormat.cols, statistics.cormat.cors);
+    this.columnStats = statistics.colstats;
+    this.colnulls = statistics.colnulls
     
-    self.statisticsTable.LoadStatisticsData(self.columnStats);
+    setTimeout(() => {
+      this.correlationTable.LoadCorrelationMatrix(this.columns, this.correlationMatrix);
+      this.statisticsTable.LoadStatisticsData(this.columnStats, this.colnulls);
+      this.statisticsTable.hasPages = false;
+    }, 0);
     
-    self.statisticsTable.hasPages = false;
   }
   
   public ParseCorrelationData(columns: string[], cormat: number[]){
@@ -81,9 +84,6 @@ export class StatisticsComponent implements OnInit {
         j = 0;
       }
     }
-    
-    console.log("Korelaciona matrica: ")
-    console.log(parsedMatrix);
     
     return parsedMatrix;
   }

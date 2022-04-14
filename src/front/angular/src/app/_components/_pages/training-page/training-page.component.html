@@ -1,8 +1,19 @@
 <navbar></navbar>
-<div class="mt-5 mx-auto">
-<app-konfiguracija #konf></app-konfiguracija>
-<div class="d-flex justify-content-center mt-5">
-    <button class="btn btn-primary" (click)="treniraj()" [hidden]="!konf.gotovoOutputi">TRENIRAJ</button>
+<div class="row mt-3 mx-auto">
+    <app-konfiguracija #konf></app-konfiguracija>
+    <div class="d-flex justify-content-center my-4">
+        <button class="btn btn-primary" (click)="treniraj()" *ngIf="!konf.gotovoOutputi">TRENIRAJ</button>
+    </div>
 </div>
-</div>
+
 <app-chart-training #grafik></app-chart-training>
+
+
+<div class="row pb-3 mx-auto d-flex justify-content-center" id="nn-container">
+    <div class="col-lg-9">
+        <app-neural-network-display #nnDisplay></app-neural-network-display>
+    </div>
+</div>
+
+
+<!-- <app-lista-mreza></app-lista-mreza> -->

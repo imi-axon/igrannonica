@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { select, zoom } from 'd3'
+import { local, select, zoom } from 'd3'
 
 @Component({
   selector: 'app-neural-network-display',
@@ -8,8 +8,13 @@ import { select, zoom } from 'd3'
 })
 export class NeuralNetworkDisplayComponent implements OnInit {
   
+  // INPUT OUPUT PODACI
   public network : any;
-  public inputData : any;
+  public inputs : string[];
+  public outputs : string[];
+  
+  public addNeuronData : any[];
+  
   
   private layerWidth = 450
   private neuronWidth = 70
@@ -20,22 +25,29 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   display : any;
   container : any;
   
-  displayWidth = 0
-  displayHeight = 0
+  private displayWidth = 0
+  private displayHeight = 0
   
   // Grupe
   inputNeurons : any;
   inputTitles : any;
+  
+  outputTitles : any;
+  
   layers : any;
   layerTitles : any;
+  
   neurons : any;
   connections : any;
   
+  addNeuronButtons : any;
+  addNeuronTexts : any;
+  
   
   // Zoom i Pan
-  minZoom = 0.25
-  currentZoom = 1
-  maxZoom = 5
+  minZoom = 0.1;
+  currentZoom = 1;
+  maxZoom = 3;
   
   private handleZoom(e : any) { 
     select('svg g')
@@ -58,14 +70,112 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   
   // TEST PODACI
   private loadDummyData(){
-    this.network = {"nn":{"layers":[{"activation":"Aktivacija 1","neurons":[{"weights":[4.3,6.15],"bias":0.76},{"weights":[2.21,3.63],"bias":2.1},{"weights":[5.76,3.7],"bias":2.9},{"weights":[6.75,7.11],"bias":3.4},{"weights":[3.55,3.64],"bias":3.4}]},{"activation":"Aktivacija 2","neurons":[{"weights":[7.18,3.64,2.31,7.25,7.8],"bias":3.11},{"weights":[1.71,3.88,5.2,4.21,5.47],"bias":1.2},{"weights":[3.61,4.8,8.8,3.12,6.77],"bias":3.5}]},{"activation":"Aktivacija 3","neurons":[{"weights":[7.18,3.45,7.95],"bias":3.11}]}]}}
-    this.inputData = [{"name": "X input", "value": 2.25},{"name": "Y input", "value": 3.54}]
+    this.network = {"layers":[{"neurons":[{"weights":[2.21,3.63],"bias":2.1},{"weights":[5.76,3.7],"bias":2.9},{"weights":[6.75,7.11],"bias":3.4},{"weights":[3.55,3.64],"bias":3.4}]},{"neurons":[{"weights":[7.18,3.64,2.31,7.8],"bias":3.11},{"weights":[3.88,5.2,4.21,5.47],"bias":1.2},{"weights":[3.61,8.8,3.12,6.77],"bias":3.5}]},{"neurons":[{"weights":[7.18,3.45,7.95],"bias":3.11}]}] }
+    this.inputs = ["Input X", "Input Y"];
+    this.outputs = ["Output X"]
     this.SetupD3Svg();
-    
   }
   
+  
+  
+  
+  private addNeuron(layerIndex: any){
+    var weights = [];
+    var bias: number = 1;
+    
+    // Prvi sloj - proveravamo input
+    if(layerIndex == 0)
+      for(var i = 0; i < this.inputs.length; i++)
+        weights.push(1);
+      
+    // Drugi sloj - proveravamo prethodni sloj
+    else
+      for(var i = 0; i < this.network.layers[layerIndex - 1].neurons.length; i++)
+        weights.push(1);
+    
+        
+    this.network.layers[layerIndex].neurons.push({weights: weights, bias: bias});
+    
+    // Update sledece
+    for(var i = 0; i < this.network.layers[layerIndex + 1].neurons.length; i++)
+      this.network.layers[layerIndex + 1].neurons[i].weights.push(1);
+    
+    
+
+    this.getDisplaySize();
+    this.caluculateMaxNodes();
+    
+    this.caluculateAddNeuronData();
+    
+    // DISPLAY
+    this.display = select("svg")
+      .attr("width", this.displayWidth)
+      .attr("height", this.displayHeight)
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("cursor", "grab")
+    
+    // CONTAINER
+    this.container = this.display.select("svg g")
+      .attr("width", "100%")
+      .attr("height", "100%")
+      .attr("x", 0)
+      .attr("y", 0)
+    
+    // Redosled pozivanja je bitan
+    // Komponente prve funkcije se prikazuju na dnu
+    // Komponente poslednje funkcije se prikazuju na vrhu
+    this.setupInputLayer()
+    this.setupNeuralNetworkLayers()
+    this.setupConnections();
+    this.setupInputNeurons()
+    this.setupHiddenAndOutputNeurons();
+    this.setupOutputNeuronTitles()
+    
+    this.setupAddNeuronButtonsAndTitles();
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  private caluculateAddNeuronData(){
+    this.addNeuronData = [];
+    for(let i = 0; i < this.network.layers.length - 1; i++){
+      let neuronIndex = this.network.layers[i].neurons.length;
+      let add = {
+        layer: i, 
+        index: neuronIndex 
+      };
+      this.addNeuronData[i] = add;
+    }
+    
+    console.log(this.addNeuronData)
+  }
+  
+  
   private getDisplaySize(){
-    this.displayWidth = (this.network.nn.layers.length + 1) * this.layerWidth + 200
+    this.displayWidth = (this.network.layers.length + 1) * this.layerWidth + 200
     this.displayHeight = (this.maxNodes + this.neuronYOffset + 10) * 150
     
     if(this.displayWidth > this.displayHeight)
@@ -89,16 +199,18 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   // Max neurona u jednom sloju (potrebno da bi mogli da centriramo sve neurone horizontalno)
   private caluculateMaxNodes(){
     this.maxNodes = 0;
-    for(var i = 0; i < this.network.nn.layers.length; i++)
-        if(this.network.nn.layers[i].neurons.length >= this.maxNodes)
-            this.maxNodes = this.network.nn.layers[i].neurons.length;
+    for(var i = 0; i < this.network.layers.length; i++)
+        if(this.network.layers[i].neurons.length >= this.maxNodes)
+            this.maxNodes = this.network.layers[i].neurons.length;
   }
   
   
   // Podesavanje SVG prikaza
   public SetupD3Svg(){
-    this.getDisplaySize()
+    this.getDisplaySize();
     this.caluculateMaxNodes();
+    
+    this.caluculateAddNeuronData();
     
     // DISPLAY
     this.display = select("svg")
@@ -106,6 +218,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
       .attr("height", this.displayHeight)
       .attr("x", 0)
       .attr("y", 0)
+      .attr("cursor", "grab")
     
     // CONTAINER
     this.container = this.display.select("svg g")
@@ -113,16 +226,21 @@ export class NeuralNetworkDisplayComponent implements OnInit {
       .attr("height", "100%")
       .attr("x", 0)
       .attr("y", 0)
-    
+      
     
     this.inputNeurons = this.container.selectAll("circle")
     this.inputTitles = this.container.selectAll("text")
+    
+    this.outputTitles = this.container.selectAll("text")
 
     this.layers = this.container.selectAll("rect")
     this.layerTitles = this.container.selectAll("text")
     
     this.neurons = this.container.selectAll("circle")
     this.connections = this.container.selectAll("lines")
+    
+    this.addNeuronButtons = this.container.selectAll("circle");
+    this.addNeuronTexts = this.container.selectAll("text");
     
     // Redosled pozivanja je bitan
     // Komponente prve funkcije se prikazuju na dnu
@@ -132,6 +250,9 @@ export class NeuralNetworkDisplayComponent implements OnInit {
     this.setupConnections();
     this.setupInputNeurons()
     this.setupHiddenAndOutputNeurons();
+    this.setupOutputNeuronTitles()
+    
+    this.setupAddNeuronButtonsAndTitles();
     
     this.initZoom();
   }
@@ -150,9 +271,9 @@ export class NeuralNetworkDisplayComponent implements OnInit {
     // INPUT LAYER TITLE
     this.container
       .append("text")
-      .text("Input Layer")
+      .text("Inputs")
       .attr("font-size", 28)
-      .style("font-family", "Montserrat")
+      .style("font-family", "Raleway")
       .attr("text-anchor", "middle")
       .attr("fill", "#555555")
       .attr("x", this.layerWidth / 2)
@@ -176,16 +297,16 @@ export class NeuralNetworkDisplayComponent implements OnInit {
 
     // INPUT NAMES
     this.inputTitles
-      .data(this.inputData)
+      .data(this.inputs)
       .enter()
       .append("text")
-      .text((d : any) => d.name)
+      .text((d : any) => d)
       .attr("font-size", 16)
-      .style("font-family", "Montserrat")
+      .style("font-family", "Raleway")
       .attr("text-anchor", "middle")
       .attr("fill", "#555555")
       .attr("x", this.layerWidth / 2)
-      .attr("y", (d : any, i : number) => (i + 1) * this.neuronYOffset - 15 + (((this.maxNodes - this.inputData.length) * 0.5) * this.neuronYOffset))
+      .attr("y", (d : any, i : number) => (i + 1) * this.neuronYOffset - 15 + (((this.maxNodes - this.inputs.length) * 0.5) * this.neuronYOffset))
       .attr("cursor", "pointer")
       .on("mouseenter", (event : any, d : any) => {
           select(event.currentTarget)
@@ -201,21 +322,22 @@ export class NeuralNetworkDisplayComponent implements OnInit {
               .attr("font-size", 16)
               .attr("fill", "#555555")
       })
+
   }
   
   // Prikaz input-a
   private setupInputNeurons(){
     // INPUT NEURONS
     this.inputNeurons
-      .data(this.inputData)
+      .data(this.inputs)
       .enter()
       .append("circle")
       .attr("cx", this.layerWidth / 2)
-      .attr("cy",  (d : any, i : number) => { return (i + 1) * this.neuronYOffset + (this.neuronWidth / 2) + (((this.maxNodes - this.inputData.length) * 0.5) * this.neuronYOffset) })
+      .attr("cy",  (d : any, i : number) => { return (i + 1) * this.neuronYOffset + (this.neuronWidth / 2) + (((this.maxNodes - this.inputs.length) * 0.5) * this.neuronYOffset) })
       .attr("fill", "#FFFFFF")
       .attr("stroke", "#888888")
       .attr("r", (this.neuronWidth / 2))
-      .attr("cursor", "grab")
+      .attr("cursor", "pointer")
       
       .on("mouseenter", (event : any, d : any) => {
           select(event.currentTarget)
@@ -249,7 +371,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
     
     // HIDDEN LAYERS + OUTPUT LAYER
     this.layers
-      .data(this.network.nn.layers)
+      .data(this.network.layers)
       .enter()
       .append("rect")
       .attr("width", this.layerWidth)
@@ -261,12 +383,17 @@ export class NeuralNetworkDisplayComponent implements OnInit {
 
     // HIDEN LAYER TITLES
     this.layerTitles
-      .data(this.network.nn.layers)
+      .data(this.network.layers)
       .enter()
       .append("text")
-      .text((d : any, i : number) => "Layer " + (i + 1))
+      .text((d : any, i : number) => {
+        if(this.network.layers.length - 1 != i) 
+          return "Layer " + (i + 1);
+        else
+          return "Outputs"
+      })
       .attr("font-size", 28)
-      .style("font-family", "Montserrat")
+      .style("font-family", "Raleway")
       .attr("text-anchor", "middle")
       .attr("fill", "#555555")
       .attr("x", (d : any, i : number) => (i + 0.5 + 1) * this.layerWidth)
@@ -291,12 +418,12 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   
   // Prikaz neurona skrivenih slojeva i output-a
   private setupHiddenAndOutputNeurons(){
-    for(var i = 0; i < this.network.nn.layers.length; i++){
+    for(var i = 0; i < this.network.layers.length; i++){
     
-      var currentYOffsetRatio = (this.maxNodes - this.network.nn.layers[i].neurons.length) * 0.5
+      var currentYOffsetRatio = (this.maxNodes - this.network.layers[i].neurons.length) * 0.5
       
       this.neurons
-        .data(this.network.nn.layers[i].neurons)
+        .data(this.network.layers[i].neurons)
         .enter()
         .append("circle")
         .attr("cx", (i + 0.5 + 1) * this.layerWidth)
@@ -304,7 +431,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
         .attr("fill", "#FFFFFF")
         .attr("stroke", "#888888")
         .attr("r", (this.neuronWidth / 2))
-        .attr("cursor", "grab")
+        .attr("cursor", "pointer")
 
         .attr("width", this.neuronWidth)
         .attr("height", this.neuronWidth)
@@ -325,22 +452,54 @@ export class NeuralNetworkDisplayComponent implements OnInit {
     }
   }
   
+  // Prikaz naziva output neurona
+  private setupOutputNeuronTitles(){
+    var currentYOffsetRatio = (this.maxNodes - this.network.layers[this.network.layers.length - 1].neurons.length) * 0.5
+    
+    this.inputTitles
+      .data(this.outputs)
+      .enter()
+      .append("text")
+      .text((d : any) => d)
+      .attr("font-size", 16)
+      .style("font-family", "Raleway")
+      .attr("text-anchor", "middle")
+      .attr("fill", "#555555")
+      .attr("x", ((this.network.layers.length - 1) + 0.5 + 1) * this.layerWidth)
+      .attr("y", (d : any, j : number) => (j + 1) * this.neuronYOffset + (currentYOffsetRatio * this.neuronYOffset) - 15)
+      .attr("cursor", "pointer")
+      .on("mouseenter", (event : any, d : any) => {
+          select(event.currentTarget)
+              .transition()
+              .duration(250)
+              .attr("font-size", 18)
+              .attr("fill", "#000000")
+      })
+      .on("mouseout", (event : any, d : any) => {
+          select(event.currentTarget)
+              .transition()
+              .duration(250)
+              .attr("font-size", 16)
+              .attr("fill", "#555555")
+      })
+  }
+  
   // Prikaz veza izmedju input-a, skrivenih slojeva i output-a
   private setupConnections(){
-    var leftYOffset = (this.maxNodes - this.inputData.length) * 0.5
+    var leftYOffset = (this.maxNodes - this.inputs.length) * 0.5
 
-    for(var i = 0; i < this.network.nn.layers.length; i++){
+    for(var i = 0; i < this.network.layers.length; i++){
         
-        var rightYOffset = (this.maxNodes - this.network.nn.layers[i].neurons.length) * 0.5
+        var rightYOffset = (this.maxNodes - this.network.layers[i].neurons.length) * 0.5
         
-        for(var j = 0; j < this.network.nn.layers[i].neurons.length; j++){
+        for(var j = 0; j < this.network.layers[i].neurons.length; j++){
             
             var lineInputOffset = 4
-            var lineInputTopOffset = (this.network.nn.layers[i].neurons[j].weights.length * lineInputOffset) / 2;
+            var lineInputTopOffset = (this.network.layers[i].neurons[j].weights.length * lineInputOffset) / 2;
             
             
             this.connections
-              .data(this.network.nn.layers[i].neurons[j].weights)
+              .data(this.network.layers[i].neurons[j].weights)
               .enter()
               .append('path')
               .attr("stroke-width", 2)
@@ -374,5 +533,125 @@ export class NeuralNetworkDisplayComponent implements OnInit {
     }
   }
   
+  
+  
+  private setupAddNeuronButtonsAndTitles(){
+    var index = local();
+    
+    this.addNeuronButtons
+      .data( this.addNeuronData )
+      .enter()
+      .append("circle")
+      .attr("cx", (d : any, j : number) => {
+        return (j + 0.5 + 1) * this.layerWidth
+      })
+      .attr("cy", (d : any, j : number) => {
+        var currentYOffsetRatio = (this.maxNodes - this.network.layers[j].neurons.length) * 0.5;
+        return (this.network.layers[j].neurons.length + 1) * this.neuronYOffset + (this.neuronWidth / 2) + (currentYOffsetRatio * this.neuronYOffset)
+      })
+      .each((d : any, i : number, n: any) => {
+        index.set(n[i], i);
+      })
+      .attr("fill", "#FFFFFF55")
+      .attr("stroke", "#88888855")
+      .attr("stroke-width", 3)
+      .attr("stroke-dasharray", "5,5,5")
+      .attr("r", (this.neuronWidth / 2))
+      .attr("cursor", "pointer")
 
+      .attr("width", this.neuronWidth)
+      .attr("height", this.neuronWidth)
+      
+      .on("mouseenter", (event : any, d : any) => {
+        select(event.currentTarget)
+            .transition()
+            .duration(150)
+            .attr("r", (this.neuronWidth / 2) + 10)
+            .attr("stroke-dasharray", "10,10,10")
+            .attr("stroke-width", "5")
+      })
+      .on("mouseout", (event : any, d : any) => {
+          select(event.currentTarget)
+              .transition()
+              .duration(150)
+              .attr("r", (this.neuronWidth / 2))
+              .attr("stroke-dasharray", "5,5,5")
+              .attr("fill", "#FFFFFF")
+      })
+      
+      .on("click", (event : any, d : any) => {
+        this.addNeuron(index.get(event.currentTarget));
+      })
+      
+    this.addNeuronTexts
+      .data(this.addNeuronData)
+      .enter()
+      .append("text")
+      .text("Add new neuron")
+      .attr("font-size", 18)
+      .style("font-family", "Raleway")
+      .attr("text-anchor", "middle")
+      
+      .attr("x", (d : any, j : number) => {
+        return (j + 0.5 + 1) * this.layerWidth
+      })
+      .attr("y", (d : any, j : number) => {
+        var currentYOffsetRatio = (this.maxNodes - this.network.layers[j].neurons.length) * 0.5;
+        return (this.network.layers[j].neurons.length + 1) * this.neuronYOffset + (currentYOffsetRatio * this.neuronYOffset) + (this.neuronWidth) + 40
+      })
+      
+      .attr("fill", "#00000055")
+      .attr("r", (this.neuronWidth / 2))
+      .attr("cursor", "pointer")
+
+      .attr("width", this.neuronWidth)
+      .attr("height", this.neuronWidth)
+      
+      .on("mouseenter", (event : any, d : any) => {
+        select(event.currentTarget)
+            .transition()
+            .duration(250)
+            .attr("font-size", 20)
+            .attr("fill", "#000000AA")
+      })
+      .on("mouseout", (event : any, d : any) => {
+          select(event.currentTarget)
+              .transition()
+              .duration(250)
+              .attr("font-size", 18)
+              .attr("fill", "#00000055")
+      })
+      
+      this.addNeuronButtons
+      .attr("x", (d : any) => {
+        console.log("START")
+        console.log(d)
+        console.log("END")
+        return (d.layer + 0.5 + 1) * this.layerWidth
+      })
+      .attr("y", (d : any) => {
+        var currentYOffsetRatio = (this.maxNodes - this.network.layers[d.layer].neurons.length) * 0.5;
+        return (d.index) * this.neuronYOffset + (currentYOffsetRatio * this.neuronYOffset) + (this.neuronWidth) + 40
+      })
+      
+      this.addNeuronTexts
+        .attr("x", (d : any) => {
+          return (d.layer + 0.5 + 1) * this.layerWidth
+        })
+        .attr("y", (d : any) => {
+          var currentYOffsetRatio = (this.maxNodes - this.network.layers[d.layer].neurons.length) * 0.5;
+          return (d.index) * this.neuronYOffset + (currentYOffsetRatio * this.neuronYOffset) + (this.neuronWidth) + 40
+        })
+      
+      this.addNeuronButtons
+        .exit()
+        .remove()
+      
+      this.addNeuronTexts
+        .exit()
+        .remove()
+      
+  }
+
+    
 }
