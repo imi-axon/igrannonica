@@ -30,6 +30,7 @@ builder.WebHost.ConfigureKestrel((context, serverOptions) =>
 
 // Add services to the container.
 builder.Services.AddDbContext<DataBaseContext>();
+//builder.Services.AddEntityFrameworkSqlite().AddDbContext<DataBaseContext>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
