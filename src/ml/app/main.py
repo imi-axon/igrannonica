@@ -34,10 +34,10 @@ app = FastAPI()
 def validate_csv(body: Dataset, response: Response):
 
     # print('Pocetak kontrolera (za Add Dataset)')
-    print(f'{body.dataset}')
+    # print(f'{body.dataset}')
     csvstring = httpc.get(body.dataset)
 
-    print(f'>>>>>>>>>> {csvstring}')
+    # print(f'>>>>>>>>>> {csvstring}')
 
     if not csv_is_valid(csvstring):
         response.status_code = status.HTTP_400_BAD_REQUEST
@@ -75,22 +75,22 @@ def convert_csv_to_json(body: Dataset, response: Response):
 @app.post('/api/dataset/edit', status_code=200)
 def edit_dataset(body: DatasetEditActions, response: FileResponse):
     
-    print(f'EDIT: actions {body.actions}')
-    print(f'EDIT: actions {body.dataset}')
+    # print(f'EDIT: actions {body.actions}')
+    # print(f'EDIT: actions {body.dataset}')
     
     actions = [{'action':str.split(a['action']), 'column':(a['column'] if 'column' in a.keys() else '')} for a in json_decode(body.actions)]
     dataset = httpc.get(body.dataset)
 
-    print(f'EDIT: dataset {dataset}')
+    # print(f'EDIT: dataset {dataset}')
 
     res = DatasetEditor.execute(actions, dataset)
 
-    print(f'EDIT: dataset {res}')
+    # print(f'EDIT: dataset {res}')
 
     if res == None:
         response.status_code = status.HTTP_400_BAD_REQUEST
 
-    print(res.replace('\n', '#').replace('\r', '@'))
+    # print(res.replace('\n', '#').replace('\r', '@'))
     res = res.replace('\r\n', '\n')
 
     f = FileMngr('csv')
@@ -103,11 +103,11 @@ def edit_dataset(body: DatasetEditActions, response: FileResponse):
 @app.post('/api/dataset/statistics', status_code=200, response_model=Statistics)
 def get_statistics(body: Dataset):
     
-    print(body)
+    # print(body)
 
     csvstr: str = httpc.get(body.dataset)
 
-    print(csvstr)
+    # print(csvstr)
 
     stats: str = StatisticsMiddleware(csvstr).statistics_json()
 
@@ -120,14 +120,14 @@ def get_statistics(body: Dataset):
 @app.post('/api/nn/convert/json', status_code=200, response_model=NNOnly)
 def nn_to_json(body: NNOnly):
 
-    print(f'GET NN: body.nn: {body.nn}')
+    # print(f'GET NN: body.nn: {body.nn}')
 
     h5bytes: bytes = httpc.get(body.nn, decode=False)
     h5mngr = FileMngr('h5')
     h5mngr.create(h5bytes)
     h5path = h5mngr.path()
 
-    print(f'GET NN: h5 path: {h5path}')
+    # print(f'GET NN: h5 path: {h5path}')
 
     conv = NNJsonConverter(h5path)
     h5mngr.delete()
@@ -139,10 +139,10 @@ def nn_to_json(body: NNOnly):
 @app.put('/api/nn/default', status_code=200)
 def update_with_default_nn(body: NNCreate, response: Response):
 
-    print(body)
+    # print(body)
 
     headers = csv_decode(body.headers)[0]
-    print(headers)
+    # print(headers)
     if len(headers) < 2:
         response.status_code = 400
         return
@@ -157,7 +157,7 @@ def update_with_default_nn(body: NNCreate, response: Response):
     nnmodel.new_default_model(inputs, outputs)
     fm = FileMngr('h5')
     nnmodel.save_model(fm.directory(), fm.name())
-    print(f'PUT NN: {httpc.put(body.nn, fm.path())}')
+    # print(f'PUT NN: {httpc.put(body.nn, fm.path())}')
     fm.delete()
 
     def_conf = {
@@ -176,7 +176,7 @@ def update_with_default_nn(body: NNCreate, response: Response):
 
     fc = FileMngr('json')
     fc.create(json_encode(def_conf))
-    print(f'PUT CONF: {httpc.put(body.conf, fc.path())}')
+    # print(f'PUT CONF: {httpc.put(body.conf, fc.path())}')
     fc.delete()
     
 
