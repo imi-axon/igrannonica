@@ -1,5 +1,5 @@
 export const apiProperties = 
 {
-    url: 'https://localhost:7057',
-    wsurl:'wss://localhost:7057'
+    url: 'http://147.91.204.115:10016',
+    wsurl:'ws://147.91.204.115:10016'
 }

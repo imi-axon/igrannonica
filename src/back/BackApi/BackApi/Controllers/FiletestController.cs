@@ -18,10 +18,10 @@ namespace BackApi.Controllers
         private IJwtService jwtsrv;
         private IProjectService projsrv;
 
-        private const string mlUrl = "localhost:8000";
-        private const string backUrl = "localhost:7057";
-        //private const string mlUrl = "147.91.204.115:10017";
-        //private const string backUrl = "147.91.204.115:10016";
+        //private const string mlUrl = "localhost:8000";
+        //private const string backUrl = "localhost:7057";
+        private const string mlUrl = "147.91.204.115:10017";
+        private const string backUrl = "147.91.204.115:10016";
 
 
         public FiletestController(IStorageService storageService,IDatasetService datasetService, IJwtService jwtService, IProjectService projectService)

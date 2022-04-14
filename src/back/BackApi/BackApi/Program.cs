@@ -19,12 +19,12 @@ var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
-/*
+
 builder.WebHost.ConfigureKestrel((context, serverOptions) =>
 {
     serverOptions.Listen(IPAddress.Any, 10016);
 });
-*/
+
 
 //builder.Services.Configure<KestrelServerOptions>(builder.Configuration.GetSection("Kestrel"));
 
@@ -74,7 +74,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: myAllowSpecificOrigins,
         builder =>
         {
-            builder.WithOrigins("http://localhost:4200")
+            builder.WithOrigins("http://147.91.204.115:10015")
             .AllowAnyMethod()
             .AllowAnyHeader();
         });
@@ -103,7 +103,7 @@ var webSocketOptions = new WebSocketOptions
 
 app.UseWebSockets(webSocketOptions);
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
