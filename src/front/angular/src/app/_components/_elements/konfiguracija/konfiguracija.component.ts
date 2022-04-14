@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
 
@@ -31,11 +31,15 @@ export class KonfiguracijaComponent implements OnInit {
   public gotovoOutputi = false;
   public trenutneVr:any=[];
 
+  @Output() inputChanged: EventEmitter<any> = new EventEmitter<any>();
+  @Output() outputChanged: EventEmitter<any> = new EventEmitter<any>();
+  
   ngOnInit(): void {
     this.projectID = this.activatedRoute.snapshot.paramMap.get("ProjectId");
+    
     this.inputs = [];
     this.outputs = [];
-
+    
     //ZAMENITI F-JOM KOJA DOVLACI SAMO KOLONE
     this.datasetService.GetDataset(this.projectID, true, this, this.successCallback);
   }
@@ -77,9 +81,12 @@ export class KonfiguracijaComponent implements OnInit {
     console.log(clicked.target.value);
     console.log(clicked.target.checked);
 
-
+    
+    var added = false;
+    
     if (clicked.target.checked == true) {
       this.inputs.push(clicked.target.value);
+      added = true;
     }
     else {
       for (let i = 0; i < this.inputs.length; i++) {
@@ -89,17 +96,20 @@ export class KonfiguracijaComponent implements OnInit {
     }
 
     console.log(this.inputs);
-
+    
+    this.inputChanged.emit({inputs:this.inputs, added: added});
   }
 
   outputClick(clicked: any) {
     console.log(clicked.target.id);
     console.log(clicked.target.value);
     console.log(clicked.target.checked);
-
+    
+    var added = false;
+    
     if (clicked.target.checked == true) {
       this.outputs.push(clicked.target.value);
-
+      added = true;
     }
     else {
       for (let i = 0; i < this.outputs.length; i++) {
@@ -110,6 +120,7 @@ export class KonfiguracijaComponent implements OnInit {
 
     console.log(this.outputs);
 
+    this.outputChanged.emit({outputs: this.outputs, added: added});
   }
 
   public prikaziInput() {
