@@ -51,7 +51,7 @@ namespace BackApi.Services
             }
             catch
             {
-                return "";
+                return null;
             }
         }
 

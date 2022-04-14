@@ -1,5 +1,6 @@
 ﻿using BackApi.Entities;
 using BackApi.Models;
+using BackApi.Config;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Net;
@@ -132,7 +133,7 @@ namespace BackApi.Services
             var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
             var byteContent = new ByteArrayContent(buffer);
             byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            response = await client.PutAsync("http://localhost:8000/api/nn/default",byteContent);
+            response = await client.PutAsync(Urls.ml + "/api/nn/default",byteContent);
 
             return response;
         }
