@@ -45,17 +45,21 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
     }, 0);
     
   }
+  public statistika=true;
   
   public OnActivate(component: any){
     if(!(component instanceof EditDatasetComponent)){
       this.statisticsComponent = component;
-      
+      this.statistika=true;
       if(this.statistics != undefined)
         this.statisticsComponent.LoadStatisticsAndUpdate(this.statistics);
       
       this.showsEditOptions = false;
+      
+
       return;
     }
+    else this.statistika=false;
     this.editComponent = component;
     
     this.editComponent.LoadData(this.dataset);

@@ -6,7 +6,7 @@
             </span>{{'edit-dataset-page.naslov2'|translate}}</p>
         </div>
         <div class="col-md-2 d-flex justify-content-end">
-        <button class="btn btn-primary" (click)="train()">Train</button>
+        <button *ngIf="statistika" class="btn btn-primary" (click)="train()">Train</button>
     </div>
         <hr class="mt-2">
     </div>

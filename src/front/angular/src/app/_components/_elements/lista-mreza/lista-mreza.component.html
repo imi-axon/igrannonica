@@ -1,7 +1,7 @@
 <div class="container mt-5">
     <div class="row">
 
-        <div class="col-6 d-flex justify-content-start">
+        <div class="col-4 d-flex justify-content-start">
             <div class="input-group input-group-sm pe-5">
                 <button type="button" class=" dugme btn btn-primary input-group-text">
                     <i class="fas fa-search"></i>
@@ -10,7 +10,10 @@
                     aria-label="Small" [(ngModel)]="searchTerm" aria-describedby="inputGroup-sizing-sm" />
             </div>
         </div>
-        <div class="col-6 d-flex justify-content-end">
+        <div class="col-4 d-flex justify-content-center">
+           <h4>{{'lista-mreza.mojeMreze'|translate}}</h4>
+        </div>
+        <div class="col-4 d-flex justify-content-end">
 
             <select class="btn btn-primary btn-sm form-control" id="sort" name="sort" (change)="onChange($event)"
                 style="width:50%">

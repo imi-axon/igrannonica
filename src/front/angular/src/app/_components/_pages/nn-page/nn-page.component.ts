@@ -11,12 +11,18 @@ import { ListaMrezaComponent } from '../../_elements/lista-mreza/lista-mreza.com
 export class NnPageComponent implements OnInit {
   constructor(private router:Router) { }
 
+  @ViewChild("lista") listnn:ListaMrezaComponent
+  @ViewChild("newnn") newnn:CreateNeuralNetworkComponent
+
   ngOnInit(): void {
   
   }
 
   receiveMessage() {
-    window.location.reload();
+  // window.location.reload();
+    this.newnn.sakriveno=true;
+    this.listnn.ngOnInit();
+  
 
   }
 

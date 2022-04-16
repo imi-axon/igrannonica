@@ -37,6 +37,7 @@ export class CreateNeuralNetworkComponent implements OnInit {
     console.log("Tacno");
     self.nnId=response.id;
     console.log(response.id);
+    self.sakriveno=false;
     self.messageEvent.emit();
   
   }

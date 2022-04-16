@@ -83,7 +83,9 @@
         "name":"Nziv",
         "submit":"Potvrdi"
     },
-
+    "lista-mreza":{
+        "mojeMreze": "Moje mreze"
+    },
 
 
 
