@@ -163,6 +163,7 @@ namespace BackApi.Services
             korisnik.Name = model.firstname;
             korisnik.Email = model.email;
             korisnik.Verified = false;
+            korisnik.PhotoPath = "";
             string jwtoken = CreateEmailToken(korisnik.Username, int.Parse(configuration.GetSection("AppSettings2:EmailToken").Value.ToString()));
             korisnik.EmailToken = jwtoken;
 
@@ -184,14 +185,14 @@ namespace BackApi.Services
         {
             var user = kontext.Users.FirstOrDefault(x => x.UserId == id);
             var path = storageService.CreatePhoto(id);
-            //user.PhotoPath= path;
-            kontext.SaveChanges();
 
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
             path = path + "\\" + photo.FileName;
+            user.PhotoPath = path;
+            kontext.SaveChanges();
             using (FileStream stream = System.IO.File.Create(path))
             {
                 photo.CopyTo(stream);

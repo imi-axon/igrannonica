@@ -39,13 +39,14 @@ namespace BackApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> Register(UserRegister req/*, IFormFile photo*/)
+        public async Task<ActionResult<string>> Register([FromForm]UserRegister req)
         {
             int userid = jwtsrv.GetUserId();
             if (userid != -1) return Forbid();
             string tmp = korsrv.Register(req);
             int id = korsrv.UsernameToId(req.username);
-            //korsrv.addPhoto(1, photo);
+            if(req.photo!=null)
+                korsrv.addPhoto(id, req.photo);
             string rez = "";
             if (tmp != "")
             {

@@ -1,5 +1,4 @@
 /*  REGISTRACIJA  */
-
 export class RegistrationCheck
 {
   public invalidRegistration = true;
@@ -80,6 +79,7 @@ export class UserEditCheck
         this.invalidRegistration3 = false;
   }
 }
+
 export class UserRegistration
 {
     public firstname:string = "";
@@ -87,6 +87,7 @@ export class UserRegistration
     public username: string = "";
     public password: string = "";
     public email: string = "";
+    public photo:File = null as any;
     
     constructor() {
         this.firstname = "";
@@ -94,6 +95,7 @@ export class UserRegistration
         this.username = "";
         this.password = "";
         this.email = "";
+        this.photo = null as any;
     }
 }
 

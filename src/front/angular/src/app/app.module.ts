@@ -56,6 +56,7 @@ import { LandingPageSelectorComponent } from './_components/_elements/landing-pa
 import { ListaMrezaComponent } from './_components/_elements/lista-mreza/lista-mreza.component';
 import { ChartTrainingComponent } from './_components/_elements/chart-training/chart-training.component';
 import { NgChartsModule } from 'ng2-charts';
+import { PhotoInputComponent } from './_components/_elements/photo-input/photo-input.component';
 
 
 
@@ -101,7 +102,8 @@ import { NgChartsModule } from 'ng2-charts';
     KonfiguracijaComponent,
     TrainingPageComponent,
     ListaMrezaComponent,
-    ChartTrainingComponent
+    ChartTrainingComponent,
+    PhotoInputComponent
   ],
   imports: [
     NgxCsvParserModule,

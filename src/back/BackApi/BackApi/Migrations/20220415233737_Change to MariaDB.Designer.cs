@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackApi.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20220401154012_Change to MariaDB")]
+    [Migration("20220415233737_Change to MariaDB")]
     partial class ChangetoMariaDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,6 +57,10 @@ namespace BackApi.Migrations
                     b.Property<int>("NNId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<string>("ConfPath")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("DataPath")
                         .IsRequired()
@@ -135,6 +139,10 @@ namespace BackApi.Migrations
                     b.Property<byte[]>("PasswordSalt")
                         .IsRequired()
                         .HasColumnType("longblob");
+
+                    b.Property<string>("PhotoPath")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Username")
                         .IsRequired()
