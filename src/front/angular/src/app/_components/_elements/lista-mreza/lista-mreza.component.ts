@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { sort } from 'd3';
 import { NN } from 'src/app/_utilities/_data-types/models';
 import { AuthService } from 'src/app/_utilities/_services/auth.service';
 import { NnService } from 'src/app/_utilities/_services/nn.service';
@@ -28,6 +29,7 @@ export class ListaMrezaComponent implements OnInit {
     if(this.key=='sort') this.sortSort();
     else if(this.key=='az') this.sortAZ();
     else if(this.key=='za') this.sortZA();
+    else if(this.key=='sortRev') this.sortRev();
   }
 
   filtriraj(str:string){
@@ -35,7 +37,6 @@ export class ListaMrezaComponent implements OnInit {
       mreze.name.toLowerCase().indexOf(str.toLowerCase())!==-1)
 
   }
-
   ngOnInit(): void {
     let p = this.activatedRoute.snapshot.paramMap.get("ProjectId");
     if (p != null) this.projectID=Number.parseInt(p);
@@ -44,10 +45,15 @@ export class ListaMrezaComponent implements OnInit {
 
   handleSuccess(self: any, mreze: NN[]) {
     console.log("Tacno jeeeeeee");
+    console.log("kljuc je" + self.key);
     if(mreze) {
       self.mreze=mreze;
       self.filtriraneMreze=mreze;
     }
+    if(self.key=='sort') self.sortSort();
+    else if(self.key=='az') self.sortAZ();
+    else if(self.key=='za') self.sortZA();
+    else if(self.key=='sortRev') self.sortRev();
 
   //  console.log(mreze[0].name);
     //console.log(projekti[0]);
@@ -69,6 +75,7 @@ onChange(select:any){
   if(this.key=='za') this.sortZA();
   else if(this.key=='az') this.sortAZ();
   else if(this.key=='sort') this.sortSort();
+  else if(this.key=='sortRev') this.sortRev();
 }
 
 sortAZ(){
@@ -81,6 +88,9 @@ sortZA(){
 
 sortSort(){
   this.filtriraneMreze.sort((a,b)=>a.id-b.id);
+}
+sortRev(){
+  this.filtriraneMreze.sort((a,b)=>b.id-a.id);
 }
 
 onClick(id:any){

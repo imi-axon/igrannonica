@@ -88,6 +88,10 @@
     "lista-mreza":{
         "mojeMreze": "My NNs"
     },
+    "sortiranje":{
+        "starije":"Date(old->new)",
+        "novije":"Date(new->old)"
+    },
 
 
 

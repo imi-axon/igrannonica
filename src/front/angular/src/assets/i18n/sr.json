@@ -86,6 +86,10 @@
     "lista-mreza":{
         "mojeMreze": "Moje mreze"
     },
+    "sortiranje":{
+        "starije":"Datum(staro->novo)",
+        "novije":"Datum(novo->staro)"
+    },
 
 
 

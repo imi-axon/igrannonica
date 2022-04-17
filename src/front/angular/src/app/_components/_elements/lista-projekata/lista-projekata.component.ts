@@ -28,6 +28,7 @@ export class ListaProjekataComponent implements OnInit {
     if(this.key=='sort') this.sortSort();
     else if(this.key=='az') this.sortAZ();
     else if(this.key=='za') this.sortZA();
+    else if(this.key=='sortRev') this.sortRev();
   }
 
   filtriraj(str:string){
@@ -66,6 +67,7 @@ onChange(select:any){
   if(this.key=='za') this.sortZA();
   else if(this.key=='az') this.sortAZ();
   else if(this.key=='sort') this.sortSort();
+  else if(this.key=='sortRev') this.sortRev();
 }
 
 sortAZ(){
@@ -78,6 +80,10 @@ sortZA(){
 
 sortSort(){
   this.filtriraniProjekti.sort((a,b)=>a.ProjectId-b.ProjectId);
+}
+
+sortRev(){
+  this.filtriraniProjekti.sort((a,b)=>b.ProjectId-a.ProjectId);
 }
 
 onClick(projId:any, hasDataset:any){
