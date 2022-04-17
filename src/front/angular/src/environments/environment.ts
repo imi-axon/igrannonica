@@ -3,7 +3,12 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  apiProperties:
+  {
+    url: 'https://localhost:7057',
+    wsurl:'wss://localhost:7057'
+  }
 };
 
 /*
