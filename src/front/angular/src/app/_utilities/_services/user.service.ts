@@ -172,4 +172,16 @@ export class UserService {
         );
     }
 
+    public getImage(username:string)
+    {
+      return this.userAPI.getimage(username).subscribe(
+        res=>{
+          console.log(res);
+        },
+        err=>{
+          console.log(err)
+        }
+      )
+    }
+
 }

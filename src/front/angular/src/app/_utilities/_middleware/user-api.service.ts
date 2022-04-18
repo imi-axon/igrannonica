@@ -84,4 +84,15 @@ export class UserApiService {
       });
       return response;
   }
+
+  getimage(username:any):Observable<HttpResponse<Blob>>
+  {
+    let response = this.http.get<Blob>(apiProperties.url+"/api/users/"+`${username}`+"/getimage",
+    {
+      observe:"response",
+      headers:HeaderUtil.jwtOnlyHeaders()
+    });
+    console.log(response);
+    return response;
+  }
 }

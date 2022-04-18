@@ -23,6 +23,7 @@ namespace BackApi.Services
         public bool EditEmail(int id, UserEdit model);
         public bool EditPassword(int id, UserEdit model);
         public bool addPhoto(int id, IFormFile photo);
+        public string UsernameToImagePath(string username);
     }
 
     public class UserService : IUserService
@@ -190,7 +191,7 @@ namespace BackApi.Services
             {
                 Directory.CreateDirectory(path);
             }
-            path = path + "\\" + photo.FileName;
+            path = path + "\\" + "user"+id+".jpg";
             user.PhotoPath = path;
             kontext.SaveChanges();
             using (FileStream stream = System.IO.File.Create(path))
@@ -341,6 +342,18 @@ namespace BackApi.Services
             rez.Append("}");
 
             return rez.ToString();
+        }
+
+        public string UsernameToImagePath(string username)
+        {
+            int id = UsernameToId(username);
+            if (id == -1)
+                return "";
+            var user = kontext.Users.Find(id);
+            if (user == null)
+                return "";
+
+            return user.PhotoPath;
         }
     }
 }

@@ -46,7 +46,7 @@
             </div>
 
             <div class="photoUpload">
-                <img [src]="url" title="Profile Picture" height="150px" width="150px" src="" />
+                <img [src]="url" title="Profile Picture" height="150px" width="150px" />
                 <input class="form-control" type="file" id="photo" name="photo" #photo="ngModel" [(ngModel)]="registration.photo" 
                 style="display: none;" accept="image/*" (change)="selectPhoto($event)"><br>
                 <label for="photo" id="button">Choose image</label>

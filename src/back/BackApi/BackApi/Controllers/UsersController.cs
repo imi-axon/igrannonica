@@ -155,5 +155,16 @@ namespace BackApi.Controllers
 
             return rez;
         }
+
+        [HttpGet("{username}/getimage")]
+        public async Task<ActionResult<dynamic>> GetImage(string username)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+
+            string photopath = korsrv.UsernameToImagePath(username);
+            Byte[] b = System.IO.File.ReadAllBytes(photopath);
+            return File(b, "image/jpeg");
+        }
     }
 }

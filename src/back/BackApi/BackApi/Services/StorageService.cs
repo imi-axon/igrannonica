@@ -52,9 +52,9 @@
             var basepath = @"Storage\";
             var imgfolder = "Images";
             var imgpath = Path.Combine(basepath, imgfolder);
-            var image = "img" + userid;
-            var datapath = Path.Combine(imgpath, image);
-            return datapath;
+            //var image = "img" + userid;
+            //var datapath = Path.Combine(imgpath, image);
+            return imgpath;
         }
         public void DeleteDataset(string path)
         {

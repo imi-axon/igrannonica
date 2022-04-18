@@ -15,7 +15,7 @@ export class RegistrationFormComponent implements OnInit {
   public registration:UserRegistration = new UserRegistration();
   public passwordAgain:string = "";
   public photo: File = null as any;
-  
+  url = 'assets/Images/profilna.png';
   public registrationCheck:RegistrationCheck = new RegistrationCheck();
   
   selectedFile:File = null as any;
@@ -60,7 +60,6 @@ export class RegistrationFormComponent implements OnInit {
   handleLogedIn(self: any, message: string){
     
   }
-  url = 'assets/images/profilna.png';
   public selectPhoto(event:any) {
     let fileType = event.target.files[0].type
     this.selectedFile=<File>event.target.files[0];
