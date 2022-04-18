@@ -19,7 +19,7 @@ namespace BackApi.Services
         public string ProjIdToPath(int projid,Boolean main);
         public Boolean EditHelperset(int projid, int userid, DatasetGetPost model);
         public Boolean UpdateMainDataset(int projid, int userid, out Boolean owner);
-        public string CreatePage(int projid, Boolean main, int p, int r);
+        public Task<string> CreatePage(int projid, Boolean main, int p, int r);
     }
 
     public class DatasetService : IDatasetService
@@ -229,29 +229,33 @@ namespace BackApi.Services
             return true;    
         }
 
-        public string CreatePage(int projid,Boolean main,int p, int r)
+        public async Task<string> CreatePage(int projid,Boolean main,int p, int r)
         {
+            //var xdd = projid + ";" + main;
             var tmp = kontext.Datasets.FirstOrDefault(x => x.Main == main && x.ProjectId == projid);
             if(tmp == null) return null;
 
-            var did = tmp.DatasetId;
-            var path = storageService.CreateDataset(projid, did);
-            string[] lines = File.ReadAllLines(path);
+            string[] lines =await File.ReadAllLinesAsync(tmp.Path);
             var content = new StringBuilder();
-            content.Append(lines[0]);
-            content.Append("\r\n");
+            if (lines.Length - 1>0)
+            {
+                content.Append(lines[0]);
+                content.Append("\r\n");
+            }
             for(int i=(p-1)*r+1;i<r;i++)
             {
-                content.Append(lines[i]);
-                content.Append("\r\n");
+                //content.Append(i);
+                if (i < lines.Length - 1)
+                {
+                    content.Append(lines[i]);
+                    content.Append("\r\n");
+                }
             }
             content.Remove(content.Length - 2, 2);
             var str = content.ToString();
 
             var rez = storageService.DsetPage(projid, main);
-            var file = File.Create(rez);
-            File.WriteAllText(rez,str);
-            file.Close();
+            await File.WriteAllTextAsync(rez,str);
 
             return rez;
         }

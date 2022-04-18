@@ -98,11 +98,11 @@
 
         public string DsetPage(int projid,Boolean main)
         {
+            var rng= new Random();
+            int xd=rng.Next(1000000,2000000);
             var path= @"Storage\";
-            var tmp = "Tmp" + projid + "Main" + main;
+            var tmp = "Tmp" + projid + "Main" + main+xd+".csv";
             path=Path.Combine(path,tmp);
-            path = Path.Combine(path, DateTime.Now.ToString());
-            path = Path.Combine(path, ".csv");
             return path;
         }
     }

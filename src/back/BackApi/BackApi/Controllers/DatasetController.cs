@@ -164,13 +164,13 @@ namespace BackApi.Controllers
             if (!owner)
                 return Forbid();
             DatasetGetPost dataset = new DatasetGetPost();
-            dataset.dataset = datasrv.CreatePage(projid, main, p, r);
+            dataset.dataset =await  datasrv.CreatePage(projid, main, p, r);
             if (dataset.dataset == null)
                 return NotFound("Ne postoji dataset");
             var response = await MLconnection.convertCSVstring(dataset);
             var ret= await response.Content.ReadAsStringAsync();
-            storsrv.DeletePath(dataset.dataset);
 
+            storsrv.DeletePath(dataset.dataset);
             return Ok(ret);
         }
     }
