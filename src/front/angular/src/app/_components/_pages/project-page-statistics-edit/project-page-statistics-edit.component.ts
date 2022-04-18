@@ -16,6 +16,7 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
 
   public showsEditOptions: boolean;
   public dataset: any;
+  public pageCount: number;
   public statistics: any;
   
   
@@ -29,16 +30,15 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.checkProjectId();
     
     setTimeout(() => {
-      this.checkProjectId();
     
       this.statisticsAPI.GetStatistics(this.ProjectId, false, this, this.successfulGetStatisticsCallback);
-      this.datasetAPI.GetDataset(this.ProjectId, false, this, this.successfulGetDatasetCallback);
       
       if(this.editComponent != null){
         this.editComponent.ChangedField.subscribe( change => this.HandleFieldChange(change) );
-        this.editComponent.DataUpdateNeeded.subscribe( event => this.UpdateData() );
+        this.editComponent.DataUpdateNeeded.subscribe( event => this.UpdatePageData(event) );
         this.editComponent.SaveDataNeeded.subscribe( event =>this.SaveData() );
       }
       
@@ -48,6 +48,8 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
   public statistika=true;
   
   public OnActivate(component: any){
+    this.checkProjectId();
+    
     if(!(component instanceof EditDatasetComponent)){
       this.statisticsComponent = component;
       this.statistika=true;
@@ -59,13 +61,17 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
 
       return;
     }
-    else this.statistika=false;
+    
+    this.statistika=false;
+      
     this.editComponent = component;
     
-    this.editComponent.LoadData(this.dataset);
+    this.UpdatePageData(1);
+    
+    this.editComponent.PageLoadEvent.subscribe( change => this.UpdatePageData(change) );
     
     this.editComponent.ChangedField.subscribe( change => this.HandleFieldChange(change) );
-    this.editComponent.DataUpdateNeeded.subscribe( event => this.UpdateData() );
+    this.editComponent.DataUpdateNeeded.subscribe( change => this.UpdatePageData(change) );
     this.editComponent.SaveDataNeeded.subscribe( event =>this.SaveData() );
     
     this.showsEditOptions = true;
@@ -79,8 +85,8 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
     let p = this.activatedRoute.snapshot.paramMap.get("ProjectId");
     if (p != null)  {
       this.ProjectId = Number.parseInt(p);
-      console.log('ProjectId')
-      console.log(this.ProjectId)
+      //console.log('ProjectId')
+      //console.log(this.ProjectId)
     }
   }
   
@@ -96,10 +102,9 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
     return editJSON;
   }
   
-  
   // PONOVO KUPIMO PODATKE
-  public UpdateData(){
-    this.datasetAPI.GetDataset(this.ProjectId, true, this, this.successfulGetDatasetCallback);
+  public UpdatePageData(pageNumber: number){
+    this.datasetAPI.GetDatasetPage(this.ProjectId, true, pageNumber, 10, this.successfulGetDatasetPageCallback);
   }
   
   // CUVAMO TRENUTNU IZMENU KAO TRAJNU
@@ -115,11 +120,14 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
       self.statisticsComponent.LoadStatisticsAndUpdate(self.statistics);
   }
   
-  private successfulGetDatasetCallback(self: any, response: any){
+  private successfulGetDatasetPageCallback(self: any, response: any){
+    console.log("RESPONSE")
+    console.log(response)
     self.dataset = JSON.parse(response.dataset);
+    //self.pageCount = JSON.parse(response.pageCount);
     self.statisticsAPI.GetStatistics(self.ProjectId, false, self, self.successfulGetStatisticsCallback);
     if(self.editComponent != null)
-      self.editComponent.LoadData(self.dataset);
+      self.editComponent.LoadPage(self.dataset, 5 /* self.pageCount */);
   }
   
   private successfulEditCallback(self: any){
@@ -129,6 +137,7 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
   
   
   // KOMANDE  =========================================================================
+
   
   // IZMENI KOLONU
   public HandleFieldChange(event: any){

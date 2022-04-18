@@ -21,7 +21,7 @@
             
             <tbody>
                 
-                <tr *ngFor="let i = index; let row of dataPages[currentPage];">
+                <tr *ngFor="let i = index; let row of dataset;">
                     
                     <!-- CELIJE ZA PRVU KOLONU -->
                     <td class="prva-kolona">
@@ -66,17 +66,17 @@
             </li>
             
             <li class="page-item">
-                <button class="page-link" [disabled]="true"> {{currentPage + 1}} / {{dataPages.length}}</button>
+                <button class="page-link" [disabled]="true"> {{currentPage + 1}} / {{pageCount}}</button>
             </li>
 
             <li class="page-item">
-                <button class="page-link" [class.disabled]="currentPage > dataPages.length - 2"
-                    [disabled]="currentPage > dataPages.length - 2" (click)="nextPage()">&gt;</button>
+                <button class="page-link" [class.disabled]="currentPage > pageCount - 2"
+                    [disabled]="currentPage > pageCount - 2" (click)="nextPage()">&gt;</button>
             </li>
 
             <li class="page-item">
-                <button class="page-link" [class.disabled]="currentPage > dataPages.length - 2"
-                    [disabled]="currentPage > dataPages.length - 2" (click)="maxPage();">&gt;&gt;&gt;</button>
+                <button class="page-link" [class.disabled]="currentPage > pageCount - 2"
+                    [disabled]="currentPage > pageCount - 2" (click)="maxPage();">&gt;&gt;&gt;</button>
             </li>
             
         </ul>
