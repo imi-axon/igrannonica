@@ -141,6 +141,19 @@ namespace BackApi.Controllers
             return BadRequest();
 
         }
+        [HttpDelete("{id}/nn/{nnid}")]
+        public async Task<ActionResult> DeleteNN(int id,int nnid)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized("Ulogujte se");
+            var chk = projsrv.projectOwnership(userid, id);
+            if (!chk)
+                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Vi niste vlasnik projekta" });
+            Boolean rez = nnsrv.DeleteNN(nnid);
+            if (rez)
+                return Ok("Mreza izbrisana");
+            else return BadRequest("Greska pri brisanju");
+        }
 
         [HttpGet("/wstest/{nnid}"),AllowAnonymous]
         public async Task<ActionResult> WsTesting(int nnid)

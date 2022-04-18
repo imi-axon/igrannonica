@@ -151,5 +151,18 @@ namespace BackApi.Controllers
 
             return rez;
         }
+        [HttpDelete("{username}/delete")]
+        public async Task<ActionResult> DeleteUser(string username)
+        {
+            int loggedid = jwtsrv.GetUserId();
+            if (loggedid == -1) return Unauthorized();
+            var userid= korsrv.UsernameToId(username);
+            if (userid == -1) return NotFound();
+            var chk = korsrv.DeleteUser(userid, loggedid);
+            if(!chk) return Forbid();
+
+
+            return Ok();
+        }
     }
 }

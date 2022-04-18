@@ -19,6 +19,7 @@ namespace BackApi.Services
         public string ProjIdToPath(int projid,Boolean main);
         public Boolean EditHelperset(int projid, int userid, DatasetGetPost model);
         public Boolean UpdateMainDataset(int projid, int userid, out Boolean owner);
+        public string CreatePage(int projid, Boolean main, int p, int r);
     }
 
     public class DatasetService : IDatasetService
@@ -139,7 +140,7 @@ namespace BackApi.Services
                 return false;
             foreach (Dataset d in lista)
             {
-                storageService.DeleteDataset(d.Path);
+                storageService.DeletePath(d.Path);
 
                 kontext.Datasets.Remove(d);
                 kontext.SaveChanges();
@@ -227,5 +228,34 @@ namespace BackApi.Services
             File.WriteAllTextAsync(path, temp);
             return true;    
         }
+
+        public string CreatePage(int projid,Boolean main,int p, int r)
+        {
+            var tmp = kontext.Datasets.FirstOrDefault(x => x.Main == main && x.ProjectId == projid);
+            if(tmp == null) return null;
+
+            var did = tmp.DatasetId;
+            var path = storageService.CreateDataset(projid, did);
+            string[] lines = File.ReadAllLines(path);
+            var content = new StringBuilder();
+            content.Append(lines[0]);
+            content.Append("\r\n");
+            for(int i=(p-1)*r+1;i<r;i++)
+            {
+                content.Append(lines[i]);
+                content.Append("\r\n");
+            }
+            content.Remove(content.Length - 2, 2);
+            var str = content.ToString();
+
+            var rez = storageService.DsetPage(projid, main);
+            var file = File.Create(rez);
+            File.WriteAllText(rez,str);
+            file.Close();
+
+            return rez;
+        }
+
+
     }
 }

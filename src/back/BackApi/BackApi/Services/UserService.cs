@@ -21,6 +21,7 @@ namespace BackApi.Services
         public string GetUser(string username);
         public bool EditEmail(int id, UserEdit model);
         public bool EditPassword(int id, UserEdit model);
+        public Boolean DeleteUser(int userid, int loggedid);
     }
 
     public class UserService: IUserService
@@ -28,12 +29,14 @@ namespace BackApi.Services
         private DataBaseContext kontext;
         private readonly IConfiguration configuration;
         private IEmailService emailService;
+        private IProjectService projectService;
 
-        public UserService(DataBaseContext korisnikContext,IConfiguration configuration, IEmailService emailService)
+        public UserService(DataBaseContext korisnikContext,IConfiguration configuration, IEmailService emailService, IProjectService projectService)
         {
             kontext = korisnikContext;
             this.configuration = configuration;
             this.emailService = emailService;
+            this.projectService=projectService;
         }
 
         private void CreatePWHash(string password, out byte[] pwHash, out byte[] pwSalt)
@@ -316,6 +319,28 @@ namespace BackApi.Services
             rez.Append("}");
 
             return rez.ToString();
+        }
+
+        public Boolean DeleteUser(int userid,int loggedid)
+        {
+            if (userid != loggedid)
+                return false;
+            var tmp=kontext.Users.FirstOrDefault(x=> x.UserId == userid);
+            if (tmp == null)
+                return false;
+            var projs=kontext.Projects.Where(x=> x.UserId == userid).ToList();
+            if (projs.Any())
+            {
+                foreach(var p in projs)
+                {
+                    projectService.DeleteProject(p.ProjectId, userid);
+                }
+
+                kontext.Users.Remove(tmp);
+                kontext.SaveChanges();
+                return true;
+            }
+            return true;
         }
     }
 }
