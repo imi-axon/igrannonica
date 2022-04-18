@@ -90,5 +90,12 @@ namespace BackApi.Controllers
 
             return File(bytes, "text/csv", Path.GetFileName(path));
         }
+        [HttpGet("{pagepath}")]
+        public async Task<ActionResult> PassPageToML(string pagepath)
+        {
+            var bytes=await System.IO.File.ReadAllBytesAsync(pagepath);
+            return File(bytes, "text/csv", Path.GetFileName(pagepath));
+        }
+
     }
 }
