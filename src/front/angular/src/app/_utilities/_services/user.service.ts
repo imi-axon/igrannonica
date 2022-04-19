@@ -172,14 +172,12 @@ export class UserService {
         );
     }
 
-    public getImage(username:string)
+    public getImage(username:string, self: any, successCallback: Function)
     {
-      return this.userAPI.getimage(username).subscribe(
-        res=>{
-          console.log(res);
-        },
-        err=>{
-          console.log(err)
+      this.userAPI.getimage(username).subscribe(
+        (res: any)=>{
+          
+          successCallback(self, res);
         }
       )
     }

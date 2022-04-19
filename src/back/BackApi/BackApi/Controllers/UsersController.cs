@@ -163,6 +163,9 @@ namespace BackApi.Controllers
             if (userid == -1) return Unauthorized();
 
             string photopath = korsrv.UsernameToImagePath(username);
+            if (photopath == "")
+                photopath = "Storage\\profilna.png";
+
             Byte[] b = System.IO.File.ReadAllBytes(photopath);
             return File(b, "image/jpeg");
         }
