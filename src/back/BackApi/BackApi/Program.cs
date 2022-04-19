@@ -15,6 +15,24 @@ using System.Security.Claims;
 using System.Net;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 
+// -- Custom Environment Variable --
+
+var BACK_ENV_TYPE = Environment.GetEnvironmentVariable("BACK_ENV_TYPE");
+
+if (BACK_ENV_TYPE == null)
+    BACK_ENV_TYPE = "DEVELOPMENT";
+
+if (BACK_ENV_TYPE == "DEVELOPMENT")
+{
+    Urls.SetForDev();
+}
+else if (BACK_ENV_TYPE == "PRODUCTION")
+{
+    Urls.SetForProd();
+}
+
+// ---------------------------------
+
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,7 +40,7 @@ var builder = WebApplication.CreateBuilder(args);
 /*
 builder.WebHost.ConfigureKestrel((context, serverOptions) =>
 {
-    serverOptions.Listen(IPAddress.Any, 10016);
+    serverOptions.Listen(IPAddress.Any, int.Parse(Urls.backPort));
 });
 */
 
@@ -96,12 +114,6 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-
-    Urls.SetForDev();
-}
-else
-{
-    Urls.SetForProd();
 }
 
 var webSocketOptions = new WebSocketOptions
