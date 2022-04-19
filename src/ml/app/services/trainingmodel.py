@@ -25,14 +25,14 @@ class TrainingService():
     #learning_rate = LEARING_RATE -> float
     #regularization_rate = REG_RATE -> float
     #regularization = REGULARIZATION -> string ('L1','L2')
-    #actGlobal -> string ('relu', 'sigmoid', 'tanh') -> aktivaciona funkcija
+    #actOutput -> string ('relu', 'sigmoid', 'tanh') -> aktivaciona funkcija u output sloju => ukoliko nije navedena vrednost je "None"
     #actPerLayer -> lista stringova ('relu', 'sigmoid', 'tanh') -> aktivaciona funkcija za svaki sloj
     #nbperlayer -> lista int -> broj neurona za svaki sloj
     #metrics -> lista stringova ('mse', 'mae', 'rmse' -> za regresiju; 'precision', 'recall','accuracy')
     #type -> string -> "CLASSIFICATION"/"REGRESSION"
     #batchSize -> int
     #percentage_training -> float - [0,1] -> koliki procenat celog skupa je training skup
-    def __init__(self, datasetAll,inputs, outputs, epochs, learning_rate, regularization_rate,regularization, actPerLayer, nbperlayer, metrics, batchSize,percentage_training,type):
+    def __init__(self, datasetAll,inputs, outputs, epochs, learning_rate, regularization_rate,regularization, actPerLayer,actOutput, nbperlayer, metrics, batchSize,percentage_training,type):
         self.datasetAll = datasetAll
         self.inputs = inputs
         self.outputs = outputs
@@ -54,6 +54,14 @@ class TrainingService():
 
         self.METRICS = metrics
         self.TYPE = type
+
+        if(actOutput=="None"):
+            if(type=="CLASSIFICATION"):
+                self.ACT_OUTPUT = "softmax"
+            elif (type=="REGRESSION"):
+                self.ACT_OUTPUT = "linear"
+        else:
+            self.ACT_OUTPUT = actOutput
 
         self.BATCH_SIZE = batchSize
         self.PERCENTAGE_TRAINING = percentage_training
@@ -163,9 +171,9 @@ class TrainingService():
             
         #izlazni sloj
         if(self.TYPE=="REGRESSION"):
-            model.add(Dense(1))
+            model.add(Dense(1, activation = self.ACT_OUTPUT))
         elif(self.TYPE=="CLASSIFICATION"):
-            model.add(Dense(len(self.outputs), activation='softmax'))
+            model.add(Dense(len(self.outputs), activation=self.ACT_OUTPUT))
 
         model_loss = self.REGRESSION_LOSS
         if(self.TYPE=="CLASSIFICATION"):
