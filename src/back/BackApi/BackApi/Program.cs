@@ -25,7 +25,6 @@ builder.WebHost.ConfigureKestrel((context, serverOptions) =>
     serverOptions.Listen(IPAddress.Any, 10016);
 });
 
-
 //builder.Services.Configure<KestrelServerOptions>(builder.Configuration.GetSection("Kestrel"));
 
 // Add services to the container.
@@ -74,7 +73,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: myAllowSpecificOrigins,
         builder =>
         {
-            builder.WithOrigins("http://147.91.204.115:10015")
+            //builder.WithOrigins("http://147.91.204.115:10015", "http://softeng.pmf.kg.ac.rs:10015", "http://localhost:10015")
+            builder.AllowAnyOrigin()
             .AllowAnyMethod()
             .AllowAnyHeader();
         });
