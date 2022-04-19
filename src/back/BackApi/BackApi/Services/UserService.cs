@@ -1,5 +1,6 @@
 ﻿using BackApi.Entities;
 using BackApi.Models;
+using BackApi.Config;
 using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
@@ -181,7 +182,7 @@ namespace BackApi.Services
             kontext.SaveChanges();
             //rez = "Korisnik uspesno registrovan";
 
-            emailService.SendEmail("Kliknite na link za potvrdu registracije:http://localhost:4200/verification?token=" + jwtoken, "Potvrda registracije", model.email);
+            emailService.SendEmail("Kliknite na link za potvrdu registracije:" + Urls.front + "/verification?token=" + jwtoken, "Potvrda registracije", model.email);
             return "Proverite vas email i verifikujte se";
         }
 
@@ -230,7 +231,7 @@ namespace BackApi.Services
             else
             {
                 string jwtoken = CreateEmailToken(user.Username, int.Parse(configuration.GetSection("AppSettings2:EmailToken").Value.ToString()));
-                bool res = emailService.SendEmailForPass("Kliknite na link da biste promenili lozinku: http://localhost:4200/changepass?token=" + jwtoken, "Promena lozinke", user.Email);
+                bool res = emailService.SendEmailForPass("Kliknite na link da biste promenili lozinku: " + Urls.front + "/changepass?token=" + jwtoken, "Promena lozinke", user.Email);
                 return "Proverite vas mail";
             }
         }
@@ -308,7 +309,7 @@ namespace BackApi.Services
             user.EmailToken = jwtoken;
 
             kontext.SaveChanges();
-            emailService.SendEmail("Kliknite na link za potvrdu registracije:http://localhost:4200/verification?token=" + jwtoken, "Potvrda registracije", model.email);
+            emailService.SendEmail("Kliknite na link za potvrdu registracije:" + Urls.front + "/verification?token=" + jwtoken, "Potvrda registracije", model.email);
             return true;
 
         }

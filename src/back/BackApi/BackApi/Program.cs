@@ -30,7 +30,7 @@ builder.WebHost.ConfigureKestrel((context, serverOptions) =>
 
 // Add services to the container.
 builder.Services.AddDbContext<DataBaseContext>();
-//builder.Services.AddEntityFrameworkSqlite().AddDbContext<DataBaseContext>();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -74,7 +74,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: myAllowSpecificOrigins,
         builder =>
         {
-            builder.WithOrigins("http://localhost:4200")
+            //builder.WithOrigins("http://localhost:4200")
+            builder.AllowAnyOrigin()
             .AllowAnyMethod()
             .AllowAnyHeader();
         });
@@ -82,6 +83,13 @@ builder.Services.AddCors(options =>
 
 
 var app = builder.Build();
+
+// Primenjuje migracije
+using (var scope = app.Services.CreateScope())
+{
+    var dataContext = scope.ServiceProvider.GetRequiredService<DataBaseContext>();
+    dataContext.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

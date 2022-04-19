@@ -50,10 +50,10 @@ namespace BackApi.Controllers
             return File(bytes, "text/csv",Path.GetFileName(path));
         }
 
-        [HttpGet("Storage/proj{pid}/data/data{did}.csv"),Host(backUrl, mlUrl)] //adresa ml mikroserivsa
+        [HttpGet("Storage/proj{pid}/data/data{did}.csv"), AllowAnonymous] //Host(backUrl, mlUrl)] //adresa ml mikroserivsa
         public async Task<ActionResult> PassDatasetToML(int pid,int did)
         {
-            Debug.WriteLine(Request.Host);
+            //Debug.WriteLine();
             var path = storsrv.GetDataset(datasrv.ProjIdToPath(pid, true));
             var bytes = await System.IO.File.ReadAllBytesAsync(path);
 
@@ -78,7 +78,7 @@ namespace BackApi.Controllers
             storsrv.SaveFile(path, file);
             return Ok();
         }
-        [HttpGet("Storage/proj{pid}/mreze/mreza{nnid}.h5"), Host(backUrl, mlUrl)] //adresa ml mikroserivsa
+        [HttpGet("Storage/proj{pid}/mreze/mreza{nnid}.h5"), AllowAnonymous] //Host(backUrl, mlUrl)] //adresa ml mikroserivsa
         public async Task<ActionResult> PassNNToML(int pid, int nnid)
         {
             var path = storsrv.CreateNNFile(pid, nnid);
@@ -86,7 +86,7 @@ namespace BackApi.Controllers
 
             return File(bytes, "text/csv", Path.GetFileName(path));
         }
-        [HttpGet("Storage/proj{pid}/mreze/cfg{nnid}.json"), Host(backUrl, mlUrl)] //adresa ml mikroserivsa
+        [HttpGet("Storage/proj{pid}/mreze/cfg{nnid}.json"), AllowAnonymous] //Host(backUrl, mlUrl)] //adresa ml mikroserivsa
         public async Task<ActionResult> PassCfgToML(int pid, int nnid)
         {
             var path = storsrv.CreateNNCfg(pid, nnid);
