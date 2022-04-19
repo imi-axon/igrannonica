@@ -100,7 +100,7 @@
         {
             var rng= new Random();
             int xd=rng.Next(1000000,2000000);
-            var path= @"Storage\";
+            var path= @"Storage";
             var tmp = "Tmp" + projid + "Main" + main+xd+".csv";
             path=Path.Combine(path,tmp);
             return path;

@@ -19,7 +19,7 @@ namespace BackApi.Services
         public string ProjIdToPath(int projid,Boolean main);
         public Boolean EditHelperset(int projid, int userid, DatasetGetPost model);
         public Boolean UpdateMainDataset(int projid, int userid, out Boolean owner);
-        public Task<string> CreatePage(int projid, Boolean main, int p, int r);
+        public Task<DatasetPages> CreatePage(int projid, Boolean main, int p, int r);
     }
 
     public class DatasetService : IDatasetService
@@ -229,13 +229,15 @@ namespace BackApi.Services
             return true;    
         }
 
-        public async Task<string> CreatePage(int projid,Boolean main,int p, int r)
+        public async Task<DatasetPages> CreatePage(int projid,Boolean main,int p, int r)
         {
             //var xdd = projid + ";" + main;
             var tmp = kontext.Datasets.FirstOrDefault(x => x.Main == main && x.ProjectId == projid);
             if(tmp == null) return null;
 
             string[] lines =await File.ReadAllLinesAsync(tmp.Path);
+            var np = (decimal)(lines.Length - 1) / r;
+            var pages = (int)Math.Ceiling(np);
             var content = new StringBuilder();
             if (lines.Length - 1>0)
             {
@@ -257,7 +259,11 @@ namespace BackApi.Services
             var rez = storageService.DsetPage(projid, main);
             await File.WriteAllTextAsync(rez,str);
 
-            return rez;
+            var ret = new DatasetPages();
+            ret.dataset = rez;
+            ret.pages=pages;
+
+            return ret;
         }
 
 

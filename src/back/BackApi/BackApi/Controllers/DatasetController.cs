@@ -163,15 +163,19 @@ namespace BackApi.Controllers
             owner = projsrv.projectOwnership(userid, projid);
             if (!owner)
                 return Forbid();
-            DatasetGetPost dataset = new DatasetGetPost();
-            dataset.dataset =await  datasrv.CreatePage(projid, main, p, r);
+            var dataset = new DatasetPages();
+            dataset =await datasrv.CreatePage(projid, main, p, r);
             if (dataset.dataset == null)
                 return NotFound("Ne postoji dataset");
-            var response = await MLconnection.convertCSVstring(dataset);
+            dataset.dataset = dataset.dataset.Replace('\\', '/');
+            var toml = new DatasetGetPost();
+            toml.dataset = dataset.dataset;
+            var response = await MLconnection.convertCSVstring(toml);
             var ret= await response.Content.ReadAsStringAsync();
 
+            dataset.dataset = ret;
             storsrv.DeletePath(dataset.dataset);
-            return Ok(ret);
+            return Ok(dataset);
         }
     }
 }
