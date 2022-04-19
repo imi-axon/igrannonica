@@ -9,7 +9,7 @@ class Urls():
     BACK_PORT = ''
 
     def SetForDev(ssl: bool = False):
-        Urls.BACK_PORT = '7057' if ssl else '5057'
+        Urls.BACK_PORT = '7057' if ssl else '10016'
         Urls.SetWithCommonHost('localhost', ssl)
     
     def SetForProd(ssl: bool = False):
@@ -26,4 +26,4 @@ class Urls():
 if ENV_TYPE == 'PRODUCTION':
     Urls.SetForProd()
 elif ENV_TYPE == 'DEVELOPMENT':
-    Urls.SetForDev(True)
+    Urls.SetForDev()

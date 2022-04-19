@@ -24,7 +24,7 @@ namespace BackApi.Config
         public static void SetForDev()
         {
             mlPort = "8000";
-            backPort = "5057";
+            backPort = "10016";
             frontPort = "4200";
 
             SetWithCommonHost("localhost");

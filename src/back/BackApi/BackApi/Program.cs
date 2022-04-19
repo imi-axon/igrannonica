@@ -44,7 +44,7 @@ builder.WebHost.ConfigureKestrel((context, serverOptions) =>
 });
 */
 
-//builder.Services.Configure<KestrelServerOptions>(builder.Configuration.GetSection("Kestrel"));
+builder.Services.Configure<KestrelServerOptions>(builder.Configuration.GetSection("Kestrel"));
 
 // Add services to the container.
 builder.Services.AddDbContext<DataBaseContext>();
@@ -92,8 +92,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: myAllowSpecificOrigins,
         builder =>
         {
-            //builder.WithOrigins("http://localhost:4200")
-            builder.AllowAnyOrigin()
+            builder.WithOrigins("http://localhost:4200")
+            //builder.AllowAnyOrigin()
             .AllowAnyMethod()
             .AllowAnyHeader();
         });
@@ -123,7 +123,7 @@ var webSocketOptions = new WebSocketOptions
 
 app.UseWebSockets(webSocketOptions);
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection()
 
 app.UseAuthentication();
 
