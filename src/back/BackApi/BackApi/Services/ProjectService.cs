@@ -19,13 +19,15 @@ namespace BackApi.Services
         private DataBaseContext context;
         private readonly IConfiguration configuration;
         private IDatasetService datasetService;
+        private INNservice nnService;
         private IStorageService storageService =new StorageService();
 
-        public ProjectService(DataBaseContext context, IConfiguration configuration, IDatasetService datasetService)
+        public ProjectService(DataBaseContext context, IConfiguration configuration, IDatasetService datasetService,INNservice nNservice)
         {
             this.datasetService = datasetService;
             this.context = context;
             this.configuration = configuration;
+            this.nnService = nNservice;
         }
         public Boolean CreateProject(ProjectPostPut model,int userid)
         {
@@ -49,29 +51,6 @@ namespace BackApi.Services
             return true;
         }
 
-        private void DeleteDataset(int datasetid)    //implementacija ce biti pomerena u dataset servis 
-        {
-            try
-            {
-                var dataset = context.Datasets.Find(datasetid);
-                context.Datasets.Remove(dataset);
-                context.SaveChanges();
-            }
-            catch (Exception ex) { }
-
-        }
-
-        private void DeleteNN(int nnid)      //implementacija ce biti pomerena u NN servis
-        {
-            try
-            {
-                var nn = context.NNs.Find(nnid);
-                context.NNs.Remove(nn);
-                context.SaveChanges();
-            }
-            catch (Exception ex) { }
-        }
-
         public Boolean DeleteProject(int projid, int userid) //manual cascade delete
         {
             var tmp = context.Projects.Where(x => x.UserId == userid && x.ProjectId == projid).FirstOrDefault();
@@ -86,7 +65,7 @@ namespace BackApi.Services
                 foreach (NN n in NNs)
                 {
                     //List<NNConfig> nnconfigs=context.NNConfigs.Where(x => x.ProjectId == projid).ToList()  //brisanje hiperparametara
-                    DeleteNN(n.NNId);
+                    nnService.DeleteNN(n.NNId);
                 }
 
                 storageService.DeleteProject(tmp.ProjectId);

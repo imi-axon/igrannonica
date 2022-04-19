@@ -17,4 +17,9 @@
     {
         public string actions { get; set; }
     }
+    public class DatasetPages
+    {
+        public string dataset { get; set; }
+        public int pages { get; set; }
+    }
 }

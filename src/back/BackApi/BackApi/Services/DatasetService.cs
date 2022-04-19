@@ -19,6 +19,7 @@ namespace BackApi.Services
         public string ProjIdToPath(int projid,Boolean main);
         public Boolean EditHelperset(int projid, int userid, DatasetGetPost model);
         public Boolean UpdateMainDataset(int projid, int userid, out Boolean owner);
+        public Task<DatasetPages> CreatePage(int projid, Boolean main, int p, int r);
     }
 
     public class DatasetService : IDatasetService
@@ -139,7 +140,7 @@ namespace BackApi.Services
                 return false;
             foreach (Dataset d in lista)
             {
-                storageService.DeleteDataset(d.Path);
+                storageService.DeletePath(d.Path);
 
                 kontext.Datasets.Remove(d);
                 kontext.SaveChanges();
@@ -227,5 +228,44 @@ namespace BackApi.Services
             File.WriteAllTextAsync(path, temp);
             return true;    
         }
+
+        public async Task<DatasetPages> CreatePage(int projid,Boolean main,int p, int r)
+        {
+            //var xdd = projid + ";" + main;
+            var tmp = kontext.Datasets.FirstOrDefault(x => x.Main == main && x.ProjectId == projid);
+            if(tmp == null) return null;
+
+            string[] lines =await File.ReadAllLinesAsync(tmp.Path);
+            var np = (decimal)(lines.Length - 1) / r;
+            var pages = (int)Math.Ceiling(np);
+            var content = new StringBuilder();
+            if (lines.Length - 1>0)
+            {
+                content.Append(lines[0]);
+                content.Append("\r\n");
+            }
+            for(int i=(p-1)*r+1;i<r;i++)
+            {
+                //content.Append(i);
+                if (i < lines.Length - 1)
+                {
+                    content.Append(lines[i]);
+                    content.Append("\r\n");
+                }
+            }
+            content.Remove(content.Length - 2, 2);
+            var str = content.ToString();
+
+            var rez = storageService.DsetPage(projid, main);
+            await File.WriteAllTextAsync(rez,str);
+
+            var ret = new DatasetPages();
+            ret.dataset = rez;
+            ret.pages=pages;
+
+            return ret;
+        }
+
+
     }
 }

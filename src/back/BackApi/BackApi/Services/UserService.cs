@@ -24,6 +24,7 @@ namespace BackApi.Services
         public bool EditPassword(int id, UserEdit model);
         public bool addPhoto(int id, IFormFile photo);
         public string UsernameToImagePath(string username);
+        public Boolean DeleteUser(int userid, int loggedid);
     }
 
     public class UserService : IUserService
@@ -32,13 +33,15 @@ namespace BackApi.Services
         private readonly IConfiguration configuration;
         private IEmailService emailService;
         private IStorageService storageService;
+        private IProjectService projectService;
 
-        public UserService(DataBaseContext korisnikContext, IConfiguration configuration, IEmailService emailService, IStorageService storageService)
+        public UserService(DataBaseContext korisnikContext,IConfiguration configuration, IEmailService emailService, IStorageService storageService, IProjectService projectService)
         {
             kontext = korisnikContext;
             this.configuration = configuration;
             this.emailService = emailService;
             this.storageService = storageService;
+            this.projectService=projectService;
         }
 
         private void CreatePWHash(string password, out byte[] pwHash, out byte[] pwSalt)
@@ -354,6 +357,28 @@ namespace BackApi.Services
                 return "";
 
             return user.PhotoPath;
+        }
+        
+        public Boolean DeleteUser(int userid,int loggedid)
+        {
+            if (userid != loggedid)
+                return false;
+            var tmp=kontext.Users.FirstOrDefault(x=> x.UserId == userid);
+            if (tmp == null)
+                return false;
+            var projs=kontext.Projects.Where(x=> x.UserId == userid).ToList();
+            if (projs.Any())
+            {
+                foreach(var p in projs)
+                {
+                    projectService.DeleteProject(p.ProjectId, userid);
+                }
+
+                kontext.Users.Remove(tmp);
+                kontext.SaveChanges();
+                return true;
+            }
+            return true;
         }
     }
 }

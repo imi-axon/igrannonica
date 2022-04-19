@@ -18,36 +18,15 @@ namespace BackApi.Controllers
         private IDatasetService datasrv;
         private IJwtService jwtsrv;
         private IProjectService projsrv;
-        public DatasetController(IDatasetService datasetServis, IJwtService jwtServis, IProjectService projectService)
+        private IStorageService storsrv;
+        public DatasetController(IDatasetService datasetServis, IJwtService jwtServis, IProjectService projectService, IStorageService storageService)
         {
             this.datasrv = datasetServis;
             this.jwtsrv = jwtServis;
             this.projsrv=projectService;
+            this.storsrv=storageService;
         }
 
-        /*
-        [HttpGet("{id}/dataset")]
-        public async Task<ActionResult<dynamic>> Get(int id)
-        {
-            int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized("Ulogujte se");
-            Boolean uspeh;
-            Boolean owner;
-            string pom = datasrv.daLiPostoji(id, out uspeh,userid,out owner);
-            if(!uspeh)
-                return NotFound(pom);
-            if (!owner)
-                return Forbid(pom);
-
-            //string tekst = "n1;n2;n3;out\r1; 1; 0; 1\r1; 0; 0; 1\r0; 0; 1; 1\r1; 0; 1; 1\r0; 0; 0; 0\r";
-            DatasetGetPost dataset = new DatasetGetPost();
-            dataset.dataset = pom;
-            var response = await KonekcijaSaML.convertCSVstring(dataset);
-
-            return await response.Content.ReadAsStringAsync();
-        }
-        */
-        
         [HttpPost("{id}/dataset")]
         [RequestFormLimits(MultipartBodyLengthLimit = 209715200)]
         [RequestSizeLimit(209715200)]
@@ -63,7 +42,7 @@ namespace BackApi.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Greska pri pisanju fajla." });
             DatasetGetPost novi = new DatasetGetPost();
             novi.dataset= datasrv.ProjIdToPath(id,true);
-            /*var response = await MLconnection.validateCSVstring(novi); // ceka se implementacija obrade fajla na ml-u a ne stringa
+            var response = await MLconnection.validateCSVstring(novi); // ceka se implementacija obrade fajla na ml-u a ne stringa
 
             if (response.StatusCode == HttpStatusCode.Created)
             {
@@ -73,7 +52,7 @@ namespace BackApi.Controllers
             {
                 datasrv.Delete(id);
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Ne valja CSV." });
-            }*/
+            }
             return Ok();
         }
 
@@ -90,15 +69,6 @@ namespace BackApi.Controllers
                 return Ok("Uspesno Obrisan");
             else return BadRequest("Vec obrisan ");
         }
-
-        /*[HttpGet("{projid}")]
-        public async Task<ActionResult<string>> ListajDataset(int projid)
-        {
-            var rez = datasrv.Listaj(projid);
-            if (rez != "[]")
-                return Ok(rez);
-            else return NotFound("Ne postoji dataset");
-        }*/
 
         [HttpGet("{projid}/dataset/{main}")]
         public async Task<ActionResult<dynamic>> ReadDataset(int projid,Boolean main)
@@ -182,6 +152,30 @@ namespace BackApi.Controllers
             if(!chk)
                 return NotFound();
             return Ok();
+        }
+
+        [HttpGet("{projid}/dataset/{main}/page/{p}/rows/{r}")] //p-broj strane, r-broj redova po strani
+        public async Task<ActionResult<dynamic>> Paging(int projid, Boolean main,int p, int r)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            Boolean owner;
+            owner = projsrv.projectOwnership(userid, projid);
+            if (!owner)
+                return Forbid();
+            var dataset = new DatasetPages();
+            dataset =await datasrv.CreatePage(projid, main, p, r);
+            if (dataset.dataset == null)
+                return NotFound("Ne postoji dataset");
+            dataset.dataset = dataset.dataset.Replace('\\', '/');
+            var toml = new DatasetGetPost();
+            toml.dataset = dataset.dataset;
+            var response = await MLconnection.convertCSVstring(toml);
+            var ret= await response.Content.ReadAsStringAsync();
+
+            dataset.dataset = ret;
+            storsrv.DeletePath(dataset.dataset);
+            return Ok(dataset);
         }
     }
 }

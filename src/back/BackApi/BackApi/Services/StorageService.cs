@@ -6,13 +6,14 @@
         public void DeleteProject(int projectId);
         public void CreateProject(int projectId);
         public string CreateDataset(int projid, int datasetid);
-        public void DeleteDataset(string path);
+        public void DeletePath(string path);
         public string GetDataset(string tmp);
         public string CreateNNFile(int projid, int nnid);
         public string CreateNNCfg(int projid, int nnid);
         public string ReadCfg(string path);
         public void SaveFile(string path, IFormFile file);
         public string CreatePhoto(int userid);
+        public string DsetPage(int projid, Boolean main);
     }
     public class StorageService : IStorageService
     {
@@ -56,7 +57,8 @@
             //var datapath = Path.Combine(imgpath, image);
             return imgpath;
         }
-        public void DeleteDataset(string path)
+
+        public void DeletePath(string path)
         {
             var basepath = @"";
             basepath = Path.Combine(basepath,path);
@@ -104,6 +106,16 @@
             {
                 file.CopyTo(stream);           
             }
+        }
+
+        public string DsetPage(int projid,Boolean main)
+        {
+            var rng= new Random();
+            int xd=rng.Next(1000000,2000000);
+            var path= @"Storage";
+            var tmp = "Tmp" + projid + "Main" + main+xd+".csv";
+            path=Path.Combine(path,tmp);
+            return path;
         }
     }
 }

@@ -18,6 +18,7 @@ namespace BackApi.Services
         public string NNIdToPath(int nnid);
         public string ListNN(int userid, int projid);
         public string NNIdToCfg(int nnid);
+        public Boolean DeleteNN(int nnid);
     }
 
     public class NNservice: INNservice
@@ -217,6 +218,20 @@ namespace BackApi.Services
             if (nn != null)
                 return nn.ConfPath;
             return null;
+        }
+
+        public Boolean DeleteNN(int nnid)
+        {
+            var nn= kontext.NNs.FirstOrDefault(x => x.NNId == nnid);
+            if(nn == null)
+                return false;
+            storageService.DeletePath(nn.ConfPath);
+            storageService.DeletePath(nn.DataPath);
+
+            kontext.NNs.Remove(nn);
+            kontext.SaveChanges();
+
+            return true;
         }
     }
 }

@@ -35,6 +35,16 @@ export class DatasetApiService {
     );
   }
   
+  public GetDatasetPage(project_id: number, main: boolean, pageNumber: number, rowCount: number): Observable<HttpResponse<any>>{
+    return this.http.get<any>(
+      apiProperties.url + '/api/projects/' + project_id + '/dataset/' + main + "/page/" + pageNumber + "/rows/" + rowCount,
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    );
+  }
+  
   
   public GetStatistics(project_id: number, main: boolean) : Observable<HttpResponse<any>>{
     return this.http.get<any>(
