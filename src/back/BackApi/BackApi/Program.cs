@@ -1,6 +1,7 @@
 using BackApi;
 using BackApi.Entities;
 using BackApi.Services;
+using BackApi.Config;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -12,14 +13,24 @@ using Microsoft.Extensions.FileProviders;
 using System.Diagnostics;
 using System.Security.Claims;
 using System.Net;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
-var mlhost = "localhost:8000";
 
 var builder = WebApplication.CreateBuilder(args);
 
+/*
+builder.WebHost.ConfigureKestrel((context, serverOptions) =>
+{
+    serverOptions.Listen(IPAddress.Any, 10016);
+});
+*/
+
+//builder.Services.Configure<KestrelServerOptions>(builder.Configuration.GetSection("Kestrel"));
+
 // Add services to the container.
 builder.Services.AddDbContext<DataBaseContext>();
+//builder.Services.AddEntityFrameworkSqlite().AddDbContext<DataBaseContext>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -77,6 +88,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    Urls.SetForDev();
+}
+else
+{
+    Urls.SetForProd();
 }
 
 var webSocketOptions = new WebSocketOptions
@@ -101,7 +118,7 @@ app.UseStaticFiles(new StaticFileOptions
     OnPrepareResponse = context =>
     {
         var x = context.Context.Request.Host;
-        if (x.ToString() == null  || x.ToString() != mlhost)
+        if (x.ToString() == null  || x.ToString() != Urls.mlHost)
         {       
             context.Context.Response.ContentLength = 0;
             context.Context.Response.Body = Stream.Null;

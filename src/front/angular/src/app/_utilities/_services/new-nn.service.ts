@@ -14,7 +14,7 @@ export class NewNnService {
       (response:HttpResponse<any>) => {
    
         // OK (Success)
-          if(response.status== HttpStatusCode.Created){
+          if(response.status== HttpStatusCode.Ok){
              if(self && successCallback) 
                 successCallback(self,response.body);
           }

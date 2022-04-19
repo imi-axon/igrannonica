@@ -51,7 +51,8 @@
     "lista-mreza":{
         "nema":"Nemate ni jednu neuronsku mrezu",
         "search":"Search...",
-        "nova":"Nova mreza"
+        "nova":"Nova mreza",
+        "mojeMreze": "Moje mreze"
     },
     "new-project":{
         "name":"Naziv eksperimenta",
@@ -83,7 +84,10 @@
         "name":"Nziv",
         "submit":"Potvrdi"
     },
-
+    "sortiranje":{
+        "starije":"Datum(staro->novo)",
+        "novije":"Datum(novo->staro)"
+    },
 
 
 

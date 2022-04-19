@@ -57,6 +57,7 @@ import { ListaMrezaComponent } from './_components/_elements/lista-mreza/lista-m
 import { ChartTrainingComponent } from './_components/_elements/chart-training/chart-training.component';
 import { NgChartsModule } from 'ng2-charts';
 import { PhotoInputComponent } from './_components/_elements/photo-input/photo-input.component';
+import { NnPageComponent } from './_components/_pages/nn-page/nn-page.component';
 
 
 
@@ -103,7 +104,8 @@ import { PhotoInputComponent } from './_components/_elements/photo-input/photo-i
     TrainingPageComponent,
     ListaMrezaComponent,
     ChartTrainingComponent,
-    PhotoInputComponent
+    PhotoInputComponent,
+    NnPageComponent
   ],
   imports: [
     NgxCsvParserModule,

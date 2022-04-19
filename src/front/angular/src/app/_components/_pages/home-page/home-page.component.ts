@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { fromEvent, Subscription, windowWhen } from 'rxjs';
 
-import * as THREE from 'three';
+import {AmbientLight, PointLight, Color, Mesh, IcosahedronGeometry, MeshStandardMaterial, WebGLRenderer, MeshPhongMaterial, Scene, PerspectiveCamera} from 'three';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
 import { LandingPageSelectorComponent } from '../../_elements/landing-page-selector/landing-page-selector.component';
@@ -28,9 +28,9 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   }
   
   // Camera
-  private camera!: THREE.PerspectiveCamera;
+  private camera!: PerspectiveCamera;
   private cameraX: number = 0;
-  private cameraZ: number = 7;
+  private cameraZ: number = 6;
   private cameraY: number = -5;
   
   private fov: number = 50;
@@ -39,11 +39,11 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   
   
   // Light
-  private ambientLight: THREE.AmbientLight = new THREE.AmbientLight(new THREE.Color(0x003FB9), 0.5);
-  private pointLight: THREE.PointLight = new THREE.PointLight(new THREE.Color(0xFFFFFF), 1.5, Infinity);
+  private ambientLight: AmbientLight = new AmbientLight(new Color(0x003FB9), 0.5);
+  private pointLight: PointLight = new PointLight(new Color(0xFFFFFF), 1.5, Infinity);
   
   // Icosahedron
-  private icosahedron: THREE.Mesh = new THREE.Mesh( new THREE.IcosahedronGeometry(1, 0), new THREE.MeshStandardMaterial({color: 0x009DF5}) );
+  private icosahedron: Mesh = new Mesh( new IcosahedronGeometry(1, 0), new MeshStandardMaterial({color: 0x009DF5}) );
   
   
   // Backgroudn Icosahedrons
@@ -52,13 +52,13 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   private icosahedronsSpreadY: number = 1500;
   private icosahedronsSpreadZ: number = -600;
   private icosahedronScale: number = 10;
-  private backgroundIcosahedrons: THREE.Mesh[] = [];
+  private backgroundIcosahedrons: Mesh[] = [];
   
   // Renderer
-  private renderer!: THREE.WebGLRenderer;
+  private renderer!: WebGLRenderer;
   
   // Scene
-  private scene!: THREE.Scene;
+  private scene!: Scene;
   
   private threeOnLoad(){
     window.scrollTo({top: 0})
@@ -88,7 +88,7 @@ export class HomePageComponent implements OnInit, AfterViewInit {
       let y = Math.random() * this.icosahedronsSpreadY - this.icosahedronsSpreadY / 2;
       let z = Math.random() * this.icosahedronsSpreadZ - 400;
       let scale = Math.random() * this.icosahedronScale;
-      this.backgroundIcosahedrons.push( new THREE.Mesh( new THREE.IcosahedronGeometry(1, 0), new THREE.MeshPhongMaterial({color: 0x009DF5})) );
+      this.backgroundIcosahedrons.push( new Mesh( new IcosahedronGeometry(1, 0), new MeshPhongMaterial({color: 0x009DF5})) );
       this.backgroundIcosahedrons[i].position.set(x, y, z);
       this.backgroundIcosahedrons[i].scale.set(scale, scale, scale);
       
@@ -97,7 +97,7 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   }
   
   private createScene(){
-    this.scene = new THREE.Scene();
+    this.scene = new Scene();
     
     // DODAVANJE KOMPONENTI
     
@@ -116,12 +116,12 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   
   private setCamera(){
     let aspectRatio = this.getAspectRatio();
-    this.camera = new THREE.PerspectiveCamera( this.fov, aspectRatio, this.nearClippingPlane, this.farClippingPlane);
+    this.camera = new PerspectiveCamera( this.fov, aspectRatio, this.nearClippingPlane, this.farClippingPlane);
     this.camera.position.set(this.cameraX, this.cameraY, this.cameraZ);
   }
   
   private startRenderingLoop(){
-    this.renderer = new THREE.WebGLRenderer( 
+    this.renderer = new WebGLRenderer( 
       {
         canvas: this.canvas,
         alpha: true,

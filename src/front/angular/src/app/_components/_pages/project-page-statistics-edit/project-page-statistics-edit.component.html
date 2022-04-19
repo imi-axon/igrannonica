@@ -1,16 +1,21 @@
 <navbar></navbar>
 <div class="container p-5">
     <div class="row title-section">
+        <div class="col-md-10">
         <p> <span> <a href='/my-projects'>{{'edit-dataset-page.naslov1'|translate}}/ </a>
             </span>{{'edit-dataset-page.naslov2'|translate}}</p>
-        <hr>
+        </div>
+        <div class="col-md-2 d-flex justify-content-end">
+        <button *ngIf="statistika" class="btn btn-primary" (click)="train()">Train</button>
+    </div>
+        <hr class="mt-2">
     </div>
     <div class="row">
         <div class="col-11">
             <router-outlet (activate)="OnActivate($event)"> </router-outlet>
         </div>
         <div class="col-1">
-            <app-opcije-dataset></app-opcije-dataset>
+            <app-opcije-dataset ></app-opcije-dataset>
             <app-opcije-edit-dataset *ngIf="showsEditOptions"
                 (RemoveColumnsClicked)="RemoveColumns()"
                 (RemoveNullRowsClicked)="RemoveNullRows()"

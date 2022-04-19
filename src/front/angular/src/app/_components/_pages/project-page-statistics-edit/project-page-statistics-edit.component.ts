@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
 import { ProjectsService } from 'src/app/_utilities/_services/projects.service';
 import { StatisticsService } from 'src/app/_utilities/_services/statistics.service';
 import { EditDatasetComponent } from '../../_elements/edit-dataset/edit-dataset.component';
+import { StatisticsComponent } from '../../_elements/statistics/statistics.component';
 
 @Component({
   selector: 'app-project-page-statistics-edit',
@@ -21,9 +22,10 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
   // TEST, ZAMENITI KASNIJE
   main: boolean = false;
   
+  statisticsComponent : StatisticsComponent;
   editComponent: EditDatasetComponent;
   
-  constructor(private datasetAPI: DatasetService, private statisticsAPI: StatisticsService, public activatedRoute: ActivatedRoute, public projectsService: ProjectsService) { }
+  constructor(private datasetAPI: DatasetService, private statisticsAPI: StatisticsService, public activatedRoute: ActivatedRoute, public projectsService: ProjectsService,public router:Router) { }
 
 
   ngOnInit(): void {
@@ -31,21 +33,36 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
     setTimeout(() => {
       this.checkProjectId();
     
+      this.statisticsAPI.GetStatistics(this.ProjectId, false, this, this.successfulGetStatisticsCallback);
       this.datasetAPI.GetDataset(this.ProjectId, false, this, this.successfulGetDatasetCallback);
+      
+      if(this.editComponent != null){
+        this.editComponent.ChangedField.subscribe( change => this.HandleFieldChange(change) );
+        this.editComponent.DataUpdateNeeded.subscribe( event => this.UpdateData() );
+        this.editComponent.SaveDataNeeded.subscribe( event =>this.SaveData() );
+      }
+      
     }, 0);
-
-    // this.checkProjectId();
-    
-    // this.datasetAPI.GetDataset(this.ProjectId, false, this, this.successfulGetDatasetCallback);
     
   }
+  public statistika=true;
   
   public OnActivate(component: any){
     if(!(component instanceof EditDatasetComponent)){
+      this.statisticsComponent = component;
+      this.statistika=true;
+      if(this.statistics != undefined)
+        this.statisticsComponent.LoadStatisticsAndUpdate(this.statistics);
+      
       this.showsEditOptions = false;
+      
+
       return;
     }
+    else this.statistika=false;
     this.editComponent = component;
+    
+    this.editComponent.LoadData(this.dataset);
     
     this.editComponent.ChangedField.subscribe( change => this.HandleFieldChange(change) );
     this.editComponent.DataUpdateNeeded.subscribe( event => this.UpdateData() );
@@ -94,15 +111,15 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
   
   private successfulGetStatisticsCallback(self: any, response: any){
     self.statistics = JSON.parse(response.statistics);
+    if(self.statisticsComponent != null)
+      self.statisticsComponent.LoadStatisticsAndUpdate(self.statistics);
   }
   
   private successfulGetDatasetCallback(self: any, response: any){
     self.dataset = JSON.parse(response.dataset);
-    // self.datasetAPI.GetStatistics(self.ProjectId, false, self, self.successfulGetStatisticsCallback);
-    console.log('Get Dataset Callback')
-    console.log('ProjectId' + self.ProjectId)
     self.statisticsAPI.GetStatistics(self.ProjectId, false, self, self.successfulGetStatisticsCallback);
-    self.editComponent.LoadDataAndRowNulls(self.dataset, self.statistics.rownulls);
+    if(self.editComponent != null)
+      self.editComponent.LoadData(self.dataset);
   }
   
   private successfulEditCallback(self: any){
@@ -218,6 +235,11 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
     let editJSON = this.getActionsJSON(selectedColumns, 'enc label');
     
     this.datasetAPI.EditDataset(editJSON, this.ProjectId, false, this, this.successfulEditCallback);
+  }
+
+  public train(){
+    console.log(this.ProjectId);
+    this.router.navigate(['/project/'+this.ProjectId+'/nns']);
   }
 
 }

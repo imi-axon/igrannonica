@@ -1,5 +1,6 @@
 ﻿using BackApi.Services;
 using BackApi.Models;
+using BackApi.Config;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -60,7 +61,7 @@ namespace BackApi.Controllers
                     var webSocketfront = await HttpContext.WebSockets.AcceptWebSocketAsync();
                     wsq.AddToDict(nnid, webSocketfront);
                     var webSocketMl = new ClientWebSocket();
-                    await webSocketMl.ConnectAsync(new Uri("ws://localhost:8000/api/nn/train/start"), CancellationToken.None);
+                    await webSocketMl.ConnectAsync(new Uri(Urls.mlWs + "/api/nn/train/start"), CancellationToken.None);
                     try
                     {
                         var finished=await nnsrv.MlTraining(webSocketfront, packet,webSocketMl);

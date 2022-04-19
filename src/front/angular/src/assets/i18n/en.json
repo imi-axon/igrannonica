@@ -51,7 +51,8 @@
     "lista-mreza":{
         "nema":"There is no neural network for this project",
         "search":"Search...",
-        "nova":"New NN"
+        "nova":"New NN",
+        "mojeMreze": "My NNs"
     },
     "new-project":{
         "name":"Experiment name",
@@ -85,6 +86,10 @@
         "submit":"Submit"
     },
 
+    "sortiranje":{
+        "starije":"Date(old->new)",
+        "novije":"Date(new->old)"
+    },
 
 
 

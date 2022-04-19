@@ -1,4 +1,5 @@
 ﻿using BackApi.Services;
+using BackApi.Config;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,12 +17,20 @@ namespace BackApi.Controllers
         private IDatasetService datasrv;
         private IJwtService jwtsrv;
         private IProjectService projsrv;
+
+        private const string mlUrl = "localhost:8000";
+        private const string backUrl = "localhost:7057";
+        //private const string mlUrl = "147.91.204.115:10017";
+        //private const string backUrl = "147.91.204.115:10016";
+
+
         public FiletestController(IStorageService storageService,IDatasetService datasetService, IJwtService jwtService, IProjectService projectService)
         {
             this.storsrv = storageService;
             this.datasrv = datasetService;
             this.jwtsrv = jwtService;
             this.projsrv = projectService;
+            
         }
 
         [Authorize]
@@ -38,7 +47,7 @@ namespace BackApi.Controllers
             return File(bytes, "text/csv",Path.GetFileName(path));
         }
 
-        [HttpGet("Storage/proj{pid}/data/data{did}.csv"),Host("localhost:7057","localhost:8000")] //adresa ml mikroserivsa
+        [HttpGet("Storage/proj{pid}/data/data{did}.csv"),Host(backUrl, mlUrl)] //adresa ml mikroserivsa
         public async Task<ActionResult> PassDatasetToML(int pid,int did)
         {
             var path = storsrv.GetDataset(datasrv.ProjIdToPath(pid, true));
@@ -65,7 +74,7 @@ namespace BackApi.Controllers
             storsrv.SaveFile(path, file);
             return Ok();
         }
-        [HttpGet("Storage/proj{pid}/mreze/mreza{nnid}.h5"), Host("localhost:7057", "localhost:8000")] //adresa ml mikroserivsa
+        [HttpGet("Storage/proj{pid}/mreze/mreza{nnid}.h5"), Host(backUrl, mlUrl)] //adresa ml mikroserivsa
         public async Task<ActionResult> PassNNToML(int pid, int nnid)
         {
             var path = storsrv.CreateNNFile(pid, nnid);
@@ -73,7 +82,7 @@ namespace BackApi.Controllers
 
             return File(bytes, "text/csv", Path.GetFileName(path));
         }
-        [HttpGet("Storage/proj{pid}/mreze/cfg{nnid}.json"), Host("localhost:7057", "localhost:8000")] //adresa ml mikroserivsa
+        [HttpGet("Storage/proj{pid}/mreze/cfg{nnid}.json"), Host(backUrl, mlUrl)] //adresa ml mikroserivsa
         public async Task<ActionResult> PassCfgToML(int pid, int nnid)
         {
             var path = storsrv.CreateNNCfg(pid, nnid);

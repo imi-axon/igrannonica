@@ -11,6 +11,8 @@ namespace BackApi.Entities
         }
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
+
+            //options.UseSqlite("Data Source=baza.db;");
             options.UseMySql(Configuration.GetConnectionString("MariaDB"),
             ServerVersion.AutoDetect(Configuration.GetConnectionString("MariaDB")));
         }

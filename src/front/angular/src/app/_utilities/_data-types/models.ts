@@ -161,6 +161,7 @@ export class Project
     public Description:string="";
     public Public:boolean=false;
     public Creationdate:string="";
+    public hasDataset:boolean=false;
 
     constructor()
     {
@@ -169,6 +170,7 @@ export class Project
         this.Public=false;
         this.Creationdate="";
         this.ProjectId=-1;
+        this.hasDataset=false;
     }
 }
 /* PROJEKAT */
@@ -185,8 +187,10 @@ export class NewNN{
 
 export class NN{
     public name:string='';
+    public id:number=-1;
     constructor(){
         this.name='';
+        this.id=-1;
     }
 }
 /*

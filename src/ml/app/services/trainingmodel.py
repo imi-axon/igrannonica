@@ -50,6 +50,8 @@ class TrainingService():
             self.REGULARIZATION = regularizers.L1(self.REG_RATE)
         elif (regularization == 'L2'):
             self.REGULARIZATION = regularizers.L2(self.REG_RATE)
+        else:
+            self.REGULARIZATION = None
 
         
         self.ACT_PER_LAYER = actPerLayer
@@ -170,6 +172,11 @@ class TrainingService():
     def build_model(self):
         model = Sequential()
 
+        print(' -- BUILD MODEL -- ')
+        print(f'inputs            : {self.inputs}')
+        print(f'neurons per layer : {self.NB_PER_LAYER}')
+        print(f'act per layer     : {self.ACT_PER_LAYER}')
+
         model.add(Dense(self.NB_PER_LAYER[0], kernel_regularizer = self.REGULARIZATION, input_shape=[len(self.inputs)], activation = self.ACT_PER_LAYER[0]))
         
         for i in range(1, len(self.NB_PER_LAYER)):
@@ -235,6 +242,7 @@ class TrainingService():
 
         if self.model == None:
             self.new_model()
+        self.new_model()
 
         self.fit_model(self.model, epoch, val_split)
         # for i in range(10):
