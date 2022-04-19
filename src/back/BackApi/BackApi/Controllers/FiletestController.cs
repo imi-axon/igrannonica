@@ -17,6 +17,7 @@ namespace BackApi.Controllers
         private IDatasetService datasrv;
         private IJwtService jwtsrv;
         private IProjectService projsrv;
+        private IConfiguration configuration;
 
         private const string mlUrl = "localhost:8000";
         private const string backUrl = "localhost:7057";
@@ -24,12 +25,14 @@ namespace BackApi.Controllers
         //private const string backUrl = "147.91.204.115:10016";
 
 
-        public FiletestController(IStorageService storageService,IDatasetService datasetService, IJwtService jwtService, IProjectService projectService)
+        public FiletestController(IStorageService storageService,IDatasetService datasetService, 
+                                  IJwtService jwtService, IProjectService projectService, IConfiguration configuration)
         {
             this.storsrv = storageService;
             this.datasrv = datasetService;
             this.jwtsrv = jwtService;
             this.projsrv = projectService;
+            this.configuration = configuration;
             
         }
 
@@ -50,6 +53,7 @@ namespace BackApi.Controllers
         [HttpGet("Storage/proj{pid}/data/data{did}.csv"),Host(backUrl, mlUrl)] //adresa ml mikroserivsa
         public async Task<ActionResult> PassDatasetToML(int pid,int did)
         {
+            Debug.WriteLine(Request.Host);
             var path = storsrv.GetDataset(datasrv.ProjIdToPath(pid, true));
             var bytes = await System.IO.File.ReadAllBytesAsync(path);
 
