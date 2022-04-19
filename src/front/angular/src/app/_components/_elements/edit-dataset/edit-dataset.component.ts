@@ -1,5 +1,6 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Papa } from 'ngx-papaparse';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-edit-dataset',
@@ -7,22 +8,24 @@ import { Papa } from 'ngx-papaparse';
   styleUrls: ['./edit-dataset.component.scss']
 })
 export class EditDatasetComponent implements OnInit {
-
+  
   dataset: any;
   columns: string[];
   
   // Stranicenje za prikaz podataka
-  rowsPerPage: number = 13;
+  rowsPerPage: number = 14;
   currentPage: number = 1;
-  pageCount: number = 5;
+  pageCount: number = 1;
   pageInput: number;
   
   // Za editovanje
   selectedColumns: boolean[] = [];
   selectAll: boolean = true;
   
+  @ViewChild("loader")
+  public loader: LoaderComponent;
   
-  @Output() PageLoadEvent = new EventEmitter<number>();
+  @Output() PageLoadEvent = new EventEmitter<any>();
   
   // Koristi se na stranici za input fajla i statistics stranici
   @Output() LoadedEvent = new EventEmitter<null>();
@@ -31,7 +34,7 @@ export class EditDatasetComponent implements OnInit {
   @Output() ChangedField = new EventEmitter<any>();
   
   // Pravimo "zahtev" za update podataka
-  @Output() DataUpdateNeeded = new EventEmitter<number>();
+  @Output() DataUpdateNeeded = new EventEmitter<any>();
   
   // Saljemo event da zelimo da sacuvamo trenutne u trajne podatke na back-u
   @Output() SaveDataNeeded = new EventEmitter<null>();
@@ -42,8 +45,9 @@ export class EditDatasetComponent implements OnInit {
   // ZA TESTIRANJE
   
   ngOnInit(): void {
-    // Moze se ukljuciti za testiranje prikaza
-    //this.LoadTestData();
+    setTimeout(() => {
+      this.loader.isLoading = true;
+    }, 0);
   }
   
   
@@ -53,7 +57,8 @@ export class EditDatasetComponent implements OnInit {
   
   // Odbacivanje izmena (preuzimanje starih podataka)
   public Discard(){
-    this.DataUpdateNeeded.emit(this.currentPage);
+    this.DataUpdateNeeded.emit({currentPage: this.currentPage, rowsPerPage: this.rowsPerPage});
+    this.loader.isLoading = true;
   }
   
   
@@ -92,40 +97,28 @@ export class EditDatasetComponent implements OnInit {
   // Izmenjeno polje u datasetu
   public ChangeField(input: any, pageRow: number, col: number, currentPage: number){
     
-    let row = pageRow + currentPage * this.rowsPerPage;
-    //console.log("Row: " + row + " | Col: " + col);
+    let row = pageRow + (currentPage - 1) * this.rowsPerPage;
     
-    // Menjamo vrednost u celokupnom datasetu (ne verziji koja je podeljena na strane)
-    this.dataset[row][this.columns[col]] = input.value;
+    this.dataset[row][col] = input.value;
     
-    let change: any = { value: input.value, col: this.columns[col], row: row };
+    let change: any = { value: input.value, col: col, row: row };
     this.ChangedField.emit(change);
   }
   
   
-  
-  
-  // Ucitavanje
-  public GetPage(dataset: any){    
-    
-    this.dataset = dataset;
-    this.columns = Object.keys(this.dataset[0]);
-    
-    this.setSelectedColumns();
-    
-    
-  }
-  
   public LoadPage(dataset: any, pageCount: number){    
     
-    this.dataset = dataset;
-    this.columns = Object.keys(this.dataset[0]);
+    this.dataset = JSON.parse(dataset);
+    
+    this.columns = Object.keys(this.dataset[0])
     
     this.setSelectedColumns();
     
     this.pageCount = pageCount;
     
     this.LoadedEvent.emit();
+    
+    this.loader.isLoading = false;
   }
   
   private setSelectedColumns(){
@@ -150,30 +143,46 @@ export class EditDatasetComponent implements OnInit {
     if(this.currentPage <= 1)
       return;
     this.currentPage--;
-    this.PageLoadEvent.emit(this.currentPage);
     
+    let pagingData = {
+      currentPage: this.currentPage, 
+      rowsPerPage: this.rowsPerPage
+    };
+    this.PageLoadEvent.emit(pagingData);
+    this.loader.isLoading = true;
   }
   
   public nextPage(){
     this.currentPage++;
-    this.PageLoadEvent.emit(this.currentPage);
-    
+    let pagingData = {
+      currentPage: this.currentPage, 
+      rowsPerPage: this.rowsPerPage
+    };
+    this.PageLoadEvent.emit(pagingData);
+    this.loader.isLoading = true;
   }
   
   public minPage(){
     this.currentPage = 1;
-    this.PageLoadEvent.emit(this.currentPage);
-    
+    let pagingData = {
+      currentPage: this.currentPage, 
+      rowsPerPage: this.rowsPerPage
+    };
+    this.PageLoadEvent.emit(pagingData);
+    this.loader.isLoading = true;
   }
   
   public maxPage(){
-    if(this.currentPage = this.pageCount)
+    if(this.currentPage == this.pageCount)
       return;
     
-    // TRENUTNO NEMA FUNKCIONALNOST -- NE ZNAMO KOJA JE MAKS STRANA
-    
     this.currentPage = this.pageCount;
-    this.PageLoadEvent.emit(this.currentPage);
+    let pagingData = {
+      currentPage: this.currentPage, 
+      rowsPerPage: this.rowsPerPage
+    };
+    this.PageLoadEvent.emit(pagingData);
+    this.loader.isLoading = true;
   }
   
   public goToPage(){
@@ -181,10 +190,15 @@ export class EditDatasetComponent implements OnInit {
       || this.pageInput <= 0 
       || this.pageInput > this.pageCount)
       return;
-      
-    this.currentPage = this.pageInput - 1;
     
-    this.PageLoadEvent.emit(this.currentPage);
+    this.currentPage = this.pageInput;
+    
+    let pagingData = {
+      currentPage: this.currentPage, 
+      rowsPerPage: this.rowsPerPage
+    };
+    this.PageLoadEvent.emit(pagingData);
+    this.loader.isLoading = true;
   }
   
   
@@ -201,7 +215,6 @@ export class EditDatasetComponent implements OnInit {
   
   public Select(i: number){
     this.selectedColumns[i] = !this.selectedColumns[i];
-    // console.log(this.selectedColumns);
   }
   public SelectAll(){
     if(this.selectAll)

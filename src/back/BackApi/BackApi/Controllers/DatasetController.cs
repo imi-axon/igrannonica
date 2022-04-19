@@ -173,8 +173,8 @@ namespace BackApi.Controllers
             var response = await MLconnection.convertCSVstring(toml);
             var ret= await response.Content.ReadAsStringAsync();
 
-            dataset.dataset = ret;
             storsrv.DeletePath(dataset.dataset);
+            dataset.dataset = ret;
             return Ok(dataset);
         }
     }

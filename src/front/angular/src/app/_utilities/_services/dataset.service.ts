@@ -55,10 +55,10 @@ export class DatasetService {
     );
   }
   
-  GetDatasetPage(project_id: number, main: boolean, pageNumber: number, rowCount: number, successCallback?: Function, unauthorizedCallback?: Function, forbiddenCallback?: Function, notFoundCallback?: Function){
+  GetDatasetPage(project_id: number, main: boolean, pageNumber: number, rowCount: number, self?: any, successCallback?: Function, unauthorizedCallback?: Function, forbiddenCallback?: Function, notFoundCallback?: Function){
     this.datasetAPI.GetDatasetPage(project_id, main, pageNumber, rowCount).subscribe(
       (response) => {
-        console.log(response)
+        
         if (response.status == HttpStatusCode.Ok)
           if (self && successCallback)
             successCallback(self, response.body);

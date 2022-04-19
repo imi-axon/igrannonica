@@ -66,9 +66,9 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
       
     this.editComponent = component;
     
-    this.UpdatePageData(1);
+    this.UpdatePageData({currentPage: 1, rowsPerPage: this.editComponent.rowsPerPage});
     
-    this.editComponent.PageLoadEvent.subscribe( change => this.UpdatePageData(change) );
+    this.editComponent.PageLoadEvent.subscribe( change => this.UpdatePageDataFromMain(change) );
     
     this.editComponent.ChangedField.subscribe( change => this.HandleFieldChange(change) );
     this.editComponent.DataUpdateNeeded.subscribe( change => this.UpdatePageData(change) );
@@ -103,8 +103,12 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
   }
   
   // PONOVO KUPIMO PODATKE
-  public UpdatePageData(pageNumber: number){
-    this.datasetAPI.GetDatasetPage(this.ProjectId, true, pageNumber, 10, this.successfulGetDatasetPageCallback);
+  public UpdatePageDataFromMain(pagingData: any){
+    this.datasetAPI.GetDatasetPage(this.ProjectId, true, pagingData.currentPage, pagingData.rowsPerPage, this, this.successfulGetDatasetPageCallback);
+  }
+  
+  public UpdatePageData(pagingData: any){
+    this.datasetAPI.GetDatasetPage(this.ProjectId, false, pagingData.currentPage, pagingData.rowsPerPage, this, this.successfulGetDatasetPageCallback);
   }
   
   // CUVAMO TRENUTNU IZMENU KAO TRAJNU
@@ -121,17 +125,17 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
   }
   
   private successfulGetDatasetPageCallback(self: any, response: any){
-    console.log("RESPONSE")
-    console.log(response)
-    self.dataset = JSON.parse(response.dataset);
-    //self.pageCount = JSON.parse(response.pageCount);
-    self.statisticsAPI.GetStatistics(self.ProjectId, false, self, self.successfulGetStatisticsCallback);
+    
+    self.dataset = JSON.parse(response.dataset).dataset;
+    self.pageCount = JSON.parse(response.pages);
+    
+    // self.statisticsAPI.GetStatistics(self.ProjectId, false, self, self.successfulGetStatisticsCallback);
     if(self.editComponent != null)
-      self.editComponent.LoadPage(self.dataset, 5 /* self.pageCount */);
+      self.editComponent.LoadPage(self.dataset, self.pageCount);
   }
   
   private successfulEditCallback(self: any){
-    self.datasetAPI.GetDataset(self.ProjectId, false, self, self.successfulGetDatasetCallback);
+    self.UpdatePageData({currentPage: self.editComponent.currentPage, rowsPerPage: self.editComponent.rowsPerPage});
   }
   
   
@@ -139,12 +143,11 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
   // KOMANDE  =========================================================================
 
   
-  // IZMENI KOLONU
+  // IZMENI CELIJU
   public HandleFieldChange(event: any){
     let command = [{ action: "put", col: event.col, row: event.row, value: event.value }]
     
-    console.log(command);
-    
+    console.log("TEST")
     // Ispod kao novi parametar bi isao callback za gresku gde bi mogli da revert-ujemo vrednost u polju (za to bi morali da posaljemo startu vrednost ovoj f-ji)
     this.datasetAPI.EditDataset(command, this.ProjectId, false, this);
   }
