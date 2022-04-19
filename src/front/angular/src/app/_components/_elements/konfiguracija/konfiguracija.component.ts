@@ -14,7 +14,7 @@ export class KonfiguracijaComponent implements OnInit {
   public learningRate: number=0.003;
   public regularization: string='None';
   public regularizationRate: number=0;
-  public epoch: number;
+  public epoch: number=0;
   public activation:string='Tanh';
   private selektovano: any;
   private idSelektovanog: any;
@@ -30,6 +30,11 @@ export class KonfiguracijaComponent implements OnInit {
   public gotovoInputi = false;
   public gotovoOutputi = false;
   public trenutneVr:any=[];
+  public split:string='Random';
+  public trainSplit:number=0; // float
+  public valSplit: number=0;
+  public testSplit:number=0;
+  public krajSplit:boolean=false;
 
   @Output() inputChanged: EventEmitter<any> = new EventEmitter<any>();
   @Output() outputChanged: EventEmitter<any> = new EventEmitter<any>();
@@ -72,6 +77,12 @@ export class KonfiguracijaComponent implements OnInit {
         break;
       case "Activation":
         this.activation = this.selektovano;
+        break;
+      case "Split":
+        this.split = this.selektovano;
+        console.log("uso ha");
+        if(this.split=='Random')
+        this.dataSplit();
         break;
     }
   }
@@ -155,5 +166,14 @@ export class KonfiguracijaComponent implements OnInit {
     this.prikaziOutpute = false;
     this.gotovoOutputi = true;
   }
+
+  dataSplit(){
+
+    this.trainSplit =  (Math.random() * 100)/100
+    this.valSplit =(Math.random() * (100-this.trainSplit))/100;
+    this.krajSplit=true;
+   // this.konfiguracija.testSplit =  (Math.random() * (100- (this.konfiguracija.valSplit+this.konfiguracija.trainSplit)))
+
+}
 
 }

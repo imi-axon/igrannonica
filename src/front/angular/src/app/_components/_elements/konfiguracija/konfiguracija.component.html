@@ -1,8 +1,8 @@
 <div class="container mx-auto mt-3">
-    <div class="row" >
+    <div class="row">
         <div class="col-md-6">
             <label for="epoch" style="font-weight: bold;">Epoch</label>
-            <p id="epoch" style="font-weight: bolder; font-size: x-large;">000.000</p>
+            <p id="epoch" style="font-weight: bolder; font-size: x-large;">{{epoch}}</p>
         </div>
         <div class="col-md-2">
             <label for="LearningRate">Learning rate</label>
@@ -60,7 +60,7 @@
                 </select>
             </div>
         </div>
-        <div id="batchSize" class="col-4 mt-5 ">
+        <div id="batchSize" class="col-md-4 mt-5 ">
             <div class="" style="width:100%">
                 <label for="batchSlider" class="form-label">Batch size: <span
                         id="batchSizeNum">{{batchSize}}</span></label>
@@ -68,6 +68,22 @@
                     (input)="onChange($event)">
             </div>
         </div>
+        <div class="col-md-4 mt-5 d-flex justify-content-center">
+            <div>
+            <label for="Split">Data split</label>
+            <div class="select">
+                <select id="Split" (click)="onChange($event)">
+                    <option>Random</option>
+                    <option selected>Izaberi</option>
+                </select>
+            </div>
+            <div *ngIf(krajSplit)>
+                Train:{{trainSplit}}<br>
+                Val:{{valSplit}}
+            </div>
+        </div>
+        </div>
+
     </div>
     <div class="row mt-5 ml-0">
         <div id="input/output" class="col-11 mt-3">

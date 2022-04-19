@@ -35,6 +35,8 @@ export class TrainingPageComponent implements OnInit {
   }
 
   public treniraj() {
+
+
     console.log("pokrecem treniranje projekta" + this.projectId);
     
     let neuronsPerLayer : number [] = [];
@@ -75,13 +77,18 @@ export class TrainingPageComponent implements OnInit {
       
       // Dodato
       ,
-      trainSplit: 0.5, // float
-      valSplit: 0.5 // float
+      trainSplit:this.konfiguracija.trainSplit,
+      valSplit:this.konfiguracija.valSplit,
+      testSplit:this.konfiguracija.testSplit
+     // trainSplit: 0.5, // float
+     // valSplit: 0.5 // float
     };
     
     console.log('--- KONFIGURACIJA ---')
     console.log(conf)
     this.wsService.train(this.projectId, this.nnId, conf, this, this.addTrainData);
+
+    console.log(this.konfiguracija.valSplit);
 
   }
 
@@ -91,6 +98,7 @@ export class TrainingPageComponent implements OnInit {
     let ep = data['epoch'];
 
     self.grafik.dataUpdate(ep, tLoss, vLoss)
+    self.konfiguracija.epoch=ep;
   }
 
 }
