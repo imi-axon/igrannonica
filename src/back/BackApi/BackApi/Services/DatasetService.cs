@@ -244,7 +244,7 @@ namespace BackApi.Services
                 content.Append(lines[0]);
                 content.Append("\r\n");
             }
-            for(int i=(p-1)*r+1;i<r;i++)
+            for(int i=(p-1)*r+1;i<(p*r) + 1;i++)
             {
                 //content.Append(i);
                 if (i < lines.Length - 1)

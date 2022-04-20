@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { NgForm, NgSelectOption } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Project } from 'src/app/_utilities/_data-types/models';
@@ -11,7 +11,7 @@ import { ProjectsService } from 'src/app/_utilities/_services/projects.service';
   styleUrls: ['./lista-projekata.component.scss']
 })
 export class ListaProjekataComponent implements OnInit {
-
+  
   constructor(private projectsService:ProjectsService,private authService:AuthService,private router:Router) { }
   private username:string=this.authService.korisnickoIme;
   public projekti:Project[]=[];
@@ -39,7 +39,11 @@ export class ListaProjekataComponent implements OnInit {
 
 
   ngOnInit(): void {
-   this.projectsService.userProjects(this.username,this,this.handleSuccess,this.handleError);
+    this.projectsService.userProjects(this.username,this,this.handleSuccess,this.handleError);
+  }
+
+  loadProjectsCallback(self: any){
+    self.projectsService.userProjects(self.username,self,self.handleSuccess,self.handleError);
   }
 
   handleSuccess(self: any, projekti: Project[]) {
@@ -96,6 +100,11 @@ onClick(projId:any, hasDataset:any){
   else if(hasDataset=='false'){
   this.router.navigate(['/dataset/'+projId]);
   }
+}
+
+RemoveProject(event: any, projectId: number){
+  this.projectsService.removeProject(projectId, this, this.loadProjectsCallback);
+  event.stopPropagation();
 }
 
 }

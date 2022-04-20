@@ -1,9 +1,13 @@
 .projekat
 {
     background-color: white;
-    height: 20vh;
+    height: 220px;
     margin-bottom: 10%;
+    cursor: pointer;
     
+    &:hover{
+        outline: solid 1px #777777;
+    }
 }
 .imeProjekta
 {
@@ -28,6 +32,28 @@
 {
     color: #868686;
 }
+
+
+.projekat-header{
+    display: flex;
+    flex-direction: row;
+    align-items:flex-start;
+    justify-content: space-between;
+}
+.remove-button{
+    background-color: #FF0000; 
+    border: solid 2px #880000;
+    color: white; 
+    font-weight: bold;
+    
+    width: 35px;
+    height: 35px;
+    
+    &:hover{
+        background-color: #880000
+    }
+}
+
 .dugme
 {
     background-color: #555555;

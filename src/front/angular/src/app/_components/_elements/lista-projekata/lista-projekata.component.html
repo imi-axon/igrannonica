@@ -75,14 +75,19 @@
 
 <h1 *ngIf="projekti.length==0">{{'lista-projekata.nema'|translate}}</h1>
 <div  class="projekti-lista row" *ngIf="projekti.length>0">
-
   <div class="col-md-4" *ngFor="let p of filtriraniProjekti">
-    <div class="projekat p-3 shadow rounded" (click)="onClick(p.ProjectId, p.hasDataset)" > 
+    <div class="projekat p-4 shadow rounded" (click)="onClick(p.ProjectId, p.hasDataset)" > 
+      
       <div class="imeIopis">
-        <p class="imeProjekta">{{p.Name}}</p>
+        <div class="projekat-header">
+            <p class="imeProjekta">{{p.Name}}</p>
+            <button type="button" class="remove-button btn d-flex align-items-center justify-content-center" (click)="RemoveProject($event, p.ProjectId)"> <i class="bi bi-trash"></i> </button>
+        </div>
         <p class="opis">{{p.Description}}</p>
       </div>
       <p class="datum">{{'lista-projekata.kreiran'|translate}} | {{p.Creationdate}}</p>
+      
+      
     </div>
 
     <!-- <button class="projekat btn-primary" routerLink="/dataset/{{p.ProjectId}}">{{p.Name}}</button> -->
