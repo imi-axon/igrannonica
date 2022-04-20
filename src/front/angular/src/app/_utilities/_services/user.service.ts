@@ -18,9 +18,9 @@ export class UserService {
   
     Register(applicantData: any, self?: any, successCallback?: Function, badRequestCallback?: Function, forbiddenCallback?: Function) {
       this.userAPI.Register(applicantData).subscribe(
-          
-        (response) => {
-          
+
+        (response: any) => {
+
           if(response.status == HttpStatusCode.Ok)
             if(self && successCallback) 
               successCallback(self);
@@ -32,9 +32,7 @@ export class UserService {
           if(response.status == HttpStatusCode.Forbidden)
             if(self && forbiddenCallback)
               forbiddenCallback(self, response.body.message);
-          
         }
-        
       );
     }
     
