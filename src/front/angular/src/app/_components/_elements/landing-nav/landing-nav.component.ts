@@ -13,9 +13,12 @@ import { AuthService } from 'src/app/_utilities/_services/auth.service';
 export class LandingNavComponent implements OnInit {
 
   constructor(private router:Router,public auth:AuthService, public translate:TranslateService) { 
-
   }
+  lang1:string;
   ngOnInit(): void {
+    this.lang1=localStorage.getItem('lang1') || 'en';
+    this.translate.use(this.lang1);
+    console.log(this.lang1);
   }
   
   logout()
@@ -25,5 +28,11 @@ export class LandingNavComponent implements OnInit {
     this.auth.logovan=false;
     this.auth.korisnickoIme='';
   }
+  
+  changeLang(lang:string){
+    this.translate.use(lang);
+    localStorage.setItem('lang1', lang);
+  }
+
 
 }

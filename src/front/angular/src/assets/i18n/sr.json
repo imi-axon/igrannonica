@@ -1,7 +1,7 @@
 {
 
     "navbar":{
-        "home":"Pocetna",
+        "home":"Početna",
         "registration":"Registracija",
         "login":"Prijava",
         "myExperiments":"Moji Eksperimenti",
@@ -10,29 +10,29 @@
         "select":""
     },
     "register":{
-        "register":"Registruj se",
+        "register":"Registrujte se",
         "firstname_placeholder":"Ime",
         "lastname_placeholder":"Prezime",
-        "username_placeholder":"Korisnicko ime",
+        "username_placeholder":"Korisničko ime",
         "email_placeholder":"E-mail",
         "password_placeholder":"Lozinka",
         "password2_placeholder":"Ponovite lozinku",
         "obavestenje1-1":"*Lozinka mora biti duža od 8 karaktera",
         "obavestenje1-2":"*Lozinka mora sadržati jedan broj, jedno veliko i jedno malo slovo",
-        "dugme":"Registruj se",
-        "login1":"Vec imate nalog?",
+        "dugme":"Registrujte se",
+        "login1":"Već imate nalog?",
         "login2":"Ulogujte se ovde"
     },
     "login":{
-        "login":"Uloguj se",
-        "username_placeholder":"Korisnicko ime",
+        "login":"Ulogujte se",
+        "username_placeholder":"Korisničko ime",
         "password_placeholder":"Lozinka",
         "zapamti_me":"Zapamti me",
         "register1":"Nemate nalog? ",
         "register2":"Registrujte se ovde",
-        "dugme":"Uloguj se",
-        "forgot1":"Zavboravio si lozinku?",
-        "forgot2":"Promeni je"
+        "dugme":"Ulogujte se",
+        "forgot1":"Zavboravili ste lozinku?",
+        "forgot2":"Promenite je"
     },
     "csv":{
         "format":"Uneti fajl mora biti u .csv formatu!",
@@ -41,18 +41,18 @@
     "data-set-table":{
         "p1-1":"Strana ",
         "p1-2":"od ",
-        "jump":"Skoci na"
+        "jump":"Skoči na"
     },
     "lista-projekata":{
         "kreiran":"Kreiran",
         "nema":"Nemate eksperimente",
-        "search":"Pretrazite..."
+        "search":"Pretražite..."
     },
     "lista-mreza":{
-        "nema":"Nemate ni jednu neuronsku mrezu",
-        "search":"Search...",
-        "nova":"Nova mreza",
-        "mojeMreze": "Moje mreze"
+        "nema":"Nemate nijednu neuronsku mrežu",
+        "search":"Pretražite...",
+        "nova":"Nova mreža",
+        "mojeMreze": "Moje mreže"
     },
     "new-project":{
         "name":"Naziv eksperimenta",
@@ -68,19 +68,19 @@
         "izmeni":"Izmeni podatke"
     },
     "opcije-edit-dataset":{
-        "izbrisiKol":"Izbrisi kolone",
-        "nullRedovi":"Izbrisi redove sa null vrednostima",
+        "izbrisiKol":"Izbriši kolone",
+        "nullRedovi":"Izbriši redove sa null vrednostima",
         "popuni":"Popuni redove sa null vrednostima",
-        "duplikati":"Izbrisi duplikate",
+        "duplikati":"Izbriši duplikate",
         "enkodiranje":"Enkodiranje",
         "onehot1":"Onehot enkodiranje",
         "label1":"Label enkodiranje"
     },
     "profil":{
-        "izmeni":"Izmeni podatke"
+        "izmeni":"Izmenite podatke"
     },
     "create-neural-network":{
-        "kreiraj":"Nova mreza",
+        "kreiraj":"Nova mreža",
         "name":"Nziv",
         "submit":"Potvrdi"
     },
@@ -99,7 +99,7 @@
     },
     "edit-dataset-page":{
         "naslov1":" Moji eksperimenti",
-        "naslov2":"Meteoroloska analiza V1"
+        "naslov2":"Meteorološka analiza V1"
     },
     "my-projects-page":{
         "projekti":"Eksperimenti",
@@ -113,7 +113,7 @@
         "eksperimenti":"Korisnikovi eksperimenti"
     },
     "registration-successful":{
-        "uspeh":"Uspesna registracija",
+        "uspeh":"Uspešna registracija",
         "login":"Ulogujte se"
     },
     "statistics-page":{
@@ -122,27 +122,27 @@
         "dugme":"DUGME"
     },
     "input-username":{
-        "place":"Korisnicko ime",
-        "button":"Posalji email",
-        "title":"Unesite korisnicko ime"
+        "place":"Korisničko ime",
+        "button":"Pošalji email",
+        "title":"Unesite korisničko ime"
     },
     "changepass":{
-        "title":"Promeni lozinku",
+        "title":"Promenite lozinku",
         "pass1":"Nova lozinka",
-        "pass2":"Ponovi lozinku",
+        "pass2":"Ponovite lozinku",
         "button":"Izmeni"
     },
     "edit-profile":{
-        "title1":"Izmeni profil",
+        "title1":"Izmenite profil",
         "pass1":"Lozinka",
         "submit1":"Izmeni",
-        "title2":"Izmeni email",
+        "title2":"Izmenite email",
         "pass2":"Lozinka",
         "submit2":"Izmeni",
-        "title3":"Izmeni lozinku",
+        "title3":"Izmenite lozinku",
         "newpass1":"Nova lozinka",
-        "newpass2":"Ponovi lozinku",
-        "pass3":"Unesi trenutnu lozinku",
+        "newpass2":"Ponovite lozinku",
+        "pass3":"Unesite trenutnu lozinku",
         "submit3":"Izmeni"
     }
 

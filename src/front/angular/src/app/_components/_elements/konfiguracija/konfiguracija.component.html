@@ -70,18 +70,18 @@
         </div>
         <div class="col-md-4 mt-5 d-flex justify-content-center">
             <div>
-            <label for="Split">Data split</label>
-            <div class="select">
-                <select id="Split" (click)="onChange($event)">
-                    <option>Random</option>
-                    <option selected>Izaberi</option>
-                </select>
+                <label for="Split">Data split</label>
+                <div class="select">
+                    <select id="Split" (click)="onChange($event)">
+                        <option>Random</option>
+                        <option selected>Izaberi</option>
+                    </select>
+                </div>
+                <div *ngIf="krajSplit">
+                    <p> Train:{{trainSplit}}</p>
+                    <p> Val:{{valSplit}}</p>
+                </div>
             </div>
-            <div *ngIf(krajSplit)>
-                Train:{{trainSplit}}<br>
-                Val:{{valSplit}}
-            </div>
-        </div>
         </div>
 
     </div>
