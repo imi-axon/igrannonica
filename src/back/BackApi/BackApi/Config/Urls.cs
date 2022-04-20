@@ -47,8 +47,8 @@ namespace BackApi.Config
             backHost = host;
             frontHost = host;
 
-            mlWs = "ws://" + mlHost + ":" + mlPort;
-            ml = "http://" + mlHost + ":" + mlPort;
+            mlWs = "ws://localhost:" + mlPort;
+            ml = "http://localhost:" + mlPort;
             back = "http://" + backHost + ":" + backPort;
             front = "http://" + frontHost + ":" + frontPort;
 
