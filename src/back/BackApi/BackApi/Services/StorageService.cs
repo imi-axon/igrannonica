@@ -19,7 +19,7 @@
     {
         public void DeleteProject(int projectId)
         {
-            var basepath = @"Storage\";
+            var basepath = @"Storage";
             var projfolder = "proj" + projectId;
             var projpath = Path.Combine(basepath, projfolder);
             Directory.Delete(projpath, true);
@@ -27,7 +27,7 @@
 
         public void CreateProject(int projectId)
         {
-            var basepath = @"Storage\";
+            var basepath = @"Storage";
             var projfolder = "proj" + projectId;
             var projpath = Path.Combine(basepath, projfolder);
             Directory.CreateDirectory(projpath);
@@ -39,7 +39,7 @@
 
         public string CreateDataset(int projid,int datasetid)
         {
-            var basepath = @"Storage\";
+            var basepath = @"Storage";
             var projfolder = "proj" + projid;
             var projpath = Path.Combine(basepath, projfolder);
             var datapath = Path.Combine(projpath, "data");
@@ -50,7 +50,7 @@
 
         public string CreatePhoto(int userid)
         {
-            var basepath = @"Storage\";
+            var basepath = @"Storage";
             var imgfolder = "Images";
             var imgpath = Path.Combine(basepath, imgfolder);
             //var image = "img" + userid;
@@ -73,7 +73,7 @@
 
         public string CreateNNFile(int projid,int nnid)
         {
-            var path = @"Storage\";
+            var path = @"Storage";
             var tmp = "proj" + projid;
             path = Path.Combine(path, tmp);
             path = Path.Combine(path, "mreze");
@@ -85,7 +85,7 @@
 
         public string CreateNNCfg(int projid,int nnid)
         {
-            var path = @"Storage\";
+            var path = @"Storage";
             var tmp = "proj" + projid;
             path = Path.Combine(path, tmp);
             path = Path.Combine(path, "mreze");

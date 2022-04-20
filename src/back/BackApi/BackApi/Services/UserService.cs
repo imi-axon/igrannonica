@@ -196,7 +196,8 @@ namespace BackApi.Services
             {
                 Directory.CreateDirectory(path);
             }
-            path = path + "\\" + "user"+id+".jpg";
+            
+            path = Path.Combine(path, "user" + id + ".jpg");
             user.PhotoPath = path;
             kontext.SaveChanges();
             using (FileStream stream = System.IO.File.Create(path))
@@ -217,7 +218,7 @@ namespace BackApi.Services
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
 
-            path = path + "\\" + "user" + id + ".jpg";
+            path = Path.Combine(path, "user" + id + ".jpg");
             if (File.Exists(path))
                 System.IO.File.Delete(path);
             using (FileStream stream = System.IO.File.Create(path))

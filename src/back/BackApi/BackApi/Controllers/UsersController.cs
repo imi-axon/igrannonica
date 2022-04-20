@@ -176,7 +176,7 @@ namespace BackApi.Controllers
 
             string photopath = korsrv.UsernameToImagePath(username);
             if (photopath == "" || photopath==null)
-                photopath = "Storage\\profilna.png";
+                photopath = Path.Combine("Storage", "profilna.png");
 
             Byte[] b = System.IO.File.ReadAllBytes(photopath);
             return File(b, "image/jpeg");
