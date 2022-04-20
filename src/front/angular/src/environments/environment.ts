@@ -6,8 +6,8 @@ export const environment = {
   production: false,
   apiProperties:
   {
-    url: 'https://localhost:7057',
-    wsurl:'wss://localhost:7057'
+    url: 'http://localhost:10016',
+    wsurl:'ws://localhost:10016'
   }
 };
 

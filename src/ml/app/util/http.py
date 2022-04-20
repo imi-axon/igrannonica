@@ -1,8 +1,12 @@
 import httpx
+import config
 
-baseURL = 'https://localhost:7057/api/files/'
-baseHeaders = {'Host':'localhost:8000'}
+baseURL = config.Urls.BACK + '/api/files/'
+baseHeaders = {'Host': f'{config.Urls.BACK_HOST}:{config.Urls.BACK_PORT}'}
 sslVerify = False
+
+print(f'baseURL: {baseURL}')
+print(f'baseHeaders: {baseHeaders}')
 
 
 def debug_request(response):

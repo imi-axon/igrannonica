@@ -1,5 +1,6 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Papa } from 'ngx-papaparse';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-edit-dataset',
@@ -7,20 +8,24 @@ import { Papa } from 'ngx-papaparse';
   styleUrls: ['./edit-dataset.component.scss']
 })
 export class EditDatasetComponent implements OnInit {
-
+  
   dataset: any;
   columns: string[];
   
   // Stranicenje za prikaz podataka
-  dataPages: any[][] = [];
-  rowsPerPage: number = 13;
-  currentPage: number = 0;
+  rowsPerPage: number = 14;
+  currentPage: number = 1;
+  pageCount: number = 1;
   pageInput: number;
   
   // Za editovanje
   selectedColumns: boolean[] = [];
   selectAll: boolean = true;
   
+  @ViewChild("loader")
+  public loader: LoaderComponent;
+  
+  @Output() PageLoadEvent = new EventEmitter<any>();
   
   // Koristi se na stranici za input fajla i statistics stranici
   @Output() LoadedEvent = new EventEmitter<null>();
@@ -29,27 +34,20 @@ export class EditDatasetComponent implements OnInit {
   @Output() ChangedField = new EventEmitter<any>();
   
   // Pravimo "zahtev" za update podataka
-  @Output() DataUpdateNeeded = new EventEmitter<null>();
+  @Output() DataUpdateNeeded = new EventEmitter<any>();
   
   // Saljemo event da zelimo da sacuvamo trenutne u trajne podatke na back-u
   @Output() SaveDataNeeded = new EventEmitter<null>();
   
+  // OBSOLITE - IZBACITI KADA SE BUDE VRACAO FAJL KORISNIKU
   constructor(private papa: Papa) { }
 
   // ZA TESTIRANJE
   
   ngOnInit(): void {
-    // Moze se ukljuciti za testiranje prikaza
-    //this.LoadTestData();
-  }
-  
-  
-  public LoadTestData(){
-    let testDataset = JSON.parse('[{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"},{"col1":"test","col2":"test","col3":"test","col4":"test","col5":"test","col6":"test","col7":"test","col8":"test","col9":"test","col10":"test","col11":"test","col12":"test","col13":"test","col14":"test","col15":"test"}]');
-    
-    let testStatistics = JSON.parse('{"cormat":{"cols":["Kolona1","Kolona2","Kolona3","Kolona4","Kolona5"],"cors":[0.533,0.644,0,0,0.751,1,0,0.151,0.253,0.26]},"colstats":[{"col":"Kolona1","min":0.6,"max":1.85,"avg":1.2,"med":1,"nul":0},{"col":"Kolona2","min":0.3,"max":3.25,"avg":1.98,"med":1.56,"nul":1},{"col":"Kolona3","min":1.6,"max":2.15,"avg":3.67,"med":1.23,"nul":0},{"col":"Kolona4","min":3.23,"max":6.42,"avg":2.41,"med":4.2,"nul":2},{"col":"Kolona5","min":1.72,"max":4.88,"avg":3.2,"med":2,"nul":0},{"col":"Kolona1","min":0.6,"max":1.85,"avg":1.2,"med":1,"nul":0},{"col":"Kolona2","min":0.3,"max":3.25,"avg":1.98,"med":1.56,"nul":1},{"col":"Kolona3","min":1.6,"max":2.15,"avg":3.67,"med":1.23,"nul":0},{"col":"Kolona4","min":3.23,"max":6.42,"avg":2.41,"med":4.2,"nul":2},{"col":"Kolona5","min":1.72,"max":4.88,"avg":3.2,"med":2,"nul":0},{"col":"Kolona1","min":0.6,"max":1.85,"avg":1.2,"med":1,"nul":0},{"col":"Kolona2","min":0.3,"max":3.25,"avg":1.98,"med":1.56,"nul":1},{"col":"Kolona3","min":1.6,"max":2.15,"avg":3.67,"med":1.23,"nul":0},{"col":"Kolona4","min":3.23,"max":6.42,"avg":2.41,"med":4.2,"nul":2},{"col":"Kolona5","min":1.72,"max":4.88,"avg":3.2,"med":2,"nul":0}],"rownulls":[0,1,0,1,1,0,0,2,2,0,1,2,0,2,2,3,3,2,1,2,2,2,0,1,0,0,2,1,2,3,1,0,2,2,1,3,0,1,2,0,0,0,1,3,1,2,1,0,1,0]}');
-     
-    this.LoadData(testDataset);
+    setTimeout(() => {
+      this.loader.isLoading = true;
+    }, 0);
   }
   
   
@@ -59,10 +57,12 @@ export class EditDatasetComponent implements OnInit {
   
   // Odbacivanje izmena (preuzimanje starih podataka)
   public Discard(){
-    this.DataUpdateNeeded.emit();
+    this.DataUpdateNeeded.emit({currentPage: this.currentPage, rowsPerPage: this.rowsPerPage});
+    this.loader.isLoading = true;
   }
   
-  // Preuzimanje fajla
+  
+  // OBSOLITE - IZBACITI KADA SE BUDE VRACAO FAJL KORISNIKU
   public Download(){
     let datasetToCSV = this.papa.unparse(this.dataset);
     
@@ -85,59 +85,42 @@ export class EditDatasetComponent implements OnInit {
     }, 0);
   }
   
+  // OBSOLITE - IZBACITI KADA SE BUDE VRACAO FAJL KORISNIKU
   private convertToFile(buffer: any, name: string, type: string) : Blob{
     let file = new Blob([buffer], {type: type});
     return file;
   }
   
+  
+  
+  
   // Izmenjeno polje u datasetu
   public ChangeField(input: any, pageRow: number, col: number, currentPage: number){
     
-    let row = pageRow + currentPage * this.rowsPerPage;
-    //console.log("Row: " + row + " | Col: " + col);
+    let row = pageRow + (currentPage - 1) * this.rowsPerPage;
     
-    // Menjamo vrednost u celokupnom datasetu (ne verziji koja je podeljena na strane)
-    this.dataset[row][this.columns[col]] = input.value;
+    this.dataset[row][col] = input.value;
     
-    let change: any = { value: input.value, col: this.columns[col], row: row };
+    let change: any = { value: input.value, col: col, row: row };
     this.ChangedField.emit(change);
   }
   
-  // Ucitavanje
-  public LoadData(dataset: any){    
+  
+  public LoadPage(dataset: any, pageCount: number){    
     
-    this.dataset = dataset;
-    this.columns = Object.keys(this.dataset[0]);
+    this.dataset = JSON.parse(dataset);
+    
+    this.columns = Object.keys(this.dataset[0])
     
     this.setSelectedColumns();
     
-    this.splitData(this.dataset);
-    this.currentPage = 0;
+    this.pageCount = pageCount;
     
     this.LoadedEvent.emit();
+    
+    this.loader.isLoading = false;
   }
-  private splitData(data: any){
-    this.dataPages = [];
-    
-    let arrayCounter = 0;
-    
-    this.dataPages.push([]);
-    
-    let sectionCounter = 0;
-    
-    for(let i = 0; i < data.length; i++){
-      if(sectionCounter < this.rowsPerPage){
-        this.dataPages[arrayCounter].push(data[i]);
-      }
-      else{
-        sectionCounter = 0;
-        
-        this.dataPages.push([]);
-        this.dataPages[++arrayCounter].push(data[i]);
-      }
-      sectionCounter++;
-    }
-  }
+  
   private setSelectedColumns(){
     this.selectedColumns = [];
     for(let i = 0; i < this.columns.length; i++)
@@ -145,41 +128,93 @@ export class EditDatasetComponent implements OnInit {
   }
   
   
-  // Stranicenje
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  // STRANICENJE
+  
   public previousPage(){
-    if(this.currentPage < 1)
+    if(this.currentPage <= 1)
       return;
     this.currentPage--;
+    
+    let pagingData = {
+      currentPage: this.currentPage, 
+      rowsPerPage: this.rowsPerPage
+    };
+    this.PageLoadEvent.emit(pagingData);
+    this.loader.isLoading = true;
   }
   
   public nextPage(){
-    if(this.currentPage > this.dataPages.length - 2)
-      return;
     this.currentPage++;
+    let pagingData = {
+      currentPage: this.currentPage, 
+      rowsPerPage: this.rowsPerPage
+    };
+    this.PageLoadEvent.emit(pagingData);
+    this.loader.isLoading = true;
   }
   
   public minPage(){
-    this.currentPage = 0;
+    this.currentPage = 1;
+    let pagingData = {
+      currentPage: this.currentPage, 
+      rowsPerPage: this.rowsPerPage
+    };
+    this.PageLoadEvent.emit(pagingData);
+    this.loader.isLoading = true;
   }
   
   public maxPage(){
-    this.currentPage = this.dataPages.length - 1;
+    if(this.currentPage == this.pageCount)
+      return;
+    
+    this.currentPage = this.pageCount;
+    let pagingData = {
+      currentPage: this.currentPage, 
+      rowsPerPage: this.rowsPerPage
+    };
+    this.PageLoadEvent.emit(pagingData);
+    this.loader.isLoading = true;
   }
   
   public goToPage(){
     if(this.pageInput == null 
       || this.pageInput <= 0 
-      || this.pageInput > this.dataPages.length)
+      || this.pageInput > this.pageCount)
       return;
-      
-    this.currentPage = this.pageInput - 1;
+    
+    this.currentPage = this.pageInput;
+    
+    let pagingData = {
+      currentPage: this.currentPage, 
+      rowsPerPage: this.rowsPerPage
+    };
+    this.PageLoadEvent.emit(pagingData);
+    this.loader.isLoading = true;
   }
   
   
-  // Edit
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  // SELEKTOVANJE
+  
   public Select(i: number){
     this.selectedColumns[i] = !this.selectedColumns[i];
-    // console.log(this.selectedColumns);
   }
   public SelectAll(){
     if(this.selectAll)

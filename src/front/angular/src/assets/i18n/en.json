@@ -117,7 +117,7 @@
     },
     "registration-successful":{
         "uspeh":"Registration successful",
-        "login":"Login"
+        "mail":"Check your email"
     },
     "statistics-page":{
         "view":"Switch view",
@@ -146,7 +146,11 @@
         "newpass1":"New password",
         "newpass2":"Repeat password",
         "pass3":"Current password",
-        "submit3":"Edit"
+        "submit3":"Edit",
+        "title4":"Edit Profile Photo",
+        "pass4": "Password",
+        "submit4": "Edit",
+        "image": "Choose image"
     }
 
 }

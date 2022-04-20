@@ -1,7 +1,10 @@
 
 <div class="c1 container">
     <div class="tabela mx-auto mb-3 justify-content-center">
-        <table class="tabela1 table table-bordered table-hover table-responsive table-curved table-strip">
+        
+        <loader #loader></loader>
+        
+        <table *ngIf="!loader.isLoading" class="tabela1 table table-bordered table-hover table-responsive table-curved table-strip">
             <thead>
                 <!-- RED NA NAZIVE KOLONA -->
                 <tr class=""> 
@@ -21,7 +24,7 @@
             
             <tbody>
                 
-                <tr *ngFor="let i = index; let row of dataPages[currentPage];">
+                <tr *ngFor="let i = index; let row of dataset;">
                     
                     <!-- CELIJE ZA PRVU KOLONU -->
                     <td class="prva-kolona">
@@ -38,6 +41,7 @@
             </tbody>
             
         </table>
+        
     </div>
 </div>
 
@@ -56,27 +60,27 @@
         <ul class="pagination align-items-center m-0">
             
             <li class="page-item">
-                <button class="page-link" [class.disabled]="currentPage < 1" [disabled]="currentPage < 1"
+                <button class="page-link" [class.disabled]="currentPage == 1" [disabled]="currentPage == 1"
                     (click)="minPage();">&lt;&lt;&lt;</button>
             </li>
 
             <li class="page-item">
-                <button class="page-link" [class.disabled]="currentPage < 1" [disabled]="currentPage < 1"
+                <button class="page-link" [class.disabled]="currentPage == 1" [disabled]="currentPage == 1"
                     (click)="previousPage()">&lt;</button>
             </li>
             
             <li class="page-item">
-                <button class="page-link" [disabled]="true"> {{currentPage + 1}} / {{dataPages.length}}</button>
+                <button class="page-link" [disabled]="true"> {{currentPage}}&nbsp;/&nbsp;{{pageCount}}</button>
             </li>
 
             <li class="page-item">
-                <button class="page-link" [class.disabled]="currentPage > dataPages.length - 2"
-                    [disabled]="currentPage > dataPages.length - 2" (click)="nextPage()">&gt;</button>
+                <button class="page-link" [class.disabled]="currentPage == pageCount" [disabled]="currentPage == pageCount"
+                    (click)="nextPage()">&gt;</button>
             </li>
 
             <li class="page-item">
-                <button class="page-link" [class.disabled]="currentPage > dataPages.length - 2"
-                    [disabled]="currentPage > dataPages.length - 2" (click)="maxPage();">&gt;&gt;&gt;</button>
+                <button class="page-link" [class.disabled]="currentPage == pageCount" [disabled]="currentPage == pageCount"
+                    (click)="maxPage();">&gt;&gt;&gt;</button>
             </li>
             
         </ul>

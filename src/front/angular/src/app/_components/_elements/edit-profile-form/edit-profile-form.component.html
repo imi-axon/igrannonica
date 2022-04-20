@@ -77,3 +77,23 @@
                 </div>
             </form>
         </div>
+        <div class="container mt-md-5  p-5 bg-white rounded-3 shadow-sm border" style="max-width: 50em;">
+            <h2 class="text-center pb-5">{{"edit-profile.title4"|translate}}</h2>
+            <form method="POST" novalidate #form="ngForm" (submit)="SubmitEdit4()" autocomplete="off">
+                <div class="photoUpload">
+                    <img src="{{imageBlobUrl}}" alt="trenutna slika" height="150px" width="150px">
+                    <input class="form-control" type="file" id="photo" name="photo" #photo="ngModel" [(ngModel)]="newphoto" 
+                    style="display: none;" accept="image/*" (change)="selectPhoto($event)"><br>
+                    <label for="photo" id="button">{{"edit-profile.image"|translate}}</label>
+                </div>
+
+                <div class="form-group mb-3">
+                    <input type="password" class="form-control" placeholder="{{'edit-profile.pass4'|translate}}" name="oldpassword4" #oldpassword4="ngModel" [(ngModel)]="edit.oldpassword4"
+                    required [class.invalid]="oldpassword4.touched && registrationCheck.invalidOldPassword4" (blur)="checkOldPassword4()" (input)="checkOldPassword4()">
+                </div>
+
+                <div class="form-group mb-3">
+                    <input type="submit" name="EditPhoto" class="btn btn-primary" value="{{'edit-profile.submit4'|translate}}" [disabled]="registrationCheck.invalidRegistration4">
+                </div>
+            </form>
+        </div>

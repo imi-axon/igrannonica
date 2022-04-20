@@ -39,11 +39,14 @@ namespace BackApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> Register(UserRegister req)
+        public async Task<ActionResult<string>> Register([FromForm]UserRegister req)
         {
             int userid = jwtsrv.GetUserId();
             if (userid != -1) return Forbid();
             string tmp = korsrv.Register(req);
+            int id = korsrv.UsernameToId(req.username);
+            if(req.photo!=null)
+                korsrv.addPhoto(id, req.photo);
             string rez = "";
             if (tmp != "")
             {
@@ -54,8 +57,9 @@ namespace BackApi.Controllers
             else
             {
                 rez = "Korisnik sa tim Username-om vec postoji!";
-                return BadRequest(rez);
+                return BadRequest();
             }
+            return Ok();
         }
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login(UserLogin req)
@@ -139,6 +143,18 @@ namespace BackApi.Controllers
             bool rez = korsrv.EditPassword(userid, user);
             return Ok();
         }
+
+        [HttpPut("edit/photo")]
+        public async Task<ActionResult<string>> EditPhoto([FromForm]UserEdit user)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            bool pass = korsrv.CheckPass(userid, user.oldpassword3);
+            if (!pass)
+                return "NESTO NIJE U REDU";
+            bool rez = korsrv.EditPhoto(userid, user);
+            return Ok();
+        }
         [HttpGet("{username}/getuser")]
         public async Task<ActionResult<string>> GetUser(string username)
         {
@@ -150,6 +166,34 @@ namespace BackApi.Controllers
                 return BadRequest();
 
             return rez;
+        }
+
+        [HttpGet("{username}/getimage")]
+        public async Task<ActionResult<dynamic>> GetImage(string username)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+
+            string photopath = korsrv.UsernameToImagePath(username);
+            if (photopath == "" || photopath==null)
+                photopath = Path.Combine("Storage", "profilna.png");
+
+            Byte[] b = System.IO.File.ReadAllBytes(photopath);
+            return File(b, "image/jpeg");
+        }
+        
+        [HttpDelete("{username}/delete")]
+        public async Task<ActionResult> DeleteUser(string username)
+        {
+            int loggedid = jwtsrv.GetUserId();
+            if (loggedid == -1) return Unauthorized();
+            var userid= korsrv.UsernameToId(username);
+            if (userid == -1) return NotFound();
+            var chk = korsrv.DeleteUser(userid, loggedid);
+            if(!chk) return Forbid();
+
+
+            return Ok();
         }
     }
 }

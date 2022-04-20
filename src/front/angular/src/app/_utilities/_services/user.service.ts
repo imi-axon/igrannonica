@@ -18,9 +18,9 @@ export class UserService {
   
     Register(applicantData: any, self?: any, successCallback?: Function, badRequestCallback?: Function, forbiddenCallback?: Function) {
       this.userAPI.Register(applicantData).subscribe(
-          
-        (response) => {
-          
+
+        (response: any) => {
+
           if(response.status == HttpStatusCode.Ok)
             if(self && successCallback) 
               successCallback(self);
@@ -32,9 +32,7 @@ export class UserService {
           if(response.status == HttpStatusCode.Forbidden)
             if(self && forbiddenCallback)
               forbiddenCallback(self, response.body.message);
-          
         }
-        
       );
     }
     
@@ -151,6 +149,19 @@ export class UserService {
         }
       )
     }
+    editUser4(model:any)
+    {
+      console.log(model.lastname);
+      this.userAPI.edituser4(model).subscribe(
+        res=>{
+          console.log("Uspesno promenjena slika");
+          this.router.navigate(['profil'])
+        },
+        err=>{
+          console.log(err)
+        }
+      )
+    }
     getInfo(username:string, self?: any, successCallback?: Function, errorCallback?: Function)
     {
         this.userAPI.getinfo(username).subscribe(
@@ -170,6 +181,16 @@ export class UserService {
           }
         
         );
+    }
+
+    public getImage(username:string, self: any, successCallback: Function)
+    {
+      this.userAPI.getimage(username).subscribe(
+        (res: any)=>{
+          
+          successCallback(self, res);
+        }
+      )
     }
 
 }

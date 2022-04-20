@@ -13,16 +13,19 @@ export class UserApiService {
   constructor(private http: HttpClient) { }
   
   
-  Register(applicantData: any): Observable<HttpResponse<any>> {
+  Register(applicantData: any): any {
     
-    return this.http.post<any>(
+    let response = this.http.post(
       apiProperties.url + "/api/users",
       applicantData,
       {
         observe: 'response',
+        responseType: "text",
         headers: HeaderUtil.jwtOnlyHeaders()
       }
     );
+    console.log(response);
+    return response;
   }
 
   login(formData: any): Observable<HttpResponse<any>> {
@@ -75,6 +78,15 @@ export class UserApiService {
       });
     return response
   }
+  edituser4(model:any):Observable<any>{
+    //return this.http.put<any>(apiProperties.url+"/api/users/edit-user", model);
+    let response = this.http.put<any>(apiProperties.url + "/api/users/edit/photo", model,
+      {
+        observe: "response",
+        headers: HeaderUtil.jwtOnlyHeaders()
+      });
+    return response
+  }
   getinfo(username:any):Observable<HttpResponse<UserRegistration>>
   {
     let response = this.http.get<UserRegistration>(apiProperties.url+"/api/users/"+`${username}`+"/getuser",
@@ -83,5 +95,17 @@ export class UserApiService {
         headers:HeaderUtil.jwtOnlyHeaders()
       });
       return response;
+  }
+
+  getimage(username:any):any
+  {
+    let response = this.http.get(apiProperties.url+"/api/users/"+`${username}`+"/getimage",
+    {
+      observe:"response",
+      responseType : "blob",
+      headers:HeaderUtil.jwtOnlyHeaders()
+    });
+    console.log(response);
+    return response;
   }
 }

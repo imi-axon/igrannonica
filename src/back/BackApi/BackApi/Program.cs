@@ -15,6 +15,24 @@ using System.Security.Claims;
 using System.Net;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 
+// -- Custom Environment Variable --
+
+var BACK_ENV_TYPE = Environment.GetEnvironmentVariable("BACK_ENV_TYPE");
+
+if (BACK_ENV_TYPE == null)
+    BACK_ENV_TYPE = "DEVELOPMENT";
+
+if (BACK_ENV_TYPE == "DEVELOPMENT")
+{
+    Urls.SetForDev();
+}
+else if (BACK_ENV_TYPE == "PRODUCTION")
+{
+    Urls.SetForProd();
+}
+
+// ---------------------------------
+
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,15 +40,19 @@ var builder = WebApplication.CreateBuilder(args);
 /*
 builder.WebHost.ConfigureKestrel((context, serverOptions) =>
 {
-    serverOptions.Listen(IPAddress.Any, 10016);
+    serverOptions.Listen(IPAddress.Any, int.Parse(Urls.backPort));
 });
 */
 
-//builder.Services.Configure<KestrelServerOptions>(builder.Configuration.GetSection("Kestrel"));
+builder.Services.Configure<KestrelServerOptions>(builder.Configuration.GetSection("Kestrel"));
+
+Debug.WriteLine(" ---===||| ADD CONTEXT |||===--- ");
 
 // Add services to the container.
 builder.Services.AddDbContext<DataBaseContext>();
-//builder.Services.AddEntityFrameworkSqlite().AddDbContext<DataBaseContext>();
+
+Debug.WriteLine(" ---===||| GOTOV CONTEXT |||===--- ");
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -74,7 +96,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: myAllowSpecificOrigins,
         builder =>
         {
-            builder.WithOrigins("http://localhost:4200")
+            //builder.WithOrigins("http://localhost:4200")
+            builder.AllowAnyOrigin()
             .AllowAnyMethod()
             .AllowAnyHeader();
         });
@@ -83,17 +106,20 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Primenjuje migracije
+/*
+using (var scope = app.Services.CreateScope())
+{
+    var dataContext = scope.ServiceProvider.GetRequiredService<DataBaseContext>();
+    dataContext.Database.Migrate();
+}
+*/
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-
-    Urls.SetForDev();
-}
-else
-{
-    Urls.SetForProd();
 }
 
 var webSocketOptions = new WebSocketOptions
@@ -103,7 +129,7 @@ var webSocketOptions = new WebSocketOptions
 
 app.UseWebSockets(webSocketOptions);
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection()
 
 app.UseAuthentication();
 
