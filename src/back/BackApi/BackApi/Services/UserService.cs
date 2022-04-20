@@ -26,6 +26,7 @@ namespace BackApi.Services
         public bool addPhoto(int id, IFormFile photo);
         public string UsernameToImagePath(string username);
         public Boolean DeleteUser(int userid, int loggedid);
+        public bool EditPhoto(int id, UserEdit model);
     }
 
     public class UserService : IUserService
@@ -201,6 +202,27 @@ namespace BackApi.Services
             using (FileStream stream = System.IO.File.Create(path))
             {
                 photo.CopyTo(stream);
+                stream.Flush();
+            }
+            return true;
+        }
+        public bool EditPhoto(int id, UserEdit model)
+        {
+            var user = kontext.Users.Find(id);
+            if (user == null)
+                return false;
+
+            var path = storageService.CreatePhoto(id);
+
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            path = path + "\\" + "user" + id + ".jpg";
+            if (File.Exists(path))
+                System.IO.File.Delete(path);
+            using (FileStream stream = System.IO.File.Create(path))
+            {
+                model.photo.CopyTo(stream);
                 stream.Flush();
             }
             return true;

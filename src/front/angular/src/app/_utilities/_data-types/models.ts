@@ -33,6 +33,7 @@ export class UserEditCheck
   public invalidRegistration1 = true;
   public invalidRegistration2 = true;
   public invalidRegistration3 = true;
+  public invalidRegistration4 = true;
   public invalidName:boolean = true;
   public invalidLastname:boolean = true;
   public invalidUsername:boolean = true;
@@ -40,6 +41,7 @@ export class UserEditCheck
   public invalidOldPassword1: boolean = true;
   public invalidOldPassword2: boolean = true;
   public invalidOldPassword3: boolean = true;
+  public invalidOldPassword4: boolean = true;
   public invalidPassword:boolean = true;
   public invalidPasswordAgain:boolean = true;
   
@@ -47,6 +49,7 @@ export class UserEditCheck
       this.invalidRegistration1 = true;
       this.invalidRegistration2 = true;
       this.invalidRegistration3 = true;
+      this.invalidRegistration4 = true;
       this.invalidName = true;
       this.invalidLastname = true;
       this.invalidUsername = true;
@@ -54,6 +57,7 @@ export class UserEditCheck
       this.invalidOldPassword1 =true;
       this.invalidOldPassword2 =true;
       this.invalidOldPassword3 =true;
+      this.invalidOldPassword4 =true;
       this.invalidPassword = true;
       this.invalidPasswordAgain = true;
   }
@@ -77,6 +81,12 @@ export class UserEditCheck
         this.invalidRegistration3 = true;
     else
         this.invalidRegistration3 = false;
+  }
+  public checkForm4(){
+    if(this.invalidOldPassword4)
+        this.invalidRegistration4 = true;
+    else
+        this.invalidRegistration4 = false;
   }
 }
 
@@ -107,8 +117,10 @@ export class EditUser
     public oldpassword1: string="";
     public oldpassword2: string="";
     public oldpassword3: string="";
+    public oldpassword4: string="";
     public newpassword: string = "";
     public email: string = "";
+    public photo:File = null as any;
     
     constructor() {
         this.firstname = "";
@@ -117,8 +129,10 @@ export class EditUser
         this.oldpassword1 = "";
         this.oldpassword2 = "";
         this.oldpassword3 = "";
+        this.oldpassword4 = "";
         this.newpassword = "";
         this.email = "";
+        this.photo = null as any;
     }
 }
 /* REGISTRACIJA */

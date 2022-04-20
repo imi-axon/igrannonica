@@ -151,6 +151,19 @@ export class UserService {
         }
       )
     }
+    editUser4(model:any)
+    {
+      console.log(model.lastname);
+      this.userAPI.edituser4(model).subscribe(
+        res=>{
+          console.log("Uspesno promenjena slika");
+          this.router.navigate(['profil'])
+        },
+        err=>{
+          console.log(err)
+        }
+      )
+    }
     getInfo(username:string, self?: any, successCallback?: Function, errorCallback?: Function)
     {
         this.userAPI.getinfo(username).subscribe(
@@ -172,14 +185,12 @@ export class UserService {
         );
     }
 
-    public getImage(username:string)
+    public getImage(username:string, self: any, successCallback: Function)
     {
-      return this.userAPI.getimage(username).subscribe(
-        res=>{
-          console.log(res);
-        },
-        err=>{
-          console.log(err)
+      this.userAPI.getimage(username).subscribe(
+        (res: any)=>{
+          
+          successCallback(self, res);
         }
       )
     }

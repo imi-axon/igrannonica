@@ -16,6 +16,8 @@ export class EditProfileFormComponent implements OnInit {
   private username:string=this.auth.korisnickoIme;
   public user:UserRegistration;
 
+  public newphoto: File = null as any;
+  public imageBlobUrl:any;
   public split:string[];
   public edit:EditUser = new EditUser();
   public passwordAgain:string = "";
@@ -32,8 +34,28 @@ export class EditProfileFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.userService.getInfo(this.username,this,this.handleUserSuccess,this.handleError);
+    this.userService.getImage(this.auth.korisnickoIme, this, this.prikazslike);
   }
-  
+
+  public selectPhoto(event:any) {
+    let fileType = event.target.files[0].type
+    this.newphoto=<File>event.target.files[0];
+    if (fileType.match(/image\/*/)) {
+      let reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = (event: any) => {
+        this.imageBlobUrl = event.target.result;
+        
+      };
+    } 
+  }
+  prikazslike(self: any, response: any): void{
+    let reader = new FileReader();
+    reader.addEventListener("load", () => {
+      self.imageBlobUrl = reader.result;
+    }, false);
+    reader.readAsDataURL(response.body);
+  }
   public SubmitEdit1(){
     if(this.registrationCheck.invalidRegistration1)
       return;
@@ -51,6 +73,24 @@ export class EditProfileFormComponent implements OnInit {
       return;
     
     this.userService.editUser3(this.edit);
+  }
+  public SubmitEdit4(){
+    if(this.registrationCheck.invalidRegistration4)
+      return;
+    
+    let formData : FormData = new FormData();
+
+    formData.append("photo", this.newphoto, this.newphoto.name);
+    formData.append("firstname", this.edit.firstname);
+    formData.append("lastname", this.edit.lastname);
+    formData.append("email", this.edit.email);
+    formData.append("username", this.edit.username);
+    formData.append("oldpassword1", this.edit.oldpassword4);
+    formData.append("oldpassword2", this.edit.oldpassword4);
+    formData.append("oldpassword3", this.edit.oldpassword4);
+    formData.append("oldpassword4", this.edit.oldpassword4);
+    formData.append("newpassword", this.edit.oldpassword4);
+    this.userService.editUser4(formData);
   }
   handleSuccess(self: any) {
     self.router.navigate(RedirectRoutes.ON_REGISTER_SUCCESSFUL);
@@ -146,6 +186,14 @@ export class EditProfileFormComponent implements OnInit {
     if(!regExp.pattPass.test(this.edit.oldpassword3))
       this.registrationCheck.invalidOldPassword3 = true;
     this.registrationCheck.checkForm3();
+  }
+
+  public checkOldPassword4(){
+    this.registrationCheck.invalidOldPassword4 = false;
+    
+    if(!regExp.pattPass.test(this.edit.oldpassword4))
+      this.registrationCheck.invalidOldPassword4 = true;
+    this.registrationCheck.checkForm4();
   }
 
   public checkPassword(){

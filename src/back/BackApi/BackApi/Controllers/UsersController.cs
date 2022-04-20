@@ -143,6 +143,18 @@ namespace BackApi.Controllers
             bool rez = korsrv.EditPassword(userid, user);
             return Ok();
         }
+
+        [HttpPut("edit/photo")]
+        public async Task<ActionResult<string>> EditPhoto([FromForm]UserEdit user)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            bool pass = korsrv.CheckPass(userid, user.oldpassword3);
+            if (!pass)
+                return "NESTO NIJE U REDU";
+            bool rez = korsrv.EditPhoto(userid, user);
+            return Ok();
+        }
         [HttpGet("{username}/getuser")]
         public async Task<ActionResult<string>> GetUser(string username)
         {
@@ -163,6 +175,9 @@ namespace BackApi.Controllers
             if (userid == -1) return Unauthorized();
 
             string photopath = korsrv.UsernameToImagePath(username);
+            if (photopath == "" || photopath==null)
+                photopath = "Storage\\profilna.png";
+
             Byte[] b = System.IO.File.ReadAllBytes(photopath);
             return File(b, "image/jpeg");
         }

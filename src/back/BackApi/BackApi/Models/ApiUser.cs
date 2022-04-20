@@ -30,7 +30,9 @@
         public string oldpassword1 { get; set; }
         public string oldpassword2 { get; set; }
         public string oldpassword3 { get; set; }
+        public string oldpassword4 { get; set; }
         public string newpassword { get; set; }
+        public IFormFile? photo { get; set; }
 
     }
 

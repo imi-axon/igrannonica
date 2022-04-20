@@ -123,5 +123,20 @@
             transition: ease 0.25s;
         }
     }
+    .photoUpload label{
+        border: none;
+        border-radius: 10px;
+        color: #0084FF;
+        
+        width: 130px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 15px;
+        font-weight: bold;
+        margin: 6px 7px;
+        cursor: pointer;
+        
+      }
     
 }

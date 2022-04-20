@@ -70,10 +70,7 @@ export class RegistrationFormComponent implements OnInit {
         this.url = event.target.result;
         
       };
-    } else {
-      window.alert('Please select correct image format');
-    }
-    
+    } 
   }
   
   // Validacije

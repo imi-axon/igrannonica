@@ -143,7 +143,11 @@
         "newpass1":"Nova lozinka",
         "newpass2":"Ponovi lozinku",
         "pass3":"Unesi trenutnu lozinku",
-        "submit3":"Izmeni"
+        "submit3":"Izmeni",
+        "title4":"Promeni profilnu sliku",
+        "pass4": "Lozinka",
+        "submit4": "Izmeni",
+        "image": "Izaberi sliku"
     }
 
 
