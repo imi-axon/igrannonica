@@ -13,16 +13,19 @@ export class UserApiService {
   constructor(private http: HttpClient) { }
   
   
-  Register(applicantData: any): Observable<HttpResponse<any>> {
+  Register(applicantData: any): any {
     
-    return this.http.post<any>(
+    let response = this.http.post(
       apiProperties.url + "/api/users",
       applicantData,
       {
         observe: 'response',
+        responseType: "text",
         headers: HeaderUtil.jwtOnlyHeaders()
       }
     );
+    console.log(response);
+    return response;
   }
 
   login(formData: any): Observable<HttpResponse<any>> {

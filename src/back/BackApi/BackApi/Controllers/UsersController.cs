@@ -57,9 +57,9 @@ namespace BackApi.Controllers
             else
             {
                 rez = "Korisnik sa tim Username-om vec postoji!";
-                return BadRequest(rez);
+                return BadRequest();
             }
-            return rez;
+            return Ok();
         }
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login(UserLogin req)

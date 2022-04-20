@@ -221,6 +221,8 @@ namespace BackApi.Services
             path = Path.Combine(path, "user" + id + ".jpg");
             if (File.Exists(path))
                 System.IO.File.Delete(path);
+            user.PhotoPath=path;
+            kontext.SaveChanges();
             using (FileStream stream = System.IO.File.Create(path))
             {
                 model.photo.CopyTo(stream);

@@ -23,7 +23,7 @@ export class RegistrationFormComponent implements OnInit {
   isSignUpFailed = false;
   errorMessage = '';
   
-  constructor(private userService: UserService,public translate:TranslateService) { }
+  constructor(private userService: UserService,public translate:TranslateService, private router:Router) { }
   
   
 
