@@ -75,7 +75,7 @@ export class DatasetApiService {
   // api/projects/{id}/dataset/save
   public SaveDataset(project_id: number): Observable<HttpResponse<any>>{
     return this.http.put<any>(
-      apiProperties.url + "/api/projects/" + project_id + "/dataset/save",
+      apiProperties.url + "/api/projects/" + project_id + "/dataset/save", {},
       {
         observe: 'response',
         headers: HeaderUtil.jwtOnlyHeaders()
