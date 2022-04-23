@@ -10,7 +10,7 @@ namespace BackApi.Services
         Boolean DeleteProject(int projid,int userid);
         string ListProjects(int userid,int pubuserid);
         string GetProjById(int projid, int userid);
-        Boolean EditProject(int projid, ProjectPostPut proj,int userid);
+        string EditProject(int projid, ProjectPostPut proj,int userid, out bool tmp);
         int getProjectId(ProjectPostPut model);
         public Boolean projectOwnership(int userid, int projid);
     }
@@ -142,20 +142,25 @@ namespace BackApi.Services
             return rez.ToString();
         }
 
-        public Boolean EditProject(int projid,ProjectPostPut proj,int userid)
+        public string EditProject(int projid,ProjectPostPut proj,int userid, out bool tmp)
         {
-            Boolean rez;
             var edited = context.Projects.Find(projid);
-            if(edited == null)
-                return rez = false;
+            if (edited == null)
+            {
+                tmp = false;
+                return "project";
+            }
             if (edited.UserId != userid)
-                return rez = false;
+            {
+                tmp = false;
+                return "username";
+            }
             edited.Name = proj.name;
             edited.Description = proj.description;
             edited.Public = proj.ispublic;
             context.SaveChanges();
-            rez = true;
-            return rez;
+            tmp = true;
+            return "uspesno";
         }
 
         public int getProjectId(ProjectPostPut model)

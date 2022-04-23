@@ -45,13 +45,13 @@ namespace BackApi.Controllers
             */
             var packet = new ApiNNTrain();
             packet.dataset = datasrv.ProjIdToPath(id, true);
-            if (packet.dataset == null) return BadRequest("Ne postoji dataset");
+            if (packet.dataset == null) return BadRequest(new {v="dataset"});
             packet.dataset = packet.dataset.Replace('\\', '/');
             packet.nn = nnsrv.NNIdToPath(nnid);
-            if (packet.nn == null) return BadRequest("Ne postoji Mreza");
+            if (packet.nn == null) return BadRequest(new { v = "network" });
             packet.nn = packet.nn.Replace('\\', '/');
             packet.conf = nnsrv.NNIdToCfg(nnid);
-            if (packet.conf == null) return BadRequest("Ne postoji Config");
+            if (packet.conf == null) return BadRequest(new { v = "config" });
             packet.conf = packet.nn.Replace('\\', '/');
 
             if (!wsq.CheckInDict(nnid)) 

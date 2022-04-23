@@ -11,19 +11,19 @@ namespace BackApi.Services
 {
     public interface IUserService
     {
-        string Register(UserRegister model);
+        string Register(UserRegister model, out bool mail);
         string Login(UserLogin model,out Boolean uspeh);
         public int UsernameToId(string username);
         public int EmailToId(string email);
-        public string ChangePassword(string username);
-        public string ChangePasswordInDataBase(string username, string password);
+        public string ChangePassword(string username, out bool tmp);
+        public string ChangePasswordInDataBase(string username, string password, out bool tmp);
         public bool CheckPass(int id, string password);
         public bool EditUser(int id, UserEdit model);
-        public string GetUser(string username);
+        public string GetUser(string username, out bool tmp);
         public bool EditEmail(int id, UserEdit model);
         public bool EditPassword(int id, UserEdit model);
         public bool addPhoto(int id, IFormFile photo);
-        public string UsernameToImagePath(string username);
+        public string UsernameToImagePath(string username, out bool tmp);
         public Boolean DeleteUser(int userid, int loggedid);
         public bool EditPhoto(int id, UserEdit model);
     }
@@ -102,13 +102,18 @@ namespace BackApi.Services
             return jwt;
         }
 
-        public string Register(UserRegister model)
+        public string Register(UserRegister model, out bool mail)
         {
             //string rez = "";
-            if (kontext.Users.Any(x => (x.Username == model.username && x.Verified == true) || (x.Email == model.email && x.Verified == true)))
+            if (kontext.Users.Any(x => (x.Username == model.username && x.Verified == true)))
             {
-                //rez = "Korisnik sa tim Username-om vec postoji!";
-                return "Korisnik sa ovim email-om ili username-om vec postoji!";
+                mail = false;
+                return "username";
+            }
+            else if (kontext.Users.Any(x => (x.Email == model.email && x.Verified == true)))
+            {
+                mail = false;
+                return "email";
             }
 
             else if (kontext.Users.Any(x => (x.Email == model.email && x.Verified == false) || (x.Username == model.username && x.Verified == false)))
@@ -123,7 +128,10 @@ namespace BackApi.Services
                     {
                         string pom = emailService.ValidateToken(user.EmailToken);
                         if (pom != "")
-                            return "Korisnik sa ovim username-om treba da se verifikuje, pokusajte za 5min sa ovim ili promenite username";
+                        {
+                            mail = false;
+                            return "verify";
+                        }
                         else
                         {
                             ind1 = 1;
@@ -146,7 +154,10 @@ namespace BackApi.Services
                     {
                         string pom = emailService.ValidateToken(user.EmailToken);
                         if (pom != "")
-                            return "Korisnik sa ovim email-om treba da se verifikuje, pokusajte za 5min sa ovim ili promenite email";
+                        {
+                            mail = false;
+                            return "verify";
+                        }
                         else
                         {
                             ind2 = 1;
@@ -183,14 +194,16 @@ namespace BackApi.Services
             //rez = "Korisnik uspesno registrovan";
 
             emailService.SendEmail("Kliknite na link za potvrdu registracije:http://localhost:4200/verification?token=" + jwtoken, "Potvrda registracije", model.email);
-            return "Proverite vas email i verifikujte se";
+            mail = true;
+            return "uspesno";
         }
 
         public bool addPhoto(int id, IFormFile photo)
         {
             var user = kontext.Users.FirstOrDefault(x => x.UserId == id);
+            if (user == null)
+                return false;
             var path = storageService.CreatePhoto(id);
-
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -233,42 +246,55 @@ namespace BackApi.Services
             var kor =kontext.Users.FirstOrDefault(x => x.Username == model.username && x.Verified==true);
             var jwtoken = "";
 
-            if (kor != null && CheckPWHash(model.password, kor.PasswordHash, kor.PasswordSalt))
-                {            
-                        jwtoken = CreateToken(kor);
-                        uspeh = true;
-                        return jwtoken;
-                }
-            else
+            if (kor == null)
             {
                 uspeh = false;
-                return "Pogresan username ili password ili korisnik nije verifikovan";
+                return "username";
+            }
+            else if(!CheckPWHash(model.password, kor.PasswordHash, kor.PasswordSalt))
+            {
+                uspeh = false;
+                return "password";
+            }
+            else
+            {
+                uspeh = true;
+                jwtoken = CreateToken(kor);
+                return jwtoken;
             }
         }
 
-        public string ChangePassword(string username)
+        public string ChangePassword(string username, out bool tmp)
         {
             var user = kontext.Users.FirstOrDefault(x=> x.Username == username);
             if (user == null)
-                return "Korisnik sa ovim usernam-om ne postoji";
+            {
+                tmp = false;
+                return "username";
+            }
             else
             {
                 string jwtoken = CreateEmailToken(user.Username, int.Parse(configuration.GetSection("AppSettings2:EmailToken").Value.ToString()));
                 bool res = emailService.SendEmailForPass("Kliknite na link da biste promenili lozinku: http://localhost:4200/changepass?token=" + jwtoken, "Promena lozinke", user.Email);
-                return "Proverite vas mail";
+                tmp = true;
+                return "uspesno";
             }
         }
 
-        public string ChangePasswordInDataBase(string username, string password)
+        public string ChangePasswordInDataBase(string username, string password, out bool tmp)
         {
             var user = kontext.Users.FirstOrDefault(x => x.Username == username);
             if (user == null)
-                return "Greska";
+            {
+                tmp = false;
+                return "username";
+            }
             CreatePWHash(password, out byte[] pwHash, out byte[] pwSalt);
             user.PasswordHash = pwHash;
             user.PasswordSalt = pwSalt;
             kontext.SaveChanges();
-            return "Uspesno promenjena lozinka";
+            tmp = true;
+            return "uspesno";
 
         }
         public int UsernameToId(string username)
@@ -332,7 +358,7 @@ namespace BackApi.Services
             user.EmailToken = jwtoken;
 
             kontext.SaveChanges();
-            emailService.SendEmail("Kliknite na link za potvrdu registracije:http://localhost:4200/verification?token=" + jwtoken, "Potvrda registracije", model.email);
+            emailService.SendEmail("Kliknite na link za potvrdu novog email-a:http://localhost:4200/verification?token=" + jwtoken, "Potvrda novog email-a", model.email);
             return true;
 
         }
@@ -350,14 +376,20 @@ namespace BackApi.Services
             return true;
 
         }
-        public string GetUser(string username)
+        public string GetUser(string username, out bool tmp)
         {
             int id = UsernameToId(username);
             if (id == -1)
-                return "";
+            {
+                tmp = false;
+                return "username";
+            }
             var user = kontext.Users.Find(id);
             if (user == null)
-                return "";
+            {
+                tmp = false;
+                return "username";
+            }
 
             var rez = new StringBuilder();
             rez.Append("{");
@@ -368,18 +400,25 @@ namespace BackApi.Services
             rez.Append("\"" + "password" + "\":" + "\"" + "" + "\"");
             rez.Append("}");
 
+            tmp = true;
             return rez.ToString();
         }
 
-        public string UsernameToImagePath(string username)
+        public string UsernameToImagePath(string username, out bool tmp)
         {
             int id = UsernameToId(username);
             if (id == -1)
-                return "";
+            {
+                tmp = false;
+                return "username";
+            }
             var user = kontext.Users.Find(id);
             if (user == null)
-                return "";
-
+            {
+                tmp = false;
+                return "username";
+            }
+            tmp = true;
             return user.PhotoPath;
         }
         
