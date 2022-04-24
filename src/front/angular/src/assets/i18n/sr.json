@@ -28,11 +28,12 @@
         "username_placeholder":"Korisnicko ime",
         "password_placeholder":"Lozinka",
         "zapamti_me":"Zapamti me",
+        "dugme":"Uloguj se",
         "register1":"Nemate nalog? ",
         "register2":"Registrujte se ovde",
-        "dugme":"Uloguj se",
         "forgot1":"Zavboravio si lozinku?",
-        "forgot2":"Promeni je"
+        "forgot2":"Promeni je",
+        "login-greska":"Pogresni podaci ili korisnik nije verifikovan!"
     },
     "csv":{
         "format":"Uneti fajl mora biti u .csv formatu!",
@@ -98,8 +99,12 @@
         "submit":"Potvrdi"
     },
     "edit-dataset-page":{
-        "naslov1":" Moji eksperimenti",
-        "naslov2":"Meteoroloska analiza V1"
+        "naslov1":" Moji eksperimenti"
+    },
+    "data-set-options":{
+        "save":"Sacuvaj",
+        "discard":"Odbaci",
+        "download":"Preuzmi"
     },
     "my-projects-page":{
         "projekti":"Eksperimenti",

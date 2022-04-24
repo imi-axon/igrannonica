@@ -15,9 +15,13 @@ import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
   styleUrls: ['./login-form.component.scss']
 })
 export class LoginFormComponent implements OnInit {
-
+  
+  public isSignUpFailed: boolean = false;
+  
   public login:UserLogin = new UserLogin();
   public loginUser: UserLogin = new UserLogin();
+  
+  public loginFailed: boolean = false;
   
   constructor(
     private userService:UserService,
@@ -31,8 +35,8 @@ export class LoginFormComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public invalidUsername:boolean=true;
-  public invalidPass:boolean=true;
+  public invalidUsername:boolean=false;
+  public invalidPass:boolean=false;
 
   onSubmit(f:NgForm)
   {
@@ -53,6 +57,7 @@ export class LoginFormComponent implements OnInit {
   }
   
   public checkUsername(){
+    this.isSignUpFailed = false;
     this.invalidUsername=false;
     if(!this.pattUsername.test(this.login.username)){
       this.invalidUsername = true;
@@ -61,6 +66,7 @@ export class LoginFormComponent implements OnInit {
   }
 
   public checkPass(){
+    this.isSignUpFailed = false;
     this.invalidPass=false;
     if(!this.pattPass.test(this.login.password)){
       this.invalidPass = true;
@@ -77,8 +83,7 @@ export class LoginFormComponent implements OnInit {
   }
 
   handleError(self: any, message: string) {
-    console.log("GRESKA")
-    self.errorMessage = message;
+    console.log("TESTTESTTEST")
     self.isSignUpFailed = true;
   }
 

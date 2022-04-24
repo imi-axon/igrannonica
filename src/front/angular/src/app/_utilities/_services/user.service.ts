@@ -40,26 +40,29 @@ export class UserService {
     
     loginUser(applicantData: any, self?: any, successCallback?: Function, errorCallback?: Function) {
       this.userAPI.login(applicantData).subscribe(
-  
         // Success
         (response:any) => {
+          console.log("TEST");
           if (response.status== HttpStatusCode.Ok) { 
             console.log("TACNO");
             JWTUtil.store(response.body.v);
             if (self && successCallback) successCallback(self);
           }
-          if(response.status==HttpStatusCode.BadRequest)
+        },
+        (error:any) => {
+          
+          if(error.status==HttpStatusCode.BadRequest)
           {
             console.log("NETACNO");
             JWTUtil.delete();
-            if (self && errorCallback) errorCallback(self, response.body.message);
+            if (self && errorCallback) errorCallback(self);
           }
-          if(response.status==HttpStatusCode.Forbidden)
+          if(error.status==HttpStatusCode.Forbidden)
           {
             console.log("NETACNO");
             JWTUtil.delete();
             if (self && errorCallback)
-              errorCallback(self, response.body.message); 
+              errorCallback(self); 
           }
         }
       

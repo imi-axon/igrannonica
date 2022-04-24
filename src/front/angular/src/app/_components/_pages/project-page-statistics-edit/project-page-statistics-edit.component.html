@@ -3,7 +3,7 @@
     <div class="row title-section">
         <div class="col-md-10">
         <p> <span> <a href='/my-projects'>{{'edit-dataset-page.naslov1'|translate}}/ </a>
-            </span>{{'edit-dataset-page.naslov2'|translate}}</p>
+            </span>{{currentProject.Name}}</p>
         </div>
         <div class="col-md-2 d-flex justify-content-end">
         <button *ngIf="statistika" class="btn btn-primary" (click)="train()">Train</button>
@@ -28,6 +28,4 @@
             </app-opcije-edit-dataset>
         </div>
     </div>
-    
-    <!-- <loader #loader class="loader"></loader> -->
 </div>

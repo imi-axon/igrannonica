@@ -28,9 +28,24 @@ $izabrana-celija: #878f95;
     scroll-behavior: smooth;
 }
 
+table{
+    height: 100%;
+}
+
+thead{
+    tr{
+        position: sticky;
+        top: 0px;
+        border: none;
+        outline: solid 2px #444444;
+    }
+}
+
 th{
     white-space: nowrap;
     padding: 0px;
+    border: none;
+    outline: solid 1px #444444;
 }
 td{
     white-space: nowrap;
