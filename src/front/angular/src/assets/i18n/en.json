@@ -24,7 +24,7 @@
 
     },
     "login":{
-        "login":"Login",
+        "login":"LogIn",
         "username_placeholder":"Username",
         "password_placeholder":"Password",
         "zapamti_me":"Remember me",
