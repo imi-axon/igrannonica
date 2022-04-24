@@ -1,6 +1,6 @@
 
-       <div class="container mt-md-5  p-5 bg-white rounded-3 shadow-sm border" style="max-width: 50em;">
-        <h2 class="text-center pb-5">{{"register.register"|translate}} </h2>
+       <div class="container mt-md-5  p-5 shadow-sm rounded" style="max-width: 50em;">
+        <h2 id="reg" class="text-center pb-5">{{"register.register"|translate}} </h2>
         
         <form method="POST" novalidate #form="ngForm" (submit)="SubmitRegistracija()" autocomplete="off">
             
@@ -45,20 +45,20 @@
                 <p *ngIf="isSignUpFailed" style="color: #FF0000; font-size: 12px;"> {{errorMessage}} </p>
             </div>
 
-            <div class="photoUpload">
+            <!-- <div class="photoUpload">
                 <img [src]="url" title="Profile Picture" height="150px" width="150px" />
                 <input class="form-control" type="file" id="photo" name="photo" #photo="ngModel" [(ngModel)]="registration.photo" 
                 style="display: none;" accept="image/*" (change)="selectPhoto($event)"><br>
-                <label for="photo" id="button">Choose image</label>
+                <label for="photo" id="button">Choose image</label> -->
                 <!-- $event.target.files ne radi -->
-            </div>
+            <!-- </div> -->
             
-            <div class="form-group mb-3">
-                <input type="submit" name="submit" class="btn btn-primary" value="{{'register.dugme'|translate}}" [disabled]="registrationCheck.invalidRegistration">
+            <div class="form-group mb-3 d-flex justify-content-center">
+                <input id="submit" type="submit" name="submit" class="btn btn" value="{{'register.dugme'|translate}}" [disabled]="registrationCheck.invalidRegistration">
             </div>
         </form>
         
-        <p>
-            {{'register.login1'|translate}} <a href="/login" class="login-here">{{'register.login2'|translate}}</a>
+        <p id="log">
+            {{'register.login1'|translate}} <a id="loginHere" routerLink="/login">  {{'register.login2'|translate}}</a>
         </p>
     </div>

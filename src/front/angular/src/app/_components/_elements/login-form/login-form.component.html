@@ -1,5 +1,5 @@
-<div class="container mt-md-5 p-5 bg-white rounded-3 shadow-sm border" style="max-width: 50em;">
-  <h2 class="text-center pb-5">{{"login.login"|translate}} </h2>
+<div class="container mt-md-5 p-5 rounded shadow-sm" style="max-width: 50em;">
+  <h2 class="info text-center pb-5">{{"login.login"|translate}} </h2>
   <form #f="ngForm" (ngSubmit)="onSubmit(f)" autocomplete="off">
     <div class="mb-3">
       <!-- <label for="exampleInputEmail1" class="form-label">Username</label> -->
@@ -13,9 +13,11 @@
     </div>
     <div class="mb-3 form-check">
       <input type="checkbox" class="form-check-input" id="exampleCheck1">
-      <label class="form-check-label" for="exampleCheck1">{{"login.zapamti_me"|translate}}</label>
+      <label class="info form-check-label" for="exampleCheck1">{{"login.zapamti_me"|translate}}</label>
     </div>
-    <button type="submit" [disabled]="f.invalid || invalidPass || invalidUsername" class="btn btn-primary">{{"login.dugme"|translate}}</button>
+    <div class="form-group d-flex justify-content-center">
+    <button id="submit" type="submit" [disabled]="f.invalid || invalidPass || invalidUsername" class="btn">{{"login.dugme"|translate}}</button>
+   </div>
     <div class="text-center text-lg-start mt-4 pt-2">
       <!-- Text - Pogresna lozinka -->
       <!-- <p *ngIf="invalidUsername" class="small fw-bold mt-2 pt-1 mb-0 text-danger"> Pogresan username </p>
@@ -23,8 +25,8 @@
       </div>
     <div class="mb-3 mt-3">
 
-        <p>{{"login.register1"|translate}}<a href="/registration" class="link-danger">{{"login.register2"|translate}}</a></p>
-        <p>{{"login.forgot1"|translate}} <a href="/input-username" class="link-danger">{{"login.forgot2"|translate}}</a></p>
+        <p class="info">{{"login.forgot1"|translate}} <a routerLink="/input-username" class="link-danger">{{"login.forgot2"|translate}}</a></p>
+        <p class="info">{{"login.register1"|translate}}<a routerLink="/registration" class="link-danger">{{"login.register2"|translate}}</a></p>
 
     </div>
 </form>
