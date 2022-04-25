@@ -63,48 +63,48 @@ export class ListaProjekataComponent implements OnInit {
     // self.isSignUpFailed = true;
   }
 
-onChange(select:any){
+  onChange(select:any){
 
-  this.key=select.target.value;
-  console.log(this.key);
+    this.key=select.target.value;
+    console.log(this.key);
 
-  if(this.key=='za') this.sortZA();
-  else if(this.key=='az') this.sortAZ();
-  else if(this.key=='sort') this.sortSort();
-  else if(this.key=='sortRev') this.sortRev();
-}
-
-sortAZ(){
-  this.filtriraniProjekti.sort((a, b) => a.Name.localeCompare(b.Name));
-}
-
-sortZA(){
-  this.filtriraniProjekti.sort((a, b) => b.Name.localeCompare(a.Name));
-}
-
-sortSort(){
-  this.filtriraniProjekti.sort((a,b)=>a.ProjectId-b.ProjectId);
-}
-
-sortRev(){
-  this.filtriraniProjekti.sort((a,b)=>b.ProjectId-a.ProjectId);
-}
-
-onClick(projId:any, hasDataset:any){
-  console.log(projId);
-  console.log(hasDataset);
-
-  if(hasDataset=='true'){
-    this.router.navigate(['/project/'+projId]);
+    if(this.key=='za') this.sortZA();
+    else if(this.key=='az') this.sortAZ();
+    else if(this.key=='sort') this.sortSort();
+    else if(this.key=='sortRev') this.sortRev();
   }
-  else if(hasDataset=='false'){
-  this.router.navigate(['/dataset/'+projId]);
-  }
-}
 
-RemoveProject(event: any, projectId: number){
-  this.projectsService.removeProject(projectId, this, this.loadProjectsCallback);
-  event.stopPropagation();
-}
+  sortAZ(){
+    this.filtriraniProjekti.sort((a, b) => a.Name.localeCompare(b.Name));
+  }
+
+  sortZA(){
+    this.filtriraniProjekti.sort((a, b) => b.Name.localeCompare(a.Name));
+  }
+
+  sortSort(){
+    this.filtriraniProjekti.sort((a,b)=>a.ProjectId-b.ProjectId);
+  }
+
+  sortRev(){
+    this.filtriraniProjekti.sort((a,b)=>b.ProjectId-a.ProjectId);
+  }
+
+  onClick(projId:any, hasDataset:any){
+    console.log(projId);
+    console.log(hasDataset);
+
+    if(hasDataset=='true'){
+      this.router.navigate(['/project/'+projId]);
+    }
+    else if(hasDataset=='false'){
+    this.router.navigate(['/dataset/'+projId]);
+    }
+  }
+
+  RemoveProject(event: any, projectId: number){
+    this.projectsService.removeProject(projectId, this, this.loadProjectsCallback);
+    event.stopPropagation();
+  }
 
 }

@@ -1,56 +1,97 @@
-$bojaNavbar:#343a40;
-#korisnickoIme
-{
-    color:#0084FF;
-}
-// .navbar-toggler
-// {
-//     margin-left: 85%;
-// }
-
-// @media (max-width: 576px) { 
-//     .navbar-nav
-//     {
-//         text-align: right;
-//     }
-// }
-
-.navbar-toggler
-{
-   // color:$bojaNavbar;
-    background-color: $bojaNavbar;
+nav{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    
+    padding: 5px 5px 5px 30px;
+    height: 50px;
+    background: linear-gradient(90deg, #0C1B31 0%, #1C2E5B 47.92%, #0D1C32 100%);
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+    
+    width: 100%;
+    position: fixed;
+    top: 0px;
+    z-index: 100;
 }
 
-@media (max-width: 575px) { 
-    .navbar
-    {
-        //background-color: transparent;
-        background-color: white;
+#leftSide{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+    height: 100%;
+    cursor: pointer;
+    
+    img{
+        height: 90%;
     }
-    // .nav-item a{
-    //     color:$bojaNavbar;
-    // }
-    // .nav-item a:hover{
-    //     color:blue;
-    // }
-    .nav-item a{
-        color:$bojaNavbar;
-    }
-    .nav-item a:hover{
-        color:$bojaNavbar;
-        font-weight: bold;
-    }
-    .nav-item a.active{
-        color:$bojaNavbar;
-        font-weight: bold;
+    
+    p{
+        margin: 0px;
+        font-size: 26px;
+        color: #FFFFFF;
+        transition: 0.3s ease-out;
+        
+        &:hover{
+            color: #00BFFF;
+            transition: 0.3s ease-in;
+        }
     }
 }
-@media (min-width: 576px) { 
-    .navbar
-    {
-        background-color: $bojaNavbar
+
+#rightSide{
+    width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 100%;
+    
+    #controls{
+        img{
+            height: 22px;
+            cursor: pointer;
+            border-radius: 50%;
+            
+            &:hover:first-child{
+                outline: solid 1px #FFFFFF;
+            }
+            
+            &:first-child{
+                margin-right: 10px;
+            }
+            &:last-child{
+                margin-left: 10px;
+            }
+        }
     }
-    .nav-link{
-        color:white;
+    
+    
+    #user{
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        height: 100%;
+        
+        p{
+            margin: 0px !important;
+            font-size: 16px;
+            color: #FFFFFFBB;
+            transition: 0.2s ease-out;
+        
+            &:hover{
+                color: #FFFFFF;
+                transition: 0.2s ease-in;
+            }
+        }
+        
+        img{
+            margin-left: 10px;
+            height: 90%;
+            border-radius: 5px;
+            outline: solid 1px #FFFFFF;
+        }
     }
+    
 }

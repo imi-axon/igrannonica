@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { StatisticsService } from 'src/app/_utilities/_services/statistics.service';
 import { CorrelationTableComponent } from '../correlation-table/correlation-table.component';
 import { DataSetTableComponent } from '../data-set-table/data-set-table.component';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-statistics',
@@ -30,12 +31,14 @@ export class StatisticsComponent implements OnInit {
   @ViewChild('statisticsTable')
   public statisticsTable: DataSetTableComponent;
   
+  @ViewChild("correlationLoader")
+  public correlationLoader: LoaderComponent;
+  
+  @ViewChild("statisticsLoader")
+  public statisticsLoader: LoaderComponent;
+  
   ngOnInit(): void {
-    setTimeout(() => {
-      this.checkProjectId();
-      
-      // this.statisticsAPI.GetStatistics(this.ProjectId, true, this, this.LoadAndUpdate);
-    }, 0);
+    this.checkProjectId();
   }
   
   // UZIMAMAMO projectId
@@ -57,8 +60,10 @@ export class StatisticsComponent implements OnInit {
       this.correlationTable.LoadCorrelationMatrix(this.columns, this.correlationMatrix);
       this.statisticsTable.LoadStatisticsData(this.columnStats, this.colnulls);
       this.statisticsTable.hasPages = false;
+      
+      this.correlationLoader.stop();
+      this.statisticsLoader.stop();
     }, 0);
-    
   }
   
   public ParseCorrelationData(columns: string[], cormat: number[]){

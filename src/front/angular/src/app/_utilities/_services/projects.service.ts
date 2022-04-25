@@ -57,6 +57,18 @@ export class ProjectsService {
     )
   }
   
+  getProject(projectId: number, self?: any, successCallback?: Function, errorCallback?: Function){
+    this.projectsApi.getProject(projectId).subscribe(
+      (response) => {
+        
+        if (response.status == HttpStatusCode.Ok)
+          if (self && successCallback)
+            successCallback(self, response.body);
+        
+        
+      }
+    )
+  }
   
   
 }

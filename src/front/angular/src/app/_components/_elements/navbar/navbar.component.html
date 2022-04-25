@@ -1,60 +1,23 @@
-<!--
-  navbar-dark - svetli tekst (za tamnu pozadinu)
-  bg-dark - tamna pozadina, bg-primary - plava pozadina
--->
-<nav class="navbar navbar-expand-sm navbar-dark  sticky-top">
-    <div class="container-fluid">
-              
-      <!--
-        Dugme za prikaz linkova na manjim ekranima / mobilnim uredjajima
-      -->
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-
-      
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mx-auto">
-          
-          <li class="nav-item mx-2">
-            <a class="nav-link" routerLink="/home" [routerLinkActive]="['active']"> {{"navbar.home" | translate }} </a>
-          </li>
-
-          <li class="nav-item mx-2" *ngIf="!auth.logovan">
-            <a class="nav-link" routerLink="/registration" [routerLinkActive]="['active']" > {{"navbar.registration" | translate}} </a>
-          </li>
-          
-          <li class="nav-item mx-2" *ngIf="!auth.logovan">
-            <a class="nav-link" routerLink="/login" [routerLinkActive]="['active']" > {{"navbar.login" | translate}} </a>
-          </li>
-
-          <li class="nav-item mx-2" *ngIf="auth.logovan">
-            <a class="nav-link" routerLink="/my-projects" [routerLinkActive]="['active']"> {{"navbar.myExperiments"| translate}}</a>
-          </li>
-          <li class="nav-item mx-2" *ngIf="auth.logovan">
-            <a id="profil" class="nav-link" routerLink="/profil" [routerLinkActive]="['active']">{{"navbar.myAccount" | translate}} </a>
-            <!-- {{auth.korisnickoIme}} -->
-          </li>
-          <li class="nav-item mx-2" *ngIf="auth.logovan">
-            <a class="nav-link" routerLink="/login" [routerLinkActive]="['active']" (click)="logout()"> {{"navbar.logout" | translate}} </a>
-          </li>
-
-          <li class="nav-item mx-2 my-2">
-            {{"navbar.select"|translate}}
-          <select #langselect (change)="changeLang(langselect.value)"> 
-            <!-- translate.use(langselect.value) -->
-            <option *ngFor="let lang of translate.getLangs()" [selected]="lang1==lang" [value]="lang">
-                {{lang}}
-            </option>
-          </select>
-        </li>
-      
-          		
-        </ul>		  
-      </div>
-      
-      
-    </div>
-  </nav>
+<nav class="navbar navbar-expand-sm">
+  <div id="leftSide" routerLink="/home">
+    <img src="/assets/Images/icosahedron.png">
+    <p> Igrannonica </p>
+  </div>
   
+  
+  <div id="rightSide">
+    
+    <div id="controls">
+      <img [src]="languageIcon" (click)="ChangeLanguage()">
+      <img src="assets/Images/Icons/theme_icon.png">
+    </div>
+    
+    <div id="user" routerLink="/profil">
+      <p> {{userFullname}} </p>
+      <img [src]="userImage">
+    </div>
+    
+  </div>
+  
+</nav>

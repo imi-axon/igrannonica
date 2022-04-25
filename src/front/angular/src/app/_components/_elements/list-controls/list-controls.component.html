@@ -1,0 +1,13 @@
+<div id="wrapper">
+    <div>
+        <!-- <button id="searchButton"> <i class="fas fa-search"></i> </button> -->
+        <input id="searchField" type="text" placeholder="{{'lista-projekata.search'|translate}}" (input)="SearchChanged($event)"/>
+    </div>
+    
+    <select class="form-select" (change)="SortSelected($event)">
+        <option selected value="sort" >{{'sortiranje.starije' |translate}}</option>
+        <option value="sortRev" >{{'sortiranje.novije' |translate}}</option>
+        <option value="az">a-z</option>
+        <option value="za">z-a</option>
+    </select>
+</div>

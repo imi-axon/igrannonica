@@ -58,6 +58,9 @@ import { ChartTrainingComponent } from './_components/_elements/chart-training/c
 import { NgChartsModule } from 'ng2-charts';
 import { PhotoInputComponent } from './_components/_elements/photo-input/photo-input.component';
 import { NnPageComponent } from './_components/_pages/nn-page/nn-page.component';
+import { ProjectListComponent } from './_components/_elements/project-list/project-list.component';
+import { ListControlsComponent } from './_components/_elements/list-controls/list-controls.component';
+import { FullscreenLoaderComponent } from './_components/_elements/fullscreen-loader/fullscreen-loader.component';
 
 
 
@@ -105,7 +108,10 @@ import { NnPageComponent } from './_components/_pages/nn-page/nn-page.component'
     ListaMrezaComponent,
     ChartTrainingComponent,
     PhotoInputComponent,
-    NnPageComponent
+    NnPageComponent,
+    ProjectListComponent,
+    ListControlsComponent,
+    FullscreenLoaderComponent
   ],
   imports: [
     NgxCsvParserModule,

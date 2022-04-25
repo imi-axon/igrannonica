@@ -50,11 +50,12 @@ export class EditProfileFormComponent implements OnInit {
     } 
   }
   prikazslike(self: any, response: any): void{
-    let reader = new FileReader();
+    /*let reader = new FileReader();
     reader.addEventListener("load", () => {
       self.imageBlobUrl = reader.result;
     }, false);
-    reader.readAsDataURL(response.body);
+    reader.readAsDataURL(response.body);*/
+    self.imageBlobUrl = response;
   }
   public SubmitEdit1(){
     if(this.registrationCheck.invalidRegistration1)

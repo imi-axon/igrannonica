@@ -28,7 +28,7 @@ export class UserApiService {
     return response;
   }
 
-  login(formData: any): Observable<HttpResponse<any>> {
+  login(formData: any) {
     console.log("saljem")
     let response = this.http.post<any>(apiProperties.url + "/api/users/login", formData,
       {
