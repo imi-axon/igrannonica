@@ -1,4 +1,5 @@
 from typing import Tuple
+from numpy import NaN
 import pandas
 from csv import Sniffer, Dialect, reader as csvreader
 
@@ -20,12 +21,16 @@ def csv_decode(text: str) -> Tuple[list[list], Dialect]:
     
     head = result[0]
     result = result[1:]
-    R = len(result)
-    C = len(head)
-    res = [[result[r][c] for r in range(R)] for c in range(C)]
-    result = {}
-    for i in range(C):
-        result[head[i]] = res[i]
+
+    result = [[(NaN if x == '' else x) for x in r] for r in result]
+
+    # Transponse and convert to Dictionary
+    # R = len(result)
+    # C = len(head)
+    # res = [[result[r][c] for r in range(R)] for c in range(C)]
+    # result = {}
+    # for i in range(C):
+    #     result[head[i]] = res[i]
 
     # print(result)
     return result, head, dialect
@@ -53,7 +58,7 @@ dataframe = pandas.read_csv(csv_path, sep=csv_dialect.delimiter)
 print(dataframe)
 
 print('\n -- Pandas | Create dataframe from list -- ')
-dataframe = pandas.DataFrame(csv_list)
+dataframe = pandas.DataFrame(csv_list, columns=csv_headers)
 #dataframe = dataframe.transpose()
 print(dataframe)
 
