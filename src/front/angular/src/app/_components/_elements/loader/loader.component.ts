@@ -7,8 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoaderComponent implements OnInit {
   
-  //private msBeforeIndicator = 100;
-  //private timeout: any; 
+  private msBeforeIndicator = 100;
+  private timeout: any; 
   public isLoading = false;
   
   constructor() { }
@@ -19,14 +19,13 @@ export class LoaderComponent implements OnInit {
   
     
   public start(){
-      //this.timeout = setTimeout(() =>{
-        this.isLoading = true;
-      //}, this.msBeforeIndicator);
+    this.timeout = setTimeout(() =>{
+      this.isLoading = true;
+    }, this.msBeforeIndicator);
   }
   
   public stop(){
-      this.isLoading = false;
-      //clearTimeout(this.timeout);
+    this.isLoading = false;
   }
 
 }

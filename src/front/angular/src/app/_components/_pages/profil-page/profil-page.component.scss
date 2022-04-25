@@ -1,15 +1,13 @@
-.container
-{
+#cover{
     width: 100%;
+    height: 250px;
+    background-size: cover;
+    background-image:url("/assets/Images/cover_placeholder.png");
 }
-.projekti{
-    height:75vh;
-    background-color:#F0F0F0;
-    overflow-y: scroll;
-    width:95%;
-    
-}
-.kolona
-{
-    color:#555555;
+
+#profile{
+    img{
+        width: 180px;
+        transform: translateY(-130px);
+    }
 }

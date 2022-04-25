@@ -37,6 +37,30 @@ export class ProjectsApiService {
     return response;
   }
   
+  getProject(projectId: number){
+    let response = this.http.get(
+      this.url + "/projects/" + projectId,
+      {
+        observe: "response",
+        responseType: "json",
+        headers:HeaderUtil.jwtOnlyHeaders()
+      }
+    )
+    return response;
+  }
+
+  getProjects(){
+    let response = this.http.get(
+      this.url + "/projects",
+      {
+        observe: "response",
+        responseType: "json",
+        headers:HeaderUtil.jwtOnlyHeaders()
+      }
+    )
+    return response;
+  }
+  
   
   
 }

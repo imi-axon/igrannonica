@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Project } from 'src/app/_utilities/_data-types/models';
 import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
 import { ProjectsService } from 'src/app/_utilities/_services/projects.service';
 import { StatisticsService } from 'src/app/_utilities/_services/statistics.service';
@@ -13,6 +14,7 @@ import { StatisticsComponent } from '../../_elements/statistics/statistics.compo
 })
 export class ProjectPageStatisticsEditComponent implements OnInit {
   public ProjectId: number;
+  public currentProject: Project = new Project();
 
   public showsEditOptions: boolean;
   public dataset: any;
@@ -31,10 +33,9 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkProjectId();
+    this.projectsService.getProject(this.ProjectId, this, this.successfulGetProjectCallback);
     
     setTimeout(() => {
-    
-      this.statisticsAPI.GetStatistics(this.ProjectId, false, this, this.successfulGetStatisticsCallback);
       
       if(this.editComponent != null){
         this.editComponent.ChangedField.subscribe( change => this.HandleFieldChange(change) );
@@ -53,8 +54,16 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
     if(!(component instanceof EditDatasetComponent)){
       this.statisticsComponent = component;
       this.statistika=true;
-      if(this.statistics != undefined)
-        this.statisticsComponent.LoadStatisticsAndUpdate(this.statistics);
+      if(this.statisticsComponent != undefined){
+        
+        setTimeout(() => {
+          this.statisticsComponent.correlationLoader.start();
+          this.statisticsComponent.statisticsLoader.start();
+        }, 0);
+          
+        this.statisticsAPI.GetStatistics(this.ProjectId, false, this, this.successfulGetStatisticsCallback);
+      }
+        
       
       this.showsEditOptions = false;
       
@@ -138,7 +147,10 @@ export class ProjectPageStatisticsEditComponent implements OnInit {
     self.UpdatePageData({currentPage: self.editComponent.currentPage, rowsPerPage: self.editComponent.rowsPerPage});
   }
   
-  
+  private successfulGetProjectCallback(self: any, response: any){
+    console.log(response);
+    self.currentProject = response;
+  }
   
   // KOMANDE  =========================================================================
 

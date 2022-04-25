@@ -1,4 +1,5 @@
 {
+    
     "navbar":{
         "home":"Home",
         "public_exp":"Public Experiments",
@@ -8,6 +9,13 @@
         "myAccount":"My Account",
         "logout":"Logout",
         "select":""
+    },
+    "sidebar":{
+        "myProfile": "My Profile",
+        "publicExperiments": "Public Experiments",
+        "myExperiments": "My Experiments",
+        "settings": "Settings",
+        "logout": "Logout"
     },
     "register":{ 
         "register":"Register",
@@ -22,7 +30,6 @@
         "dugme":"Register",
         "login1":"Already have an account?",
         "login2":"Log in here"
-
     },
     "login":{
         "login":"LogIn",
@@ -33,7 +40,8 @@
         "register1":"Do not have an account? ",
         "register2":"Register here",
         "forgot1":"Forgot password?",
-        "forgot2":"Change it!"
+        "forgot2":"Change it!",
+        "login-greska":"Wrong credentials or user is not verified!"
     },
     "csv":{
         "format":"The file must be in .csv format!",
@@ -45,8 +53,9 @@
         "jump":"Jump to"
     },
     "lista-projekata":{
-        "kreiran":"Created",
-        "nema":"You have no experiments",
+        "moji_eksperimenti":"My Experiments",
+        "kreiran":"Created on: ",
+        "nema":"Your experiment list is empty!",
         "search":"Search..."
     },
     "lista-mreza":{
@@ -102,8 +111,12 @@
         "submit":"Submit"
     },
     "edit-dataset-page":{
-        "naslov1":" My experiments",
-        "naslov2":"Meteorological analysis V1"
+        "naslov1":" My experiments"
+    },
+    "data-set-options":{
+        "save":"Save",
+        "discard":"Discard",
+        "download":"Download"
     },
     "my-projects-page":{
         "projekti":"Experiments",
