@@ -44,8 +44,9 @@
         "jump":"Skoči na"
     },
     "lista-projekata":{
-        "kreiran":"Kreiran",
-        "nema":"Nemate eksperimente",
+        "moji_eksperimenti":"Moji Eksperimenti",
+        "kreiran":"Kreiran: ",
+        "nema":"List eksperimenata je prazna!",
         "search":"Pretražite..."
     },
     "lista-mreza":{

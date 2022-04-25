@@ -1,8 +1,13 @@
-#newProjectButton
-{
-    float:right;
-}
-#naslov
-{
-    font-weight: bold;
+#wrapper{
+    h1{
+        width: 100%;
+        text-align: center;
+        font-size: 52px;
+        color: #2C5D96;
+        margin-bottom: 75px;
+        cursor: default;
+    }
+    
+    margin-top: 75px;
+    width: 60%;
 }

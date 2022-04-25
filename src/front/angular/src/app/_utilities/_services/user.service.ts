@@ -187,8 +187,12 @@ export class UserService {
     {
       this.userAPI.getimage(username).subscribe(
         (res: any)=>{
-          
-          successCallback(self, res);
+          let reader = new FileReader();
+          reader.addEventListener("load", () => {
+            self.imageBlobUrl = reader.result;
+            successCallback(self, res);
+          }, false);
+          reader.readAsDataURL(res.body);
         }
       )
     }
