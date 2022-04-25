@@ -1,29 +1,28 @@
 <div  class="projectsList" *ngIf="projects.length > 0">
     
-  
-    <div *ngFor="let project of filteredProjects" class="project" > 
+  <div *ngFor="let project of filteredProjects" class="project" > 
+    
+    <div class="projectLeft">
+      <p class="title" (click)="onClick(project.ProjectId, project.hasDataset)"> {{project.Name}} </p>
       
-      <div class="projectLeft">
-        <p class="title" (click)="onClick(project.ProjectId, project.hasDataset)"> {{project.Name}} </p>
-        
-        <p class="created"> {{'lista-projekata.kreiran'|translate}} {{project.Creationdate}} </p>
+      <p class="created"> {{'lista-projekata.kreiran'|translate}} {{project.Creationdate}} </p>
+    
+      <p class="description">{{project.Description}}</p>
+    </div>
+    
+    <div class="projectRight">
       
-        <p class="description">{{project.Description}}</p>
-      </div>
+      <button type="button" class="remove-button d-flex align-items-center justify-content-center" (click)="RemoveProject($event, project.ProjectId)"> 
+        <i class="bi bi-trash"></i> 
+      </button>
       
-      <div class="projectRight">
-        
-        <button type="button" class="remove-button d-flex align-items-center justify-content-center" (click)="RemoveProject($event, project.ProjectId)"> 
-          <i class="bi bi-trash"></i> 
-        </button>
-        
-        <div class="counters">
-          
-        </div>
+      <div class="counters">
         
       </div>
       
     </div>
+    
+  </div>
     
 </div>
 

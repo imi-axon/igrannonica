@@ -17,6 +17,8 @@ export class NavbarComponent implements OnInit{
   
   userFullname: string = "";
   userImage: string = "assets/Images/profilna.png";
+  srImage: string = "assets/Images/Icons/sr_lang.png";
+  enImage: string = "assets/Images/Icons/en_lang.png";
   
   constructor(
     private router: Router,
@@ -30,9 +32,9 @@ export class NavbarComponent implements OnInit{
     this.translate.use(this.language);
     
     if(this.language == "en")
-      this.languageIcon = "assets/Images/en_lang.png";
+      this.languageIcon = this.enImage;
     else
-      this.languageIcon = "assets/Images/sr_lang.png";
+      this.languageIcon = this.srImage;
     
     this.userFullname = this.auth.ime_prezime;
     
@@ -57,11 +59,11 @@ export class NavbarComponent implements OnInit{
   
   public ChangeLanguage(){
     if(this.language == "en"){
-      this.languageIcon = "assets/Images/sr_lang.png";
+      this.languageIcon = this.srImage;
       this.language = "sr";
     }
     else{
-      this.languageIcon = "assets/Images/en_lang.png";
+      this.languageIcon = this.enImage;
       this.language = "en";
     }
     

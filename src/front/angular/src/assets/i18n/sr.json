@@ -9,6 +9,13 @@
         "logout":"Odjava",
         "select":""
     },
+    "sidebar":{
+        "myProfile": "Moj profil",
+        "publicExperiments": "Javni eksperimenti",
+        "myExperiments": "Moji eksperimenti",
+        "settings": "Podešavanja",
+        "logout": "Odjavi se"
+    },
     "register":{
         "register":"Registrujte se",
         "firstname_placeholder":"Ime",

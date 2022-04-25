@@ -9,6 +9,13 @@
         "logout":"Logout",
         "select":""
     },
+    "sidebar":{
+        "myProfile": "My Profile",
+        "publicExperiments": "Public Experiments",
+        "myExperiments": "My Experiments",
+        "settings": "Settings",
+        "logout": "Logout"
+    },
     "register":{ 
         "register":"Register",
         "firstname_placeholder":"First name",

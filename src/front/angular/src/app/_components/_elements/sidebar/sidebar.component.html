@@ -1,6 +1,42 @@
 
 <div id="sidebar">
     
+    <div id="navigation_wrapper">
+        <div id="routes">
+            <div class="sidebar_button" routerLink="/profil" [routerLinkActive]="['active']">
+                <img src="assets/Images/Icons/User_icon.svg">
+                <p> {{'sidebar.myProfile'|translate}} </p>
+            </div>
+            
+            <div class="sidebar_button" routerLink="/my-projects" [routerLinkActive]="['active']">
+                <img src="assets/Images/Icons/MyExperiments_icon.svg">
+                <p> {{'sidebar.myExperiments'|translate}} </p>
+            </div>
+            
+            <div class="sidebar_button" routerLink="/public-Experiments" [routerLinkActive]="['active']">
+                <img src="assets/Images/Icons/PublicExperiments_icon.svg">
+                <p> {{'sidebar.publicExperiments'|translate}} </p>
+            </div>
+        </div>
+        
+        <div id="controls">
+            <div class="sidebar_button" routerLink="/profil">
+                <img src="assets/Images/Icons/Settings_icon.svg">
+                <p> {{'sidebar.settings'|translate}} </p>
+            </div>
+            
+            <div class="sidebar_button" (click)="Logout()">
+                <img src="assets/Images/Icons/Logout_icon.svg">
+                <p> {{'sidebar.logout'|translate}} </p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="footer">
+        <p> &copy; Team Axon 2022 </p>
+        <img src="assets/Images/Icons/Info_icon.svg">
+    </div>
+    
     
     
 </div>
