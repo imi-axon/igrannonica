@@ -15,13 +15,13 @@
       
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <div id="logo">
-          <a style="user-select: none;">Igrannonica</a>
+          <a style="user-select: none; text-decoration: none;" routerLink="/home">Igrannonica</a>
         </div>
       
         <ul class="navbar-nav">
           
           <li class="nav-item mx-2">
-            <a class="nav-link" routerLink="/home" [routerLinkActive]="['active']"> {{"navbar.home" | translate }} </a>
+            <a class="nav-link" routerLink="/public_exp" [routerLinkActive]="['active']"> {{"navbar.public_exp" | translate }} </a>
           </li>
 
           <li class="nav-item mx-2" *ngIf="!auth.logovan">

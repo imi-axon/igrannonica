@@ -2,6 +2,7 @@
 
     "navbar":{
         "home":"Početna",
+        "public_exp":"Javni eksperimenti",
         "registration":"Registracija",
         "login":"Prijava",
         "myExperiments":"Moji Eksperimenti",
