@@ -60,6 +60,7 @@ import { PhotoInputComponent } from './_components/_elements/photo-input/photo-i
 import { NnPageComponent } from './_components/_pages/nn-page/nn-page.component';
 import { ProjectListComponent } from './_components/_elements/project-list/project-list.component';
 import { ListControlsComponent } from './_components/_elements/list-controls/list-controls.component';
+import { FullscreenLoaderComponent } from './_components/_elements/fullscreen-loader/fullscreen-loader.component';
 
 
 
@@ -109,7 +110,8 @@ import { ListControlsComponent } from './_components/_elements/list-controls/lis
     PhotoInputComponent,
     NnPageComponent,
     ProjectListComponent,
-    ListControlsComponent
+    ListControlsComponent,
+    FullscreenLoaderComponent
   ],
   imports: [
     NgxCsvParserModule,

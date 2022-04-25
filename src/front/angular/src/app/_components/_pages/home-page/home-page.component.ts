@@ -238,8 +238,6 @@ export class HomePageComponent implements OnInit, AfterViewInit {
       
     let deltaScrollY = this.oldScrollY - window.scrollY;
     
-    console.log(deltaScrollY * this.pageHeight / (window.innerHeight * 2))
-    
     this.camera.position.y += deltaScrollY * this.pageHeight / (window.innerHeight * 2);
     
     //console.log(this.camera.position.y)

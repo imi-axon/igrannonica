@@ -32,7 +32,8 @@
         "register2":"Registrujte se ovde",
         "dugme":"Ulogujte se",
         "forgot1":"Zavboravili ste lozinku?",
-        "forgot2":"Promenite je"
+        "forgot2":"Promenite je",
+        "login-greska":"Pogresni podaci ili korisnik nije verifikovan!"
     },
     "csv":{
         "format":"Uneti fajl mora biti u .csv formatu!",
@@ -101,6 +102,11 @@
     "edit-dataset-page":{
         "naslov1":" Moji eksperimenti",
         "naslov2":"Meteorološka analiza V1"
+    },
+    "data-set-options":{
+        "save":"Sacuvaj",
+        "discard":"Odbaci",
+        "download":"Preuzmi"
     },
     "my-projects-page":{
         "projekti":"Eksperimenti",
