@@ -183,7 +183,7 @@ namespace BackApi.Services
             kontext.SaveChanges();
             //rez = "Korisnik uspesno registrovan";
 
-            emailService.SendEmail("Kliknite na link za potvrdu registracije:" + Urls.front + "/verification?token=" + jwtoken, "Potvrda registracije", model.email);
+            emailService.SendEmail(Urls.front + "/verification?token=" + jwtoken, "Potvrda registracije", model.email, 1);
             return "Proverite vas email i verifikujte se";
         }
 
@@ -256,7 +256,7 @@ namespace BackApi.Services
             else
             {
                 string jwtoken = CreateEmailToken(user.Username, int.Parse(configuration.GetSection("AppSettings2:EmailToken").Value.ToString()));
-                bool res = emailService.SendEmailForPass("Kliknite na link da biste promenili lozinku: " + Urls.front + "/changepass?token=" + jwtoken, "Promena lozinke", user.Email);
+                bool res = emailService.SendEmailForPass(Urls.front + "/changepass?token=" + jwtoken, "Promena lozinke", user.Email);
                 return "Proverite vas mail";
             }
         }
@@ -334,7 +334,7 @@ namespace BackApi.Services
             user.EmailToken = jwtoken;
 
             kontext.SaveChanges();
-            emailService.SendEmail("Kliknite na link za potvrdu registracije:" + Urls.front + "/verification?token=" + jwtoken, "Potvrda registracije", model.email);
+            emailService.SendEmail(Urls.front + "/verification?token=" + jwtoken, "Promena E-mail-a", model.email, 2);
             return true;
 
         }
