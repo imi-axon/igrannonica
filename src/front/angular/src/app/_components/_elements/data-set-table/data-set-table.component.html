@@ -1,104 +1,99 @@
-<div class="c1 container">
-    <div class="tabela mx-auto mb-3 justify-content-center">
-        <table class="tabela1 table table-bordered table-hover table-responsive table-curved table-strip" *ngIf="visible">
+
+<table class="tabela1 table table-bordered table-hover table-responsive table-curved table-strip" *ngIf="visible">
+    
+    <!-- AKO IMAMO STRANICENJE -->
+    <thead *ngIf="hasPages">
+        <!-- RED NA NAZIVE KOLONA / SORTIRANJE -->
+        <tr class="">
+
+            <th scope="col" class="prvi" *ngFor="let column of columns">
+                {{column}}
+            </th>
+        </tr>
+    </thead>
+    <tbody *ngIf="hasPages">
+
+        <tr *ngFor="let row of dataPages[currentPage];">
+
+            <!-- CELIJE IZ SETA-->
+            <td  *ngFor="let column of columns">
+                {{row[column]}}
+            </td>
+
+        </tr>
+
+    </tbody>
+    
+    <!-- AKO NEMAMO STRANICENJE -->
+    <thead *ngIf="!hasPages">
+        
+        <!-- ZA STATISTIKU -->
+        <!-- RED NA NAZIVE KOLONA / SORTIRANJE -->
+        <tr class="">
+            <th style="font-weight: bold; border-right: solid 2px black;"></th>
             
-            <!-- AKO IMAMO STRANICENJE -->
-            <thead *ngIf="hasPages">
-                <!-- RED NA NAZIVE KOLONA / SORTIRANJE -->
-                <tr class="">
+            <th scope="col" class="prvi" *ngFor="let column of columns">
+                {{column}}
+            </th>
+        </tr>
+    </thead>
+    <tbody *ngIf="!hasPages">
 
-                    <th scope="col" class="prvi" *ngFor="let column of columns">
-                        {{column}}
-                    </th>
-                </tr>
-            </thead>
-            <tbody *ngIf="hasPages">
+        <tr *ngFor="let i = index; let row of data">
 
-                <tr *ngFor="let row of dataPages[currentPage];">
-
-                    <!-- CELIJE IZ SETA-->
-                    <td  *ngFor="let column of columns">
-                        {{row[column]}}
-                    </td>
-
-                </tr>
-
-            </tbody>
+            <td style="font-weight: bold; border-right: solid 2px black;">
+                {{statisticOptions[i]}}:
+            </td>
             
-            <!-- AKO NEMAMO STRANICENJE -->
-            <thead *ngIf="!hasPages">
-                
-                <!-- ZA STATISTIKU -->
-                <!-- RED NA NAZIVE KOLONA / SORTIRANJE -->
-                <tr class="">
-                    <th style="font-weight: bold; border-right: solid 2px black;"></th>
-                    
-                    <th scope="col" class="prvi" *ngFor="let column of columns">
-                        {{column}}
-                    </th>
-                </tr>
-            </thead>
-            <tbody *ngIf="!hasPages">
+            <!-- CELIJE IZ SETA-->
+            <td  *ngFor="let cell of row">
+                {{cell}}
+            </td>
 
-                <tr *ngFor="let i = index; let row of data">
+        </tr>
 
-                    <td style="font-weight: bold; border-right: solid 2px black;">
-                        {{statisticOptions[i]}}:
-                    </td>
-                    
-                    <!-- CELIJE IZ SETA-->
-                    <td  *ngFor="let cell of row">
-                        {{cell}}
-                    </td>
+    </tbody>
 
-                </tr>
+</table>
 
-            </tbody>
+<div class="row justify-content-center align-items-center mt-3" *ngIf="hasPages && visible">
 
-        </table>
+<div class="col-xs-12 col-md-4 d-flex align-items-center justify-content-center">
+    <p> {{'data-set-table.p1-1'|translate}}{{currentPage + 1}} {{'data-set-table.p1-2'|translate}}{{dataPages.length}}</p>
+</div>
+
+<div class="col-xs-12 col-md-4">
+    <ul class="pagination justify-content-center">
+
+        <li class="page-item">
+            <button class="page-link" [class.disabled]="currentPage < 1" [disabled]="currentPage < 1"
+                (click)="minPage();">&lt;&lt;&lt;</button>
+        </li>
+
+        <li class="page-item">
+            <button class="page-link" [class.disabled]="currentPage < 1" [disabled]="currentPage < 1"
+                (click)="previousPage()">&lt;</button>
+        </li>
+
+        <li class="page-item">
+            <button class="page-link" [class.disabled]="currentPage > dataPages.length - 2"
+                [disabled]="currentPage > dataPages.length - 2" (click)="nextPage()">&gt;</button>
+        </li>
+
+        <li class="page-item">
+            <button class="page-link" [class.disabled]="currentPage > dataPages.length - 2"
+                [disabled]="currentPage > dataPages.length - 2" (click)="maxPage();">&gt;&gt;&gt;</button>
+        </li>
+
+    </ul>
+</div>
+
+<div class="row col-xs-12 col-md-4 mb-2">
+<div class="input-group mb-3">
+    <div class="input-group-prepend">
+        <button class="input-group-text btn-primary" id="inputGroup-sizing-default" (click)="goToPage();">{{'data-set-table.jump'|translate}}</button>
     </div>
-
-    <div class="row justify-content-center align-items-center mt-3" *ngIf="hasPages && visible">
-
-        <div class="col-xs-12 col-md-4 d-flex align-items-center justify-content-center">
-            <p> {{'data-set-table.p1-1'|translate}}{{currentPage + 1}} {{'data-set-table.p1-2'|translate}}{{dataPages.length}}</p>
-        </div>
-
-        <div class="col-xs-12 col-md-4">
-            <ul class="pagination justify-content-center">
-
-                <li class="page-item">
-                    <button class="page-link" [class.disabled]="currentPage < 1" [disabled]="currentPage < 1"
-                        (click)="minPage();">&lt;&lt;&lt;</button>
-                </li>
-
-                <li class="page-item">
-                    <button class="page-link" [class.disabled]="currentPage < 1" [disabled]="currentPage < 1"
-                        (click)="previousPage()">&lt;</button>
-                </li>
-
-                <li class="page-item">
-                    <button class="page-link" [class.disabled]="currentPage > dataPages.length - 2"
-                        [disabled]="currentPage > dataPages.length - 2" (click)="nextPage()">&gt;</button>
-                </li>
-
-                <li class="page-item">
-                    <button class="page-link" [class.disabled]="currentPage > dataPages.length - 2"
-                        [disabled]="currentPage > dataPages.length - 2" (click)="maxPage();">&gt;&gt;&gt;</button>
-                </li>
-
-            </ul>
-        </div>
-
-        <div class="row col-xs-12 col-md-4 mb-2">
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <button class="input-group-text btn-primary" id="inputGroup-sizing-default" (click)="goToPage();">{{'data-set-table.jump'|translate}}</button>
-            </div>
-            <input type="number" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" [(ngModel)]="pageInput">
-          </div>
-        </div>
+    <input type="number" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" [(ngModel)]="pageInput">
     </div>
-
-
+</div>
 </div>

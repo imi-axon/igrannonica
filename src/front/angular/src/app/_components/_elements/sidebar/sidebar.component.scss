@@ -1,22 +1,4 @@
-#sidebar{
-    background-color: #1B2E5E;
-    // 100% visina ekrana - 50px visine navbara  
-    height: calc(100% - 50px);
-    width: 250px;
-    float: left;
-    padding: 10px;
-    
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: space-between;
-    
-    position: fixed;
-    left: 0px;
-    // 50px visine navbara
-    top: 50px;
-    z-index: 50;
-}
+
 
 .active{
     opacity: 100% !important;
