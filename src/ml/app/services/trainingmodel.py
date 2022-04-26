@@ -1,5 +1,6 @@
 import pathlib
 from pyexpat import model
+import random
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -32,12 +33,16 @@ class TrainingService():
     #type -> string -> "CLASSIFICATION"/"REGRESSION"
     #batchSize -> int
     #percentage_training -> float - [0,1] -> koliki procenat celog skupa je training skup
-    def __init__(self, datasetAll,inputs, outputs, epochs, learning_rate, regularization_rate,regularization, actPerLayer,actOutput, nbperlayer, metrics, batchSize,percentage_training,type):
-        self.datasetAll = datasetAll
+
+    def __init__(self, datasetAll, inputs, outputs, actPerLayer, nbperlayer, 
+                actOutput = None, metrics = ['mse'], learning_rate = 0.1, regularization_rate = 0.1, regularization = 'L1', 
+                batchSize = 1, percentage_training = 0.2, problem_type = 'REGRESSION', callbacks = [], model = None):
+        self.model = model
+
         self.inputs = inputs
         self.outputs = outputs
 
-        self.EPOCHS = epochs
+        self.CALLBACKS = callbacks
         
         self.LEARNING_RATE = learning_rate
         self.OPTIMIZER = keras.optimizers.Adam(learning_rate = self.LEARNING_RATE)
@@ -47,15 +52,17 @@ class TrainingService():
             self.REGULARIZATION = regularizers.L1(self.REG_RATE)
         elif (regularization == 'L2'):
             self.REGULARIZATION = regularizers.L2(self.REG_RATE)
+        else:
+            self.REGULARIZATION = None
 
         
         self.ACT_PER_LAYER = actPerLayer
         self.NB_PER_LAYER = nbperlayer
 
         self.METRICS = metrics
-        self.TYPE = type
+        self.TYPE = problem_type
 
-        if(actOutput=="None"):
+        if(actOutput==None):
             if(type=="CLASSIFICATION"):
                 self.ACT_OUTPUT = "softmax"
             elif (type=="REGRESSION"):
@@ -69,15 +76,26 @@ class TrainingService():
         self.REGRESSION_LOSS = 'mse'
         self.CLASSIFICATION_LOSS = 'categorical_crossentropy'
 
+        # Dataframe
+        self.datasetAll = datasetAll
         self.dataframe = self.load_dataframe() #dataframe koji se sastoji samo od ulaznih i izlaznih kolona
-
         #podela na trening i testne podatke
         self.train_dataset, self.test_dataset, self.train_labels, self.test_labels = self.train_test()
-
         #skaliranje podataka
         self.normed_train_dataset, self.normed_test_dataset = self.data_standardization()
 
-        
+        # if datasetAll != None:
+        #     self.setup_dataset(datasetAll)
+
+
+    # def setup_dataset(self, datasetAll):
+    #     # Dataframe
+    #     self.datasetAll = datasetAll
+    #     self.dataframe = self.load_dataframe() #dataframe koji se sastoji samo od ulaznih i izlaznih kolona
+    #     #podela na trening i testne podatke
+    #     self.train_dataset, self.test_dataset, self.train_labels, self.test_labels = self.train_test()
+    #     #skaliranje podataka
+    #     self.normed_train_dataset, self.normed_test_dataset = self.data_standardization()
 
 
     #f-ja load_dataframe od celokupnog dataframe-a pravi dataframe koji se sastoji od kolona koje su potrebne za kreiranje neuronske mreze
@@ -164,6 +182,11 @@ class TrainingService():
     def build_model(self):
         model = Sequential()
 
+        print(' -- BUILD MODEL -- ')
+        print(f'inputs            : {self.inputs}')
+        print(f'neurons per layer : {self.NB_PER_LAYER}')
+        print(f'act per layer     : {self.ACT_PER_LAYER}')
+
         model.add(Dense(self.NB_PER_LAYER[0], kernel_regularizer = self.REGULARIZATION, input_shape=[len(self.inputs)], activation = self.ACT_PER_LAYER[0]))
         
         for i in range(1, len(self.NB_PER_LAYER)):
@@ -183,16 +206,17 @@ class TrainingService():
                 optimizer = self.OPTIMIZER,
                 metrics = self.METRICS)
 
+        # print(model)
         return model
 
 
 
     #obucavanje modela
-    def fit_model(self, model):
+    def fit_model(self, model, epoch, val_split = 0.2):
         history = model.fit(self.normed_train_dataset, self.train_labels, 
-                            epochs = self.EPOCHS, batch_size = self.BATCH_SIZE, 
-                            validation_split = 0.2, 
-                            verbose=0)
+                            epochs = epoch, batch_size = self.BATCH_SIZE, 
+                            validation_split = val_split, 
+                            verbose=0, callbacks=self.CALLBACKS)
 
         return history.history
 
@@ -209,17 +233,35 @@ class TrainingService():
         return predictions
 
 
-    def start_training(self):
-        #if(self.TYPE=="REGRESSION"):
-        #    model = self.build_regression_model()
-        #elif(self.TYPE=="CLASSIFICATION"):
-        #    model = self.build_classification_model()
-        
-        model = self.build_model()
+    # Metode za eksternu upotrebu
 
-        history = self.fit_model(model)
+    def new_model(self):
+        self.model = self.build_model()
+        return self.model
 
-        results = self.evaluate_model(model)
-        predictions = self.predict_model(model)
+    def load_model(self, filepath: str):
+        self.model = tf.keras.models.load_model(filepath)
 
-        return history, results, predictions
+    def save_model(self, path: str, name: str):
+        model_path = path + name
+        self.model.save(model_path)
+        return model_path
+
+
+    def start_training(self, epoch, val_split):
+
+        if self.model == None:
+            self.new_model()
+        self.new_model()
+
+        self.fit_model(self.model, epoch, val_split)
+        # for i in range(10):
+        #     print(f'TRAIN {i}')
+        #     self.fit_model(self.model, epoch, val_split)
+
+        print('TRAINING FINISHED')
+
+        # results = self.evaluate_model(model)
+        # predictions = self.predict_model(model)
+
+        #return model_path

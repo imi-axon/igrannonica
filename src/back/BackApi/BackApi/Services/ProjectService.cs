@@ -11,19 +11,23 @@ namespace BackApi.Services
         string ListProjects(int userid,int pubuserid);
         string GetProjById(int projid, int userid);
         Boolean EditProject(int projid, ProjectPostPut proj,int userid);
+        int getProjectId(ProjectPostPut model);
+        public Boolean projectOwnership(int userid, int projid);
     }
     public class ProjectService:IProjectService
     {
         private DataBaseContext context;
         private readonly IConfiguration configuration;
         private IDatasetService datasetService;
+        private INNservice nnService;
         private IStorageService storageService =new StorageService();
 
-        public ProjectService(DataBaseContext context, IConfiguration configuration, IDatasetService datasetService)
+        public ProjectService(DataBaseContext context, IConfiguration configuration, IDatasetService datasetService,INNservice nNservice)
         {
             this.datasetService = datasetService;
             this.context = context;
             this.configuration = configuration;
+            this.nnService = nNservice;
         }
         public Boolean CreateProject(ProjectPostPut model,int userid)
         {
@@ -47,29 +51,6 @@ namespace BackApi.Services
             return true;
         }
 
-        private void DeleteDataset(int datasetid)    //implementacija ce biti pomerena u dataset servis 
-        {
-            try
-            {
-                var dataset = context.Datasets.Find(datasetid);
-                context.Datasets.Remove(dataset);
-                context.SaveChanges();
-            }
-            catch (Exception ex) { }
-
-        }
-
-        private void DeleteNN(int nnid)      //implementacija ce biti pomerena u NN servis
-        {
-            try
-            {
-                var nn = context.NNs.Find(nnid);
-                context.NNs.Remove(nn);
-                context.SaveChanges();
-            }
-            catch (Exception ex) { }
-        }
-
         public Boolean DeleteProject(int projid, int userid) //manual cascade delete
         {
             var tmp = context.Projects.Where(x => x.UserId == userid && x.ProjectId == projid).FirstOrDefault();
@@ -77,14 +58,14 @@ namespace BackApi.Services
                 List<Dataset> datasets = context.Datasets.Where(x => x.ProjectId == projid).ToList();
                 foreach (Dataset dataset in datasets)
                 {
-                    datasetService.Delete(projid,userid);
+                    datasetService.Delete(projid);
                 }
 
                 List<NN> NNs = context.NNs.Where(x => x.ProjectId == projid).ToList();
                 foreach (NN n in NNs)
                 {
                     //List<NNConfig> nnconfigs=context.NNConfigs.Where(x => x.ProjectId == projid).ToList()  //brisanje hiperparametara
-                    DeleteNN(n.NNId);
+                    nnService.DeleteNN(n.NNId);
                 }
 
                 storageService.DeleteProject(tmp.ProjectId);
@@ -109,6 +90,11 @@ namespace BackApi.Services
                 rez.Append("\"" + "Name" + "\":" + "\"" + p.Name + "\",");
                 rez.Append("\"" + "Public" + "\":" + "\"" + p.Public + "\",");
                 rez.Append("\"" + "Creationdate" + "\":" + "\"" + p.CreationDate + "\",");
+                var pom = context.Datasets.FirstOrDefault(x => x.ProjectId == p.ProjectId);
+                if(pom != null)
+                    rez.Append("\"" + "hasDataset" + "\":" + "\"" + "true" + "\",");
+                else
+                    rez.Append("\"" + "hasDataset" + "\":" + "\"" + "false" + "\",");
                 rez.Append("\"" + "Description" + "\":" + "\"" + p.Description + "\"");
                 rez.Append("},");
             }
@@ -120,6 +106,11 @@ namespace BackApi.Services
                 rez.Append("\"" + "Name" + "\":" + "\"" + p.Name + "\",");
                 rez.Append("\"" + "Public" + "\":" + "\"" + p.Public + "\",");
                 rez.Append("\"" + "Creationdate" + "\":" + "\"" + p.CreationDate + "\",");
+                var pom = context.Datasets.FirstOrDefault(x => x.ProjectId == p.ProjectId);
+                if (pom != null)
+                    rez.Append("\"" + "hasDataset" + "\":" + "\"" + "true" + "\",");
+                else
+                    rez.Append("\"" + "hasDataset" + "\":" + "\"" + "false" + "\",");
                 rez.Append("\"" + "Description" + "\":" + "\"" + p.Description + "\"");
                 rez.Append("},");
             }
@@ -131,16 +122,22 @@ namespace BackApi.Services
         public string GetProjById(int projid, int userid)
         {
             var rez = new StringBuilder();
-            var proj = context.Projects.Where(x => x.UserId == userid && x.ProjectId == projid);
-            foreach (Project p in proj) 
-            {
-                rez.Append("{");
-                rez.Append("\"" + "ProjectId" + "\":" + "\"" + p.ProjectId + "\",");
-                rez.Append("\"" + "Name" + "\":" + "\"" + p.Name + "\",");
-                rez.Append("\"" + "Public" + "\":" + "\"" + p.Public + "\",");
-                rez.Append("\"" + "Description" + "\":" + "\"" + p.Description + "\"");
-                rez.Append("}");
-            }
+            Boolean tmp;
+            var proj = context.Projects.FirstOrDefault(x => x.UserId == userid && x.ProjectId == projid);
+            if (proj == null)
+                return null;
+            var dset=context.Datasets.FirstOrDefault(x=> x.ProjectId == projid);
+            if (dset != null)
+                tmp = true;
+            else tmp = false;
+
+            rez.Append("{");
+            rez.Append("\"" + "ProjectId" + "\":" + "\"" + proj.ProjectId + "\",");
+            rez.Append("\"" + "Name" + "\":" + "\"" + proj.Name + "\",");
+            rez.Append("\"" + "Public" + "\":" + "\"" + proj.Public + "\",");
+            rez.Append("\"" + "Description" + "\":" + "\"" + proj.Description + "\",");
+            rez.Append("\"" + "hasDataset" + "\":" + "\"" + tmp + "\"");
+            rez.Append("}");
 
             return rez.ToString();
         }
@@ -159,6 +156,19 @@ namespace BackApi.Services
             context.SaveChanges();
             rez = true;
             return rez;
+        }
+
+        public int getProjectId(ProjectPostPut model)
+        {
+            var tmp = context.Projects.Where(x => x.Name == model.name).FirstOrDefault();
+            return tmp.ProjectId;
+        }
+
+        public Boolean projectOwnership(int userid,int projid)
+        {
+            var tmp=context.Projects.FirstOrDefault(x=> x.UserId==userid && x.ProjectId ==projid);
+            if (tmp == null) return false;
+            return true;
         }
     }
 }

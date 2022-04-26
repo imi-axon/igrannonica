@@ -35,4 +35,40 @@ export class ProjectsService {
     
     );
   }
+  
+  removeProject(projectId: number, self?: any, successCallback?: Function, unauthorizedCallback?: Function, badRequestCallback?: Function){
+    this.projectsApi.removeProject(projectId).subscribe(
+    (response) => {
+        console.log("TEST")
+        
+        if (response.status == HttpStatusCode.Ok)
+          if (self && successCallback)
+            successCallback(self);
+
+        if (response.status == HttpStatusCode.Unauthorized)
+          if (self && unauthorizedCallback)
+            unauthorizedCallback(self);
+
+        if (response.status == HttpStatusCode.BadRequest)
+          if (self && badRequestCallback)
+            badRequestCallback(self);
+            
+      }
+    )
+  }
+  
+  getProject(projectId: number, self?: any, successCallback?: Function, errorCallback?: Function){
+    this.projectsApi.getProject(projectId).subscribe(
+      (response) => {
+        
+        if (response.status == HttpStatusCode.Ok)
+          if (self && successCallback)
+            successCallback(self, response.body);
+        
+        
+      }
+    )
+  }
+  
+  
 }

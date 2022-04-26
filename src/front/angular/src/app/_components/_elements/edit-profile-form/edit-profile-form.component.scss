@@ -1,0 +1,142 @@
+.container-fluid{
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    
+}
+
+.lozinka-info{
+    font-size: 12px;
+    color: #777777;
+
+}
+
+.invalid{
+    border: solid 1px #8d0000 !important;
+    background-color: #ff9a9a;
+    
+    &:hover{
+        background-color: #ff6e6e !important;
+    }
+    
+    &:focus{
+        background-color: #ff6e6e !important;
+    }
+    
+    &::placeholder{
+        color: #EEEEEE;
+    }
+}
+
+.registration-form-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    
+    width: 30%;
+    min-width: 450px;
+    height: 750px;
+    background-color: #ffffff;
+    border: solid 1px #a9d4fc;
+    padding: 70px;
+    padding-bottom: 50px;
+    
+    form{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        
+        width: 100%;
+        margin-bottom: 30px;
+        
+        .form-group{
+            width: 100%;
+            margin-top: 25px;
+            
+            input{
+                width: 100%;
+                height: 50px;
+                border: solid 1px #007BFF;
+                
+                transition: ease 0.25s;
+                
+                &:hover{
+                    border: solid 1px #a5d0fd;
+                    background-color: #d5e7fa;
+                }
+                
+                &:focus{
+                    outline: none;
+                    color: #FFFFFF;
+                    background-color: #0084ff;
+                    
+                    &::placeholder{
+                        color: #FFFFFFAA;
+                    }
+                }
+                
+                &::content{
+                    padding: 10px;
+                }
+            }
+            
+            input[type=submit]{
+                margin-top: 30px;
+                color: #FFFFFF;
+                font-weight: bold;
+                background-color: #007BFF;
+                
+                &:hover{
+                    
+                    background-color: #0033b5;
+                }
+                
+                &:disabled{
+                    opacity: 50%;
+                    background-color: #007BFF;
+                    border: none;
+                }
+                
+            }
+            
+        }
+        
+    }
+    
+    h2{
+        font-size: 36px;
+        font-weight: bold;
+    }
+    
+    .login-here{
+        margin-left: 10px;
+        font-weight: bold;
+        text-decoration: none;
+        transition: ease 0.25s;
+        
+        &:hover{
+            color: #00288d;
+            transition: ease 0.25s;
+        }
+    }
+    .photoUpload label{
+        border: none;
+        border-radius: 10px;
+        color: #0084FF;
+        
+        width: 130px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 15px;
+        font-weight: bold;
+        margin: 6px 7px;
+        cursor: pointer;
+        
+      }
+    
+}

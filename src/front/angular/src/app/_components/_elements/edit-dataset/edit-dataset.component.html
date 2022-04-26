@@ -1,0 +1,98 @@
+
+<div class="c1 container">
+    <div class="tabela mx-auto mb-3 justify-content-center">
+        
+        <loader #loader></loader>
+        
+        <table *ngIf="!loader.isLoading" class="tabela1 table table-bordered table-hover table-responsive table-curved table-strip">
+            <thead>
+                <!-- RED NA NAZIVE KOLONA -->
+                <tr class=""> 
+                    
+                    <!-- DODATNA KOLONA -->
+                    <th scope="col" class="prvi">
+                        <button class="column-button" (click)="SelectAll();">&nbsp;</button>
+                    </th>
+                    
+                    <th scope="col" class="prvi" *ngFor="let i = index; let column of columns"> 
+                        <button class="column-button" (click)="Select(i);" [class.selected-header]="selectedColumns[i]">
+                            {{column}} 
+                        </button>
+                    </th> 
+                </tr>
+            </thead>
+            
+            <tbody>
+                
+                <tr *ngFor="let i = index; let row of dataset;">
+                    
+                    <!-- CELIJE ZA PRVU KOLONU -->
+                    <td class="prva-kolona">
+                        
+                    </td>
+                    
+                    <!-- CELIJE IZ SETA-->
+                    <td class="" *ngFor="let j = index; let column of columns">
+                        <input class="cell-input" [class.selected-column]="selectedColumns[j]" type="text" [value]="row[column]" (change)="ChangeField($event.target, i, j, currentPage);">
+                    </td>
+                    
+                </tr>
+                
+            </tbody>
+            
+        </table>
+        
+    </div>
+</div>
+
+<div class="row justify-content-center align-items-center">
+    
+    <div class="col-lg-4 col-sm-12 d-flex align-items-center justify-content-center">
+        <div class="jump">
+            <button class="border" (click)="goToPage();">
+                {{'data-set-table.jump'|translate}}
+            </button>
+            <input class="border" style="outline: none;" type="number" [(ngModel)]="pageInput">
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-sm-12 d-flex align-items-center justify-content-center">
+        <ul class="pagination align-items-center m-0">
+            
+            <li class="page-item">
+                <button class="page-link" [class.disabled]="currentPage == 1" [disabled]="currentPage == 1"
+                    (click)="minPage();">&lt;&lt;&lt;</button>
+            </li>
+
+            <li class="page-item">
+                <button class="page-link" [class.disabled]="currentPage == 1" [disabled]="currentPage == 1"
+                    (click)="previousPage()">&lt;</button>
+            </li>
+            
+            <li class="page-item">
+                <button class="page-link" [disabled]="true"> {{currentPage}}&nbsp;/&nbsp;{{pageCount}}</button>
+            </li>
+
+            <li class="page-item">
+                <button class="page-link" [class.disabled]="currentPage == pageCount" [disabled]="currentPage == pageCount"
+                    (click)="nextPage()">&gt;</button>
+            </li>
+
+            <li class="page-item">
+                <button class="page-link" [class.disabled]="currentPage == pageCount" [disabled]="currentPage == pageCount"
+                    (click)="maxPage();">&gt;&gt;&gt;</button>
+            </li>
+            
+        </ul>
+    </div>  
+    
+    <div class="col-lg-5 col-sm-12 d-flex align-items-center justify-content-center">
+        <app-dataset-options
+        (SaveClicked)="Save()"
+        (DiscardClicked)="Discard()"
+        (DownloadClicked)="Download()">
+        </app-dataset-options>
+        
+    </div>
+</div>
+

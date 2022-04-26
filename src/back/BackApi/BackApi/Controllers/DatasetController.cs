@@ -11,55 +11,49 @@ namespace BackApi.Controllers
     [Route("api/projects")]
     [ApiController]
     [Authorize]
+    [RequestFormLimits(MultipartBodyLengthLimit = 209715200)]
+    [RequestSizeLimit(209715200)]
     public class DatasetController : ControllerBase
     {
         private IDatasetService datasrv;
         private IJwtService jwtsrv;
-        public DatasetController(IDatasetService datasetServis, IJwtService jwtServis)
+        private IProjectService projsrv;
+        private IStorageService storsrv;
+        public DatasetController(IDatasetService datasetServis, IJwtService jwtServis, IProjectService projectService, IStorageService storageService)
         {
             this.datasrv = datasetServis;
             this.jwtsrv = jwtServis;
+            this.projsrv=projectService;
+            this.storsrv=storageService;
         }
 
-        /*
-        [HttpGet("{id}/dataset")]
-        public async Task<ActionResult<dynamic>> Get(int id)
-        {
-            int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized("Ulogujte se");
-            Boolean uspeh;
-            Boolean owner;
-            string pom = datasrv.daLiPostoji(id, out uspeh,userid,out owner);
-            if(!uspeh)
-                return NotFound(pom);
-            if (!owner)
-                return Forbid(pom);
-
-            //string tekst = "n1;n2;n3;out\r1; 1; 0; 1\r1; 0; 0; 1\r0; 0; 1; 1\r1; 0; 1; 1\r0; 0; 0; 0\r";
-            DatasetGetPost dataset = new DatasetGetPost();
-            dataset.dataset = pom;
-            var response = await KonekcijaSaML.convertCSVstring(dataset);
-
-            return await response.Content.ReadAsStringAsync();
-        }
-        */
-        
         [HttpPost("{id}/dataset")]
-        public async Task<ActionResult<string>> NewDataSet(int id, [FromBody] DatasetGetPost req)
+        [RequestFormLimits(MultipartBodyLengthLimit = 209715200)]
+        [RequestSizeLimit(209715200)]
+        public async Task<ActionResult<string>> NewDataSet(int id,IFormFile dataset )
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized("Ulogujte se");
-            var response = await MLconnection.validateCSVstring(req);
+            var chk = projsrv.projectOwnership(userid, id);
+            if (!chk)
+                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Vi niste vlasnik projekta" });
+            var time = await datasrv.New(dataset, id, userid);
+            if(!time)
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Greska pri pisanju fajla." });
+            DatasetGetPost novi = new DatasetGetPost();
+            novi.dataset= datasrv.ProjIdToPath(id,true);
+            var response = await MLconnection.validateCSVstring(novi); // ceka se implementacija obrade fajla na ml-u a ne stringa
 
             if (response.StatusCode == HttpStatusCode.Created)
             {
-                var chk=datasrv.New(req, id,userid);
-                if (chk)
-                    return StatusCode(StatusCodes.Status200OK, new { message = "Sve je u redu." });
-                else return StatusCode(StatusCodes.Status403Forbidden, new { message = "Vi niste vlasnik projekta" });
+                return StatusCode(StatusCodes.Status200OK, new { message = "Sve je u redu." });
             }
-
-            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Ne valja CSV." });
+            else
+            {
+                datasrv.Delete(id);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Ne valja CSV." });
+            }
+            return Ok();
         }
 
         [HttpDelete("{projid}")]
@@ -67,39 +61,31 @@ namespace BackApi.Controllers
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized("Ulogujte se");
-            var rez = datasrv.Delete(projid,userid);
+            var chk = projsrv.projectOwnership(userid, projid);
+            if (!chk)
+                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Vi niste vlasnik projekta" });
+            var rez = datasrv.Delete(projid);
             if (rez)
                 return Ok("Uspesno Obrisan");
-            else return BadRequest("Vec obrisan ili vi niste vlasnik projekta");
+            else return BadRequest("Vec obrisan ");
         }
 
-        /*[HttpGet("{projid}")]
-        public async Task<ActionResult<string>> ListajDataset(int projid)
-        {
-            var rez = datasrv.Listaj(projid);
-            if (rez != "[]")
-                return Ok(rez);
-            else return NotFound("Ne postoji dataset");
-        }*/
-
-        [HttpGet("{projid}/dataset")]
+        [HttpGet("{projid}/dataset/{main}")]
         public async Task<ActionResult<dynamic>> ReadDataset(int projid,Boolean main)
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
             Boolean owner;
-            var rez = datasrv.Read(projid,main,userid,out owner);
+            owner = projsrv.projectOwnership(userid, projid);
             if (!owner)
                 return Forbid();
-            if (rez != null)
-            {
-                DatasetGetPost dataset = new DatasetGetPost();
-                dataset.dataset = rez;
-                var response = await MLconnection.convertCSVstring(dataset);
+            DatasetGetPost dataset = new DatasetGetPost();
+            dataset.dataset = datasrv.ProjIdToPath(projid,main);
+            if(dataset.dataset==null)
+                return NotFound("Ne postoji dataset");
+            var response = await MLconnection.convertCSVstring(dataset);
 
-                return await response.Content.ReadAsStringAsync();
-            }
-            else return NotFound("Ne postoji dataset");
+           return await response.Content.ReadAsStringAsync();
         }
 
         [HttpGet("{id}/dataset/{main}/statistics")]
@@ -110,9 +96,13 @@ namespace BackApi.Controllers
             
             DatasetGetPost dataset = new DatasetGetPost();
             Boolean owner;
-            dataset.dataset = datasrv.Read(id, main,userid,out owner);
+            owner = projsrv.projectOwnership(userid,id);
             if (!owner)
                 return Forbid();
+            dataset.dataset= datasrv.ProjIdToPath(id,main);
+            if (dataset.dataset == null)
+                return NotFound();
+
             var response = await MLconnection.getStatistic(dataset);
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -127,13 +117,15 @@ namespace BackApi.Controllers
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
             Boolean owner;
-            var dataset = datasrv.Read(id,main,userid,out owner);
+            owner = projsrv.projectOwnership(userid, id);
             if (!owner)
                 return Forbid();
-            if (dataset == null)
+            var dataset = new DatasetGetPost();
+            dataset.dataset = datasrv.ProjIdToPath(id,main);
+            if (dataset.dataset == null)
                 return NotFound();
             DatasetMLPost snd = new DatasetMLPost();
-            snd.data = dataset;
+            snd.dataset = dataset.dataset;
             snd.actions = act.actions;
             var response = await MLconnection.editDataset(snd);
             if(response.StatusCode == HttpStatusCode.OK)
@@ -160,6 +152,30 @@ namespace BackApi.Controllers
             if(!chk)
                 return NotFound();
             return Ok();
+        }
+
+        [HttpGet("{projid}/dataset/{main}/page/{p}/rows/{r}")] //p-broj strane, r-broj redova po strani
+        public async Task<ActionResult<dynamic>> Paging(int projid, Boolean main,int p, int r)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            Boolean owner;
+            owner = projsrv.projectOwnership(userid, projid);
+            if (!owner)
+                return Forbid();
+            var dataset = new DatasetPages();
+            dataset =await datasrv.CreatePage(projid, main, p, r);
+            if (dataset.dataset == null)
+                return NotFound("Ne postoji dataset");
+            dataset.dataset = dataset.dataset.Replace('\\', '/');
+            var toml = new DatasetGetPost();
+            toml.dataset = dataset.dataset;
+            var response = await MLconnection.convertCSVstring(toml);
+            var ret= await response.Content.ReadAsStringAsync();
+
+            storsrv.DeletePath(dataset.dataset);
+            dataset.dataset = ret;
+            return Ok(dataset);
         }
     }
 }

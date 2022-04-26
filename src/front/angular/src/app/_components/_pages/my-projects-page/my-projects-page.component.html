@@ -1,9 +1,15 @@
+<navbar ></navbar>
 
-<div class="container mt-5">
-<div class="col">
-    <h2 class="d-inline-block">Projects</h2>
-    <a id="newProjectButton" href="new-project" class="btn btn-primary" role="button">Create new project</a>
-</div>
-<hr>
-<app-lista-projekata></app-lista-projekata>
+<sidebar></sidebar>
+
+<div class="content">
+    
+    <div id="wrapper">
+        <h1> {{'lista-projekata.moji_eksperimenti' |translate}} </h1>
+        
+        <list-controls (OnSearch)="projectList.SetSearchTerm($event)" (OnOrderBy)="projectList.OrderBy($event)"></list-controls>
+        
+        <app-project-list #projectList> </app-project-list>
+    </div>
+    
 </div>

@@ -13,6 +13,7 @@ namespace BackApi.Services
         string ValidateToken(string token);
         string VerifyEmailAdress(string username);
         bool SendEmail(string textmessage, string title, string receiver);
+        bool SendEmailForPass(string textmessage, string title, string receiver);
     }
     public class EmailService:IEmailService
     {
@@ -92,6 +93,38 @@ namespace BackApi.Services
                 client.Dispose();
             }
 
+            return false;
+        }
+
+        public bool SendEmailForPass(string textmessage, string title, string receiver)
+        {
+            MimeMessage message = new MimeMessage();
+            message.From.Add(new MailboxAddress("Axon", configuration.GetSection("EmailConfiguration:Email").Value));
+            message.To.Add(MailboxAddress.Parse(receiver));
+            message.Subject = title;
+
+            message.Body = new TextPart("plain")
+            {
+                Text = textmessage
+            };
+            SmtpClient client = new SmtpClient();
+
+            try
+            {
+                client.Connect(configuration.GetSection("EmailConfiguration:SmtpServer").Value, 465, true);
+                client.Authenticate(configuration.GetSection("EmailConfiguration:Email").Value, configuration.GetSection("EmailConfiguration:Password").Value);
+                client.Send(message);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                client.Disconnect(true);
+                client.Dispose();
+            }
             return false;
         }
     }

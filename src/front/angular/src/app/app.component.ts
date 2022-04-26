@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { FullscreenLoaderComponent } from './_components/_elements/fullscreen-loader/fullscreen-loader.component';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +10,29 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'angular';
+  
+  @ViewChild("fullscreenLoader")
+  fullscreenLoader: FullscreenLoaderComponent;
+
+  constructor(public translate:TranslateService, private router: Router)
+  {
+    translate.addLangs(['en','sr']);
+    translate.setDefaultLang('en');
+    
+      router.events.subscribe(
+        (event) => {
+          if(event instanceof RouteConfigLoadStart){
+            this.fullscreenLoader.isLoading = true;
+            console.log("LOAD START")
+          }
+          if(event instanceof RouteConfigLoadEnd){
+            this.fullscreenLoader.isLoading = false;
+            console.log("LOAD END")
+          }
+        }
+      )
+  }
+  
+  
+  
 }

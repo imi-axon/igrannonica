@@ -9,12 +9,17 @@
 
     public class DatasetMLPost
     {
-        public string data { get; set; }
+        public string dataset { get; set; }
         public string actions { get; set; }
     }
 
     public class ActionsPut
     {
         public string actions { get; set; }
+    }
+    public class DatasetPages
+    {
+        public string dataset { get; set; }
+        public int pages { get; set; }
     }
 }

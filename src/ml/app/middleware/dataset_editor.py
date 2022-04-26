@@ -18,8 +18,11 @@ class DatasetEditor:
             for c in choosen:
                 sel.append(actions[c])
 
-            for c in choosen:
-                actions.pop(c)
+            tmp = []
+            for i in range(len(actions)):
+                if i not in choosen:
+                    tmp.append(actions[i])
+            actions = tmp
 
         return sel
 
@@ -89,4 +92,4 @@ class DatasetEditor:
             else:
                 return None
 
-        return service.dataset.to_csv()
+        return service.csv_result()

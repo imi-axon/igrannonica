@@ -27,8 +27,9 @@ namespace BackApi.Controllers
             if (userid == -1) return Unauthorized();
             Boolean rez;
             rez = service.CreateProject(req,userid);
+            int id = service.getProjectId(req);
             if (rez)
-                return Ok();
+                return id+"";
             else return BadRequest();
         }
 
@@ -47,7 +48,7 @@ namespace BackApi.Controllers
         public async Task<ActionResult<string>> GetProjectById(int projid)
         {
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized("Ulogujte se");
+            if (userid == -1) return "Uloguj se";//Unauthorized("Ulogujte se");
             var rez = service.GetProjById(projid, userid);
             if (rez != "")
                 return Ok(rez);

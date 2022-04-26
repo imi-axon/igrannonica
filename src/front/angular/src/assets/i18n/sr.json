@@ -1,0 +1,173 @@
+{
+
+    "navbar":{
+        "home":"Početna",
+        "registration":"Registracija",
+        "login":"Prijava",
+        "myExperiments":"Moji Eksperimenti",
+        "myAccount":"Moj Nalog",
+        "logout":"Odjava",
+        "select":""
+    },
+    "sidebar":{
+        "myProfile": "Moj profil",
+        "publicExperiments": "Javni eksperimenti",
+        "myExperiments": "Moji eksperimenti",
+        "settings": "Podešavanja",
+        "logout": "Odjavi se"
+    },
+    "register":{
+        "register":"Registrujte se",
+        "firstname_placeholder":"Ime",
+        "lastname_placeholder":"Prezime",
+        "username_placeholder":"Korisničko ime",
+        "email_placeholder":"E-mail",
+        "password_placeholder":"Lozinka",
+        "password2_placeholder":"Ponovite lozinku",
+        "obavestenje1-1":"*Lozinka mora biti duža od 8 karaktera",
+        "obavestenje1-2":"*Lozinka mora sadržati jedan broj, jedno veliko i jedno malo slovo",
+        "dugme":"Registrujte se",
+        "login1":"Već imate nalog?",
+        "login2":"Ulogujte se ovde"
+    },
+    "login":{
+        "login":"Ulogujte se",
+        "username_placeholder":"Korisničko ime",
+        "password_placeholder":"Lozinka",
+        "zapamti_me":"Zapamti me",
+        "register1":"Nemate nalog? ",
+        "register2":"Registrujte se ovde",
+        "dugme":"Ulogujte se",
+        "forgot1":"Zavboravili ste lozinku?",
+        "forgot2":"Promenite je",
+        "login-greska":"Pogresni podaci ili korisnik nije verifikovan!"
+    },
+    "csv":{
+        "format":"Uneti fajl mora biti u .csv formatu!",
+        "prazan":"Uneti fajl ne sme biti prazan!"
+    },
+    "data-set-table":{
+        "p1-1":"Strana ",
+        "p1-2":"od ",
+        "jump":"Skoči na"
+    },
+    "lista-projekata":{
+        "moji_eksperimenti":"Moji Eksperimenti",
+        "kreiran":"Kreiran: ",
+        "nema":"List eksperimenata je prazna!",
+        "search":"Pretražite..."
+    },
+    "lista-mreza":{
+        "nema":"Nemate nijednu neuronsku mrežu",
+        "search":"Pretražite...",
+        "nova":"Nova mreža",
+        "mojeMreze": "Moje mreže"
+    },
+    "new-project":{
+        "name":"Naziv eksperimenta",
+        "poruka":"*Maksimalan broj karaktera je 30",
+        "opis":"Opis eksperimenta",
+        "poruka2":"*Maksimalan broj karaktera je 250",
+        "public":"Javno",
+        "submit":"Potvrdi"
+    },
+    "opcije-dataset":{
+        "tabela":"Tabela",
+        "statistika":"Statistika",
+        "izmeni":"Izmeni podatke"
+    },
+    "opcije-edit-dataset":{
+        "izbrisiKol":"Izbriši kolone",
+        "nullRedovi":"Izbriši redove sa null vrednostima",
+        "popuni":"Popuni redove sa null vrednostima",
+        "duplikati":"Izbriši duplikate",
+        "enkodiranje":"Enkodiranje",
+        "onehot1":"Onehot enkodiranje",
+        "label1":"Label enkodiranje"
+    },
+    "profil":{
+        "izmeni":"Izmenite podatke"
+    },
+    "create-neural-network":{
+        "kreiraj":"Nova mreža",
+        "name":"Nziv",
+        "submit":"Potvrdi"
+    },
+    "sortiranje":{
+        "starije":"Datum(staro->novo)",
+        "novije":"Datum(novo->staro)"
+    },
+
+
+
+
+
+    "data-set-page":{
+        "naslov":"Set podataka",
+        "submit":"Potvrdi"
+    },
+    "edit-dataset-page":{
+        "naslov1":" Moji eksperimenti",
+        "naslov2":"Meteorološka analiza V1"
+    },
+    "data-set-options":{
+        "save":"Sacuvaj",
+        "discard":"Odbaci",
+        "download":"Preuzmi"
+    },
+    "my-projects-page":{
+        "projekti":"Eksperimenti",
+        "novi":"Novi eksperiment"
+
+    },
+    "new-project-page":{
+        "novi":"Novi eksperiment"
+    },
+    "profil-page":{
+        "eksperimenti":"Korisnikovi eksperimenti"
+    },
+    "registration-successful":{
+        "uspeh":"Uspešna registracija",
+        "login":"Ulogujte se",
+
+        "mail":"Proverite vaš mail"
+
+    },
+    "statistics-page":{
+        "view":"Promeni pogled",
+        "debug":"DEBUG",
+        "dugme":"DUGME"
+    },
+    "input-username":{
+        "place":"Korisničko ime",
+        "button":"Pošalji email",
+        "title":"Unesite korisničko ime"
+    },
+    "changepass":{
+        "title":"Promenite lozinku",
+        "pass1":"Nova lozinka",
+        "pass2":"Ponovite lozinku",
+        "button":"Izmeni"
+    },
+    "edit-profile":{
+        "title1":"Izmenite profil",
+        "pass1":"Lozinka",
+        "submit1":"Izmeni",
+        "title2":"Izmenite email",
+        "pass2":"Lozinka",
+        "submit2":"Izmeni",
+        "title3":"Izmenite lozinku",
+        "newpass1":"Nova lozinka",
+        "newpass2":"Ponovite lozinku",
+        "pass3":"Unesite trenutnu lozinku",
+        "submit3":"Izmeni",
+        "title4":"Promenite profilnu sliku",
+        "pass4": "Lozinka",
+        "submit4": "Izmeni",
+        "image": "Izaberite sliku"
+
+    }
+
+
+
+}

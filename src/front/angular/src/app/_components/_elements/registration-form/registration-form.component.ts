@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { regExp } from 'src/app/_utilities/_constants/regExp';
 import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
 import { RegistrationCheck, UserRegistration } from 'src/app/_utilities/_data-types/models';
@@ -13,14 +14,16 @@ import { UserService } from 'src/app/_utilities/_services/user.service';
 export class RegistrationFormComponent implements OnInit {
   public registration:UserRegistration = new UserRegistration();
   public passwordAgain:string = "";
-  
+  public photo: File = null as any;
+  url = 'assets/Images/profilna.png';
   public registrationCheck:RegistrationCheck = new RegistrationCheck();
   
+  selectedFile:File = null as any;
   isSuccessful = false;
   isSignUpFailed = false;
   errorMessage = '';
   
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService,public translate:TranslateService, private router:Router) { }
   
   
 
@@ -31,7 +34,17 @@ export class RegistrationFormComponent implements OnInit {
     if(this.registrationCheck.invalidRegistration)
       return;
     
-    this.userService.Register(this.registration, this, this.handleSuccess, this.handleUsedUsername, this.handleLogedIn);
+    let formData : FormData = new FormData();
+    if(!this.selectedFile)
+      formData.append("photo", null as any);
+    else
+      formData.append("photo", this.selectedFile, this.selectedFile.name);
+    formData.append("firstname", this.registration.firstname);
+    formData.append("lastname", this.registration.lastname);
+    formData.append("email", this.registration.email);
+    formData.append("username", this.registration.username);
+    formData.append("password", this.registration.password);
+    this.userService.Register(formData, this, this.handleSuccess, this.handleUsedUsername, this.handleLogedIn);
     
   }
   
@@ -47,7 +60,18 @@ export class RegistrationFormComponent implements OnInit {
   handleLogedIn(self: any, message: string){
     
   }
-  
+  public selectPhoto(event:any) {
+    let fileType = event.target.files[0].type
+    this.selectedFile=<File>event.target.files[0];
+    if (fileType.match(/image\/*/)) {
+      let reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = (event: any) => {
+        this.url = event.target.result;
+        
+      };
+    } 
+  }
   
   // Validacije
   

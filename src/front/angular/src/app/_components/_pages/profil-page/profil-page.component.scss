@@ -1,23 +1,13 @@
-.container
-{
+#cover{
     width: 100%;
-}
-.projekti
-{
-    width:80%;
-}
-
-.kolona
-{
-    color:#555555;
-}
-.dugme
-{
-    background-color: #555555;
-    border:none;
+    height: 250px;
+    background-size: cover;
+    background-image:url("/assets/Images/cover_placeholder.png");
 }
 
-hr{
-    background-color:#555555;
-    height: 0.5rem;
+#profile{
+    img{
+        width: 180px;
+        transform: translateY(-130px);
+    }
 }

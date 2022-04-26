@@ -10,17 +10,45 @@ import { HeaderUtil } from '../_helpers/http-util';
 })
 export class ProjectsApiService {
 
-  private url: string = apiProperties.url + "/api/users/";
   constructor(private http:HttpClient) { }
 
+  private url: string = apiProperties.url + "/api";
+  
   userProjects(username:string):Observable<HttpResponse<Project[]>>
   {
     console.log("moji projekti");
-    let response = this.http.get<Project[]>(this.url+`${username}/projects`,
+    let response = this.http.get<Project[]>( this.url + `/users/${username}/projects`,
       {
         observe:"response",
         headers:HeaderUtil.jwtOnlyHeaders()
       });
       return response;
   }
+  
+  removeProject(projectId: number){
+    let response = this.http.delete( 
+      this.url + "/projects/" + projectId + "/delete",
+      {
+        observe: "response",
+        responseType: "text",
+        headers:HeaderUtil.jwtOnlyHeaders()
+      }
+    )
+    return response;
+  }
+  
+  getProject(projectId: number){
+    let response = this.http.get(
+      this.url + "/projects/" + projectId,
+      {
+        observe: "response",
+        responseType: "json",
+        headers:HeaderUtil.jwtOnlyHeaders()
+      }
+    )
+    return response;
+  }
+  
+  
+  
 }

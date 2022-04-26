@@ -1,0 +1,118 @@
+$tamna:#343a40;
+$svetla:#ced4da;
+$tekst:white;
+$tekst1:black;
+$izabrano: #a9b2ba;
+$izabrana-celija: #878f95;
+
+.limiter {
+    width: 100%;
+    margin: 0 auto;
+}
+
+// .container-table100 {
+//     width: 100%;
+//     min-height: 100vh;
+//     background: #d1d1d1;
+
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     flex-wrap: wrap;
+//     padding: 33px 30px;
+// }
+.tabela{
+    max-width: 100%;
+    height: 60vh;
+    overflow-x: scroll;
+    scroll-behavior: smooth;
+}
+
+table{
+    height: 100%;
+}
+
+thead{
+    tr{
+        position: sticky;
+        top: 0px;
+        border: none;
+        outline: solid 2px #444444;
+    }
+}
+
+th{
+    white-space: nowrap;
+    padding: 0px;
+    border: none;
+    outline: solid 1px #444444;
+}
+td{
+    white-space: nowrap;
+    padding: 0px;
+}
+
+.column-button{
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: none ;
+    font-weight: bold;
+    padding: 8px;
+}
+
+.cell-input{
+    border: none;
+    background: none;
+    height: 100%;
+    min-width: 100%;
+    padding: 5px;
+    
+    &:focus{
+        background-color: $izabrana-celija;
+        outline: none;
+    }
+}
+
+.selected-header{
+    background-color: $izabrano;
+    transition: 0.1s ease-out;
+}
+.selected-column{
+    background-color: $izabrano;
+    transition: 0.1s ease-out;
+}
+
+.prva-kolona{
+    padding: 10px;
+    padding-right: 70px;
+}
+
+
+table {
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    background-color: $svetla;
+    color:$tekst1;
+    margin: 0px !important;
+}
+
+.prvi
+{
+    background-color: $svetla;
+    color:$tekst1;
+    padding: 0px;
+    height: 100%;
+}
+
+.th
+{
+    border-bottom: none;
+}
+
+.disabled{
+    background-color: #e9e9e9;
+    color: #AAAAAA;
+    cursor: default;
+}

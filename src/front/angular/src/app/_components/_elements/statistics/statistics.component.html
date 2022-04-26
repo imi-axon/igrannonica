@@ -1,0 +1,13 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <loader #correlationLoader></loader>
+      <correlation-table [class.hidden]="correlationLoader.isLoading" #correlationTable></correlation-table>
+      <!-- srediti matricu -->
+    </div>
+    <div class="col-md-12 mt-5">
+      <loader #statisticsLoader></loader>
+      <data-set-table [class.hidden]="statisticsLoader.isLoading" #statisticsTable> </data-set-table>
+    </div>
+  </div>
+</div>

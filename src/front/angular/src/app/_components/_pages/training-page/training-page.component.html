@@ -1,0 +1,28 @@
+<navbar></navbar>
+<div class="row mt-3 mx-auto">
+    <app-konfiguracija #konf
+        (inputChanged)="nnDisplay.SetInput($event)"
+        (outputChanged)="nnDisplay.SetOutput($event)"></app-konfiguracija>
+    <div class="d-flex justify-content-center my-4">
+        <button class="btn btn-primary" (click)="treniraj()" *ngIf="konf.gotovoOutputi">TRENIRAJ</button>
+    </div>
+</div>
+
+
+<div class="row pb-3 mx-auto d-flex justify-content-center" id="nn-container">
+    <div class="col-lg-9">
+        <app-neural-network-display #nnDisplay></app-neural-network-display>
+    </div>
+</div>
+
+
+<div class="row pb-3 mx-auto d-flex justify-content-center">
+    <div class="col-lg-9">
+        <app-chart-training #grafik></app-chart-training>
+    </div>
+</div>
+
+
+<app-chart-training #grafik></app-chart-training>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>

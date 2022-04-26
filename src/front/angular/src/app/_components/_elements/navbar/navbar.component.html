@@ -1,50 +1,23 @@
-<!--
-  navbar-dark - svetli tekst (za tamnu pozadinu)
-  bg-dark - tamna pozadina, bg-primary - plava pozadina
--->
-<nav class="navbar navbar-expand-sm navbar-dark  sticky-top">
-    <div class="container-fluid">
-              
-      <!--
-        Dugme za prikaz linkova na manjim ekranima / mobilnim uredjajima
-      -->
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-
-      
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mx-auto">
-          
-          <li class="nav-item mx-2">
-            <a class="nav-link" routerLink="/home" [routerLinkActive]="['active']"> Home </a>
-          </li>
-
-          <li class="nav-item mx-2" *ngIf="!auth.logovan">
-            <a class="nav-link" routerLink="/registration" [routerLinkActive]="['active']" > Registration </a>
-          </li>
-          
-          <li class="nav-item mx-2" *ngIf="!auth.logovan">
-            <a class="nav-link" routerLink="/login" [routerLinkActive]="['active']" > Login </a>
-          </li>
-
-          <li class="nav-item mx-2" *ngIf="auth.logovan">
-            <a class="nav-link" routerLink="/my-projects" [routerLinkActive]="['active']"> My Experiments </a>
-          </li>
-          <li class="nav-item mx-2" *ngIf="auth.logovan">
-            <a id="profil" class="nav-link" routerLink="/profil" [routerLinkActive]="['active']">My Account  </a>
-            <!-- {{auth.korisnickoIme}} -->
-          </li>
-          <li class="nav-item mx-2" *ngIf="auth.logovan">
-            <a class="nav-link" routerLink="/login" [routerLinkActive]="['active']" (click)="logout()"> Logout </a>
-          </li>
-      
-          		
-        </ul>		  
-      </div>
-      
-      
-    </div>
-  </nav>
+<nav class="navbar navbar-expand-sm">
+  <div id="leftSide" routerLink="/home">
+    <img src="/assets/Images/icosahedron.png">
+    <p> Igrannonica </p>
+  </div>
   
+  
+  <div id="rightSide">
+    
+    <div id="controls">
+      <img [src]="languageIcon" (click)="ChangeLanguage()">
+      <img src="assets/Images/Icons/theme_icon.png">
+    </div>
+    
+    <div id="user" routerLink="/profil">
+      <p> {{userFullname}} </p>
+      <img [src]="userImage">
+    </div>
+    
+  </div>
+  
+</nav>

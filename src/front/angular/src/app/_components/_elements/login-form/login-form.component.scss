@@ -1,17 +1,62 @@
-.invalid{
+.invalid {
     border: solid 1px #8d0000 !important;
     background-color: #ff9a9a;
-    
-    &:hover{
+
+    &:hover {
         background-color: #ff6e6e !important;
     }
-    
-    &:focus{
+
+    &:focus {
         background-color: #ff6e6e !important;
     }
-    
-    &::placeholder{
+
+    &::placeholder {
         color: #EEEEEE;
     }
 }
 
+#submit{
+    background-color: transparent;
+    border:2px solid transparent;
+    border-image:linear-gradient(92.51deg, #2C4396 0%, #23AFC2 48.96%, #2C4396 100%);
+    border-image-slice:1;
+    color: #EEEEEE;
+    padding-left:8%;
+    padding-right:8%;
+}
+a{
+    text-decoration: none;
+    color:#00C2FF;
+}
+
+.info {
+    color: #FFFFFF;
+}
+
+.link{
+    font-size: large;
+    font-weight: bold;
+    color: #00C2FF;
+    text-decoration: transparent;
+}
+
+.container {
+    border:2px solid transparent;
+    border-image:linear-gradient(92.51deg, #2C4396 0%, #23AFC2 48.96%, #2C4396 100%);
+    background-origin: border-box;
+    border-image-slice:1;
+    background: rgba(0, 178, 255, 0.05);
+    backdrop-filter: blur(20px);
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 3%;
+    padding-bottom: 3%;
+}
+
+input {
+    border:2px solid transparent;
+    border-image:linear-gradient(92.51deg, #2C4396 0%, #23AFC2 48.96%, #2C4396 100%);
+    border-image-slice:1;
+    background-color: transparent;
+    color:#00C2FF;
+}

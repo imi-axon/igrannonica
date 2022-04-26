@@ -1,0 +1,101 @@
+#korisnickoIme
+{
+    color:#0084FF;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;400;700&display=swap');
+// .navbar-toggler
+// {
+//     margin-left: 85%;
+// }
+
+// @media (max-width: 576px) { 
+//     .navbar-nav
+//     {
+//         text-align: right;
+//     }
+// }
+
+/*
+.navbar-toggler
+{
+    // color:$bojaNavbar;
+    background-color: $bojaNavbar;
+}
+*/
+
+.navbar{
+    height: 18vh;
+    margin: 0px;
+}
+
+@media (max-width: 575px) { 
+    
+    .nav-item a{
+        font-size: 20px;
+        line-height: 23px;
+    }
+    .nav-item a:hover{
+        font-weight: bold;
+    }
+    .nav-item a.active{
+        font-weight: bold;
+    }
+    
+    #logo{
+        display: none;
+    }
+}
+@media (min-width: 576px) { 
+    
+    .nav-link{
+        user-select: none;
+    }
+    
+    .navbar-nav
+    {
+        top: 0px;
+        height: 150px;
+        width: 500px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+    }
+    
+    .nav-item a{
+        font-style: normal;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 23px;
+        white-space: nowrap;
+    }
+    .nav-item a:hover{
+        color: #FFFFFF;
+    }
+    .nav-item a.active{
+        font-weight: bold;
+    }
+    
+    
+    
+    #navbarSupportedContent{
+        padding-left: 7%;
+        padding-right: 7%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    #logo a{
+        font-size: 28px;
+        color: #FFFFFF;
+        cursor: pointer;
+        transition: ease-in 0.15s;
+        
+        &:hover{
+            transition: ease-out 0.15s;
+            color: #00aaff;
+        }
+    }
+}

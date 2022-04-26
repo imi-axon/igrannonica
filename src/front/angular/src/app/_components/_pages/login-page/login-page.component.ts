@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginPageComponent implements OnInit {
 
-  constructor() { }
+  constructor() { document.body.className = "log_reg_page";}
 
   ngOnInit(): void {
   }
