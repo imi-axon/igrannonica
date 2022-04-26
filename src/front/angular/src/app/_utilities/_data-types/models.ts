@@ -152,6 +152,15 @@ export class UserLogin
 /*LOGIN*/ 
 
 
+export class UserInfo
+{
+    public username: string = "";
+    public fullname: string = "";
+    public lastname: string = "";
+    public email: string = "";
+}
+
+
 /* PROJEKAT */
 export class NewProject
 {

@@ -36,6 +36,8 @@ export class UserService {
       );
     }
     
+    
+    
     loginUser(applicantData: any, self?: any, successCallback?: Function, errorCallback?: Function) {
       this.userAPI.login(applicantData).subscribe(
         // Success
@@ -66,6 +68,9 @@ export class UserService {
       
       );
     }
+    
+    
+    
     verifyUser(token:any){
       this.userAPI.verify(token).subscribe(
         res=>{
