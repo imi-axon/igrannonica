@@ -58,6 +58,10 @@ body{
     background: #ffffff;
 }
 
+.hidden{
+    display: none;
+}
+
 // Sadrzaj pored navbara
 .content{
     // 250px sirine sidebar-a
@@ -69,11 +73,17 @@ body{
     align-items: center;
 }
 
-.hidden{
-    display: none;
+
+@media screen and (max-width: 1000px) {
+    .sidebar{
+        display: none;
+    }
+    
+    .content{
+        padding-left: 0px;
+    }
+    
 }
-
-
 
 
 /* ============================= TAMNE STRANICE ============================= */
