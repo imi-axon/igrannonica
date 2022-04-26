@@ -12,7 +12,7 @@ namespace BackApi.Services
     {
         string ValidateToken(string token);
         string VerifyEmailAdress(string username);
-        bool SendEmail(string textmessage, string title, string receiver);
+        bool SendEmail(string textmessage, string title, string receiver, int ind);
         bool SendEmailForPass(string textmessage, string title, string receiver);
     }
     public class EmailService:IEmailService
@@ -63,17 +63,22 @@ namespace BackApi.Services
             return "Uspesno verifikovan";
         }
 
-        public bool SendEmail(string textmessage, string title, string receiver)
+        public bool SendEmail(string textmessage, string title, string receiver, int ind)
         {
             MimeMessage message = new MimeMessage();
             message.From.Add(new MailboxAddress("Axon", configuration.GetSection("EmailConfiguration:Email").Value));
             message.To.Add(MailboxAddress.Parse(receiver));
             message.Subject = title;
 
-            message.Body = new TextPart("plain")
-            {
-                Text = textmessage
-            };
+            var bodybuilder = new BodyBuilder();
+            if (ind == 1)
+                bodybuilder.HtmlBody = string.Format(@"<p>Kliknite na dugme kako biste se verifikovali</p>
+                <a href='" + textmessage + "'><input type='button' style='background:blue; color:red' value='VERIFIKUJ SE'></a>");
+            else
+                bodybuilder.HtmlBody = string.Format(@"<p>Kliknite na dugme kako biste promenili email</p>
+                <a href='" + textmessage + "'><input type='button' style='background:blue; color:red' value='POTVRDI'></a>");
+
+            message.Body=bodybuilder.ToMessageBody();
             SmtpClient client = new SmtpClient();
 
             try
@@ -94,7 +99,7 @@ namespace BackApi.Services
             }
 
             return false;
-        }
+         }
 
         public bool SendEmailForPass(string textmessage, string title, string receiver)
         {
@@ -103,10 +108,11 @@ namespace BackApi.Services
             message.To.Add(MailboxAddress.Parse(receiver));
             message.Subject = title;
 
-            message.Body = new TextPart("plain")
-            {
-                Text = textmessage
-            };
+            var bodybuilder = new BodyBuilder();
+            bodybuilder.HtmlBody = string.Format(@"<p>Kliknite na dugme kako biste potvrdili promenu lozinke</p>
+                <a href='" + textmessage + "'><input type='button' style='background:blue; color:red' value='PROMENI LOZINKU'></a>");
+
+            message.Body = bodybuilder.ToMessageBody();
             SmtpClient client = new SmtpClient();
 
             try

@@ -1,6 +1,6 @@
 .invalid {
     border: solid 1px #8d0000 !important;
-    background-color: #ff9a9a;
+    background-color: #ff9a9a59;
 
     &:hover {
         background-color: #ff6e6e !important;
@@ -59,4 +59,9 @@ input {
     border-image-slice:1;
     background-color: transparent;
     color:#00C2FF;
+    
+    &:focus{
+        color: #FFFFFF;
+        background: none;
+    }
 }

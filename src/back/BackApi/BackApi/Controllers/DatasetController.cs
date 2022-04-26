@@ -130,27 +130,50 @@ namespace BackApi.Controllers
             var response = await MLconnection.editDataset(snd);
             if(response.StatusCode == HttpStatusCode.OK)
             {
-                var savestr = new DatasetGetPost();
-                savestr.dataset = await response.Content.ReadAsStringAsync();
-                if (datasrv.EditHelperset(id, userid, savestr))
+                //var savestr = new DatasetGetPost();
+                //savestr.dataset = await response.Content.ReadAsStringAsync();
+                var file = await response.Content.ReadAsStreamAsync();
+                var path = datasrv.ProjIdToPath(id,false);
+                if(path == null) return NotFound();
+
+                snd.actions = snd.actions.Replace("[",string.Empty);
+                snd.actions = snd.actions.Replace("]", string.Empty);
+
+                storsrv.SaveStream(path, file);
+                storsrv.ChangesWriteLine(id,false,snd.actions);
+
+                return Ok();
+                /*if (datasrv.EditHelperset(id, userid, savestr))
                 {
                     return Ok();
                 }
-                else return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Greska prilikom cuvanja promena" });
+                else return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Greska prilikom cuvanja promena" });*/
             }
             return BadRequest();
         }
         [HttpPut("{id}/dataset/save")]
-        public async Task<ActionResult<string>> SaveDataset(int id)
+        public async Task<ActionResult> SaveChanges(int id)
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
             Boolean owner;
-            var chk = datasrv.UpdateMainDataset(id, userid, out owner);
+            owner = projsrv.projectOwnership(userid, id);
             if (!owner)
                 return Forbid();
-            if(!chk)
-                return NotFound();
+            datasrv.SaveChanges(id);
+            return Ok();
+        }
+
+        [HttpPut("{id}/dataset/discard")]
+        public async Task<ActionResult> DiscardChanges(int id)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            Boolean owner;
+            owner = projsrv.projectOwnership(userid, id);
+            if (!owner)
+                return Forbid();
+            datasrv.DiscardChanges(id);
             return Ok();
         }
 
@@ -177,5 +200,68 @@ namespace BackApi.Controllers
             dataset.dataset = ret;
             return Ok(dataset);
         }
+
+        [HttpPut("{id}/dataset/revert/line/{ln}")]
+        public async Task<ActionResult> RevertToLine(int id,int ln)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            Boolean owner;
+            owner = projsrv.projectOwnership(userid, id);
+            if (!owner)
+                return Forbid();
+            DatasetMLPost snd = new DatasetMLPost();
+            snd.dataset = datasrv.ProjIdToPath(id, false);
+            snd.actions = datasrv.RevertToLine(id, ln);
+            if (snd.actions == null || snd.dataset == null)
+                return BadRequest();
+            var response = await MLconnection.editDataset(snd);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                //var savestr = new DatasetGetPost();
+                //savestr.dataset = await response.Content.ReadAsStringAsync();
+                var file = await response.Content.ReadAsStreamAsync();
+                var path = datasrv.ProjIdToPath(id, false);
+                if (path == null) return NotFound();
+
+                storsrv.SaveStream(path, file);
+
+                return Ok();
+                /*if (datasrv.EditHelperset(id, userid, savestr))
+                {
+                    return Ok();
+                }
+                else return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Greska prilikom cuvanja promena" });*/
+            }
+            return BadRequest();
+        }
+        [HttpPut("{id}/dataset/revert")]
+        public async Task<ActionResult> RevertToInit(int id)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            Boolean owner;
+            owner = projsrv.projectOwnership(userid, id);
+            if (!owner)
+                return Forbid();
+            if (datasrv.RevertToInit(id))
+                return Ok();
+            return BadRequest();
+        }
+        [HttpGet("{projid}/dataset/{main}/changes")]
+        public async Task<ActionResult> ListChanges(int projid,Boolean main)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            Boolean owner;
+            owner = projsrv.projectOwnership(userid, projid);
+            if (!owner)
+                return Forbid();
+            var ret= datasrv.ListChanges(projid,main);
+            if(ret== null) return NotFound();
+            return Ok(ret);
+        }
+
     }
 }
