@@ -61,6 +61,7 @@ import { NnPageComponent } from './_components/_pages/nn-page/nn-page.component'
 import { ProjectListComponent } from './_components/_elements/project-list/project-list.component';
 import { ListControlsComponent } from './_components/_elements/list-controls/list-controls.component';
 import { FullscreenLoaderComponent } from './_components/_elements/fullscreen-loader/fullscreen-loader.component';
+import { TelNavComponent } from './_components/_elements/tel-nav/tel-nav.component';
 
 
 
@@ -111,7 +112,8 @@ import { FullscreenLoaderComponent } from './_components/_elements/fullscreen-lo
     NnPageComponent,
     ProjectListComponent,
     ListControlsComponent,
-    FullscreenLoaderComponent
+    FullscreenLoaderComponent,
+    TelNavComponent
   ],
   imports: [
     NgxCsvParserModule,

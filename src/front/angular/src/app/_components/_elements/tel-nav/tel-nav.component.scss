@@ -1,0 +1,18 @@
+$light_color:#FFFFFF;
+
+div{
+    color:$light_color;
+}
+a{
+    text-decoration: none;
+    color:$light_color;
+    font-size: xx-large;
+}
+.navbar-toggler{
+    width:50px;
+    height:50px;
+    background-color: #009DF5;
+}
+.navbar-toggler-icon{
+    color:$light_color ;
+}

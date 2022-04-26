@@ -1,0 +1,32 @@
+<div class="d-flex justify-content-end m-5">
+<button class="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navTel"
+    aria-controls="navTel" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+</button>
+</div>
+
+<div class="collapse navbar-collapse" id="navTel" style="z-index: 100000000;">
+    <ul class="navbar-nav">
+        <li routerLink="/profil" *ngIf="auth.logovan">
+            <a routerLink="/profil"><i class="bi bi-person"></i>My Profile</a>
+        </li>
+        <li>
+            <a routerLink="#"> <i class="bi bi-person-video3"></i>&nbsp;Public Experiments</a>
+        </li>
+        <li *ngIf="auth.logovan">
+            <a routerLink="/my-projects"> <i class="bi bi-person-video3"></i>&nbsp;My Experiments</a>
+        </li>
+        <li *ngIf="!auth.logovan">
+            <a routerLink="/registration"> <i class="bi bi-person-plus"></i>&nbsp;Register</a>
+        </li>
+        <li *ngIf="!auth.logovan">
+            <a routerLink="/login"><i class="bi bi-box-arrow-in-right"></i>&nbsp;Login</a>
+        </li>
+        <li *ngIf="auth.logovan">
+            <a routerLink="#"><i class="bi bi-gear"></i>&nbsp;Settings</a>
+        </li>
+        <li *ngIf="auth.logovan">
+            <a routerLink="/login" [routerLinkActive]="['active']" (click)="logout()"><i class="bi bi-box-arrow-right"></i>&nbsp;Logout</a>
+        </li>
+    </ul>
+</div>
