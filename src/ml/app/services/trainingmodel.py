@@ -34,8 +34,8 @@ class TrainingService():
     #batchSize -> int
     #percentage_training -> float - [0,1] -> koliki procenat celog skupa je training skup
 
-    def __init__(self, datasetAll, inputs, outputs, actPerLayer, nbperlayer, actOutput,
-                metrics = ['mse'], learning_rate = 0.1, regularization_rate = 0.1, regularization = 'L1', 
+    def __init__(self, datasetAll, inputs, outputs, actPerLayer, nbperlayer, 
+                actOutput = None, metrics = ['mse'], learning_rate = 0.1, regularization_rate = 0.1, regularization = 'L1', 
                 batchSize = 1, percentage_training = 0.2, problem_type = 'REGRESSION', callbacks = [], model = None):
         self.model = model
 
@@ -62,7 +62,7 @@ class TrainingService():
         self.METRICS = metrics
         self.TYPE = problem_type
 
-        if(actOutput=="None"):
+        if(actOutput==None):
             if(type=="CLASSIFICATION"):
                 self.ACT_OUTPUT = "softmax"
             elif (type=="REGRESSION"):
