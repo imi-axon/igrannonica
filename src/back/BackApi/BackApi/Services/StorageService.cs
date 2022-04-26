@@ -14,6 +14,11 @@
         public void SaveFile(string path, IFormFile file);
         public string CreatePhoto(int userid);
         public string DsetPage(int projid, Boolean main);
+        public string InitialFilePath(int projid);
+        public string ChangesFilePath(int projid, Boolean main);
+        public void SaveStream(string path, Stream file);
+        public void ChangesWriteLine(int projid, Boolean main, string line);
+        public void fwtest(string path, string tekst);
     }
     public class StorageService : IStorageService
     {
@@ -104,7 +109,8 @@
         {
             using(Stream stream = File.Open(path, FileMode.Create))
             {
-                file.CopyTo(stream);           
+                file.CopyTo(stream);  
+                stream.Flush();
             }
         }
 
@@ -116,6 +122,49 @@
             var tmp = "Tmp" + projid + "Main" + main+xd+".csv";
             path=Path.Combine(path,tmp);
             return path;
+        }
+
+        public string InitialFilePath(int projid)
+        {
+            var path = @"Storage";
+            var tmp = "proj" + projid;
+            path = Path.Combine(path, tmp);
+            path = Path.Combine(path, "data");
+            tmp = "Initial.csv";
+            path = Path.Combine(path, tmp);
+            return path;
+        }
+
+        public string ChangesFilePath(int projid,Boolean main)
+        {
+            var path = @"Storage";
+            var tmp = "proj" + projid;
+            path = Path.Combine(path, tmp);
+            path = Path.Combine(path, "data");
+            if (main) tmp = "chmain.txt";
+            else tmp = "chedit.txt";
+            path = Path.Combine(path, tmp);
+            return path;
+        }
+        public void SaveStream(string path, Stream file)
+        {
+            using (Stream stream = File.Open(path, FileMode.Create))
+            {
+                file.CopyTo(stream);
+                stream.Flush();
+            }
+        }
+        public void ChangesWriteLine(int projid,Boolean main, string line) 
+        {
+            var path=ChangesFilePath(projid,main);
+            using (StreamWriter sw = File.AppendText(path))
+            {
+                sw.WriteLine(line);
+            }
+        }
+        public void fwtest(string path,string tekst)
+        {
+            File.WriteAllText(path, tekst);
         }
     }
 }
