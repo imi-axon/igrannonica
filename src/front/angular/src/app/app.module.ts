@@ -64,6 +64,7 @@ import { FullscreenLoaderComponent } from './_components/_elements/fullscreen-lo
 import { PublicExpPageComponent } from './_components/_pages/public-exp-page/public-exp-page.component';
 
 import { TelNavComponent } from './_components/_elements/tel-nav/tel-nav.component';
+import { LanguageComponent } from './_components/_elements/language/language.component';
 
 
 
@@ -117,7 +118,8 @@ import { TelNavComponent } from './_components/_elements/tel-nav/tel-nav.compone
     ProjectListComponent,
     ListControlsComponent,
     FullscreenLoaderComponent,
-    TelNavComponent
+    TelNavComponent,
+    LanguageComponent
   ],
   imports: [
     NgxCsvParserModule,
