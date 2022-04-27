@@ -89,6 +89,15 @@ namespace BackApi.Controllers
                 return Ok(rez);
             else return NotFound("Korisnik sa tim username-om nema projekte");
         }
+        [HttpGet("public_projects")]
+        public async Task<ActionResult<string>> GetPublicProjcets()
+        {
+            var rez = projsrv.ListPublicProjects();
+            if (rez != "[]")
+                return Ok(rez);
+            else
+                return NotFound("Nema public projekata");
+        }
         [HttpPost("{username}/changepass")]
         public async Task<ActionResult<string>> SendEmailForChangePass(string username)
         {
