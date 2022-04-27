@@ -44,6 +44,27 @@ namespace BackApi.Controllers
             else return BadRequest("Greska pri brisanju");
         }
 
+        [HttpPut("{projid}/notes")]
+        public async Task<ActionResult<string>> SetNotes(int projid, [FromBody]NotePut note)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return "Uloguj se";
+            var rez = service.SetNote(projid, userid, note.note);
+            if (rez)
+                return Ok("uspesno");
+            else return NotFound();
+        }
+        [HttpGet("{projid}/notes")]
+        public async Task<ActionResult<string>> GetNotes(int projid)
+        {
+            bool ind = false;
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return "Uloguj se";
+            var rez = service.GetNote(projid, userid, out ind);
+            if (ind)
+                return Ok(rez);
+            else return NotFound();
+        }
         [HttpGet("{projid}")]
         public async Task<ActionResult<string>> GetProjectById(int projid)
         {

@@ -13,5 +13,6 @@ namespace BackApi.Entities
         public string NNName { get; set; }
         public string DataPath { get; set; }
         public string ConfPath { get; set; }
+        public string Notes { get; set; }   
     }
 }

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackApi.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20220420062210_Migracija")]
+    [Migration("20220427215244_Migracija")]
     partial class Migracija
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,6 +70,10 @@ namespace BackApi.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
@@ -94,6 +98,10 @@ namespace BackApi.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Notes")
                         .IsRequired()
                         .HasColumnType("longtext");
 

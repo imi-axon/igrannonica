@@ -141,6 +141,33 @@ namespace BackApi.Controllers
             return BadRequest();
 
         }
+        [HttpPut("{id}/nn/{nnid}/notes")]
+        public async Task<ActionResult<string>> AddNNNotes(int id, int nnid, [FromBody]ApiNNPutNote note)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized("Ulogujte se");
+            var chk = projsrv.projectOwnership(userid, id);
+            if (!chk)
+                return BadRequest();
+            chk = nnsrv.AddNote(id, nnid, note.note);
+            if (!chk)
+                return BadRequest();
+            return Ok("uspesno");
+        }
+        [HttpGet("{id}/nn/{nnid}/notes")]
+        public async Task<ActionResult<string>> GetNNNotes(int id, int nnid)
+        {
+            bool ind = false;
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized("Ulogujte se");
+            var chk = projsrv.projectOwnership(userid, id);
+            if (!chk)
+                return BadRequest();
+            var res = nnsrv.GetNote(id, nnid, out ind);
+            if (!ind)
+                return BadRequest();
+            return Ok(res);
+        }
         [HttpDelete("{id}/nn/{nnid}")]
         public async Task<ActionResult> DeleteNN(int id,int nnid)
         {
