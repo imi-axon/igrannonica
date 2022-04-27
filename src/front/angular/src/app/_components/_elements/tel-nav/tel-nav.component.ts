@@ -12,39 +12,11 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class TelNavComponent implements OnInit {
 
-  constructor(public auth:AuthService,private router:Router, private translate: TranslateService,) { }
-  languageIcon = "";
-  language: string;
-  srImage: string = "assets/Images/Icons/sr_lang.png";
-  enImage: string = "assets/Images/Icons/en_lang.png";
+  constructor(public auth:AuthService,private router:Router) { }
 
   ngOnInit(): void {
-    this.language = localStorage.getItem('lang1') || 'en';
-    this.translate.use(this.language);
-    
-    if(this.language == "en")
-      this.languageIcon = this.enImage;
-    else
-      this.languageIcon = this.srImage;
-    
-    // this.userFullname = this.auth.ime_prezime;
-    
-    // this.userService.getImage(this.auth.korisnickoIme, this, this.loadUserImage);
   }
 
-  public ChangeLanguage(){
-    if(this.language == "en"){
-      this.languageIcon = this.srImage;
-      this.language = "sr";
-    }
-    else{
-      this.languageIcon = this.enImage;
-      this.language = "en";
-    }
-    
-    this.translate.use(this.language);
-    localStorage.setItem('lang1', this.language);
-  }
   logout()
   {
     JWTUtil.delete();
