@@ -125,7 +125,17 @@
         "novi":"Novi eksperiment"
     },
     "profil-page":{
-        "eksperimenti":"Korisnikovi eksperimenti"
+        "osnovneInformacije": "Osnovne informacije",
+        "punoIme": "Puno ime",
+        "adresa": "Adresa",
+        "drzava": "Drzava",
+        "grad": "Grad",
+        "e-mail": "E-mail",
+        "rodjen": "Rodjen",
+        "pol": "Pol",
+        "muski": "Muski",
+        "zenski": "Zenski",
+        "korisnickiOpis": "Korisnicki opis"
     },
     "registration-successful":{
         "uspeh":"Uspešna registracija",

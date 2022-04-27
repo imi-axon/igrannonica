@@ -88,7 +88,7 @@
         "label1":"Label encoding"
     },
     "profil":{
-            "izmeni":"Edit data"
+        "izmeni":"Edit data"
     },
     "create-neural-network":{
         "kreiraj":"Create new",
@@ -127,6 +127,17 @@
         "novi":"Create new"
     },
     "profil-page":{
+        "osnovneInformacije": "Basic info",
+        "punoIme": "Fullname",
+        "adresa": "Address",
+        "drzava": "Country",
+        "grad": "City",
+        "e-mail": "E-mail",
+        "rodjen": "Birthday",
+        "pol": "Gender",
+        "muski": "Male",
+        "zenski": "Female",
+        "korisnickiOpis": "User Description",
         "eksperimenti":"User experiments"
     },
     "registration-successful":{
