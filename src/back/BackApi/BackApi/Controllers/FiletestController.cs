@@ -55,7 +55,7 @@ namespace BackApi.Controllers
         public async Task<ActionResult> PassDatasetToML(int pid,int did)
         {
             //Debug.WriteLine();
-            var path = storsrv.GetDataset(datasrv.ProjIdToPath(pid, true));
+            var path = storsrv.CreateDataset(pid,did);
             var bytes = await System.IO.File.ReadAllBytesAsync(path);
 
             return File(bytes, "text/csv", Path.GetFileName(path));
