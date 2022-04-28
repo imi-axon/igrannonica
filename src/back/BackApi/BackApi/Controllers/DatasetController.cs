@@ -226,6 +226,8 @@ namespace BackApi.Controllers
                 if (path == null) return NotFound();
 
                 storsrv.SaveStream(path, file);
+                storsrv.wipemainchanges(id);
+                datasrv.SaveChanges(id);
 
                 return Ok();
                 /*if (datasrv.EditHelperset(id, userid, savestr))
