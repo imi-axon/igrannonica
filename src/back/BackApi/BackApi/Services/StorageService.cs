@@ -19,6 +19,7 @@
         public void SaveStream(string path, Stream file);
         public void ChangesWriteLine(int projid, Boolean main, string line);
         public void fwtest(string path, string tekst);
+        public void wipemainchanges(int projid);
     }
     public class StorageService : IStorageService
     {
@@ -165,6 +166,17 @@
         public void fwtest(string path,string tekst)
         {
             File.WriteAllText(path, tekst);
+        }
+        public void wipemainchanges(int projid)
+        {
+            var chmain = ChangesFilePath(projid, true);
+            using (FileStream fs = File.Open(chmain, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                lock (fs)
+                {
+                    fs.SetLength(0);
+                }
+            }
         }
     }
 }
