@@ -49,15 +49,14 @@ export class ProjectsApiService {
     return response;
   }
 
-  getProjects(){
-    let response = this.http.get(
-      this.url + "/projects",
+  getProjects():Observable<HttpResponse<Project[]>>{
+    let response = this.http.get<Project[]>(
+      this.url + "/users/public_projects",
       {
         observe: "response",
-        responseType: "json",
         headers:HeaderUtil.jwtOnlyHeaders()
       }
-    )
+    );
     return response;
   }
   
