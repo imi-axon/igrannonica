@@ -17,8 +17,8 @@
 
 #submit{
     background-color: transparent;
-    border:2px solid transparent;
-    border-image:linear-gradient(92.51deg, #2C4396 0%, #23AFC2 48.96%, #2C4396 100%);
+    border:1px solid transparent;
+    border-image:linear-gradient(-15deg, #2C4396 0%, #23AFC2 48.96%, #2C4396 100%);
     border-image-slice:1;
     color: #EEEEEE;
     padding-left:8%;
@@ -27,6 +27,11 @@
 a{
     text-decoration: none;
     color:#00C2FF;
+}
+
+h2{
+    font-weight: lighter;
+    font-size: 48px;
 }
 
 .info {
@@ -41,8 +46,8 @@ a{
 }
 
 .container {
-    border:2px solid transparent;
-    border-image:linear-gradient(92.51deg, #2C4396 0%, #23AFC2 48.96%, #2C4396 100%);
+    border:1px solid transparent;
+    border-image:linear-gradient(-30deg, #2C4396 0%, #23AFC2 48.96%, #2C4396 100%);
     background-origin: border-box;
     border-image-slice:1;
     background: rgba(0, 178, 255, 0.05);
@@ -54,8 +59,8 @@ a{
 }
 
 input {
-    border:2px solid transparent;
-    border-image:linear-gradient(92.51deg, #2C4396 0%, #23AFC2 48.96%, #2C4396 100%);
+    border:1px solid transparent;
+    border-image:linear-gradient(-5deg, #2C4396 0%, #23AFC2 48.96%, #2C4396 100%);
     border-image-slice:1;
     background-color: transparent;
     color:#00C2FF;

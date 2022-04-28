@@ -59,7 +59,6 @@ export class StatisticsComponent implements OnInit {
     setTimeout(() => {
       this.correlationTable.LoadCorrelationMatrix(this.columns, this.correlationMatrix);
       this.statisticsTable.LoadStatisticsData(this.columnStats, this.colnulls);
-      this.statisticsTable.hasPages = false;
       
       this.correlationLoader.stop();
       this.statisticsLoader.stop();

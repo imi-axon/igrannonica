@@ -8,9 +8,8 @@
     </div>
         <div class="container">
             <app-file-input #csvInput 
-                (fileChosen)="loader.start();" 
-                (fileError)="loader.stop(); datasetTable.EmptyDataset();"
-                (jsonLoaded)="datasetTable.LoadDataDirectlyFromInput($event); this.ShowDataset(); loader.stop();"> 
+                (fileChosen)="loader.start();"
+                (jsonLoaded)="this.ShowDataset(); loader.stop();"> 
             </app-file-input>
         </div>
         <p style="color: red; font-weight:bold;"> {{errorMessage}} </p>
