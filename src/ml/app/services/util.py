@@ -8,9 +8,9 @@ else:
 import json
 
 # f-ja read_str_to_df prosledjeni string konvertuje u DataFrame
-def read_str_to_df(x):
+def read_str_to_df(x,separator,quoteChar):
     TESTDATA = StringIO(x)
-    df = pd.read_csv(TESTDATA, sep=';')
+    df = pd.read_csv(TESTDATA, sep=separator, quotechar=quoteChar)
     return df
 
 
