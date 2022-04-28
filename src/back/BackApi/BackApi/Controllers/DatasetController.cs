@@ -227,7 +227,7 @@ namespace BackApi.Controllers
 
                 storsrv.SaveStream(path, file);
                 storsrv.wipemainchanges(id);
-                SaveChanges(id);
+                datasrv.SaveChanges(id);
 
                 return Ok();
                 /*if (datasrv.EditHelperset(id, userid, savestr))
