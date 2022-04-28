@@ -152,6 +152,11 @@
 
 // KRAJ STRANICA
 
+@media (min-width:1501px) {
+    #telnav{
+        display: none;
+    }
+}
 
 @media screen and (max-width: 1500px){
     #page1{
@@ -159,34 +164,50 @@
             font-size: 130px;
         }
     }
+    #telnav{
+        display: none;
+    }
 }
 
 @media screen and (max-width: 1200px){
     #page1{
         #title{
-            font-size: 100px;
+            font-size: 60px;
         }
+    }
+    #telnav{
+        display: none;
     }
 }
 
-@media screen and (max-width: 800px){
-    #page1{
-        #title{
-            font-size: 50px;
+
+@media screen and (max-width: 750px){
+        #telnav{
+            display: block;
         }
-    }
+        #landingNav{
+            display: none;
+        }
+ 
 }
 
 
 @media screen and (max-width: 520px){
     #page1{
         #title{
-            font-size: 38px;
+            font-size: 50px;
         }
     }
     #selector{
         display: none;
     }
+    #telnav{
+        display: block;
+    }
+    #landingNav{
+        display: none;
+    }
+
 }
 
 

@@ -69,6 +69,16 @@ export class ProjectsService {
       }
     )
   }
+
+  getProjects(self?:any, successCallback?:Function, errorCallback?:Function){
+    this.projectsApi.getProjects().subscribe(
+      (response)=>{
+        if (response.status == HttpStatusCode.Ok)
+        if (self && successCallback)
+          successCallback(self, response.body);
+      }
+    )
+  }
   
   
 }

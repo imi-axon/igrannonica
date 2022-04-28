@@ -9,10 +9,13 @@ namespace BackApi.Services
         Boolean CreateProject(ProjectPostPut model,int userid);
         Boolean DeleteProject(int projid,int userid);
         string ListProjects(int userid,int pubuserid);
+        string ListPublicProjects();
         string GetProjById(int projid, int userid);
+        bool SetNote(int projid, int userid, string note);
         Boolean EditProject(int projid, ProjectPostPut proj,int userid);
         int getProjectId(ProjectPostPut model);
         public Boolean projectOwnership(int userid, int projid);
+        string GetNote(int projid, int userid, out bool ind);
     }
     public class ProjectService:IProjectService
     {
@@ -98,7 +101,7 @@ namespace BackApi.Services
                 rez.Append("\"" + "Description" + "\":" + "\"" + p.Description + "\"");
                 rez.Append("},");
             }
-            List<Project> listapriv= context.Projects.Where(x => x.UserId == userid && x.Public==false).ToList();
+            List<Project> listapriv= context.Projects.Where(x => x.UserId == pubuserid && x.Public==false).ToList();
             foreach(Project p in listapriv)
             {
                 rez.Append("{");
@@ -115,6 +118,31 @@ namespace BackApi.Services
                 rez.Append("},");
             }
             if(rez.Length>2) rez.Remove(rez.Length - 1, 1); //posto kasnije gleda da li je rez="[]" tj prazan array
+            rez.Append("]");
+            return rez.ToString();
+        }
+
+        public string ListPublicProjects()
+        {
+            var rez = new StringBuilder();
+            rez.Append("[");
+            List<Project> listapub = context.Projects.Where(x => x.Public == true).ToList();
+            foreach (Project p in listapub)
+            {
+                rez.Append("{");
+                rez.Append("\"" + "ProjectId" + "\":" + "\"" + p.ProjectId + "\",");
+                rez.Append("\"" + "Name" + "\":" + "\"" + p.Name + "\",");
+                rez.Append("\"" + "Public" + "\":" + "\"" + p.Public + "\",");
+                rez.Append("\"" + "Creationdate" + "\":" + "\"" + p.CreationDate + "\",");
+                var pom = context.Datasets.FirstOrDefault(x => x.ProjectId == p.ProjectId);
+                if (pom != null)
+                    rez.Append("\"" + "hasDataset" + "\":" + "\"" + "true" + "\",");
+                else
+                    rez.Append("\"" + "hasDataset" + "\":" + "\"" + "false" + "\",");
+                rez.Append("\"" + "Description" + "\":" + "\"" + p.Description + "\"");
+                rez.Append("},");
+            }
+            if (rez.Length > 2) rez.Remove(rez.Length - 1, 1);
             rez.Append("]");
             return rez.ToString();
         }
@@ -141,7 +169,27 @@ namespace BackApi.Services
 
             return rez.ToString();
         }
+        public bool SetNote(int projid, int userid, string note)
+        {
+            var proj = context.Projects.FirstOrDefault(x => x.UserId == userid && x.ProjectId == projid);
+            if (proj == null)
+                return false;
+            proj.Notes = note;
+            context.SaveChanges();
+            return true;
 
+        }
+        public string GetNote(int projid, int userid, out bool ind)
+        {
+            var proj = context.Projects.FirstOrDefault(x => x.UserId == userid && x.ProjectId == projid);
+            if (proj == null)
+            {
+                ind = false;
+                return "";
+            }
+            ind = true;
+            return proj.Notes;
+        }
         public Boolean EditProject(int projid,ProjectPostPut proj,int userid)
         {
             Boolean rez;

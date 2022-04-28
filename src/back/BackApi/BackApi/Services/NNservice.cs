@@ -19,6 +19,8 @@ namespace BackApi.Services
         public string ListNN(int userid, int projid);
         public string NNIdToCfg(int nnid);
         public Boolean DeleteNN(int nnid);
+        public bool AddNote(int projid, int nnid, string note);
+        public string GetNote(int projid, int nnid, out bool ind);
     }
 
     public class NNservice: INNservice
@@ -232,6 +234,26 @@ namespace BackApi.Services
             kontext.SaveChanges();
 
             return true;
+        }
+        public bool AddNote(int projid, int nnid, string note)
+        {
+            var nn = kontext.NNs.FirstOrDefault(x => x.NNId == nnid && x.ProjectId==projid);
+            if (nn==null)
+                return false;
+            nn.Notes = note;
+            kontext.SaveChanges();
+            return true;
+        }
+        public string GetNote(int projid, int nnid, out bool ind)
+        {
+            var nn = kontext.NNs.FirstOrDefault(x => x.NNId == nnid && x.ProjectId == projid);
+            if (nn == null)
+            {
+                ind = false;
+                return "";
+            }
+            ind = true;
+            return nn.Notes;
         }
     }
 }
