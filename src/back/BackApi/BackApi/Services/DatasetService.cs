@@ -379,7 +379,7 @@ namespace BackApi.Services
                 {
                     actions.Append(lines[i]);
                     actions.Append(",");
-                    storageService.ChangesWriteLine(projid, true, lines[i]);
+                    storageService.ChangesWriteLine(projid, false, lines[i]);
                 }
             }
             if(actions.Length > 2)
