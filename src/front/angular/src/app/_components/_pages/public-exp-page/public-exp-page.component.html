@@ -7,9 +7,9 @@
     <div id="wrapper">
         <h1> {{'navbar.public_exp' |translate}} </h1>
         
-        <!-- <list-controls (OnSearch)="projectListpublic.SetSearchTerm($event)" (OnOrderBy)="projectListpublic.OrderBy($event)"></list-controls>
+        <list-controls (OnSearch)="projectListpublic.SetSearchTerm($event)" (OnOrderBy)="projectListpublic.OrderBy($event)"></list-controls>
         
-        <app-project-list #projectListpublic> </app-project-list> -->
+        <app-project-list #projectListpublic [publicExp]=publicExp> </app-project-list>
     </div>
     
 </div>

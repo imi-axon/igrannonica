@@ -101,7 +101,18 @@
 
 
 
+    
+    "experiment":{
+        "pregled": "Pregled",
+        "dataset": "Dataset",
+        "mreza": "Mreža",
+        "opis": "Opis",
+        "kreiran": "Kreiran"
+    },
 
+    
+    
+    
 
     "data-set-page":{
         "naslov":"Set podataka",

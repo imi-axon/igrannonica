@@ -9,7 +9,7 @@
         
         <list-controls (OnSearch)="projectList.SetSearchTerm($event)" (OnOrderBy)="projectList.OrderBy($event)"></list-controls>
         
-        <app-project-list #projectList> </app-project-list>
+        <app-project-list #projectList [publicExp]=publicExp> </app-project-list>
     </div>
     
 </div>

@@ -102,7 +102,17 @@
     },
 
 
-
+    
+    
+    "experiment":{
+        "pregled": "Overview",
+        "dataset": "Dataset",
+        "mreza": "Network",
+        "opis": "Description",
+        "kreiran": "Created on"
+    },
+    
+    
 
 
 
