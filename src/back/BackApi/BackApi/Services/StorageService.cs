@@ -170,13 +170,7 @@
         public void wipemainchanges(int projid)
         {
             var chmain = ChangesFilePath(projid, true);
-            using (FileStream fs = File.Open(chmain, FileMode.OpenOrCreate, FileAccess.ReadWrite))
-            {
-                lock (fs)
-                {
-                    fs.SetLength(0);
-                }
-            }
+            File.WriteAllText(chmain,"");
         }
     }
 }
