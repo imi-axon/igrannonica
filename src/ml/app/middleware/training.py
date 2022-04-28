@@ -130,11 +130,11 @@ class TrainingInstance():
         # httpc.put(nnUrl) # PRIVREMENO ZAKOMENTARISANO DOK BACK NE URADI PODRSKU
 
         # -- Poruka za kraj Thread-a --
-        print('-- Poruka za kraj Thread-a --')
+        # print('-- Poruka za kraj Thread-a --')
 
-        self.lock.acquire(blocking=True)    # [ X ]
-        self.buff.append(b'')               # indikator za kraj Thread-a
-        print(self.buff)
-        self.lock.release()                 # [   ]
+        # self.lock.acquire(blocking=True)    # [ X ]
+        # self.buff.append(b'')               # indikator za kraj Thread-a
+        # print(self.buff)
+        # self.lock.release()                 # [   ]
 
         print('-'*20)

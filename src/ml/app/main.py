@@ -297,8 +297,6 @@ async def training_stream(ws: WebSocket):
         await_play = True
 
         while not finished:
-            #print('---- Main Loop ----')
-            
             # print(f'finished: {finished}')
             # print(f'flag stop: {flags["stop"]}')
             # print(f'locked: {lock}')
@@ -318,40 +316,28 @@ async def training_stream(ws: WebSocket):
                 finished = True
             
             lock.acquire(blocking=True) # [ X ]
-            
-
-            # print('--==> Buffer')
-            # print(buff)
 
             # print(len(buff))
             if len(buff) > 0:
                 await_play = True
-                b = buff.pop(0)
-                # print(f'> BUFFER POP -> {b.decode()}')
-                # TTM.pretty_print()
-                lock.release() # [   ]
-                # print(b)
                 
-                if b == b'end': 
-                    print(f'> END BLOCK')
-                    await ws.send_text(b.decode()) # >>>>
-                    print(f'> Poslat Backu END Message')
-                    while True:
-                        lock.acquire(blocking=True) # [ X ]
-                        if len(buff) > 0:
-                            break
-                        lock.release() # [   ]
+                #local_buff: List[bytes] = []
+                local_buff = buff.copy()
+                buff.clear()
+                lock.release() # [   ]
 
-                    b = buff.pop(0)
-                    lock.release() # [   ]
+                for b in local_buff:
+                    if b == b'end': 
+                        print(f'> END BLOCK')
+                        await ws.send_text(b.decode()) # >>>>
+                        print(f'> Poslat Backu END Message')
 
-                    # await ws.send_text(b.decode()) # >>>>
-                    print(f'Training thread daemon is alive: {th.is_alive()}')
-                    finished = True
-                    
-                else:
-                    print('>>> send bytes')
-                    await ws.send_text(b.decode()) # >>>>
+                        print(f'> Training thread daemon is alive: {th.is_alive()}')
+                        finished = True
+                        
+                    else:
+                        print('>>> send bytes')
+                        await ws.send_text(b.decode()) # >>>>
 
             else:
                 lock.release() # [   ]
