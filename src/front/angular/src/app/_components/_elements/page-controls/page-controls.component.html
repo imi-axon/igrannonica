@@ -1,0 +1,35 @@
+<div id="page_controls">
+    
+    <div></div>
+    <div id="page_buttons">
+        
+        <div id="button_container">
+            <button [class.disabled]="currentPage <= 1" [disabled]="currentPage <= 1" (click)="MinPage();">
+                &lt;&lt;
+            </button>
+            
+            <button [class.disabled]="currentPage <= 1" [disabled]="currentPage <= 1" (click)="PreviousPage()">
+                &lt;
+            </button>
+            
+            <div class="current_page" (click)="PreviousPage()">
+                {{currentPage}}&nbsp;/&nbsp;{{pageCount}}
+            </div>
+            
+            <button [class.disabled]="currentPage == pageCount" [disabled]="currentPage == pageCount" (click)="NextPage()">
+                &gt;
+            </button>
+            
+            <button [class.disabled]="currentPage == pageCount" [disabled]="currentPage == pageCount" (click)="MaxPage();">
+                &gt;&gt;
+            </button>
+        </div>
+        
+    </div>
+
+    <div id="jump_section">
+        <button [class.disabled]="pageCount <= 1" [disabled]="pageCount <= 1" (click)="GoToPage();">{{'data-set-table.jump'|translate}}</button>
+        <input [disabled]="pageCount <= 1" type="number" min="1" aria-label="Default" aria-describedby="inputGroup-sizing-default" [(ngModel)]="pageInput">
+    </div>
+    
+</div>

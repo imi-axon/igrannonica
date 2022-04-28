@@ -68,6 +68,10 @@ namespace BackApi.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
@@ -92,6 +96,10 @@ namespace BackApi.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Notes")
                         .IsRequired()
                         .HasColumnType("longtext");
 

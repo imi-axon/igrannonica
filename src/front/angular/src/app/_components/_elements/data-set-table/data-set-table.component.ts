@@ -1,7 +1,5 @@
-import { Component, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, OnChanges, OnInit, Output } from '@angular/core';
 import { EventEmitter } from '@angular/core';
-import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
-import { StatisticsService } from 'src/app/_utilities/_services/statistics.service';
 
 @Component({
   selector: 'data-set-table',
@@ -10,60 +8,42 @@ import { StatisticsService } from 'src/app/_utilities/_services/statistics.servi
 })
 export class DataSetTableComponent implements OnInit, OnChanges{
   
-  datasetHidden: boolean = true;
-  hasPages: boolean = true;
+  @Output() LoadedEvent = new EventEmitter<null>();
   
-  data: any;
+  dataset: any;
   columns: string[];
-  // AKO IMAMO STATISTIKU
-  public statisticOptions: string[] = ['Minimum', 'Maximum', 'Average', 'Mediana', 'Nulls'];
   
-  pageInput: number;
   
-  // Stranicenje za prikaz podataka
-  dataPages: any[][] = [];
-  rowsPerPage: number = 20;
-  currentPage: number = 0;
-  
-  // Sada se koristi samo na stranici za input fajla
-  @Output() loadingStartedEvent = new EventEmitter<null>();
-  
-  // Koristi se na stranici za input fajla i statistics stranici
-  @Output() loadedEvent = new EventEmitter<null>();
-  
-  public visible: boolean = false;
   
   ngOnInit(): void {
     
   }
 
   
-  constructor(public statisticsService:StatisticsService) {}
+  constructor() {}
   
   ngOnChanges(): void {
     
   }
   
-  
-  public EmptyDataset(){
-    this.data = null;
-    this.columns = [];
-    this.visible = false;
+  // NORMALAN DATASET 
+  public LoadDataset(dataset: any){
+    this.dataset = dataset;
+    this.columns = Object.keys(dataset[0]);
+    this.LoadedEvent.emit();
   }
   
+  public GetRowData(row: any){
+    return Object.values(row)
+  }
+  
+  // ========================= STATISTIKA ========================= //
   
   public LoadStatisticsData(statistics: any, colnulls: any){
-    this.loadingStartedEvent.emit();
-    
-    console.log(statistics)
-    
     this.columns = this.getColumnsFromStatistics(statistics);
-    this.data = this.parseStatisticsData(statistics, colnulls);
+    this.dataset = this.parseStatisticsData(statistics, colnulls);
     
-    console.log(this.data)
-    
-    this.visible = true;
-    this.loadedEvent.emit();
+    this.LoadedEvent.emit();
   }
   
   private getColumnsFromStatistics(statistics: any){
@@ -102,77 +82,6 @@ export class DataSetTableComponent implements OnInit, OnChanges{
     
     return statisticsData;
   }
-  
-  
-  // Ovo se koristi samo na dataset stranici da bi se prikazala tabela pre nego sto je posaljemo na back
-  public LoadDataDirectlyFromInput(data:Event){
-    this.loadingStartedEvent.emit();
-    
-    this.data = data;
-    console.log("Dataset iz input-a:");
-    console.log(this.data);
-    
-    this.columns = Object.keys(this.data[0]);
-    
-    this.splitData(this.data);
-    this.currentPage = 0;
-    
-    this.loadedEvent.emit();
-    
-    this.visible = true;
-  }
-  
-  private splitData(data: any){
-    this.dataPages = [];
-    
-    let arrayCounter = 0;
-    this.dataPages.push([]);
-    let sectionCounter = 0;
-    
-    for(let i = 0; i < data.length; i++){
-      if(sectionCounter < this.rowsPerPage){
-        this.dataPages[arrayCounter].push(data[i]);
-      }
-      else{
-        sectionCounter = 0;
-        this.dataPages.push([]);
-        this.dataPages[++arrayCounter].push(data[i]);
-      }
-      sectionCounter++;
-    }
-  }
-  public previousPage(){
-    if(this.currentPage < 1)
-      return;
-    this.currentPage--;
-  }
-  
-  public nextPage(){
-    if(this.currentPage > this.dataPages.length - 2)
-      return;
-    this.currentPage++;
-  }
-  
-  public minPage(){
-    this.currentPage = 0;
-  }
-  
-  public maxPage(){
-    this.currentPage = this.dataPages.length - 1;
-  }
-  
-  public goToPage(){
-    if(this.pageInput == null 
-      || this.pageInput <= 0 
-      || this.pageInput > this.dataPages.length)
-      return;
-      
-    this.currentPage = this.pageInput - 1;
-  }
-  
-  
-  
-  
 
   
 }

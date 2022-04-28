@@ -61,6 +61,15 @@ import { NnPageComponent } from './_components/_pages/nn-page/nn-page.component'
 import { ProjectListComponent } from './_components/_elements/project-list/project-list.component';
 import { ListControlsComponent } from './_components/_elements/list-controls/list-controls.component';
 import { FullscreenLoaderComponent } from './_components/_elements/fullscreen-loader/fullscreen-loader.component';
+import { PublicExpPageComponent } from './_components/_pages/public-exp-page/public-exp-page.component';
+import { TelNavComponent } from './_components/_elements/tel-nav/tel-nav.component';
+import { LanguageComponent } from './_components/_elements/language/language.component';
+import { ThreeBackgroundCanvasComponent } from './_components/_elements/three-background-canvas/three-background-canvas.component';
+import { ExperimentOverviewComponent } from './_components/_elements/experiment-overview/experiment-overview.component';
+import { ExperimentNetworkComponent } from './_components/_elements/experiment-network/experiment-network.component';
+import { ExperimentDatasetComponent } from './_components/_elements/experiment-dataset/experiment-dataset.component';
+import { ExperimentPageComponent } from './_components/_pages/experiment-page/experiment-page.component';
+import { PageControlsComponent } from './_components/_elements/page-controls/page-controls.component';
 
 
 
@@ -109,9 +118,20 @@ import { FullscreenLoaderComponent } from './_components/_elements/fullscreen-lo
     ChartTrainingComponent,
     PhotoInputComponent,
     NnPageComponent,
+    PublicExpPageComponent,
     ProjectListComponent,
     ListControlsComponent,
-    FullscreenLoaderComponent
+    FullscreenLoaderComponent,
+    TelNavComponent,
+    LanguageComponent,
+    ThreeBackgroundCanvasComponent,
+    ExperimentPageComponent,
+    ExperimentOverviewComponent,
+    ExperimentOverviewComponent,
+    ExperimentNetworkComponent,
+    ExperimentDatasetComponent,
+    ExperimentPageComponent,
+    PageControlsComponent
   ],
   imports: [
     NgxCsvParserModule,

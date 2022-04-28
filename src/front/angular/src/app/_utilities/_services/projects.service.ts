@@ -9,38 +9,36 @@ import { ProjectsApiService } from '../_middleware/projects-api.service';
 })
 export class ProjectsService {
 
-  constructor(private projectsApi:ProjectsApiService) { }
+  constructor(private projectsApi: ProjectsApiService) { }
   @Input() public projekti: Project[] = [];
 
-  userProjects(username:string, self?: any, successCallback?: Function, errorCallback?: Function)
-  {
+  userProjects(username: string, self?: any, successCallback?: Function, errorCallback?: Function) {
     this.projectsApi.userProjects(username).subscribe(
-      
+
       (response) => {
-        if (response.status== HttpStatusCode.Ok) { 
-          this.projekti=(response.body==null)?[]:response.body;
-        //  console.log("TACNO");
+        if (response.status == HttpStatusCode.Ok) {
+          this.projekti = (response.body == null) ? [] : response.body;
+          //  console.log("TACNO");
           console.log(this.projekti);
-          if(response.body)
-            if (self && successCallback) successCallback(self,this.projekti);
+          if (response.body)
+            if (self && successCallback) successCallback(self, this.projekti);
 
         }
-        if(response.status==HttpStatusCode.NotFound)
-        {
+        if (response.status == HttpStatusCode.NotFound) {
           console.log("NETACNO");
           JWTUtil.delete();
           if (self && errorCallback) errorCallback(self, response.status);
         }
       }
-    
+
     );
   }
-  
-  removeProject(projectId: number, self?: any, successCallback?: Function, unauthorizedCallback?: Function, badRequestCallback?: Function){
+
+  removeProject(projectId: number, self?: any, successCallback?: Function, unauthorizedCallback?: Function, badRequestCallback?: Function) {
     this.projectsApi.removeProject(projectId).subscribe(
-    (response) => {
+      (response) => {
         console.log("TEST")
-        
+
         if (response.status == HttpStatusCode.Ok)
           if (self && successCallback)
             successCallback(self);
@@ -52,23 +50,35 @@ export class ProjectsService {
         if (response.status == HttpStatusCode.BadRequest)
           if (self && badRequestCallback)
             badRequestCallback(self);
-            
+
       }
     )
   }
-  
-  getProject(projectId: number, self?: any, successCallback?: Function, errorCallback?: Function){
+
+  getProject(projectId: number, self?: any, successCallback?: Function, errorCallback?: Function) {
     this.projectsApi.getProject(projectId).subscribe(
       (response) => {
-        
+
         if (response.status == HttpStatusCode.Ok)
           if (self && successCallback)
             successCallback(self, response.body);
-        
-        
+
+
       }
     )
   }
-  
-  
+
+  getProjects(self?: any, successCallback?: Function, errorCallback?: Function) {
+    this.projectsApi.getProjects().subscribe(
+      (response) => {
+        if (response.status == HttpStatusCode.Ok)
+        this.projekti = (response.body == null) ? [] : response.body;
+        if(response.body)
+          if (self && successCallback)
+            successCallback(self, this.projekti);
+      }
+    )
+  }
+
+
 }

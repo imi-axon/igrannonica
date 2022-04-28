@@ -2,6 +2,7 @@
     
     "navbar":{
         "home":"Home",
+        "public_exp":"Public Experiments",
         "registration":"Registration",
         "login":"Login",
         "myExperiments":"My Experiments",
@@ -101,7 +102,17 @@
     },
 
 
-
+    
+    
+    "experiment":{
+        "pregled": "Overview",
+        "dataset": "Dataset",
+        "mreza": "Network",
+        "opis": "Description",
+        "kreiran": "Created on"
+    },
+    
+    
 
 
 

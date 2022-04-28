@@ -1,0 +1,57 @@
+<div class="container ">
+    <div class="nav-bg d-flex justify-content-end m-3">
+        <button class="navbar-toggler navbar-dark " type="button" data-bs-toggle="collapse"
+            data-bs-target="#navTel" aria-controls="navTel" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+
+    <div class="navDiv collapse navbar-collapse" id="navTel">
+        <div class="lista d-flex justify-content-center">
+            <ul class="navbar-nav" style="width:80%">
+                <li>
+                <div class="div0">
+                   <a routerLink="/home" style="text-decoration: none;">
+                    <div id="igrannonica">
+                     <h1 id="naslov" >Igrannonica</h1>
+                     <img _ngcontent-vgv-c53=""  src="/assets/Images/icosahedron.png">
+                    </div>
+                    </a>
+                </div>
+            </li>
+                <div class="div1">
+                    <li routerLink="/profil" *ngIf="auth.logovan" class="nav-item">
+                        <a routerLink="/profil"><img _ngcontent-apl-c70="" src="assets/Images/Icons/User_icon.svg">&nbsp;{{'navbar.myAccount'|translate}}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a routerLink="/public_exp"> <img _ngcontent-rml-c70="" src="assets/Images/Icons/PublicExperiments_icon.svg">&nbsp;{{'sidebar.publicExperiments'|translate}}</a>
+                    </li>
+                    <li *ngIf="auth.logovan" class="nav-item">
+                        <a routerLink="/my-projects"> <img _ngcontent-rml-c70="" src="assets/Images/Icons/MyExperiments_icon.svg">&nbsp;{{'navbar.myExperiments'|translate}}</a>
+                    </li>
+                    <li *ngIf="!auth.logovan" class="nav-item">
+                        <a routerLink="/registration"> <i class="bi bi-person-plus"></i>&nbsp;{{'navbar.registration'|translate}}</a>
+                    </li>
+                    <li *ngIf="!auth.logovan" class="nav-item">
+                        <a routerLink="/login"><i class="bi bi-box-arrow-in-right"></i>&nbsp;{{'navbar.login'|translate}}</a>
+                    </li>
+                </div>
+                <li *ngIf="auth.logovan" class="nav-item">
+                    <a routerLink="#"><img _ngcontent-rml-c70="" src="assets/Images/Icons/Settings_icon.svg">&nbsp;{{'sidebar.settings'|translate}}</a>
+                </li>
+                <li *ngIf="auth.logovan" class="nav-item">
+                    <a routerLink="/login" [routerLinkActive]="['active']" (click)="logout()"><img _ngcontent-rml-c70="" src="assets/Images/Icons/Logout_icon.svg">&nbsp;{{'navbar.logout'|translate}}</a>
+                </li>
+            <hr>
+                <li>
+                    <div id="controls">
+                        <app-language></app-language>
+                        <img _ngcontent-qjm-c69="" src="assets/Images/Icons/Info_icon.svg">
+                        <img src="assets/Images/Icons/theme_icon.png">
+                    </div>
+                </li>
+            </ul>
+        </div>
+        
+    </div>
+</div>

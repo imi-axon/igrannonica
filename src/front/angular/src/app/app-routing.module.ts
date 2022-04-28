@@ -20,6 +20,11 @@ import { StatisticsComponent } from './_components/_elements/statistics/statisti
 import { TrainingPageComponent } from './_components/_pages/training-page/training-page.component';
 import { CreateNeuralNetworkComponent } from './_components/_elements/create-neural-network/create-neural-network.component';
 import { NnPageComponent } from './_components/_pages/nn-page/nn-page.component';
+import { PublicExpPageComponent } from './_components/_pages/public-exp-page/public-exp-page.component';
+import { ExperimentOverviewComponent } from './_components/_elements/experiment-overview/experiment-overview.component';
+import { ExperimentDatasetComponent } from './_components/_elements/experiment-dataset/experiment-dataset.component';
+import { ExperimentNetworkComponent } from './_components/_elements/experiment-network/experiment-network.component';
+import { ExperimentPageComponent } from './_components/_pages/experiment-page/experiment-page.component';
 
 const routes: Routes = [
  // {path:'train/:ProjectId/:Inputs/:Outputs',component:ProjectPageComponent},
@@ -36,6 +41,7 @@ const routes: Routes = [
   {path:'profil', component:ProfilPageComponent},
   {path:'verification', component:VerificationComponent},
   {path: 'changepass', component:ChangepassPageComponent},
+  {path:'public_exp',component:PublicExpPageComponent},
 
   //{path:'edit-dataset/:ProjectId', component:EditDatasetPageComponent},
   {path:'input-username', component:InputusernamePageComponent},
@@ -43,11 +49,11 @@ const routes: Routes = [
 
   {
     path:'project/:ProjectId',
-    component:ProjectPageStatisticsEditComponent,
+    component:ExperimentPageComponent,
     children:[
-      {path:'',component:StatisticsComponent},
-      {path:'statistics', component:StatisticsComponent},
-      {path:'edit',component:EditDatasetComponent}
+      {path:'',component:ExperimentOverviewComponent},
+      {path:'dataset', component:ExperimentDatasetComponent},
+      {path:'network',component:ExperimentNetworkComponent}
     ]
   }
   //TESTIRANJE - OBRISATI KASNIJE
@@ -68,7 +74,7 @@ export const routingComponents=[
   DataSetPageComponent, LoginPageComponent, RegistrationPageComponent,
   
   HomePageComponent,MyProjectsPageComponent,ProfilPageComponent,VerificationComponent,ProjectPageStatisticsEditComponent,
-  StatisticsComponent,EditDatasetComponent,TrainingPageComponent,CreateNeuralNetworkComponent,NnPageComponent,
+  StatisticsComponent,EditDatasetComponent,TrainingPageComponent,CreateNeuralNetworkComponent,NnPageComponent,PublicExpPageComponent,
 
   //TESTIRANJE - OBRISATI KASNIJE
   NeuralNetworkDisplayComponent];

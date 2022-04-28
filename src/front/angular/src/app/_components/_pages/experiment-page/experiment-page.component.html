@@ -1,0 +1,40 @@
+<navbar></navbar>
+
+<sidebar></sidebar>
+
+<div class="content">
+    
+    <div id="header">
+        <h1>{{project.Name}}</h1>
+        
+        <div id="cards">
+            <div class="experiment-card" (click)="SwitchCard('.')" [class.selected-card]="currentCard=='.'">
+                <a>{{"experiment.pregled" | translate}}</a>
+            </div>
+            <div class="experiment-card" (click)="SwitchCard('dataset')" [class.selected-card]="currentCard=='dataset'">
+                <a>{{"experiment.dataset" | translate}}</a>
+            </div>
+            <div class="experiment-card" (click)="SwitchCard('network')" [class.selected-card]="currentCard=='network'">
+                <a>{{"experiment.mreza" | translate}}</a>
+            </div>
+        </div>
+        
+        <select id="cards_dropdown" (change)="SwitchCardCombo($event)">
+            <option value="." [selected]="currentCard=='.'">
+                <a>{{"experiment.pregled" | translate}}</a>
+            </option>
+            <option value="dataset" [selected]="currentCard=='dataset'">
+                <a>{{"experiment.dataset" | translate}}</a>
+            </option>
+            <option value="network" [selected]="currentCard=='network'">
+                <a>{{"experiment.mreza" | translate}}</a>
+            </option>
+        </select>
+        
+    </div>
+    
+    <div id="pageOutlet">
+        <router-outlet (activate)="OnActivate($event)"></router-outlet>
+    </div>
+    
+</div>

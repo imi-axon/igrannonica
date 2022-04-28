@@ -1,0 +1,108 @@
+#header{
+    height: 100px;
+    width: 90%;
+    padding: 0px 10px 0px 10px;
+    
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    
+    border-bottom: solid 1px #2C5D96;
+    
+    
+    h1{
+        margin: 0px;
+        font-size: 28px;
+    }
+    
+    #cards{
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+    
+    .experiment-card{
+        width: 120px;
+        padding-bottom: 3px;
+        text-align: center;
+        color: #444444;
+        cursor: pointer;
+        
+        &:hover{
+            color: #2c7896;
+        }
+    }
+    
+    .selected-card{
+        border-bottom: solid 3px #2C5D96;
+        padding-bottom: 0px;
+        font-weight: 600;
+        &:hover{
+            color: #444444;
+        }
+    }
+    
+    #cards_dropdown{
+        display: none;
+        color: #FFFFFF;
+        background-color: #2C5D96;
+        border: none;
+        padding: 3px 5px 3px 5px;
+        border-radius: 5px 5px 0px 0px;
+        
+        &:hover{
+            background-color: #235288;
+        }
+    }
+    
+}
+
+#pageOutlet{
+    width: 90%;
+    margin-top: 30px;
+}
+
+
+
+// 1250 PX ======================================
+@media screen and (max-width: 1250px) {
+    
+    #header{
+        
+        #cards{
+            display: none;
+        }
+        
+        #cards_dropdown{
+            display: inherit;
+        }
+    }
+    
+}
+
+// 850 PX ======================================
+@media screen and (max-width: 850px) {
+    
+    #header{
+        
+        #cards_dropdown{
+            font-size: 16px;
+        }
+        
+        h1{
+            font-size: 18px;
+            
+            
+        }
+        
+        #cards{
+            display: none;
+        }
+        
+        #cards_dropdown{
+            display: inherit;
+        }
+    }
+    
+}

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ProjectListComponent } from '../../_elements/project-list/project-list.component';
 
 @Component({
   selector: 'app-my-projects-page',
@@ -6,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./my-projects-page.component.scss']
 })
 export class MyProjectsPageComponent implements OnInit {
+
+  @ViewChild(ProjectListComponent) projectList:ProjectListComponent
+  public publicExp:boolean=false;
 
   constructor() { }
 

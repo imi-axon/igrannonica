@@ -2,6 +2,7 @@
 
     "navbar":{
         "home":"Početna",
+        "public_exp":"Javni eksperimenti",
         "registration":"Registracija",
         "login":"Prijava",
         "myExperiments":"Moji Eksperimenti",
@@ -100,7 +101,18 @@
 
 
 
+    
+    "experiment":{
+        "pregled": "Pregled",
+        "dataset": "Dataset",
+        "mreza": "Mreža",
+        "opis": "Opis",
+        "kreiran": "Kreiran"
+    },
 
+    
+    
+    
 
     "data-set-page":{
         "naslov":"Set podataka",
