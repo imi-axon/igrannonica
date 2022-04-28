@@ -1,4 +1,5 @@
 import os
+from random import randint, random
 from threading import Lock, Thread, current_thread
 from time import sleep, time
 from typing import Dict, List
@@ -19,6 +20,7 @@ from util.csv import csv_is_valid, csv_decode, csv_decode_2
 from util.json import json_encode, json_decode
 import util.http as httpc
 from util.filemngr import FileMngr
+from util.ttm import TTM, TrainingThread
 
 # ML
 from middleware.statistics import StatisticsMiddleware
@@ -236,6 +238,127 @@ def get_default_nn_conf():
 
 @app.websocket("/api/nn/train/start")
 async def training_stream(ws: WebSocket):
+    start_time = time()
+
+    await ws.accept()
+    data = await ws.receive_json()
+    await ws.send_bytes(b'') # confirm
+    print('Accepted')
+    
+
+    # print(data)
+    print(data)
+    datasetlink = data['dataset']
+    nnlink = data['nn']
+    conflink = data['conf']
+    conf = json_decode(data['newconf'])
+
+    # TEMP
+    # conf['actPerLayer'] = ['relu' for _ in range(3)]
+    # conf['neuronsPerLayer'] = [3 for _ in range(3)]
+
+    tt: TrainingThread = None
+
+    buff: List[bytes] = []
+    flags = {'stop': False}
+    lock: Lock = Lock()
+
+    try:
+        th = Thread(target=TrainingInstance(buff, lock, flags).train, args=(datasetlink, nnlink, conf))
+
+        tt = TrainingThread(th, buff, flags, lock)
+        buff = tt.buffer
+        flags = tt.flags
+        lock = tt.lock
+
+        if not TTM.add(tt, randint(1,100), randint(1,100)):
+            raise Exception()
+
+        TTM.pretty_print()
+
+        th.start()
+
+        print('Thread Started')
+
+        finished = False
+        await_play = False
+
+        while not finished:
+            print('---- Main Loop ----')
+            
+            # print(f'finished: {finished}')
+            # print(f'flag stop: {flags["stop"]}')
+            # print(f'locked: {lock}')
+
+            rcv = 'play'
+
+            if await_play:
+                print('--==> AWAIT BACK PLAY')
+                rcv = await ws.receive_text()
+                await_play = False
+                print('--==> RECIEVED: ' + rcv)
+            
+            if rcv == 'stop':
+                print(f'> RCV = stop')
+                flags['stop'] = True
+                finished = True
+            
+            lock.acquire(blocking=True) # [ X ]
+            
+
+            print('--==> Buffer')
+            print(buff)
+
+            # print(len(buff))
+            if len(buff) > 0:
+                await_play = True
+                b = buff.pop(0)
+                print(f'> BUFFER POP -> {b.decode()}')
+                TTM.pretty_print()
+                lock.release() # [   ]
+                # print(b)
+                
+                if b == b'end': 
+                    print(f'> END BLOCK')
+                    await ws.send_text(b.decode()) # >>>>
+                    print(f'> Poslat Backu END Message')
+                    while True:
+                        lock.acquire(blocking=True) # [ X ]
+                        if len(buff) > 0:
+                            break
+                        lock.release() # [   ]
+
+                    b = buff.pop(0)
+                    lock.release() # [   ]
+
+                    # await ws.send_text(b.decode()) # >>>>
+                    finished = True
+                    
+                else:
+                    print('>>> send bytes')
+                    await ws.send_text(b.decode()) # >>>>
+
+            else:
+                lock.release() # [   ]
+
+        print(f'time: { time() - start_time }')
+        await ws.close(code = 1000)
+
+    except WebSocketDisconnect:
+        print('-=| WS Disconnect |=-')
+    # except Exception:
+        
+    #     print('-=| EXCEPTION |=-')
+
+    TTM.pretty_print()
+
+    print('-'*16)
+
+
+
+# BACKUP
+@app.websocket("/api/nn/train/start1")
+async def training_stream_1(ws: WebSocket):
     start_time = time()
 
     await ws.accept()
