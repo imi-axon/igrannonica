@@ -24,30 +24,25 @@ class NNModelMiddleware():
 
     def new_default_model(self, inputs, outputs, 
         actPerLayer = ['relu']*2,
-        actOut = 'linear',
         nbperlayer = [3]*2, 
         learning_rate = 0.1, 
-        metrics = ['mse'], 
-        regularization_rate = 0.1, 
-        regularization = '', 
+        metrics = ['mse']
     ):
         # setup
-        regularization = regularizers.L1(regularization_rate) if regularization == 'L1' else (regularizers.L2(regularization_rate) if regularization == 'L1' else None)
         problem_type = 'C' if len(outputs) > 1 else 'R'
+        actOut = 'softmax' if problem_type == 'C' else 'linear'
         model_loss = 'categorical_crossentropy' if problem_type == 'C' else 'mse'
+        regularization = None
         
         model = Sequential()
 
-        # input layer
-        model.add(Dense(nbperlayer[0], kernel_regularizer = regularization, input_shape=[len(inputs)], activation = actOut))
-        
         # hidden layers
-        for i in range(1, len(nbperlayer)-1):
-            model.add(Dense(nbperlayer[i], kernel_regularizer = regularization, activation=actPerLayer[i]))
+        model.add(Dense(nbperlayer[0], input_shape=[len(inputs)], activation = actPerLayer[0]))
+        for i in range(1, len(nbperlayer)):
+            model.add(Dense(nbperlayer[i], activation=actPerLayer[i]))
             
         # output layer
-        model.add(Dense(len(outputs), activation = actPerLayer[-1]))
-        # model.add(Dense(len(outputs), activation= 'softmax' if problem_type == 'C' else None))
+        model.add(Dense(len(outputs), activation = actOut))
 
         # create model
         model.compile(loss = model_loss,
@@ -55,6 +50,21 @@ class NNModelMiddleware():
                 metrics = metrics)
 
         self.model = model
+        return {
+            'inputs': inputs,
+            'outputs': outputs,
+            'neuronsPerLayer': nbperlayer,
+            'actPerLayer': actPerLayer,
+            'actOut': actOut,
+            'learningRate': learning_rate,
+            'reg': '',
+            'regRate': 0,
+            'batchSize': 10,
+            'problemType': 'regression' if problem_type == 'R' else 'classification',
+            'splitType': 'random',
+            'trainSplit': 0.7,
+            'valSplit': 0.15
+        }
 
     
     def load_model(self, path = './', name = None):

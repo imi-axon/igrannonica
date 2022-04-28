@@ -1,5 +1,6 @@
+from csv import Dialect
 from typing import Dict, List
-from threading import Lock
+from threading import Lock, Thread, current_thread
 from venv import create
 from fastapi import WebSocket
 
@@ -15,6 +16,7 @@ import util.http as httpc
 from util.filemngr import FileMngr
 from util.json import json_encode
 import util.http as httpc
+from util.csv import get_csv_dialect
 
 from services.trainingmodel import TrainingService
 
@@ -35,9 +37,8 @@ class TrainingCallback(Callback):
         self.buff.append(bytes(json_encode(data), encoding='utf-8'))
 
         print(f'>>>> {epoch}. epoch end [ UNLOCK ]')
-        to_stop = self.flags['stop']
         
-        if to_stop:
+        if self.flags['stop']:
             self.model.stop_training = True
         
         self.lock.release() # [ UNLOCK ]
@@ -69,7 +70,8 @@ class TrainingInstance():
         f = FileMngr('csv')
         f.create(datasetStr)
         # Create dataframe
-        dataframe = pandas.read_csv(f.path(), sep = ';', quotechar='"')
+        dialect: Dialect = get_csv_dialect(datasetStr)
+        dataframe = pandas.read_csv(f.path(), sep = dialect.delimiter, quotechar = dialect.quotechar)
         f.delete()
         return dataframe
 
@@ -132,4 +134,7 @@ class TrainingInstance():
 
         self.lock.acquire(blocking=True)    # [ X ]
         self.buff.append(b'')               # indikator za kraj Thread-a
+        print(self.buff)
         self.lock.release()                 # [   ]
+
+        print('-'*20)

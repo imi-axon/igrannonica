@@ -20,7 +20,7 @@ class TrainingThreadsManager():
         self.lock: Lock = Lock()
         self.table = {}
 
-    def add(self, tt: TrainingThread, uid, nnid) -> bool: # return True/False <=> Added/NotAdded
+    def add(self, tt: TrainingThread, uid, nnid) -> bool: # return True/False <=> Added/NotAdded <=> DidNotExist/Existed
         
         if not self.user_exist(uid):
             self.table[uid] = {}
@@ -62,7 +62,7 @@ class TrainingThreadsManager():
             nns = list(self.get_user(u).keys())
             for n in nns:
                 print('\tnn ' + str(n))
-                nn = self.get_nn(u, n)
+        print('='*28)
 
 
 TTM = TrainingThreadsManager()
