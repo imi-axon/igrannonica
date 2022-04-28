@@ -19,10 +19,22 @@
             </div>
         </div>
         
+        <select id="cards_dropdown" (change)="SwitchCardCombo($event)">
+            <option value="." [selected]="currentCard=='.'">
+                <a>{{"experiment.pregled" | translate}}</a>
+            </option>
+            <option value="dataset" [selected]="currentCard=='dataset'">
+                <a>{{"experiment.dataset" | translate}}</a>
+            </option>
+            <option value="network" [selected]="currentCard=='network'">
+                <a>{{"experiment.mreza" | translate}}</a>
+            </option>
+        </select>
+        
     </div>
     
     <div id="pageOutlet">
-        <router-outlet></router-outlet>
+        <router-outlet (activate)="OnActivate($event)"></router-outlet>
     </div>
     
 </div>

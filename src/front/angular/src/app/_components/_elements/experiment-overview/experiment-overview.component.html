@@ -1,13 +1,41 @@
 <div id="grid">
     
-    <div id="datasetContainer">
-        <data-set-table></data-set-table>
-    </div>
-    
-    <div id="descriptionContainer">
+    <div id="datasetDisplay">
+        <!-- TABELA -->
+        <div id="datasetContainer">
+            <data-set-table #dataset></data-set-table>
+        </div>
         
+        <!-- KONTROLE ISPOD TABELE -->
+        <div id="controls">
+            <page-controls #pageControls (ChangePageEvent)="ChangeDatasetPage($event)"></page-controls>
+        </div>
     </div>
     
-    <div id="controls"></div>
+    <!-- OPIS PANEL -->
+    <div id="descriptionContainer">
+        <div id="descriptionHeader">
+            <img src="/assets/Images/profilna.png">
+            <div>
+                <h2> Petar Petrovic </h2>
+                <p> @petko123 </p>
+            </div>
+        </div>
+        
+        <div id="description">
+            <h2>{{"experiment.opis"|translate}}</h2>
+            <p> 
+                {{project.Description}}
+            </p>
+        </div>
+        
+        <div id="descriptionFooter">
+            <div><p>{{"experiment.kreiran"|translate}}: {{project.Creationdate}}</p> </div>
+            
+            <div id="metrics">
+                
+            </div>
+        </div>
+    </div>
     
 </div>

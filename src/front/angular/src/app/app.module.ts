@@ -66,6 +66,7 @@ import { ExperimentOverviewComponent } from './_components/_elements/experiment-
 import { ExperimentNetworkComponent } from './_components/_elements/experiment-network/experiment-network.component';
 import { ExperimentDatasetComponent } from './_components/_elements/experiment-dataset/experiment-dataset.component';
 import { ExperimentPageComponent } from './_components/_pages/experiment-page/experiment-page.component';
+import { PageControlsComponent } from './_components/_elements/page-controls/page-controls.component';
 
 
 
@@ -123,7 +124,8 @@ import { ExperimentPageComponent } from './_components/_pages/experiment-page/ex
     ExperimentOverviewComponent,
     ExperimentNetworkComponent,
     ExperimentDatasetComponent,
-    ExperimentPageComponent
+    ExperimentPageComponent,
+    PageControlsComponent
   ],
   imports: [
     NgxCsvParserModule,
