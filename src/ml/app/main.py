@@ -262,8 +262,8 @@ async def training_stream(ws: WebSocket):
     # conf['neuronsPerLayer'] = [3 for _ in range(3)]
 
     tt: TrainingThread = None
-    uid = randint(1,2)
-    nnid = randint(1,5)
+    uid = randint(1,1)
+    nnid = randint(1,1)
 
     buff: List[bytes] = []
     flags = {'stop': False}
@@ -273,23 +273,19 @@ async def training_stream(ws: WebSocket):
         th: Thread = None
 
         if TTM.nn_exist(uid, nnid):
-            tt = TTM.get_nn(uid, nnid)
+            tt = TTM.get_tt(uid, nnid)
             buff = tt.buffer
             flags = tt.flags
-            lock = tt.lock            
-        
-        th = Thread(target=TrainingInstance(buff, lock, flags).train, args=(datasetlink, nnlink, conf), daemon=True)
-
-        if not TTM.nn_exist(uid, nnid):
-            tt = TrainingThread(th, buff, flags, lock)
-
-
-        if not TTM.add(tt, uid, nnid):
+            lock = tt.lock
+            th = tt.thread      
+        else:
             print('--==> tt vec postoji <==--')
+            th = Thread(target=TrainingInstance(buff, lock, flags).train, args=(datasetlink, nnlink, conf), daemon=True)
+            tt = TrainingThread(th, buff, flags, lock)
+            TTM.add(tt, uid, nnid)
+            th.start()
 
         TTM.pretty_print()
-
-        th.start()
 
         print('Thread Started')
 

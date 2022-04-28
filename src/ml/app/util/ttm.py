@@ -31,13 +31,13 @@ class TrainingThreadsManager():
 
         return False
 
-    def get_nn(self, uid, nid) -> TrainingThread:
+    def get_tt(self, uid, nid) -> TrainingThread:
         try:
             return self.table[uid][nid]
         except:
             return None
 
-    def get_user(self, uid):
+    def get_user_nns(self, uid):
         try:
             return self.table[uid]
         except:
@@ -59,7 +59,7 @@ class TrainingThreadsManager():
         users = list(self.table.keys())
         for u in users:
             print('user ' + str(u))
-            nns = list(self.get_user(u).keys())
+            nns = list(self.get_user_nns(u).keys())
             for n in nns:
                 print('\tnn ' + str(n))
         print('='*28)
