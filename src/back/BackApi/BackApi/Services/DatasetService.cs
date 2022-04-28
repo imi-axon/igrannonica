@@ -386,6 +386,16 @@ namespace BackApi.Services
                 actions.Remove(actions.Length - 1, 1);
             actions.Append("]");
             var str= actions.ToString();
+            //revert to line irreversible
+            using (FileStream fs = File.Open(chmain, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                lock (fs)
+                {
+                    fs.SetLength(0);
+                }
+            }
+            SaveChanges(projid);
+            //revert to line irreversible
             return str;
         }
 
