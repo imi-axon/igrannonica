@@ -10,9 +10,9 @@ from .util import read_str_to_df
 
 class DataEditorService:
 
-    # klasa DataEditorService kao argument u konstruktoru ima DataFrame (ucitani csv - skup podataka)
-    def __init__(self, dataframe):
-        self.dataset = read_str_to_df(dataframe)
+    
+    def __init__(self, string, sep, quoteChar):
+        self.dataset = read_str_to_df(string,sep,quoteChar)
 
     #delete_columns : brise kolone iz dataset-a
     #columns : lista stringova (naziva kolona) koje treba obrisati

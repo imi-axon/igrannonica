@@ -63,9 +63,9 @@ class TrainingService():
         self.TYPE = problem_type
 
         if(actOutput==None):
-            if(type=="CLASSIFICATION"):
+            if(problem_type=="CLASSIFICATION"):
                 self.ACT_OUTPUT = "softmax"
-            elif (type=="REGRESSION"):
+            elif (problem_type=="REGRESSION"):
                 self.ACT_OUTPUT = "linear"
         else:
             self.ACT_OUTPUT = actOutput
