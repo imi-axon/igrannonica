@@ -252,7 +252,10 @@ class TrainingService():
 
         if self.model == None:
             self.new_model()
-        self.new_model()
+        #self.new_model()
+
+        print('Training Started')
+        print(self.model.get_config())
 
         self.fit_model(self.model, epoch, val_split)
         # for i in range(10):
