@@ -16,12 +16,9 @@ export class TelNavComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  
   logout()
   {
-    JWTUtil.delete();
-    this.router.navigate(RedirectRoutes.ON_LOGOUT);
-    this.auth.logovan=false;
-    this.auth.korisnickoIme='';
+   this.auth.logout();
   }
 }

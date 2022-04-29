@@ -17,7 +17,7 @@ export class NavbarComponent implements OnInit{
   
   constructor(
     private router: Router,
-    private auth: AuthService,
+    public auth: AuthService,
     private userService: UserService
   ) { }
     
@@ -36,10 +36,7 @@ export class NavbarComponent implements OnInit{
   
   logout()
   {
-    JWTUtil.delete();
-    this.router.navigate(RedirectRoutes.ON_LOGOUT);
-    this.auth.logovan=false;
-    this.auth.korisnickoIme='';
+   this.auth.logout();
   }
   
 

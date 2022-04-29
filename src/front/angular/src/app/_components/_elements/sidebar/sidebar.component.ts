@@ -21,10 +21,7 @@ export class SidebarComponent implements OnInit {
   
   Logout()
   {
-    JWTUtil.delete();
-    this.router.navigate(RedirectRoutes.ON_LOGOUT);
-    this.authService.logovan=false;
-    this.authService.korisnickoIme='';
+   this.authService.logout();
   }
 
 }
