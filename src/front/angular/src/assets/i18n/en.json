@@ -73,6 +73,14 @@
         "submit":"Submit"
     },
     
+    "file-input":{
+        "dodajFajl": "Add Data",
+        "klikniIliPrevuci": "Click or drag file to this area",
+        "nemaFajla": "No file found!",
+        "pogresanTipFajla": "Wrong file type!",
+        "prazanFajl": "File is empty!"
+    },
+    
     "opcije-dataset":{
         "tabela":"Table",
         "statistika":"Statistics",

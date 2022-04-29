@@ -1,15 +1,19 @@
 <div id="grid">
     
-    <div id="datasetDisplay">
+    <div id="datasetDisplay" *ngIf="showsDataset">
         <!-- TABELA -->
         <div id="datasetContainer">
             <data-set-table #dataset></data-set-table>
         </div>
         
         <!-- KONTROLE ISPOD TABELE -->
-        <div id="controls">
+        <div id="controls" >
             <page-controls #pageControls (ChangePageEvent)="ChangeDatasetPage($event)"></page-controls>
         </div>
+    </div>
+    
+    <div id="datasetInput" *ngIf="showsFileInput">
+        <app-file-input #fileInput (fileSubmited)="UplodaDatasetFile($event)"></app-file-input>
     </div>
     
     <!-- OPIS PANEL -->

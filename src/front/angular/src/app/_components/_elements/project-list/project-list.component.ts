@@ -105,12 +105,7 @@ export class ProjectListComponent implements OnInit {
     console.log(projId);
     console.log(hasDataset);
 
-    if(hasDataset=='true'){
-      this.router.navigate(['/project/'+projId]);
-    }
-    else if(hasDataset=='false'){
-    this.router.navigate(['/dataset/'+projId]);
-    }
+    this.router.navigate(['/project/'+projId]);
   }
 
   RemoveProject(event: any, projectId: number){
