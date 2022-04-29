@@ -24,6 +24,7 @@ export class ProjectListComponent implements OnInit {
   public key: string = 'sort';
 
   private _searchTerm: string;
+  public myExp:boolean=false;
 
   get searchTerm(): string {
     return this._searchTerm;
@@ -56,9 +57,11 @@ export class ProjectListComponent implements OnInit {
   @Input() publicExp:boolean; //true-JAVNI eksperimenti, false-Moji eksperimenti //public-exp-page i my-projects-page
   ngOnInit(): void {
 
+    this.myExp=false;
     console.log("primio "+this.publicExp);
     if (this.publicExp==false) {
       console.log("pozivam fj1");
+      this.myExp=true;
       this.projectsService.userProjects(this.username, this, this.handleSuccess, this.handleError);
     }
     else {
