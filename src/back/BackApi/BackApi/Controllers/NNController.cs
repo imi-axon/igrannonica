@@ -45,13 +45,13 @@ namespace BackApi.Controllers
             */
             var packet = new ApiNNTrain();
             packet.dataset = datasrv.ProjIdToPath(id, true);
-            if (packet.dataset == null) return BadRequest(new {v="dataset"});
+            if (packet.dataset == null) return BadRequest("dataset");
             packet.dataset = packet.dataset.Replace('\\', '/');
             packet.nn = nnsrv.NNIdToPath(nnid);
-            if (packet.nn == null) return BadRequest(new { v = "network" });
+            if (packet.nn == null) return BadRequest("network");
             packet.nn = packet.nn.Replace('\\', '/');
             packet.conf = nnsrv.NNIdToCfg(nnid);
-            if (packet.conf == null) return BadRequest(new { v = "config" });
+            if (packet.conf == null) return BadRequest("network");
             packet.conf = packet.nn.Replace('\\', '/');
 
             if (!wsq.CheckInDict(nnid)) 
@@ -81,7 +81,7 @@ namespace BackApi.Controllers
             }
             else
             {
-                return BadRequest("Na toj Mrezi se vec vrsi treniranje");
+                return BadRequest("error");
             }
             return Ok();
         }
@@ -93,24 +93,30 @@ namespace BackApi.Controllers
             if (userid == -1) return Unauthorized("Ulogujte se");
             var chk = projsrv.projectOwnership(userid, id);
             if (!chk)
-                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Vi niste vlasnik projekta" });
+                return BadRequest("user");
             var datapath = datasrv.ProjIdToPath(id, true);
-            if (datapath == null) return BadRequest();
+            if (datapath == null) return BadRequest("dataset");
             var rez = await nnsrv.NNCreateTemp(id, req.Name,datapath);
             int nnid = nnsrv.GetNNid(id, req.Name);
             if (nnid == -1)
-                return BadRequest();
-            if (rez.StatusCode == HttpStatusCode.OK) return Ok(new {id=nnid});
+                return BadRequest("nn");
+            if (rez.StatusCode == HttpStatusCode.OK) 
+                return Ok(new {id=nnid});
             return BadRequest();        
         }
 
         [HttpGet("{id}/nn")]
         public async Task<ActionResult<string>> ListNN(int id)
         {
+            bool ind = false;
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized("Ulogujte se");
-            string rez = nnsrv.ListNN(userid, id);
-            return rez;
+            string rez = nnsrv.ListNN(userid, id, out ind);
+            if (ind == false)
+                return BadRequest(rez);
+            if(rez=="[]")
+                return NotFound("network");
+            return Ok(rez);
         }
 
         [HttpGet("{id}/nn/{nnid}")]
@@ -120,12 +126,10 @@ namespace BackApi.Controllers
             if (userid == -1) return Unauthorized("Ulogujte se");
             var chk = projsrv.projectOwnership(userid, id);
             if (!chk)
-                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Vi niste vlasnik projekta" });
+                return BadRequest("user");
 
             var sent = new ApiNNPost();
             sent.nn = storsrv.CreateNNFile (id, nnid);
-            if (sent.nn == null)
-                return BadRequest();
             var resp = await MLconnection.GetNNJson(sent);
             if(resp.StatusCode == HttpStatusCode.OK)
             {
@@ -138,7 +142,7 @@ namespace BackApi.Controllers
                 return Ok(result);
 
             }
-            return BadRequest();
+            return BadRequest("error");
 
         }
         [HttpDelete("{id}/nn/{nnid}")]
@@ -148,10 +152,10 @@ namespace BackApi.Controllers
             if (userid == -1) return Unauthorized("Ulogujte se");
             var chk = projsrv.projectOwnership(userid, id);
             if (!chk)
-                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Vi niste vlasnik projekta" });
+                return BadRequest("user");
             Boolean rez = nnsrv.DeleteNN(nnid);
             if (rez)
-                return Ok("Mreza izbrisana");
+                return Ok();
             else return BadRequest("Greska pri brisanju");
         }
 
