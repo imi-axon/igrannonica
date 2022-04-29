@@ -13,7 +13,7 @@ export class ProjectListComponent implements OnInit {
 
   constructor(
     private projectsService: ProjectsService,
-    private authService: AuthService,
+    public authService: AuthService,
     private router: Router
   ) { }
 
