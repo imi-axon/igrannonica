@@ -185,6 +185,7 @@ export class Project
     public Public:boolean=false;
     public Creationdate:string="";
     public hasDataset:boolean=false;
+    public Username:string="";
 
     constructor()
     {
@@ -194,6 +195,7 @@ export class Project
         this.Creationdate="";
         this.ProjectId=-1;
         this.hasDataset=false;
+        this.Username="";
     }
 }
 /* PROJEKAT */

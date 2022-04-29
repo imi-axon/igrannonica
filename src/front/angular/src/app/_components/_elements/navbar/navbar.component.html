@@ -1,23 +1,20 @@
-
 <nav class="navbar navbar-expand-sm">
   <div id="leftSide" routerLink="/home">
     <img src="/assets/Images/icosahedron.png">
     <p> Igrannonica </p>
   </div>
-  
-  
+
+
   <div id="rightSide">
-    
+
     <div id="controls">
       <app-language></app-language>
       <img src="assets/Images/Icons/theme_icon.png">
     </div>
-    
-    <div id="user" routerLink="/profil">
-      <p> {{userFullname}} </p>
-      <img [src]="userImage">
-    </div>
-    
+      <div *ngIf="auth.logovan" id="user" routerLink="/profil">
+        <p> {{userFullname}} </p>
+        <img [src]="userImage">
+      </div>
   </div>
-  
+
 </nav>

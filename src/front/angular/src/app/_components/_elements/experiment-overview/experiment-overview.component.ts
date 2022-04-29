@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Project } from 'src/app/_utilities/_data-types/models';
 import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
@@ -15,7 +15,7 @@ const ROW_COUNT = 20;
 })
 export class ExperimentOverviewComponent implements OnInit{
   
-  @Input() public project: Project;
+  public project: Project = new Project();
   
   private getProjectId(): number{
     let p = this.activatedRoute.snapshot.paramMap.get("ProjectId");
@@ -25,21 +25,45 @@ export class ExperimentOverviewComponent implements OnInit{
     return -1;
   }
   
+  public showsFileInput: boolean = false;
+  public showsDataset: boolean = false;
+  
   @ViewChild("dataset")
   public datasetComponent: DataSetTableComponent;
+  
   @ViewChild("pageControls")
   public controlsComponent: PageControlsComponent; 
   
   constructor(
     private activatedRoute: ActivatedRoute,
+    private projectService: ProjectsService,
     private datasetService: DatasetService
   ) { }
   
   ngOnInit(): void {
-    setTimeout(() => {
-      this.ChangeDatasetPage(1);
-      this.controlsComponent.currentPage = 1;
-    }, 0);
+    this.projectService.getProject(this.getProjectId(), this, this.handleSuccesfulGetProjectCallback);
+  }
+  
+  
+  
+  private handleSuccesfulGetProjectCallback(self: ExperimentOverviewComponent, response: any){
+    self.project = response;
+    
+    console.log(self.project.hasDataset)
+    
+    // self.project.hasDataset se ponasa i izgleda kao string a prepoznaje se kao boolean
+    // ovo dovodi do toga da ne mozemo da pitamo self.project.hasDataset == true
+    
+    if(self.project.hasDataset.toString().toLowerCase() == "true"){
+      self.showsFileInput = false;
+      self.showsDataset = true;
+      self.ChangeDatasetPage(1);
+    }
+    
+    if(self.project.hasDataset.toString().toLowerCase() == "false"){
+      self.showsDataset = false;
+      self.showsFileInput = true;
+    }
   }
   
   private datasetPageRecieved(self: ExperimentOverviewComponent, response: any){
@@ -51,5 +75,31 @@ export class ExperimentOverviewComponent implements OnInit{
   public ChangeDatasetPage(pageNumber: number){
     this.datasetService.GetDatasetPage(this.getProjectId(), true, pageNumber, ROW_COUNT, this, this.datasetPageRecieved);
   }
-
+  
+  
+  
+  public UplodaDatasetFile(file: File){
+    let formData : FormData = new FormData();
+    formData.append("dataset", file);
+    
+    this.datasetService.AddDataset(formData, this.getProjectId(), this, this.datasetUploadHandler, this.badDataFormatHandler, this.unauthorizedHandler);
+  }
+  
+  private datasetUploadHandler(self : ExperimentOverviewComponent){
+    self.project.hasDataset = true;
+    self.showsFileInput = false;
+    self.showsDataset = true;
+    self.ChangeDatasetPage(1);
+  }
+  
+  private badDataFormatHandler(self : ExperimentOverviewComponent, response: any){
+    console.log(response);
+  }
+  
+  private unauthorizedHandler(self : ExperimentOverviewComponent, response: any){
+    console.log(response);
+  }
+  
+  
+  
 }

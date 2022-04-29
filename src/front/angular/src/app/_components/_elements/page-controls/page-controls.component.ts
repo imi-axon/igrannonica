@@ -9,8 +9,8 @@ export class PageControlsComponent implements OnInit {
   
   @Output() ChangePageEvent: EventEmitter<number> = new EventEmitter<number>();
   
-  public currentPage: number = 0;
-  public pageCount: number = 0;
+  public currentPage: number = 1;
+  public pageCount: number = 1;
   public pageInput: number;
   
   

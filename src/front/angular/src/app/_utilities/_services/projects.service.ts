@@ -49,11 +49,11 @@ export class ProjectsService {
 
         if (response.status == HttpStatusCode.BadRequest)
           if (self && badRequestCallback)
-            badRequestCallback(self);
-
+            badRequestCallback(self); 
       }
     )
   }
+
 
   getProject(projectId: number, self?: any, successCallback?: Function, errorCallback?: Function) {
     this.projectsApi.getProject(projectId).subscribe(
@@ -78,6 +78,7 @@ export class ProjectsService {
             successCallback(self, this.projekti);
       }
     )
+
   }
 
 

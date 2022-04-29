@@ -130,6 +130,9 @@ namespace BackApi.Services
             foreach (Project p in listapub)
             {
                 rez.Append("{");
+                var user = context.Users.Find(p.UserId);
+                if(user != null)
+                    rez.Append("\"" + "Username" + "\":" + "\"" + user.Username + "\",");
                 rez.Append("\"" + "ProjectId" + "\":" + "\"" + p.ProjectId + "\",");
                 rez.Append("\"" + "Name" + "\":" + "\"" + p.Name + "\",");
                 rez.Append("\"" + "Public" + "\":" + "\"" + p.Public + "\",");

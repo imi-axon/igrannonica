@@ -27,11 +27,7 @@ export class NewProjectComponent implements OnInit {
   }
 
   handleSuccess(self: any,id:any) {
-    console.log("Tacno" + id);
-    self.router.navigate(['dataset/'+id]);
-    
-    
-    
+    self.router.navigate(['project/'+id]);
   }
 
   handleError(self: any, message: string) {

@@ -13,7 +13,7 @@ export class ProjectListComponent implements OnInit {
 
   constructor(
     private projectsService: ProjectsService,
-    private authService: AuthService,
+    public authService: AuthService,
     private router: Router
   ) { }
 
@@ -24,6 +24,7 @@ export class ProjectListComponent implements OnInit {
   public key: string = 'sort';
 
   private _searchTerm: string;
+  public myExp:boolean=false;
 
   get searchTerm(): string {
     return this._searchTerm;
@@ -56,9 +57,11 @@ export class ProjectListComponent implements OnInit {
   @Input() publicExp:boolean; //true-JAVNI eksperimenti, false-Moji eksperimenti //public-exp-page i my-projects-page
   ngOnInit(): void {
 
+    this.myExp=false;
     console.log("primio "+this.publicExp);
     if (this.publicExp==false) {
       console.log("pozivam fj1");
+      this.myExp=true;
       this.projectsService.userProjects(this.username, this, this.handleSuccess, this.handleError);
     }
     else {
@@ -112,16 +115,8 @@ export class ProjectListComponent implements OnInit {
     this.filteredProjects.sort((a, b) => b.ProjectId - a.ProjectId);
   }
 
-  onClick(projId: any, hasDataset: any) {
-    console.log(projId);
-    console.log(hasDataset);
-
-    if (hasDataset == 'true') {
-      this.router.navigate(['/project/' + projId]);
-    }
-    else if (hasDataset == 'false') {
-      this.router.navigate(['/dataset/' + projId]);
-    }
+  onClick(projId: any) {
+    this.router.navigate(['/project/'+projId]);
   }
 
   RemoveProject(event: any, projectId: number) {
