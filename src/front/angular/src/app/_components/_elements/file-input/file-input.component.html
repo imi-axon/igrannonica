@@ -1,8 +1,21 @@
-<!-- upload CSV fajl sa racunara -->
+<!--
 <div class="csvUpload container">
+    
     <input class="form-control" type="file" id="formFile" accept=".csv" required=".csv" (change)="AddFile($event)" ><br>
-    <p id="greskaPoruka">{{message}}</p>
-    <!-- $event.target.files ne radi -->
+    
+</div>
+-->
+
+
+<div class="dropzone">
+    
+    <input type="file" #fileInputRef id="fileInput" accept=".csv" required=".csv" (change)="AddFile($event)" >
+    <img src="/assets/Images/file.svg">
+    <h2>{{"file-input.dodajFajl"|translate}}</h2>
+    
+    <p *ngIf="showsError" class="error">{{"file-input."+errorMessage|translate}}</p>
+    
+    <h3>{{"file-input.klikniIliPrevuci"|translate}}</h3>
 </div>
 
 

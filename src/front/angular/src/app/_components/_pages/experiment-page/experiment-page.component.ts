@@ -33,25 +33,18 @@ export class ExperimentPageComponent implements OnInit {
   // Cards
   public currentCard: string = ".";
   
-  // router-outlet za kraticu
-  public component: any;
-  
-  
-  
-  
-  
-  
   ngOnInit(): void {
     this.checkProjectId();
     this.projectsService.getProject(this.projectId, this, this.handleSuccesfulGetProjectCallback);
     
+    if(this.activatedRoute.children[0].snapshot.routeConfig?.path)
+      this.currentCard = this.activatedRoute.children[0].snapshot.routeConfig?.path;
   }
   
   
   
   private handleSuccesfulGetProjectCallback(self: ExperimentPageComponent, response: any){
     self.project = response;
-    self.component.project = self.project;
   }
   
   
@@ -65,22 +58,6 @@ export class ExperimentPageComponent implements OnInit {
     this.currentCard = comboEvent.currentTarget.value;
     this.router.navigate([this.currentCard],{relativeTo:this.activatedRoute});
   }
-  
-  
-  
-  public OnActivate(component: any){
-    this.component = component;
-    
-    if(this.project)
-      this.component.project = this.project;
-    
-    
-  }
-  
-  
-  
-  
-  
   
   
   

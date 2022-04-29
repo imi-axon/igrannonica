@@ -72,6 +72,15 @@
         "public":"Javno",
         "submit":"Potvrdi"
     },
+    
+    "file-input":{
+        "dodajFajl": "Dodaj Fajl",
+        "klikniIliPrevuci": "Kliknite ili prevucite fajl ovde",
+        "nemaFajla": "Fajl nije pronadjen!",
+        "pogresanTipFajla": "Fajl je pogresnog tipa!",
+        "prazanFajl": "Fajl je prazan!"
+    },
+    
     "opcije-dataset":{
         "tabela":"Tabela",
         "statistika":"Statistika",

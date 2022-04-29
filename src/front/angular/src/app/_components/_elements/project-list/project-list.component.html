@@ -3,7 +3,7 @@
   <div *ngFor="let project of filteredProjects" class="project" > 
     
     <div class="projectLeft">
-      <p class="title" (click)="onClick(project.ProjectId, project.hasDataset)"> {{project.Name}} </p>
+      <p class="title" (click)="onClick(project.ProjectId)"> {{project.Name}} </p>
       
       <p class="created"> {{'lista-projekata.kreiran'|translate}} {{project.Creationdate}} </p>
     

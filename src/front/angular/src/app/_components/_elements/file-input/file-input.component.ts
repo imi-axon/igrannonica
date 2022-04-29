@@ -9,22 +9,13 @@ import { Papa } from 'ngx-papaparse';
 })
 export class FileInputComponent implements OnInit {
   
-  // Unet fajl
   public inputFile: File;
+  public errorMessage: String = "";
+  public showsError = false;
   
-  // Podaci za prikaz u tabeli
-  public tableData:any;
-  
-  // Odgovor o unosu
-  public message:string;
-  
-  // Da li je uneti fajl spreman za slanje back-u
-  public fileReadyToSend = false;
-  
-  // 
-  @Output() fileChosen = new EventEmitter<any>();
-  @Output() fileError = new EventEmitter<any>();
-  @Output() jsonLoaded = new EventEmitter<any>();
+  @Output() fileChosen = new EventEmitter<null>();
+  @Output() fileError = new EventEmitter<null>();
+  @Output() fileSubmited = new EventEmitter<File>();
 
   
   constructor(private papa: Papa, public translate:TranslateService) { }
@@ -34,26 +25,22 @@ export class FileInputComponent implements OnInit {
   
   
   public AddFile(event: any){
-    this.fileReadyToSend = false;
     this.fileChosen.emit();
-    
-    this.message="";
-    /* 
-    const target = event.target as HTMLInputElement;
-    const file:File = (target.files as FileList)[0];
-    */
+    this.showsError = false;
     
     this.inputFile = event.target.files[0];
     
     if(!this.inputFile){
       console.log("Uneti fajl nije pronadjen u input komponenti!");
+      this.errorMessage = "nemaFajla";
+      this.showsError = true;
       this.fileError.emit();
       return;
     }
     
     if(this.inputFile.type != "text/csv" && this.inputFile.type!="application/vnd.ms-excel"){
-      //this.message = "Uneti fajl mora biti u .csv formatu!";
-      this.translate.stream('csv.format').subscribe((text:string)=>this.message=text);
+      this.errorMessage = "pogresanTipFajla";
+      this.showsError = true;
       this.fileError.emit();
       return;
     }
@@ -72,36 +59,14 @@ export class FileInputComponent implements OnInit {
       //console.log(this.csv);
       
       if(fileContent.trim() === ""){
-        //this.message = "Uneti fajl je prazan!";
-        this.translate.stream('csv.prazan').subscribe((text:string)=>this.message=text);
+        this.errorMessage = "prazanFajl";
+        this.showsError = true;
         this.fileError.emit();
         return;
       }
       
-      this.parseToJSON(fileContent);
+      this.fileSubmited.emit(file);
     }
-  }
-  
-  //F-ja za parsovanje ulaznog .csv fajla u JSON radi prikaza u tabeli
-  private parseToJSON(fileContent: string){
-    
-    this.papa.parse(
-      fileContent,
-      {
-        complete: (result) => {
-          this.tableData = result.data;
-          console.log(result);
-          
-          this.jsonLoaded.emit(this.tableData);
-          this.fileReadyToSend = true;
-        },
-        error: () => {
-          this.fileError.emit();
-        },
-        header: true
-      }
-    );
-    
   }
   
 }

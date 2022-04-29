@@ -16,6 +16,10 @@ thead{
         th{
             font-weight: 400;
             border-right: solid 1px #16387c;
+            
+            &:hover{
+                background-color: #184982;
+            }
         }
     }
 }
@@ -26,6 +30,20 @@ th, td{
     padding: 0px 10px 0px 10px;
     border: solid 1px #2C5D96;
     font-size: 15px;
+}
+
+tbody{
+    tr{
+        &:hover{
+            background-color: #e2f0ff;
+        }
+    }
+    
+    td{
+        &:hover{
+            background-color: #c9e4ff;
+        }
+    }
 }
 
 

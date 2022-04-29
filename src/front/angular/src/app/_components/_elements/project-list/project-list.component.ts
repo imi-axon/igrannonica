@@ -115,16 +115,8 @@ export class ProjectListComponent implements OnInit {
     this.filteredProjects.sort((a, b) => b.ProjectId - a.ProjectId);
   }
 
-  onClick(projId: any, hasDataset: any) {
-    console.log(projId);
-    console.log(hasDataset);
-
-    if (hasDataset == 'true') {
-      this.router.navigate(['/project/' + projId]);
-    }
-    else if (hasDataset == 'false') {
-      this.router.navigate(['/dataset/' + projId]);
-    }
+  onClick(projId: any) {
+    this.router.navigate(['/project/'+projId]);
   }
 
   RemoveProject(event: any, projectId: number) {
