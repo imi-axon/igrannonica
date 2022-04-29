@@ -30,7 +30,7 @@ namespace BackApi.Controllers
             int id = service.getProjectId(req);
             if (rez)
                 return id+"";
-            else return BadRequest(new { v = "project" });
+            else return BadRequest("project");
         }
 
         [HttpDelete("{projid}/delete")]
@@ -40,8 +40,8 @@ namespace BackApi.Controllers
             if (userid == -1) return Unauthorized("Ulogujte se");
             Boolean rez = service.DeleteProject(projid,userid);
             if (rez)
-                return Ok(new {v="uspesno"});
-            else return BadRequest(new {v="projcet"});
+                return Ok();
+            else return BadRequest("project");
         }
 
         [HttpGet("{projid}")]
@@ -52,7 +52,7 @@ namespace BackApi.Controllers
             var rez = service.GetProjById(projid, userid);
             if (rez != "")
                 return Ok(rez);
-            else return NotFound(new {v="project"});
+            else return NotFound("project");
         }
         [HttpGet]
         public async Task<ActionResult<string>> ListProjects()
@@ -62,7 +62,7 @@ namespace BackApi.Controllers
             var rez = service.ListProjects(userid,userid);
             if (rez != "[]")
                 return Ok(rez);
-            else return NotFound(new {v="projcet"});
+            else return NotFound("projcet");
         }
 
         [HttpPut("{projid}")]
@@ -73,8 +73,8 @@ namespace BackApi.Controllers
             if (userid == -1) return Unauthorized("Ulogujte se");
             string rez = service.EditProject(projid,req,userid, out tmp);
             if (tmp)
-                return Ok(new {v=rez});
-            else return NotFound(new { v = rez });
+                return Ok();
+            else return NotFound(rez);
         }
     }
 }

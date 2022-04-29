@@ -31,7 +31,7 @@ namespace BackApi.Services
         }
         public Boolean CreateProject(ProjectPostPut model,int userid)
         {
-            if(context.Projects.Any(x=> x.Name == model.name))
+            if(context.Projects.Any(x=> x.Name == model.name && x.UserId == userid))
             {
                 return false;
             }
@@ -125,7 +125,7 @@ namespace BackApi.Services
             Boolean tmp;
             var proj = context.Projects.FirstOrDefault(x => x.UserId == userid && x.ProjectId == projid);
             if (proj == null)
-                return null;
+                return "";
             var dset=context.Datasets.FirstOrDefault(x=> x.ProjectId == projid);
             if (dset != null)
                 tmp = true;

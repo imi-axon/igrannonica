@@ -44,18 +44,18 @@ namespace BackApi.Controllers
             bool mail = false;
             bool photo = false;
             int userid = jwtsrv.GetUserId();
-            if (userid != -1) return Forbid() ;
+            if (userid != -1) return Forbid();
             string tmp = korsrv.Register(req, out mail);
             if (!mail)
-                return BadRequest( new {v = tmp});
+                return BadRequest(tmp);
             int id = korsrv.UsernameToId(req.username);
             if (req.photo != null)
             {
                 photo = korsrv.addPhoto(id, req.photo);
                 if(!photo)
-                    return BadRequest( new {v = "photo"});
+                    return BadRequest("photo");
             }
-            return Ok(new {v = tmp});
+            return Ok();
         }
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login(UserLogin req)
@@ -65,13 +65,8 @@ namespace BackApi.Controllers
             Boolean uspeh;
             var rez = korsrv.Login(req, out uspeh);
             if (uspeh)
-                return Ok(new
-                {
-                    v = rez
-
-                });
-            else
-                return BadRequest(new {v=rez});
+                return Ok(rez);
+            return BadRequest(rez);
         }
         [HttpGet("{username}/projects")]
         public async Task<ActionResult<string>> ListProjects(string username)
@@ -83,7 +78,7 @@ namespace BackApi.Controllers
             var rez = projsrv.ListProjects(userid, pubuserid);
             if (rez != "[]")
                 return Ok(rez);
-            else return NotFound(new {v="projcets"});
+            else return NotFound("projcets");
         }
         [HttpPost("{username}/changepass")]
         public async Task<ActionResult<string>> SendEmailForChangePass(string username)
@@ -91,8 +86,8 @@ namespace BackApi.Controllers
             bool tmp = false;
             string res = korsrv.ChangePassword(username, out tmp);
             if(tmp)
-                return Ok( new {v = res});
-            return BadRequest(new {v=res});
+                return Ok(res);
+            return BadRequest(res);
         }
 
         [HttpPut("{token}/editpassword")]
@@ -103,10 +98,11 @@ namespace BackApi.Controllers
             if (username != null)
             {
                 string message = korsrv.ChangePasswordInDataBase(username, newpassword.actions, out tmp);
-                if(tmp)
-                    return Ok(new {v=message});
+                if(!tmp)
+                    return BadRequest("username");
+                return Ok();
             }
-            return BadRequest( new {v="username"});
+            return BadRequest("username");
         }
 
         [HttpPut("edit/user")]
@@ -116,25 +112,26 @@ namespace BackApi.Controllers
             if (userid == -1) return Unauthorized();
             bool pass = korsrv.CheckPass(userid, user.oldpassword1);
             if (!pass)
-                return BadRequest(new {v = "password"});
+                return BadRequest("password");
             bool rez = korsrv.EditUser(userid, user);
             if(rez)
-                return Ok(new {v="uspesno"});
-            return BadRequest(new { v = "username" });
+                return Ok();
+            return BadRequest("username");
         }
 
         [HttpPut("edit/email")]
         public async Task<ActionResult<string>> EditEmail(UserEdit user)
         {
+            bool ind = false;
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
             bool pass = korsrv.CheckPass(userid, user.oldpassword2);
             if (!pass)
-                return BadRequest(new {v="password"});
-            bool rez = korsrv.EditEmail(userid, user);
-            if(rez)
-                return Ok(new {v="uspesno"});
-            return BadRequest(new {v="email"});
+                return BadRequest("password");
+            string rez = korsrv.EditEmail(userid, user, out ind);
+            if(ind)
+                return Ok();
+            return BadRequest(rez);
         }
 
         [HttpPut("edit/password")]
@@ -144,11 +141,11 @@ namespace BackApi.Controllers
             if (userid == -1) return Unauthorized();
             bool pass = korsrv.CheckPass(userid, user.oldpassword3);
             if (!pass)
-                return BadRequest(new { v = "password" });
+                return BadRequest("password");
             bool rez = korsrv.EditPassword(userid, user);
             if(rez)
-                return Ok(new {v="uspesno"});
-            return BadRequest(new { v = "username" });
+                return Ok("uspesno");
+            return BadRequest("username");
         }
 
         [HttpPut("edit/photo")]
@@ -158,7 +155,7 @@ namespace BackApi.Controllers
             if (userid == -1) return Unauthorized();
             bool pass = korsrv.CheckPass(userid, user.oldpassword3);
             if (!pass)
-                return BadRequest(new { v = "password" });
+                return BadRequest("password");
             bool rez = korsrv.EditPhoto(userid, user);
             if (rez)
                 return Ok(new { v = "uspesno" });
@@ -173,8 +170,7 @@ namespace BackApi.Controllers
 
             string rez = korsrv.GetUser(username, out tmp);
             if(!tmp)
-                return BadRequest(new {v=rez});
-
+                return BadRequest(rez);
             return Ok(rez);
         }
 
@@ -206,7 +202,7 @@ namespace BackApi.Controllers
             var chk = korsrv.DeleteUser(userid, loggedid);
             if(!chk) return Forbid();
 
-            return Ok(new {v="uspesno"});
+            return Ok();
         }
     }
 }

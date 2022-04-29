@@ -20,7 +20,7 @@ namespace BackApi.Services
         public bool CheckPass(int id, string password);
         public bool EditUser(int id, UserEdit model);
         public string GetUser(string username, out bool tmp);
-        public bool EditEmail(int id, UserEdit model);
+        public string EditEmail(int id, UserEdit model, out bool ind);
         public bool EditPassword(int id, UserEdit model);
         public bool addPhoto(int id, IFormFile photo);
         public string UsernameToImagePath(string username, out bool tmp);
@@ -130,7 +130,7 @@ namespace BackApi.Services
                         if (pom != "")
                         {
                             mail = false;
-                            return "verify";
+                            return "verify_username";
                         }
                         else
                         {
@@ -156,7 +156,7 @@ namespace BackApi.Services
                         if (pom != "")
                         {
                             mail = false;
-                            return "verify";
+                            return "verify_email";
                         }
                         else
                         {
@@ -277,7 +277,7 @@ namespace BackApi.Services
                 string jwtoken = CreateEmailToken(user.Username, int.Parse(configuration.GetSection("AppSettings2:EmailToken").Value.ToString()));
                 bool res = emailService.SendEmailForPass("Kliknite na link da biste promenili lozinku: http://localhost:4200/changepass?token=" + jwtoken, "Promena lozinke", user.Email);
                 tmp = true;
-                return "uspesno";
+                return "email_sent";
             }
         }
 
@@ -342,15 +342,21 @@ namespace BackApi.Services
 
         }
 
-        public bool EditEmail(int id, UserEdit model)
+        public string EditEmail(int id, UserEdit model, out bool ind)
         {
             var user = kontext.Users.Find(id);
             if (user == null)
-                return false;
+            {
+                ind = false;
+                return "username";
+            }
 
             var kor = kontext.Users.FirstOrDefault(x => x.UserId != id && x.Email==model.email);
             if (kor != null)
-                return false;
+            {
+                ind = false;
+                return "email";
+            }
 
             user.Email = model.email;
             user.Verified = false;
@@ -359,7 +365,8 @@ namespace BackApi.Services
 
             kontext.SaveChanges();
             emailService.SendEmail("Kliknite na link za potvrdu novog email-a:http://localhost:4200/verification?token=" + jwtoken, "Potvrda novog email-a", model.email);
-            return true;
+            ind = true;
+            return "uspesno";
 
         }
         public bool EditPassword(int id, UserEdit model)
