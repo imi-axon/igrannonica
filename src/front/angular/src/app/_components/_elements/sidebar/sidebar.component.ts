@@ -12,7 +12,7 @@ import { AuthService } from 'src/app/_utilities/_services/auth.service';
 export class SidebarComponent implements OnInit {
 
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private router: Router
   ) { }
 
