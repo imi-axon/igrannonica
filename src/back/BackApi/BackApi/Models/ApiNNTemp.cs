@@ -14,6 +14,7 @@
         public string dataset { get; set; }
         public string nn { get; set; }
         public string conf { get; set; }
+        public string trainrez { get; set; }
         public string newconf { get; set; }
     }
     public class NNCreate

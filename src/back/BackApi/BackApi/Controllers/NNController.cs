@@ -52,6 +52,9 @@ namespace BackApi.Controllers
             packet.conf = nnsrv.NNIdToCfg(nnid);
             if (packet.conf == null) return BadRequest("network");
             packet.conf = packet.nn.Replace('\\', '/');
+            packet.trainrez = nnsrv.NNIdToTrainrez(nnid);
+            if (packet.trainrez == null) return BadRequest("network");
+            packet.trainrez = packet.nn.Replace('\\', '/');
 
             if (!wsq.CheckInDict(nnid)) 
             {
@@ -60,7 +63,7 @@ namespace BackApi.Controllers
                     var webSocketfront = await HttpContext.WebSockets.AcceptWebSocketAsync();
                     wsq.AddToDict(nnid, webSocketfront);
                     var webSocketMl = new ClientWebSocket();
-                    await webSocketMl.ConnectAsync(new Uri(Urls.mlWs + "/api/nn/train/start"), CancellationToken.None);
+                    await webSocketMl.ConnectAsync(new Uri(Urls.mlWs + "/api/user"+userid+"/nn"+nnid+"/train"), CancellationToken.None);
                     try
                     {
                         var finished=await nnsrv.MlTraining(webSocketfront, packet,webSocketMl);
