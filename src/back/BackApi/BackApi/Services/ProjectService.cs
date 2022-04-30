@@ -12,7 +12,7 @@ namespace BackApi.Services
         string ListPublicProjects();
         string GetProjById(int projid, int userid);
         bool SetNote(int projid, int userid, string note);
-        Boolean EditProject(int projid, ProjectPostPut proj,int userid);
+        string EditProject(int projid, ProjectPostPut proj,int userid, out bool tmp);
         int getProjectId(ProjectPostPut model);
         public Boolean projectOwnership(int userid, int projid);
         string GetNote(int projid, int userid, out bool ind);
@@ -34,7 +34,7 @@ namespace BackApi.Services
         }
         public Boolean CreateProject(ProjectPostPut model,int userid)
         {
-            if(context.Projects.Any(x=> x.Name == model.name))
+            if(context.Projects.Any(x=> x.Name == model.name && x.UserId==userid))
             {
                 return false;
             }
@@ -156,7 +156,7 @@ namespace BackApi.Services
             Boolean tmp;
             var proj = context.Projects.FirstOrDefault(x => x.UserId == userid && x.ProjectId == projid);
             if (proj == null)
-                return null;
+                return "";
             var dset=context.Datasets.FirstOrDefault(x=> x.ProjectId == projid);
             if (dset != null)
                 tmp = true;
@@ -193,20 +193,25 @@ namespace BackApi.Services
             ind = true;
             return proj.Notes;
         }
-        public Boolean EditProject(int projid,ProjectPostPut proj,int userid)
+        public string EditProject(int projid,ProjectPostPut proj,int userid, out bool ind)
         {
-            Boolean rez;
             var edited = context.Projects.Find(projid);
-            if(edited == null)
-                return rez = false;
+            if (edited == null)
+            {
+                ind = false;
+                return "project";
+            }
             if (edited.UserId != userid)
-                return rez = false;
+            {
+                ind = false;
+                return "user";
+            }
             edited.Name = proj.name;
             edited.Description = proj.description;
             edited.Public = proj.ispublic;
             context.SaveChanges();
-            rez = true;
-            return rez;
+            ind = true;
+            return "uspesno";
         }
 
         public int getProjectId(ProjectPostPut model)

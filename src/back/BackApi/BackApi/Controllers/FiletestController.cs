@@ -43,7 +43,7 @@ namespace BackApi.Controllers
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
-            if (!projsrv.projectOwnership(userid, projid)) return Forbid();
+            if (!projsrv.projectOwnership(userid, projid)) return BadRequest("user");
 
             var path = storsrv.GetDataset(datasrv.ProjIdToPath(projid, false));
             var bytes = await System.IO.File.ReadAllBytesAsync(path);

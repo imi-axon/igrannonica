@@ -16,7 +16,7 @@ namespace BackApi.Services
         public Task<HttpResponseMessage> NNCreateTemp(int id,string name,string datapath);
         public int GetNNid(int projid, string name);
         public string NNIdToPath(int nnid);
-        public string ListNN(int userid, int projid);
+        public string ListNN(int userid, int projid, out bool ind);
         public string NNIdToCfg(int nnid);
         public Boolean DeleteNN(int nnid);
         public bool AddNote(int projid, int nnid, string note);
@@ -181,11 +181,14 @@ namespace BackApi.Services
                 return nn.DataPath;
             return null;
         }
-        public string ListNN(int userid, int projid)
+        public string ListNN(int userid, int projid, out bool ind)
         {
             var tmp = kontext.Projects.FirstOrDefault(x => x.ProjectId == projid && x.UserId == userid);
             if (tmp == null)
-                return "Projekat za datog korisnika ne postoji";
+            {
+                ind = false;
+                return "user";
+            }
 
             var rez = new StringBuilder();
             rez.Append("[");
@@ -199,6 +202,7 @@ namespace BackApi.Services
             }
             if (rez.Length > 2) rez.Remove(rez.Length - 1, 1);
             rez.Append("]");
+            ind = true;
             return rez.ToString();
         }
         public string NNAddConfig(int nnid)
