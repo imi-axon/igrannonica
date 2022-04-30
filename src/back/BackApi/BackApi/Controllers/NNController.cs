@@ -34,15 +34,14 @@ namespace BackApi.Controllers
             this.wsq = wsQueue;
         }
 
-        [HttpGet("{id}/nn/{nnid}/train/start"),AllowAnonymous]
+        [HttpGet("{id}/nn/{nnid}/train/start")]
         public async Task<ActionResult> Train(int id, int nnid)
-        {/*
+        {
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized("Ulogujte se");
-            var chk = projsrv.projectOwnership(userid, id);
-            if (!chk)
-                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Vi niste vlasnik projekta" });
-            */
+            if (userid == -1) return Unauthorized();
+            if (!projsrv.projectExists(id)) return NotFound();
+            if (!projsrv.projectOwnership(userid, id)) return Forbid();
+
             var packet = new ApiNNTrain();
             packet.dataset = datasrv.ProjIdToPath(id, true);
             if (packet.dataset == null) return BadRequest("Ne postoji dataset");
@@ -90,10 +89,10 @@ namespace BackApi.Controllers
         public async Task<ActionResult> CreateNN(int id,[FromBody] ApiNNTempCreate req)
         {
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized("Ulogujte se");
-            var chk = projsrv.projectOwnership(userid, id);
-            if (!chk)
-                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Vi niste vlasnik projekta" });
+            if (userid == -1) return Unauthorized();
+            if (!projsrv.projectExists(id)) return NotFound();
+            if (!projsrv.projectOwnership(userid, id)) return Forbid();
+
             var datapath = datasrv.ProjIdToPath(id, true);
             if (datapath == null) return BadRequest();
             var rez = await nnsrv.NNCreateTemp(id, req.Name,datapath);
@@ -108,7 +107,11 @@ namespace BackApi.Controllers
         public async Task<ActionResult<string>> ListNN(int id)
         {
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized("Ulogujte se");
+            if (userid == -1) return Unauthorized();
+            if (!projsrv.projectExists(id)) return NotFound();
+            if (!projsrv.projectIsPublic(id))
+                if (!projsrv.projectOwnership(userid, id)) return Forbid();
+
             string rez = nnsrv.ListNN(userid, id);
             return rez;
         }
@@ -117,10 +120,10 @@ namespace BackApi.Controllers
         public async Task<ActionResult> GetNN(int id,int nnid)
         {
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized("Ulogujte se");
-            var chk = projsrv.projectOwnership(userid, id);
-            if (!chk)
-                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Vi niste vlasnik projekta" });
+            if (userid == -1) return Unauthorized();
+            if (!projsrv.projectExists(id)) return NotFound();
+            if (!projsrv.projectIsPublic(id))
+                if (!projsrv.projectOwnership(userid, id)) return Forbid();
 
             var sent = new ApiNNPost();
             sent.nn = storsrv.CreateNNFile (id, nnid);
@@ -145,11 +148,11 @@ namespace BackApi.Controllers
         public async Task<ActionResult<string>> AddNNNotes(int id, int nnid, [FromBody]ApiNNPutNote note)
         {
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized("Ulogujte se");
-            var chk = projsrv.projectOwnership(userid, id);
-            if (!chk)
-                return BadRequest();
-            chk = nnsrv.AddNote(id, nnid, note.note);
+            if (userid == -1) return Unauthorized();
+            if (!projsrv.projectExists(id)) return NotFound();
+            if (!projsrv.projectOwnership(userid, id)) return Forbid();
+
+            var chk = nnsrv.AddNote(id, nnid, note.note);
             if (!chk)
                 return BadRequest();
             return Ok("uspesno");
@@ -159,10 +162,11 @@ namespace BackApi.Controllers
         {
             bool ind = false;
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized("Ulogujte se");
-            var chk = projsrv.projectOwnership(userid, id);
-            if (!chk)
-                return BadRequest();
+            if (userid == -1) return Unauthorized();
+            if (!projsrv.projectExists(id)) return NotFound();
+            if (!projsrv.projectIsPublic(id))
+                if (!projsrv.projectOwnership(userid, id)) return Forbid();
+
             var res = nnsrv.GetNote(id, nnid, out ind);
             if (!ind)
                 return BadRequest();
@@ -172,10 +176,10 @@ namespace BackApi.Controllers
         public async Task<ActionResult> DeleteNN(int id,int nnid)
         {
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized("Ulogujte se");
-            var chk = projsrv.projectOwnership(userid, id);
-            if (!chk)
-                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Vi niste vlasnik projekta" });
+            if (userid == -1) return Unauthorized();
+            if (!projsrv.projectExists(id)) return NotFound();
+            if (!projsrv.projectOwnership(userid,id)) return Forbid();
+
             Boolean rez = nnsrv.DeleteNN(nnid);
             if (rez)
                 return Ok("Mreza izbrisana");

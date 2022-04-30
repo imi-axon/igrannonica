@@ -21,6 +21,7 @@
         public string headers { get; set; }
         public string nn { set; get; }
         public string conf { set; get; }
+        public string trainrez { set; get; }
     }
 
     public class ApiNNGet

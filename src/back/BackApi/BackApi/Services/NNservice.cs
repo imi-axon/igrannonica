@@ -44,8 +44,8 @@ namespace BackApi.Services
             var MlJson = JsonConvert.SerializeObject(packet);
             var toMLconf = Encoding.UTF8.GetBytes(MlJson);
             await webSocketMl.SendAsync(new ArraySegment<byte>(toMLconf, 0, MlJson.Length), WebSocketMessageType.Text , true, CancellationToken.None);
-            var resultml = await webSocketMl.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-
+            var resultml = await webSocketMl.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None); // new-treniranje iz pocetka; continue-nastavljanje prethodnog treniranja
+            
             while (!resultml.CloseStatus.HasValue)
             {
                 if (webSocket.CloseStatus.HasValue)//ako korisnik brzo otkaze trening
@@ -120,17 +120,25 @@ namespace BackApi.Services
                 response.StatusCode = HttpStatusCode.NotFound;
                 return response;
             }
-            //File.Create(xd.nn);
             xd.conf = NNAddConfig(nnid);
             if (xd.conf == null)
             {
                 response.StatusCode = HttpStatusCode.NotFound;
                 return response;
             }
-            //File.Create(xd.conf);
+            xd.trainrez = NNAddTrainRez(nnid);
+            if (xd.trainrez == null)
+            {
+                response.StatusCode = HttpStatusCode.NotFound;
+                return response;
+            }
+            await File.WriteAllTextAsync(xd.trainrez, "");
+            await File.WriteAllTextAsync(xd.nn, "");
+            await File.WriteAllTextAsync(xd.conf, "");
 
             xd.nn = xd.nn.Replace('\\', '/');
             xd.conf = xd.conf.Replace('\\', '/');
+            xd.trainrez = xd.trainrez.Replace('\\', '/');
 
             var myContent = JsonConvert.SerializeObject(xd);
             var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
@@ -215,6 +223,20 @@ namespace BackApi.Services
 
             return path;
         }
+        public string NNAddTrainRez(int nnid)
+        {
+            var nn = kontext.NNs.FirstOrDefault(x => x.NNId == nnid);
+            if (nn == null)
+                return null;
+
+            var path = storageService.CreateNNtrainrez(nn.ProjectId, nnid);
+            nn.TrainrezPath = path;
+
+            kontext.Entry(nn).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            kontext.SaveChanges();
+
+            return path;
+        }
         public string NNIdToCfg(int nnid)
         {
             NN nn = kontext.NNs.FirstOrDefault(x => x.NNId == nnid);
@@ -230,6 +252,7 @@ namespace BackApi.Services
                 return false;
             storageService.DeletePath(nn.ConfPath);
             storageService.DeletePath(nn.DataPath);
+            storageService.DeletePath(nn.TrainrezPath);
 
             kontext.NNs.Remove(nn);
             kontext.SaveChanges();

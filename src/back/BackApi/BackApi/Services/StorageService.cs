@@ -10,6 +10,7 @@
         public string GetDataset(string tmp);
         public string CreateNNFile(int projid, int nnid);
         public string CreateNNCfg(int projid, int nnid);
+        public string CreateNNtrainrez(int projid, int nnid);
         public string ReadCfg(string path);
         public void SaveFile(string path, IFormFile file);
         public string CreatePhoto(int userid);
@@ -96,6 +97,17 @@
             path = Path.Combine(path, tmp);
             path = Path.Combine(path, "mreze");
             tmp = "cfg" + nnid + ".json";
+            path = Path.Combine(path, tmp);
+            return path;
+        }
+
+        public string CreateNNtrainrez(int projid, int nnid)
+        {
+            var path = @"Storage";
+            var tmp = "proj" + projid;
+            path = Path.Combine(path, tmp);
+            path = Path.Combine(path, "mreze");
+            tmp = "trainrez" + nnid + ".txt";
             path = Path.Combine(path, tmp);
             return path;
         }

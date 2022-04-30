@@ -33,16 +33,16 @@ namespace BackApi.Controllers
         public async Task<ActionResult<string>> NewDataSet(int id,IFormFile dataset )
         {
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized("Ulogujte se");
-            var chk = projsrv.projectOwnership(userid, id);
-            if (!chk)
-                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Vi niste vlasnik projekta" });
+            if (userid == -1) return Unauthorized();
+            if (!projsrv.projectExists(id)) return NotFound();
+            if (!projsrv.projectOwnership(userid, id)) return Forbid();
+
             var time = await datasrv.New(dataset, id, userid);
             if(!time)
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Greska pri pisanju fajla." });
             DatasetGetPost novi = new DatasetGetPost();
             novi.dataset= datasrv.ProjIdToPath(id,true);
-            var response = await MLconnection.validateCSVstring(novi); // ceka se implementacija obrade fajla na ml-u a ne stringa
+            var response = await MLconnection.validateCSVstring(novi);
 
             if (response.StatusCode == HttpStatusCode.Created)
             {
@@ -60,10 +60,10 @@ namespace BackApi.Controllers
         public async Task<ActionResult<string>> DeleteDataset(int projid)
         {
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized("Ulogujte se");
-            var chk = projsrv.projectOwnership(userid, projid);
-            if (!chk)
-                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Vi niste vlasnik projekta" });
+            if (userid == -1) return Unauthorized();
+            if (!projsrv.projectExists(projid)) return NotFound();
+            if (!projsrv.projectOwnership(userid, projid)) return Forbid();
+
             var rez = datasrv.Delete(projid);
             if (rez)
                 return Ok("Uspesno Obrisan");
@@ -75,10 +75,10 @@ namespace BackApi.Controllers
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
-            Boolean owner;
-            owner = projsrv.projectOwnership(userid, projid);
-            if (!owner)
-                return Forbid();
+            if (!projsrv.projectExists(projid)) return NotFound();
+            if (!projsrv.projectIsPublic(projid))
+                if (!projsrv.projectOwnership(userid, projid)) return Forbid();
+
             DatasetGetPost dataset = new DatasetGetPost();
             dataset.dataset = datasrv.ProjIdToPath(projid,main);
             if(dataset.dataset==null)
@@ -93,12 +93,11 @@ namespace BackApi.Controllers
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
-            
+            if (!projsrv.projectExists(id)) return NotFound();
+            if (!projsrv.projectIsPublic(id))
+                if (!projsrv.projectOwnership(userid, id)) return Forbid();
+
             DatasetGetPost dataset = new DatasetGetPost();
-            Boolean owner;
-            owner = projsrv.projectOwnership(userid,id);
-            if (!owner)
-                return Forbid();
             dataset.dataset= datasrv.ProjIdToPath(id,main);
             if (dataset.dataset == null)
                 return NotFound();
@@ -116,10 +115,9 @@ namespace BackApi.Controllers
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
-            Boolean owner;
-            owner = projsrv.projectOwnership(userid, id);
-            if (!owner)
-                return Forbid();
+            if (!projsrv.projectExists(id)) return NotFound();
+            if (!projsrv.projectOwnership(userid, id)) return Forbid();
+
             var dataset = new DatasetGetPost();
             dataset.dataset = datasrv.ProjIdToPath(id,main);
             if (dataset.dataset == null)
@@ -156,10 +154,9 @@ namespace BackApi.Controllers
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
-            Boolean owner;
-            owner = projsrv.projectOwnership(userid, id);
-            if (!owner)
-                return Forbid();
+            if (!projsrv.projectExists(id)) return NotFound();
+            if (!projsrv.projectOwnership(userid,id)) return Forbid();
+
             datasrv.SaveChanges(id);
             return Ok();
         }
@@ -169,10 +166,9 @@ namespace BackApi.Controllers
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
-            Boolean owner;
-            owner = projsrv.projectOwnership(userid, id);
-            if (!owner)
-                return Forbid();
+            if (!projsrv.projectExists(id)) return NotFound();
+            if (!projsrv.projectOwnership(userid, id)) return Forbid();
+
             datasrv.DiscardChanges(id);
             return Ok();
         }
@@ -182,10 +178,10 @@ namespace BackApi.Controllers
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
-            Boolean owner;
-            owner = projsrv.projectOwnership(userid, projid);
-            if (!owner)
-                return Forbid();
+            if (!projsrv.projectExists(projid)) return NotFound();
+            if (!projsrv.projectIsPublic(projid))
+                if (!projsrv.projectOwnership(userid, projid)) return Forbid();
+
             var dataset = new DatasetPages();
             dataset =await datasrv.CreatePage(projid, main, p, r);
             if (dataset.dataset == null)
@@ -206,10 +202,9 @@ namespace BackApi.Controllers
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
-            Boolean owner;
-            owner = projsrv.projectOwnership(userid, id);
-            if (!owner)
-                return Forbid();
+            if (!projsrv.projectExists(id)) return NotFound();
+            if (!projsrv.projectOwnership(userid,id)) return Forbid();
+
             DatasetMLPost snd = new DatasetMLPost();
             snd.dataset = datasrv.ProjIdToPath(id, false);
             snd.actions = datasrv.RevertToLine(id, ln);
@@ -243,10 +238,9 @@ namespace BackApi.Controllers
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
-            Boolean owner;
-            owner = projsrv.projectOwnership(userid, id);
-            if (!owner)
-                return Forbid();
+            if (!projsrv.projectExists(id)) return NotFound();
+            if (!projsrv.projectOwnership(userid, id)) return Forbid();
+
             if (datasrv.RevertToInit(id))
                 return Ok();
             return BadRequest();
@@ -256,10 +250,9 @@ namespace BackApi.Controllers
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
-            Boolean owner;
-            owner = projsrv.projectOwnership(userid, projid);
-            if (!owner)
-                return Forbid();
+            if (!projsrv.projectExists(projid)) return NotFound();
+            if (!projsrv.projectOwnership(userid, projid)) return Forbid();
+
             var ret= datasrv.ListChanges(projid,main);
             if(ret== null) return NotFound();
             return Ok(ret);
