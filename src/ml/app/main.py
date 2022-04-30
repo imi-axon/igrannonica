@@ -240,18 +240,19 @@ def get_default_nn_conf():
 
 # ==== WebSockets ====
 
-@app.websocket("/api/nn/train/start")
-async def training_stream(ws: WebSocket):
+@app.websocket("/api/user{uid}/nn{nnid}/train")
+async def training_stream(ws: WebSocket, uid: int, nnid: int):
+
     start_time = time()
+    await ws.accept() # ws <ACCEPT>
 
-    await ws.accept()
-    data = await ws.receive_json()
-    await ws.send_bytes(b'') # confirm
-    print('Accepted')
+    data = await ws.receive_json() # ws <<<<
+
+    # confirm
+    await ws.send_bytes(b'') # ws >>>>
     
-
-    # print(data)
     print(data)
+
     datasetlink = data['dataset']
     nnlink = data['nn']
     conflink = data['conf']
@@ -260,10 +261,10 @@ async def training_stream(ws: WebSocket):
     # TEMP
     # conf['actPerLayer'] = ['relu' for _ in range(3)]
     # conf['neuronsPerLayer'] = [3 for _ in range(3)]
+    # uid = randint(1,1)
+    # nnid = randint(1,1)
 
     tt: TrainingThread = None
-    uid = randint(1,1)
-    nnid = randint(1,1)
 
     buff: List[bytes] = []
     flags = {'stop': False}
@@ -278,68 +279,54 @@ async def training_stream(ws: WebSocket):
             flags = tt.flags
             lock = tt.lock
             th = tt.thread      
+            print('> Thread allready exists')
         else:
-            print('--==> tt vec postoji <==--')
             th = Thread(target=TrainingInstance(buff, lock, flags).train, args=(datasetlink, nnlink, conf), daemon=True)
             tt = TrainingThread(th, buff, flags, lock)
             TTM.add(tt, uid, nnid)
             th.start()
+            print('> Thread started')
 
         TTM.pretty_print()
 
-        print('Thread Started')
-
         finished = False
-        await_play = True
+        await_command = True
 
         while not finished:
-            # print(f'finished: {finished}')
-            # print(f'flag stop: {flags["stop"]}')
-            # print(f'locked: {lock}')
 
-            rcv = 'play'
+            command = 'play'
 
-            if await_play:
-                # print('--==> AWAIT BACK PLAY')
-                rcv = await ws.receive_text()
-                #print('=-='*40)
-                await_play = False
-                # print('--==> RECIEVED: ' + rcv)
+            if await_command:
+                command = await ws.receive_text() # ws <<<<
+                await_command = False
             
-            if rcv == 'stop':
-                print(f'> RCV = stop')
+            if command == 'stop':
                 flags['stop'] = True
                 finished = True
             
             lock.acquire(blocking=True) # [ X ]
 
-            # print(len(buff))
             if len(buff) > 0:
-                await_play = True
+                await_command = True
                 
-                #local_buff: List[bytes] = []
-                local_buff = buff.copy()
+                burst_buff = buff.copy()
                 buff.clear()
                 lock.release() # [   ]
 
-                for b in local_buff:
-                    if b == b'end': 
-                        print(f'> END BLOCK')
-                        await ws.send_text(b.decode()) # >>>>
-                        print(f'> Poslat Backu END Message')
-
-                        print(f'> Training thread daemon is alive: {th.is_alive()}')
+                # send EPOCHS in BURST
+                for b in burst_buff:
+                    
+                    await ws.send_text(b.decode()) # ws >>>>
+                    print(f'>>>> send bytes: {b}')
+                    
+                    if b == b'end':
                         finished = True
-                        
-                    else:
-                        print('>>> send bytes')
-                        await ws.send_text(b.decode()) # >>>>
 
             else:
                 lock.release() # [   ]
 
         print(f'time: { time() - start_time }')
-        await ws.close(code = 1000)
+        await ws.close(code = 1000) # ws <CLOSE>
 
     except WebSocketDisconnect:
         print('-=| WS Disconnect |=-')
