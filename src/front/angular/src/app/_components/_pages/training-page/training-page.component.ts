@@ -34,6 +34,8 @@ export class TrainingPageComponent implements OnInit {
 
   }
 
+  
+  /*
   public treniraj() {
 
 
@@ -100,5 +102,6 @@ export class TrainingPageComponent implements OnInit {
     self.grafik.dataUpdate(ep, tLoss, vLoss)
     self.konfiguracija.epoch=ep;
   }
-
+  */
+  
 }

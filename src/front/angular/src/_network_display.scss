@@ -1,0 +1,28 @@
+svg{
+        
+    .neuron{
+        fill: url(#blueGradient);
+        stroke: #3465aa;
+        stroke-width: 1px;
+    }
+    
+    .label{
+        font-size: 14px;
+        fill: #1d59ac;
+        text-anchor: middle;
+    }
+    
+    .layerRect{
+        fill: #FFFFFF;
+        stroke: #a9cde9;
+        stroke-width: 1px;
+    }
+    
+    .layerTitle{
+        font-size: 18px;
+        font-weight: bold;
+        text-anchor: middle;
+        fill: #568AC6;
+    }
+    
+}
