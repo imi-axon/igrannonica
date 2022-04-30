@@ -61,7 +61,6 @@ namespace BackApi.Controllers
         public async Task<ActionResult<string>> DeleteDataset(int projid)
         {
             int userid = jwtsrv.GetUserId();
-
             if (userid == -1) return Unauthorized();
             if (!projsrv.projectExists(projid)) return NotFound();
             if (!projsrv.projectOwnership(userid, projid)) return BadRequest("user");
@@ -70,7 +69,7 @@ namespace BackApi.Controllers
             var rez = datasrv.Delete(projid);
             if (rez)
                 return Ok();
-            else return BadRequest("deletet");
+            else return BadRequest("deleted");
         }
 
         [HttpGet("{projid}/dataset/{main}")]
@@ -171,7 +170,6 @@ namespace BackApi.Controllers
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
-
             if (!projsrv.projectExists(id)) return NotFound();
             if (!projsrv.projectOwnership(userid, id)) return BadRequest("user");
 
@@ -208,7 +206,6 @@ namespace BackApi.Controllers
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
-
             if (!projsrv.projectExists(id)) return NotFound();
             if (!projsrv.projectOwnership(userid,id)) return BadRequest("user");
 

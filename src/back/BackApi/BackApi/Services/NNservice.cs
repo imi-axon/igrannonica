@@ -140,9 +140,9 @@ namespace BackApi.Services
                 response.StatusCode = HttpStatusCode.NotFound;
                 return response;
             }
-            await File.WriteAllTextAsync(xd.trainrez, "");
+            /*await File.WriteAllTextAsync(xd.trainrez, "");
             await File.WriteAllTextAsync(xd.nn, "");
-            await File.WriteAllTextAsync(xd.conf, "");
+            await File.WriteAllTextAsync(xd.conf, "");*/
 
             xd.nn = xd.nn.Replace('\\', '/');
             xd.conf = xd.conf.Replace('\\', '/');
