@@ -36,7 +36,7 @@ namespace BackApi.Services
         }
         public Boolean CreateProject(ProjectPostPut model,int userid)
         {
-            if(context.Projects.Any(x=> x.Name == model.name))
+            if(context.Projects.Any(x=> x.Name == model.name && x.UserId==userid))
             {
                 return false;
             }
@@ -160,9 +160,6 @@ namespace BackApi.Services
             var rez = new StringBuilder();
             Boolean tmp;
             var proj = context.Projects.FirstOrDefault(x =>x.ProjectId == projid);
-            if (proj == null)
-                return null;
-
             var dset=context.Datasets.FirstOrDefault(x=> x.ProjectId == projid);
             if (dset != null)
                 tmp = true;
@@ -208,18 +205,12 @@ namespace BackApi.Services
         }
         public Boolean EditProject(int projid,ProjectPostPut proj,int userid)
         {
-            Boolean rez;
             var edited = context.Projects.Find(projid);
-            if(edited == null)
-                return rez = false;
-            if (edited.UserId != userid)
-                return rez = false;
             edited.Name = proj.name;
             edited.Description = proj.description;
             edited.Public = proj.ispublic;
             context.SaveChanges();
-            rez = true;
-            return rez;
+            return true;
         }
 
         public int getProjectId(ProjectPostPut model)

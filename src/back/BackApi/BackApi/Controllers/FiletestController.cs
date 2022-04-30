@@ -45,7 +45,7 @@ namespace BackApi.Controllers
             if (userid == -1) return Unauthorized();
             if (!projsrv.projectExists(projid)) return NotFound();
             if(!projsrv.projectIsPublic(projid))
-                if (!projsrv.projectOwnership(userid, projid)) return Forbid();
+                if (!projsrv.projectOwnership(userid, projid)) return BadRequest("user");
 
             var path = storsrv.GetDataset(datasrv.ProjIdToPath(projid, false));
             var bytes = await System.IO.File.ReadAllBytesAsync(path);

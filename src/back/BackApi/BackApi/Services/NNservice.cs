@@ -191,9 +191,6 @@ namespace BackApi.Services
         }
         public string ListNN(int userid, int projid)
         {
-            var tmp = kontext.Projects.FirstOrDefault(x => x.ProjectId == projid && x.UserId == userid);
-            if (tmp == null)
-                return "Projekat za datog korisnika ne postoji";
 
             var rez = new StringBuilder();
             rez.Append("[");
