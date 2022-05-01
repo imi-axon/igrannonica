@@ -175,7 +175,7 @@ namespace BackApi.Services
             rez.Append("\"" + "Name" + "\":" + "\"" + proj.Name + "\",");
             rez.Append("\"" + "Public" + "\":" + "\"" + proj.Public + "\",");
             rez.Append("\"" + "Description" + "\":" + "\"" + proj.Description + "\",");
-            rez.Append("\"" + "loggedUserIsOwner" + "\":" + "\"" + loggedUserIsOwner + "\"");
+            //rez.Append("\"" + "loggedUserIsOwner" + "\":" + "\"" + loggedUserIsOwner + "\"");
             rez.Append("\"" + "hasDataset" + "\":" + "\"" + tmp + "\"");
 
             rez.Append("}");

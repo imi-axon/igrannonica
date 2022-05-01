@@ -169,6 +169,7 @@ namespace BackApi.Services
             nn.NNName=name;
             nn.DataPath = "";
             nn.ConfPath = "";
+            nn.TrainrezPath = "";
             nn.Notes = "";
 
             kontext.Add(nn);
