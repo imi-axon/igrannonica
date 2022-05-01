@@ -105,8 +105,8 @@
     },
 
     "sortiranje":{
-        "starije":"Date(old->new)",
-        "novije":"Date(new->old)"
+        "starije":"Date",
+        "novije":"Date"
     },
 
 
