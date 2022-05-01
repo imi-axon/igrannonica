@@ -78,3 +78,13 @@ hr{
 #igrannonica{
     margin-top: 5%;
 }
+
+@media (min-width:1001px) {
+ .container{
+     display: none;
+ }
+}
+
+.container{
+    margin-right: 0%;
+}

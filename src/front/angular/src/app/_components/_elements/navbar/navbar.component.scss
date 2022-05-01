@@ -95,3 +95,10 @@ nav{
     }
     
 }
+
+@media (max-width:1000px) {
+    #rightSide {
+      display: none;
+        
+    }
+}
