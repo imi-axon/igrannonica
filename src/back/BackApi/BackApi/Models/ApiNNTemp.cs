@@ -32,4 +32,9 @@
     {
         public string nn { set; get; }
     }
+
+    public class ApiNNPutNote
+    {
+        public string note { set; get; }
+    }
 }

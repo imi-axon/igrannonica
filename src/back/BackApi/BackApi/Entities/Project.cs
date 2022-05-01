@@ -14,7 +14,7 @@ namespace BackApi.Entities
         public string Name { get; set; }
         public DateTime CreationDate { get; set; }
         public string Description { get; set; } = string.Empty;
-
+        public string Notes { get; set; } = string.Empty;
         public Boolean Public { get; set; } = false;
     }
 }

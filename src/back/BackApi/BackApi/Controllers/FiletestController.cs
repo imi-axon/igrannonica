@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using BackApi.Models;
 
 namespace BackApi.Controllers
 {
@@ -54,7 +55,7 @@ namespace BackApi.Controllers
         public async Task<ActionResult> PassDatasetToML(int pid,int did)
         {
             //Debug.WriteLine();
-            var path = storsrv.GetDataset(datasrv.ProjIdToPath(pid, true));
+            var path = storsrv.CreateDataset(pid,did);
             var bytes = await System.IO.File.ReadAllBytesAsync(path);
 
             return File(bytes, "text/csv", Path.GetFileName(path));
@@ -64,7 +65,7 @@ namespace BackApi.Controllers
         [HttpPut("Storage/proj{pid}/mreze/mreza{nnid}.h5")]
         public async Task<ActionResult> PutNNFile(int pid, int nnid, IFormFile file ) 
         {
-            Debug.WriteLine("PUT NN");
+            //Debug.WriteLine("PUT NN");
             var path = storsrv.CreateNNFile(pid, nnid);
             storsrv.SaveFile(path, file);
             return Ok();
@@ -73,7 +74,7 @@ namespace BackApi.Controllers
         [HttpPut("Storage/proj{pid}/mreze/cfg{nnid}.json")]
         public async Task<ActionResult> PutNNCfg(int pid, int nnid, IFormFile file)
         {
-            Debug.WriteLine("PUT CFG");
+            //Debug.WriteLine("PUT CFG");
             var path = storsrv.CreateNNCfg(pid, nnid);
             storsrv.SaveFile(path, file);
             return Ok();
@@ -100,6 +101,17 @@ namespace BackApi.Controllers
             pagepath = @"Storage/" + pagepath;
             var bytes=await System.IO.File.ReadAllBytesAsync(pagepath);
             return File(bytes, "text/csv", Path.GetFileName(pagepath));
+        }
+
+        [HttpGet("xd")]//file response - save from stream testing 
+        public async Task<ActionResult> FileRespTest()
+        {
+            HttpClient client = new HttpClient();
+            var resp = await client.GetAsync("http://localhost:10016/api/files/Storage/proj2/data/data17.csv");
+            var str= await resp.Content.ReadAsStreamAsync();
+            var path = @"Storage/xddd.csv";
+            storsrv.SaveStream(path,str);
+            return Ok();
         }
 
     }

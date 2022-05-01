@@ -20,6 +20,11 @@ namespace BackApi.Services
         public Boolean EditHelperset(int projid, int userid, DatasetGetPost model);
         public Boolean UpdateMainDataset(int projid, int userid, out Boolean owner);
         public Task<DatasetPages> CreatePage(int projid, Boolean main, int p, int r);
+        public void SaveChanges(int projid);
+        public void DiscardChanges(int projid);
+        public Boolean RevertToInit(int projid);
+        public string RevertToLine(int projid, int linenum);
+        public string ListChanges(int projid, Boolean main);
     }
 
     public class DatasetService : IDatasetService
@@ -41,7 +46,7 @@ namespace BackApi.Services
                 Delete(projid);
 
             var Dataset = new Dataset();
-            Dataset.Name = "Default"; //moze se promeniti ukoliko bude implementovano vise dataseta po projektu
+            Dataset.Name = "Main"; //moze se promeniti ukoliko bude implementovano vise dataseta po projektu
             //Dataset.OwnerId =(int)model.OwnerId;
             Dataset.ProjectId=projid;
             Dataset.Ext = ".csv";
@@ -59,7 +64,7 @@ namespace BackApi.Services
             kontext.SaveChanges();
             
             var Temp = new Dataset();
-            Temp.Name = "Default - Pomocni";
+            Temp.Name = "Editing";
             Temp.ProjectId = projid;
             Temp.Ext = ".csv";
             Temp.Path="None";
@@ -77,6 +82,14 @@ namespace BackApi.Services
             //string xd= "n1;n2;n3;out\r1; 1; 0; 1\r1; 0; 0; 1\r0; 0; 1; 1\r1; 0; 1; 1\r0; 0; 0; 0\r";
             //File.WriteAllTextAsync(path, model.dataset);
             //File.WriteAllTextAsync(pathalt,model.dataset);
+            var chmain = storageService.ChangesFilePath(projid, true);
+            var chedit= storageService.ChangesFilePath(projid, false);
+            var initpath=storageService.InitialFilePath(projid);
+            using (FileStream stream = System.IO.File.Create(initpath))
+            {
+                model.CopyTo(stream);
+                stream.Flush();
+            }
             using (FileStream stream = System.IO.File.Create(Dataset.Path))
             {
                 model.CopyTo(stream);
@@ -87,7 +100,14 @@ namespace BackApi.Services
                 model.CopyTo(stream2);
                 stream2.Flush();
             }
-
+            using (FileStream stream = System.IO.File.Create(chmain))
+            {
+                stream.Flush();
+            }
+            using (FileStream stream = System.IO.File.Create(chedit))
+            {
+                stream.Flush();
+            }
             return true;
             //return datafile;
         }
@@ -138,10 +158,16 @@ namespace BackApi.Services
             var ifempty = lista[0];
             if (ifempty == null)
                 return false;
+            var initpath = storageService.InitialFilePath(projid);
+            storageService.DeletePath(initpath);
+            var chmain = storageService.ChangesFilePath(projid, true);
+            var chedit = storageService.ChangesFilePath(projid, false);
+            storageService.DeletePath(chmain);
+            storageService.DeletePath(chedit);
             foreach (Dataset d in lista)
             {
                 storageService.DeletePath(d.Path);
-
+                
                 kontext.Datasets.Remove(d);
                 kontext.SaveChanges();
             }
@@ -212,7 +238,7 @@ namespace BackApi.Services
             if (edit == null) return false;
 
             var path = storageService.GetDataset(edit.Path);
-            File.WriteAllTextAsync(path, model.dataset);
+            File.WriteAllText(path, model.dataset);
             return true;
         }
 
@@ -225,7 +251,7 @@ namespace BackApi.Services
             if (dest == null) return false;
 
             var path=storageService.GetDataset(dest.Path);
-            File.WriteAllTextAsync(path, temp);
+            File.WriteAllText(path, temp);
             return true;    
         }
 
@@ -247,7 +273,7 @@ namespace BackApi.Services
             for(int i=(p-1)*r+1;i<(p*r) + 1;i++)
             {
                 //content.Append(i);
-                if (i < lines.Length - 1)
+                if (i <= lines.Length - 1)
                 {
                     content.Append(lines[i]);
                     content.Append("\r\n");
@@ -266,6 +292,120 @@ namespace BackApi.Services
             return ret;
         }
 
+        public void SaveChanges(int projid)
+        {
+            var main =@""+ ProjIdToPath(projid, true);
+            var edit =@""+ ProjIdToPath(projid, false);
+            File.Copy(edit, main, true);
+            var chedit = storageService.ChangesFilePath(projid, false);
+            string[] lines = File.ReadAllLines(chedit);
+            var chmain = storageService.ChangesFilePath(projid, true);
+            foreach (var line in lines)
+            {
+                storageService.ChangesWriteLine(projid,true,line);
+            }
+            //clear unsaved editing history
+            using (FileStream fs = File.Open(chedit, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                lock (fs)
+                {
+                    fs.SetLength(0);
+                }
+            }
+        }
+        public void DiscardChanges(int projid)
+        {
+            var main = @"" + ProjIdToPath(projid, true);
+            var edit = @"" + ProjIdToPath(projid, false);
+            File.Copy(main, edit, true);
+            var chedit = storageService.ChangesFilePath(projid, false);
+            //clear unsaved editing history
+            using (FileStream fs = File.Open(chedit, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                lock (fs)
+                {
+                    fs.SetLength(0);
+                }
+            }
+        }
+        public Boolean RevertToInit(int projid)
+        {
+            var main = @"" + ProjIdToPath(projid, true);
+            if(main == "") return false;
+            var edit = @"" + ProjIdToPath(projid, false);
+            if (edit == "") return false;
+            var init = @"" + storageService.InitialFilePath(projid);
+            File.Copy(init, edit, true);
+            File.Copy(init, main, true);
+            var chedit = storageService.ChangesFilePath(projid, false);
+            var chmain = storageService.ChangesFilePath(projid, true);
+            using (FileStream fs = File.Open(chedit, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                lock (fs)
+                {
+                    fs.SetLength(0);
+                }
+            }
+            using (FileStream fs = File.Open(chmain, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                lock (fs)
+                {
+                    fs.SetLength(0);
+                }
+            }
+            return true;
+        }
+        public string RevertToLine(int projid,int linenum)
+        {
+            var edit = @"" + ProjIdToPath(projid, false);
+            if (edit == "") return null;
+            var init = @"" + storageService.InitialFilePath(projid);
+            File.Copy(init, edit, true);
+            var chedit = storageService.ChangesFilePath(projid, false);
+            var chmain = storageService.ChangesFilePath(projid, true);
+            using (FileStream fs = File.Open(chedit, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                lock (fs)
+                {
+                    fs.SetLength(0);
+                }
+            }
+            var actions = new StringBuilder();
+            actions.Append("[");
+            string[] lines = File.ReadAllLines(chmain);
+            for(int i=0;i <linenum;i++)
+            {
+                if (i < lines.Length)
+                {
+                    actions.Append(lines[i]);
+                    actions.Append(",");
+                    storageService.ChangesWriteLine(projid, false, lines[i]);
+                }
+            }
+            if(actions.Length > 2)
+                actions.Remove(actions.Length - 1, 1);
+            actions.Append("]");
+            var str= actions.ToString();
+            return str;
+        }
 
+        public string ListChanges(int projid,Boolean main)
+        {
+            var ch = storageService.ChangesFilePath(projid, main);
+            if (ch == "") return null;
+            var actions = new StringBuilder();
+            actions.Append("[");
+            string[] lines = File.ReadAllLines(ch);
+            foreach (var line in lines)
+            {
+                actions.Append(line);
+                actions.Append(",");
+            }
+            if (actions.Length > 2)
+                actions.Remove(actions.Length - 1, 1);
+            actions.Append("]");
+            var str = actions.ToString();
+            return str;
+        }
     }
 }

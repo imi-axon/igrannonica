@@ -113,9 +113,9 @@ from .util import NpEncoder
 
 class StatisticsMiddleware:
 
-    def __init__(self,csvString):
+    def __init__(self,csvString, sep, quoteChar):
 
-        self.dataframe = read_str_to_df(csvString)
+        self.dataframe = read_str_to_df(csvString, sep, quoteChar)
         self.stat = StatisticsService(self.dataframe)        
         self.dictionary = dictionary()
 

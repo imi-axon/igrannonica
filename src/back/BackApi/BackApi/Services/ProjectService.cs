@@ -11,9 +11,11 @@ namespace BackApi.Services
         string ListProjects(int userid,int pubuserid);
         string ListPublicProjects();
         string GetProjById(int projid, int userid);
+        bool SetNote(int projid, int userid, string note);
         Boolean EditProject(int projid, ProjectPostPut proj,int userid);
         int getProjectId(ProjectPostPut model);
         public Boolean projectOwnership(int userid, int projid);
+        string GetNote(int projid, int userid, out bool ind);
     }
     public class ProjectService:IProjectService
     {
@@ -170,7 +172,27 @@ namespace BackApi.Services
 
             return rez.ToString();
         }
+        public bool SetNote(int projid, int userid, string note)
+        {
+            var proj = context.Projects.FirstOrDefault(x => x.UserId == userid && x.ProjectId == projid);
+            if (proj == null)
+                return false;
+            proj.Notes = note;
+            context.SaveChanges();
+            return true;
 
+        }
+        public string GetNote(int projid, int userid, out bool ind)
+        {
+            var proj = context.Projects.FirstOrDefault(x => x.UserId == userid && x.ProjectId == projid);
+            if (proj == null)
+            {
+                ind = false;
+                return "";
+            }
+            ind = true;
+            return proj.Notes;
+        }
         public Boolean EditProject(int projid,ProjectPostPut proj,int userid)
         {
             Boolean rez;
