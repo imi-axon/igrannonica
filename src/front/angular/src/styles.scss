@@ -40,10 +40,13 @@ $angular-theme: mat.define-light-theme((
 @import "./buttons";
 @import "./forms";
 @import "~bootstrap-icons/font/bootstrap-icons.css";
+
+@import "./network_display";
+
+
 *{
     font-family: 'Raleway', sans-serif;
 }
-
 
 html{
     height: 100%;

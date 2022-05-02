@@ -1,0 +1,20 @@
+<div id="grid">
+    
+    <div id="confingContainer">
+        
+    </div>
+    
+    <div id="secondRow">
+        
+        <div #networkDisplay (mousedown)="MouseDownHandler($event)" (mouseup)="MouseUpHandler($event)" (mousemove)="MouseMoveHandler($event)" (mouseleave)="MouseUpHandler($event)" id="networkDisplay">
+            <app-neural-network-display #networkComponent></app-neural-network-display>
+        </div>
+        
+        <div id="trainingDisplay">
+            
+        </div>
+        
+    </div>
+    
+    
+</div>

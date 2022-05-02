@@ -1,0 +1,55 @@
+svg{
+        
+    .neuron{
+        fill: url(#blueGradient);
+        stroke: #3465aa;
+        stroke-width: 1px;
+    }
+    
+    .label{
+        font-size: 14px;
+        fill: #1d59ac;
+        text-anchor: middle;
+    }
+    
+    .layerRect{
+        fill: #FFFFFF;
+        stroke: #a9cde9;
+        stroke-width: 1px;
+    }
+    
+    .layerTitle{
+        font-size: 18px;
+        font-weight: bold;
+        text-anchor: middle;
+        fill: #568AC6;
+    }
+    
+    .addNeuronButton{
+        fill: url(#blueGradient);
+        fill-opacity: 0.5;
+        stroke: #598dd6;
+        stroke-width: 3px;
+        stroke-dasharray: 5px;
+        stroke-linecap: round;
+    }
+    
+}
+
+.activationCombo{
+    background-color: #2F5EA6;
+    color: #FFFFFF;
+    position: absolute;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    
+    height: 25px;
+    width: 90px;
+    
+    &:focus{
+        border-radius: 5px 5px 0px 0px;
+        outline: none;
+    }
+}
