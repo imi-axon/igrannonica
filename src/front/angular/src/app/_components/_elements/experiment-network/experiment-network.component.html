@@ -6,8 +6,8 @@
     
     <div id="secondRow">
         
-        <div id="networkDisplay">
-            <app-neural-network-display></app-neural-network-display>
+        <div #networkDisplay (mousedown)="MouseDownHandler($event)" (mouseup)="MouseUpHandler($event)" (mousemove)="MouseMoveHandler($event)" (mouseleave)="MouseUpHandler($event)" id="networkDisplay">
+            <app-neural-network-display #networkComponent></app-neural-network-display>
         </div>
         
         <div id="trainingDisplay">

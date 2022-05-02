@@ -9,6 +9,7 @@
     
     #confingContainer{
         border: solid 1px #2C5D96;
+        
     }
     
     
@@ -19,6 +20,8 @@
         
         #networkDisplay{
             border: solid 1px #2C5D96;
+            overflow: auto;
+            cursor: grab;
         }
         
         #trainingDisplay{
