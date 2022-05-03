@@ -1,5 +1,6 @@
 ﻿using BackApi.Entities;
 using BackApi.Models;
+using System.Diagnostics;
 using System.Text;
 
 namespace BackApi.Services
@@ -127,10 +128,9 @@ namespace BackApi.Services
             List<Project> listapub = context.Projects.Where(x => x.Public == true).ToList();
             foreach (Project p in listapub)
             {
-                rez.Append("{");
+                rez.Append("[{");
                 var user = context.Users.Find(p.UserId);
-                if(user != null)
-                    rez.Append("\"" + "Username" + "\":" + "\"" + user.Username + "\",");
+         
                 rez.Append("\"" + "ProjectId" + "\":" + "\"" + p.ProjectId + "\",");
                 rez.Append("\"" + "Name" + "\":" + "\"" + p.Name + "\",");
                 rez.Append("\"" + "Public" + "\":" + "\"" + p.Public + "\",");
@@ -142,6 +142,23 @@ namespace BackApi.Services
                     rez.Append("\"" + "hasDataset" + "\":" + "\"" + "false" + "\",");
                 rez.Append("\"" + "Description" + "\":" + "\"" + p.Description + "\"");
                 rez.Append("},");
+
+                if (user != null)
+                {
+                    string photopath = user.PhotoPath;
+                    if (photopath == "" || photopath == null)
+                        photopath = Path.Combine("Storage", "profilna.png");
+
+                    string b = System.IO.File.ReadAllText(photopath);
+                    rez.Append("{");
+                    rez.Append("\"" + "UseId" + "\":" + "\"" + user.UserId + "\",");
+                    rez.Append("\"" + "Name" + "\":" + "\"" + user.Name + "\",");
+                    rez.Append("\"" + "Lastname" + "\":" + "\"" + user.Lastname + "\",");
+                    rez.Append("\"" + "Username" + "\":" + "\"" + user.Username + "\",");
+                    rez.Append("\"" + "Username" + "\":" + "\"" + user.Email + "\",");
+                    rez.Append("\"" + "Photo" + "\":" + "\"" + b + "\"");
+                    rez.Append("}],");
+                }
             }
             if (rez.Length > 2) rez.Remove(rez.Length - 1, 1);
             rez.Append("]");
