@@ -1,6 +1,7 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { select } from 'd3';
 import { fromEvent, Subscription } from 'rxjs';
+import { ExperimentNetworkComponent } from '../experiment-network/experiment-network.component';
 
 const MIN_CLAMP_OUT = 1;
 const MAX_CLAMP_OUT = 6;
@@ -17,10 +18,10 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   @ViewChild("container")
   container: ElementRef;
   
-  public display: ElementRef;
-  
   @ViewChild("weightInput")
   weightInput: ElementRef;
+  
+  @Input() parent: ExperimentNetworkComponent;
   
   private possibleActivations: string[] = ["Linear", "Sigmoid", "ReLU", "Tahn", "Tralala"];
   private defaultActivation: string = "Linear";
@@ -29,130 +30,6 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   private weightInputId: string = "weightInput";
   private weightToChange: any = { "layerIndex": -1, "neuronIndex": -1, "weightIndex": -1 }
   
-  private neuralNetwork = 
-  {
-    "nn": {
-      "layers": [
-        
-        // LAYER 1 - 3 NEURONA
-        {
-          "neurons": [
-            {
-              "weights": [
-                1, 1, 1
-              ],
-              "bias": 2.1
-            },
-            {
-              "weights": [
-                1, 1, 1
-              ],
-              "bias": 2.9
-            },
-            {
-              "weights": [
-                1, 1, 1
-              ],
-              "bias": 3.4
-            }
-          ]
-        },
-        
-        // LAYER 2 - 3 NEURONA
-        {
-          "neurons": [
-            {
-              "weights": [
-                1.38,
-                1.6,
-                5.7
-              ],
-              "bias": 3.11
-            },
-            {
-              "weights": [
-                1.11,
-                5.8,
-                7.35
-              ],
-              "bias": 1.2
-            },
-            {
-              "weights": [
-                2.13,
-                1.3,
-                4.37
-              ],
-              "bias": 1.2
-            }
-          ]
-        },
-        
-        // LAYER 3 - 2 NEURONA
-        {
-          "neurons": [
-            {
-              "weights": [
-                7.18,
-                3.64,
-                7.8
-              ],
-              "bias": 3.11
-            },
-            {
-              "weights": [
-                3.88,
-                5.2,
-                5.47
-              ],
-              "bias": 1.2
-            }
-          ]
-        },
-        
-        // OUTPUT - 2 NEURONA
-        {
-          "neurons": [
-            {
-              "weights": [
-                4.28,
-                1.2
-              ],
-              "bias": 1.71
-            },
-            {
-              "weights": [
-                7.2,
-                6.13
-              ],
-              "bias": 3.11
-            }
-          ]
-        }
-      ]
-    },
-    "conf":
-    {
-      "inputs": ["A INPUT", "B INPUT", "C INPUT"],
-      "outputs": ["Z OUTPUT", "Y OUTPUT"],
-      
-      "neuronsPerLayer": [3, 3, 2],
-      
-      "actPerLayer": ["Linear", "Sigmoid", "Tahn"],
-      "actOut": "ReLU",
-      
-      "learningRate": 0.03,
-      "reg": "None",
-      "regRate": 0,
-      "batchSize": 1,
-      
-      "problemType": "classification",
-      
-      "splitType": "random",
-      "trainSplit": 0.5,
-      "valSplit": 0.5
-    }
-  }
   
   // Parametri
   private displayWidth: number = 0;
@@ -188,6 +65,8 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   private actPerLayerCombos: any;
   private outputActivationComboDiv: any;
   
+  private editInputOutputButtons: any;
+  
   
   private Clamp(value: number): number{
     let clampedValue = Math.abs(value / 3);
@@ -203,7 +82,6 @@ export class NeuralNetworkDisplayComponent implements OnInit {
     setTimeout(() => {
       
       this.subscription = fromEvent(document, 'mouseup').subscribe( e => { this.mouseUpHandler(e as MouseEvent); });
-      
       this.Refresh();
       
     }, 0);
@@ -222,20 +100,16 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   
   // DISPLAY REFRESHER - call after every nn change
   public Refresh(){
-    this.displayWidth = (this.neuralNetwork.nn.layers.length + 1) * this.layerWidth;
+    this.displayWidth = (this.parent.neuralNetwork.nn.layers.length + 1) * this.layerWidth;
     this.displayHeigth = (this.caluculateMaxVerticalNeurons() + 1) * this.neuronOffsetY + this.displayTopPadding;
     
     if(this.container.nativeElement.clientHeight  - 17 > this.displayHeigth)
       this.displayHeigth = this.container.nativeElement.clientHeight;
     
-    select("svg .d3Container").selectChildren()
-      .remove()
-    
-    select("#activationCombos").selectChildren()
-      .remove()
-      
-    select("#outputActivationCombo").selectChildren()
-      .remove()
+    select("svg .d3Container").selectChildren().remove();
+    select("#activationCombos").selectChildren().remove();
+    select("#outputActivationCombo").selectChildren().remove();
+    select("#editInputOutputButtons").selectChildren().remove();
     
     this.d3Init();
     this.d3Setup();
@@ -246,12 +120,12 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   private caluculateMaxVerticalNeurons(): number{
     let maxNeurons = 0;
     
-    for(var i = 0; i < this.neuralNetwork.nn.layers.length; i++)
-        if(this.neuralNetwork.nn.layers[i].neurons.length >= maxNeurons)
-            maxNeurons = this.neuralNetwork.nn.layers[i].neurons.length;
+    for(var i = 0; i < this.parent.neuralNetwork.nn.layers.length; i++)
+        if(this.parent.neuralNetwork.nn.layers[i].neurons.length >= maxNeurons)
+            maxNeurons = this.parent.neuralNetwork.nn.layers[i].neurons.length;
     
-    if(this.neuralNetwork.conf.inputs.length > maxNeurons)
-      maxNeurons = this.neuralNetwork.conf.inputs.length;
+    if(this.parent.neuralNetwork.conf.inputs.length > maxNeurons)
+      maxNeurons = this.parent.neuralNetwork.conf.inputs.length;
     
     return maxNeurons;
   }
@@ -269,43 +143,124 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   // NETWORK CONTROLS ==========================================================
   
   
-  private RemoveInputClick(inputName: string){
-    if(this.neuralNetwork.conf.inputs.length <= 1)
+  public RemoveInputClick(inputName: string){
+    if(this.parent.neuralNetwork.conf.inputs.length <= 1)
       return;
     
     let inputIndex = -1;
-    this.neuralNetwork.conf.inputs.forEach(
+    this.parent.neuralNetwork.conf.inputs.forEach(
       (element: string,index: number)=>{
         if(element == inputName) {
-          this.neuralNetwork.conf.inputs.splice(index, 1);
+          this.parent.neuralNetwork.conf.inputs.splice(index, 1);
           inputIndex = index;
         }
       }
     );
     
-    for(let i = 0; i < this.neuralNetwork.nn.layers[0].neurons.length; i++)
-      this.neuralNetwork.nn.layers[0].neurons[i].weights.splice(inputIndex, 1);
+    for(let i = 0; i < this.parent.neuralNetwork.nn.layers[0].neurons.length; i++)
+      this.parent.neuralNetwork.nn.layers[0].neurons[i].weights.splice(inputIndex, 1);
     
    
     this.Refresh();
   }
+  public RemoveOutputClick(outputName: string){
+    if(this.parent.neuralNetwork.conf.outputs.length <= 1)
+      return;
+    
+    let outputIndex = -1;
+    // Remove input name from conf
+    this.parent.neuralNetwork.conf.outputs.forEach(
+      (element: string,index: number)=>{
+        if(element == outputName) {
+          outputIndex = index;
+          this.parent.neuralNetwork.conf.outputs.splice(index, 1);
+        }
+      }
+    );
+    
+    // Remove input neuron from last layer in nn
+    this.parent.neuralNetwork.nn.layers[this.parent.neuralNetwork.nn.layers.length - 1].neurons.forEach(
+      (element: any,index: number)=>{
+        if(index == outputIndex) {
+          this.parent.neuralNetwork.nn.layers[this.parent.neuralNetwork.nn.layers.length - 1].neurons.splice(index, 1);
+        }
+      }
+    );
+   
+    this.Refresh();
+  }
   
+  public AddColumnToInput(columnName: string){
+    this.parent.neuralNetwork.conf.inputs.push(columnName);
+    
+    for(let i = 0; i < this.parent.neuralNetwork.nn.layers[0].neurons.length; i++)
+      this.parent.neuralNetwork.nn.layers[0].neurons[i].weights.push(1);
+    
+    this.Refresh();
+  }
+  public AddColumnToOutput(columnName: string){
+    this.parent.neuralNetwork.conf.outputs.push(columnName);
+    
+    let weights: number[] = [];
+    for(let i = 0; i < this.parent.neuralNetwork.nn.layers[this.parent.neuralNetwork.nn.layers.length - 2].neurons.length; i++)
+      weights.push(1);
+    
+    this.parent.neuralNetwork.nn.layers[this.parent.neuralNetwork.nn.layers.length - 1].neurons.push(
+      {
+        "weights": weights,
+        "bias": 1
+      }
+    );
+    
+    this.Refresh();
+  }
+  
+  
+  
+  private AddNeuronToLayer(layerIndex: any){
+    let weights: number[] = [];
+    
+    // Popuni tezine trenutnog neurona neuronima prethodnog sloja ili ulaza
+    if(layerIndex == 0)
+      for(let i = 0; i < this.parent.neuralNetwork.conf.inputs.length; i++)
+        weights.push(1);
+    else
+      for(let i = 0; i < this.parent.neuralNetwork.nn.layers[layerIndex - 1].neurons.length; i++)
+        weights.push(1);
+    
+    // Dodaj u tezine neurona sledeceg sloja ovaj neuron
+    if(layerIndex < (this.parent.neuralNetwork.nn.layers.length - 1))
+      for(let i = 0; i < this.parent.neuralNetwork.nn.layers[layerIndex + 1].neurons.length; i++)
+        this.parent.neuralNetwork.nn.layers[layerIndex + 1].neurons[i].weights.push(1);
+    
+    
+    this.parent.neuralNetwork.nn.layers[layerIndex].neurons.push(
+      {
+        "weights": weights,
+        "bias": 1
+      }
+    )
+    
+    this.parent.neuralNetwork.conf.neuronsPerLayer[layerIndex]++;
+    
+    this.Refresh();
+  } 
   private RemoveHiddenClick(layerIndex: number, neuronIndex: any){
     
-    if(this.neuralNetwork.nn.layers.length <= 2 && this.neuralNetwork.nn.layers[0].neurons.length <= 1)
+    if(this.parent.neuralNetwork.nn.layers.length <= 2 && this.parent.neuralNetwork.nn.layers[0].neurons.length <= 1)
       return;
     
     // Is current layer going to be empty after neuron deletion
-    if(this.neuralNetwork.nn.layers[layerIndex].neurons.length <= 1){
+    if(this.parent.neuralNetwork.nn.layers[layerIndex].neurons.length <= 1){
         
       
       // If first hidden layer is going to be removed connect next to input
       if(layerIndex == 0){
         
-        for(let i = 0; i < this.neuralNetwork.nn.layers[1].neurons.length; i++){
-          this.neuralNetwork.nn.layers[1].neurons[i].weights = [];
-          for(let j = 0; j < this.neuralNetwork.conf.inputs.length; j++)
-            this.neuralNetwork.nn.layers[1].neurons[i].weights.push(1);
+        for(let i = 0; i < this.parent.neuralNetwork.nn.layers[1].neurons.length; i++){
+          this.parent.neuralNetwork.nn.layers[1].neurons[i].weights = [];
+          for(let j = 0; j < this.parent.neuralNetwork.conf.inputs.length; j++)
+            this.parent.neuralNetwork.nn.layers[1].neurons[i].weights.push(1);
         }
         
       }
@@ -315,199 +270,119 @@ export class NeuralNetworkDisplayComponent implements OnInit {
       else
       {
         
-        for(let i = 0; i < this.neuralNetwork.nn.layers[layerIndex + 1].neurons.length; i++){
-          this.neuralNetwork.nn.layers[layerIndex + 1].neurons[i].weights = [];
-          for(let j = 0; j < this.neuralNetwork.nn.layers[layerIndex - 1].neurons.length; j++)
-            this.neuralNetwork.nn.layers[layerIndex + 1].neurons[i].weights.push(1)
+        for(let i = 0; i < this.parent.neuralNetwork.nn.layers[layerIndex + 1].neurons.length; i++){
+          this.parent.neuralNetwork.nn.layers[layerIndex + 1].neurons[i].weights = [];
+          for(let j = 0; j < this.parent.neuralNetwork.nn.layers[layerIndex - 1].neurons.length; j++)
+            this.parent.neuralNetwork.nn.layers[layerIndex + 1].neurons[i].weights.push(1)
         }
         
       }
       
       // Remove current empty layer
-      this.neuralNetwork.nn.layers.splice(layerIndex, 1);
+      this.parent.neuralNetwork.nn.layers.splice(layerIndex, 1);
       
       // Remove act from actPerLayer - in conf
-      this.neuralNetwork.conf.actPerLayer.splice(layerIndex, 1);
+      this.parent.neuralNetwork.conf.actPerLayer.splice(layerIndex, 1);
       
-      this.neuralNetwork.conf.neuronsPerLayer.splice(layerIndex, 1);
+      this.parent.neuralNetwork.conf.neuronsPerLayer.splice(layerIndex, 1);
     }
     
     else{
       
       // Remove connections from next layer
-      for(let i = 0; i < this.neuralNetwork.nn.layers[layerIndex + 1].neurons.length; i++){
-        this.neuralNetwork.nn.layers[layerIndex + 1].neurons[i].weights.splice(neuronIndex, 1);
+      for(let i = 0; i < this.parent.neuralNetwork.nn.layers[layerIndex + 1].neurons.length; i++){
+        this.parent.neuralNetwork.nn.layers[layerIndex + 1].neurons[i].weights.splice(neuronIndex, 1);
       }
       
       // Remove neuron from current layer
-      this.neuralNetwork.nn.layers[layerIndex].neurons.splice(neuronIndex, 1);
+      this.parent.neuralNetwork.nn.layers[layerIndex].neurons.splice(neuronIndex, 1);
       
-      this.neuralNetwork.conf.neuronsPerLayer[layerIndex]--;
+      this.parent.neuralNetwork.conf.neuronsPerLayer[layerIndex]--;
     }
     
     this.Refresh();
   }
+
   
-  
-  private RemoveOutputClick(outputName: string){
-    if(this.neuralNetwork.conf.outputs.length <= 1)
-      return;
-    
-    let outputIndex = -1;
-    // Remove input name from conf
-    this.neuralNetwork.conf.outputs.forEach(
-      (element: string,index: number)=>{
-        if(element == outputName) {
-          outputIndex = index;
-          this.neuralNetwork.conf.outputs.splice(index, 1);
-        }
-      }
-    );
-    
-    // Remove input neuron from last layer in nn
-    this.neuralNetwork.nn.layers[this.neuralNetwork.nn.layers.length - 1].neurons.forEach(
-      (element: any,index: number)=>{
-        if(index == outputIndex) {
-          this.neuralNetwork.nn.layers[this.neuralNetwork.nn.layers.length - 1].neurons.splice(index, 1);
-        }
-      }
-    );
-   
-    this.Refresh();
-  }
-  
-  private AddNeuronToLayer(layerIndex: any){
-    let weights: number[] = [];
-    
-    // Popuni tezine trenutnog neurona neuronima prethodnog sloja ili ulaza
-    if(layerIndex == 0)
-      for(let i = 0; i < this.neuralNetwork.conf.inputs.length; i++)
-        weights.push(1);
-    else
-      for(let i = 0; i < this.neuralNetwork.nn.layers[layerIndex - 1].neurons.length; i++)
-        weights.push(1);
-    
-    // Dodaj u tezine neurona sledeceg sloja ovaj neuron
-    if(layerIndex < (this.neuralNetwork.nn.layers.length - 1))
-      for(let i = 0; i < this.neuralNetwork.nn.layers[layerIndex + 1].neurons.length; i++)
-        this.neuralNetwork.nn.layers[layerIndex + 1].neurons[i].weights.push(1);
-    
-    
-    this.neuralNetwork.nn.layers[layerIndex].neurons.push(
-      {
-        "weights": weights,
-        "bias": 1
-      }
-    )
-    
-    this.neuralNetwork.conf.neuronsPerLayer[layerIndex]++;
-    
-    this.Refresh();
-  } 
-  
-  
-  public AddColumnToInput(columnName: string){
-    this.neuralNetwork.conf.inputs.push(columnName);
-    
-    for(let i = 0; i < this.neuralNetwork.nn.layers[0].neurons.length; i++)
-      this.neuralNetwork.nn.layers[0].neurons[i].weights.push(1);
-    
-    this.Refresh();
-  }
-  public AddColumnToOutput(columnName: string){
-    this.neuralNetwork.conf.outputs.push(columnName);
-    
-    let weights: number[] = [];
-    for(let i = 0; i < this.neuralNetwork.nn.layers[this.neuralNetwork.nn.layers.length - 2].neurons.length; i++)
-      weights.push(1);
-    
-    this.neuralNetwork.nn.layers[this.neuralNetwork.nn.layers.length - 1].neurons.push(
-      {
-        "weights": weights,
-        "bias": 1
-      }
-    );
-    
-    this.Refresh();
-  }
   
   public AddLayerAtIndex(layerIndex: number){
     let weights : number[] = [];
     
     // If first layer added get weigths by input
     if(layerIndex == 0)
-      for(let i = 0; i < this.neuralNetwork.conf.inputs.length; i++)
+      for(let i = 0; i < this.parent.neuralNetwork.conf.inputs.length; i++)
         weights.push(1);
     
     // If other layer get weights by previous layer
     else
-      for(let i = 0; i < this.neuralNetwork.nn.layers[layerIndex - 1].neurons.length; i++)
+      for(let i = 0; i < this.parent.neuralNetwork.nn.layers[layerIndex - 1].neurons.length; i++)
         weights.push(1);
     
     // Make new layer
     let newLayer: any = { "neurons": [{ "weights": weights, "bias": 1 }] }
     
     
-    let layerCount = this.neuralNetwork.nn.layers.length;
+    let layerCount = this.parent.neuralNetwork.nn.layers.length;
     // Push last element 1 space to right (adding space for new layer)
-    this.neuralNetwork.nn.layers.push(this.neuralNetwork.nn.layers[layerCount - 1]);
+    this.parent.neuralNetwork.nn.layers.push(this.parent.neuralNetwork.nn.layers[layerCount - 1]);
     
     // Update length
     layerCount += 1;
     
     // Move neurons after new layer future position 1 space to the right
     for(let i = layerCount - 3; i >= layerIndex; i--)
-      this.neuralNetwork.nn.layers[i + 1] = this.neuralNetwork.nn.layers[i];
+      this.parent.neuralNetwork.nn.layers[i + 1] = this.parent.neuralNetwork.nn.layers[i];
     
     // Place new layer at desired position
-    this.neuralNetwork.nn.layers[layerIndex] = newLayer;
+    this.parent.neuralNetwork.nn.layers[layerIndex] = newLayer;
     
     
     // Fix next layer weights to current layer neuron
-    for(let i = 0; i < this.neuralNetwork.nn.layers[layerIndex + 1].neurons.length; i++){
-      this.neuralNetwork.nn.layers[layerIndex + 1].neurons[i].weights = [1];
+    for(let i = 0; i < this.parent.neuralNetwork.nn.layers[layerIndex + 1].neurons.length; i++){
+      this.parent.neuralNetwork.nn.layers[layerIndex + 1].neurons[i].weights = [1];
     }
     
     
     // FIX ACT PER LAYER =======================
     
-    let actCount = this.neuralNetwork.conf.actPerLayer.length;
+    let actCount = this.parent.neuralNetwork.conf.actPerLayer.length;
     // Update actPerLayer
-    this.neuralNetwork.conf.actPerLayer.push(this.neuralNetwork.conf.actPerLayer[actCount - 1])
+    this.parent.neuralNetwork.conf.actPerLayer.push(this.parent.neuralNetwork.conf.actPerLayer[actCount - 1])
     
     actCount += 1;
     
     for(let i = actCount - 3; i >= layerIndex; i--)
-      this.neuralNetwork.conf.actPerLayer[i + 1] = this.neuralNetwork.conf.actPerLayer[i];
+      this.parent.neuralNetwork.conf.actPerLayer[i + 1] = this.parent.neuralNetwork.conf.actPerLayer[i];
     
-    this.neuralNetwork.conf.actPerLayer[layerIndex] = this.defaultActivation;
+    this.parent.neuralNetwork.conf.actPerLayer[layerIndex] = this.defaultActivation;
     
     // FIX NEURONS PER LAYER
     
-    let nplCount = this.neuralNetwork.conf.neuronsPerLayer.length;
-    this.neuralNetwork.conf.neuronsPerLayer.push(this.neuralNetwork.conf.neuronsPerLayer[nplCount - 1])
+    let nplCount = this.parent.neuralNetwork.conf.neuronsPerLayer.length;
+    this.parent.neuralNetwork.conf.neuronsPerLayer.push(this.parent.neuralNetwork.conf.neuronsPerLayer[nplCount - 1])
     
     nplCount += 1;
     
     for(let i = nplCount - 3; i >= layerIndex; i--)
-      this.neuralNetwork.conf.neuronsPerLayer[i + 1] = this.neuralNetwork.conf.neuronsPerLayer[i];
+      this.parent.neuralNetwork.conf.neuronsPerLayer[i + 1] = this.parent.neuralNetwork.conf.neuronsPerLayer[i];
       
-    this.neuralNetwork.conf.neuronsPerLayer[layerIndex] = 1
+    this.parent.neuralNetwork.conf.neuronsPerLayer[layerIndex] = 1
     
     
     this.Refresh();
   }
   
   
+  
   public ShowWeightChangeInput(event: MouseEvent, layerIndex: number, neuronIndex: number, weightIndex: number){
     
     let relativeClickPosition : any = {
-      x: event.x - this.container.nativeElement.offsetLeft + this.display.nativeElement.scrollLeft,
-      y: event.y - this.container.nativeElement.offsetTop + this.display.nativeElement.scrollTop
+      x: event.x - this.container.nativeElement.offsetLeft + this.parent.display.nativeElement.scrollLeft,
+      y: event.y - this.container.nativeElement.offsetTop + this.parent.display.nativeElement.scrollTop
     }
     
     this.weightInput.nativeElement.setAttribute("style", "display: block; left: " + relativeClickPosition.x + "px; top: " + relativeClickPosition.y + "px");
-    this.weightInput.nativeElement.value = this.neuralNetwork.nn.layers[layerIndex].neurons[neuronIndex].weights[weightIndex];
+    this.weightInput.nativeElement.value = this.parent.neuralNetwork.nn.layers[layerIndex].neurons[neuronIndex].weights[weightIndex];
     
     this.weightToChange = {
       "layerIndex": layerIndex,
@@ -517,19 +392,23 @@ export class NeuralNetworkDisplayComponent implements OnInit {
     
     this.weightInputShown = true;
   }
-  
   public ChangeNetworkWeight(event: any){
-    this.neuralNetwork.nn.layers[this.weightToChange.layerIndex].neurons[this.weightToChange.neuronIndex].weights[this.weightToChange.weightIndex] = event.target.value;
+    this.parent.neuralNetwork.nn.layers[this.weightToChange.layerIndex].neurons[this.weightToChange.neuronIndex].weights[this.weightToChange.weightIndex] = event.target.value;
   }
+  
+  
   
   private ChangeActivationForLayer(value: string, layerIndex: number){
-    this.neuralNetwork.conf.actPerLayer[layerIndex] = value;
+    this.parent.neuralNetwork.conf.actPerLayer[layerIndex] = value;
   }
-  
   private ChangeOutputActivation(value: string){
-    this.neuralNetwork.conf.actOut = value;
+    this.parent.neuralNetwork.conf.actOut = value;
   }
   
+  
+  private ShowChangeInputOutputWindow(){
+    this.parent.OpenChangeInputOutputWindow();
+  }
   
   // END OF NETWORK CONTROLS ===================================================
   
@@ -594,23 +473,24 @@ export class NeuralNetworkDisplayComponent implements OnInit {
       .append("g")
       .classed("outputNeurons", true);
     
+      
+    // Add neuron buttons
+    this.addNeuronButtons = this.d3Container
+      .append("g")
+      .classed("addNeuronButtons", true)
+      
+      
+    // Add layer buttons
+    this.addLayerButtons = this.d3Container
+      .append("g")
+      .classed("addLayerButtons", true)
     
-      
-      // Add neuron buttons
-      this.addNeuronButtons = this.d3Container
-        .append("g")
-        .classed("addNeuronButtons", true)
-        
-        
-      // Add layer buttons
-      this.addLayerButtons = this.d3Container
-        .append("g")
-        .classed("addLayerButtons", true)
-      
-      // Add actPerLayer combo buttons
-      this.actPerLayerCombos = select("#activationCombos")
-      
-      this.outputActivationComboDiv = select("#outputActivationCombo");
+    // Add actPerLayer combo buttons
+    this.actPerLayerCombos = select("#activationCombos")
+    
+    this.outputActivationComboDiv = select("#outputActivationCombo");
+    
+    this.editInputOutputButtons = select("#editInputOutputButtons");
     
   }
   
@@ -631,6 +511,8 @@ export class NeuralNetworkDisplayComponent implements OnInit {
     
     this.AddActivationCombos();
     this.AddOutputActivationCombo();
+    
+    this.AddEditInputOutputButtons();
   }
   
   
@@ -661,7 +543,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
       .append("rect")
       .classed("layerRect", true)
       .attr("y", 0)
-      .attr("x", this.neuralNetwork.nn.layers.length * this.layerWidth)
+      .attr("x", this.parent.neuralNetwork.nn.layers.length * this.layerWidth)
       .attr("width", this.layerWidth)
       .attr("height", "100%")
       .attr("fill-opacity", 0)
@@ -670,14 +552,14 @@ export class NeuralNetworkDisplayComponent implements OnInit {
       .append("text")
       .text("Output")
       .attr("y", 30)
-      .attr("x", this.neuralNetwork.nn.layers.length * this.layerWidth + (this.layerWidth / 2))
+      .attr("x", this.parent.neuralNetwork.nn.layers.length * this.layerWidth + (this.layerWidth / 2))
       .classed("layerTitle", true)
   }
   
   private AddHiddenLayers(){
     
     // Layer rects
-    for(let i = 0; i < this.neuralNetwork.nn.layers.length - 1; i++)
+    for(let i = 0; i < this.parent.neuralNetwork.nn.layers.length - 1; i++)
       this.layers
         .append("rect")
         .classed("layerRect", true)
@@ -688,7 +570,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
         .attr("fill-opacity", 0)
     
     // Layer texts
-    for(let i = 0; i < this.neuralNetwork.nn.layers.length - 1; i++)
+    for(let i = 0; i < this.parent.neuralNetwork.nn.layers.length - 1; i++)
       this.layers
         .append("text")
         .classed("layerTitle", true)
@@ -704,11 +586,11 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   private AddInputNeurons(){
     
     this.inputNeurons.selectAll("circle")
-      .data(this.neuralNetwork.conf.inputs)
+      .data(this.parent.neuralNetwork.conf.inputs)
       .enter()
         .append("circle")
         .classed("neuron", true)
-        .attr("cy", (d: any, i: number) => {return i * this.neuronOffsetY + this.displayTopPadding + this.calculateCurrentYOffset(this.neuralNetwork.conf.inputs.length)})
+        .attr("cy", (d: any, i: number) => {return i * this.neuronOffsetY + this.displayTopPadding + this.calculateCurrentYOffset(this.parent.neuralNetwork.conf.inputs.length)})
         .attr("cx", this.layerWidth / 2)
         .attr("cursor", "pointer")
         
@@ -724,20 +606,22 @@ export class NeuralNetworkDisplayComponent implements OnInit {
                 .duration(250)
                 .attr("r", (this.neuronWidth / 2))
         })
+        /*
         .on("click", (event : any, d : any) => {
           this.RemoveInputClick(d);
-        })   
+        })
+        */
         .transition()
         .duration(50)
           .attr("r", this.neuronWidth / 2)
       
     this.inputNeurons.selectAll("text")
-      .data(this.neuralNetwork.conf.inputs)
+      .data(this.parent.neuralNetwork.conf.inputs)
       .enter()
         .append("text")
         .classed("label", true)
         .text((d: any) => {return d;})
-        .attr("y", (d: any, i: number) => { return i * this.neuronOffsetY + this.displayTopPadding + this.calculateCurrentYOffset(this.neuralNetwork.conf.inputs.length) - (this.neuronWidth / 2) - 10})
+        .attr("y", (d: any, i: number) => { return i * this.neuronOffsetY + this.displayTopPadding + this.calculateCurrentYOffset(this.parent.neuralNetwork.conf.inputs.length) - (this.neuronWidth / 2) - 10})
         .attr("x", this.layerWidth / 3)
           
   }
@@ -745,12 +629,12 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   private AddHiddenNeurons(){
         
     // Layer neurons
-    for(let i = 0; i < this.neuralNetwork.nn.layers.length - 1; i++)
-      for(let j = 0; j < this.neuralNetwork.nn.layers[i].neurons.length; j++)
+    for(let i = 0; i < this.parent.neuralNetwork.nn.layers.length - 1; i++)
+      for(let j = 0; j < this.parent.neuralNetwork.nn.layers[i].neurons.length; j++)
         this.neurons
           .append("circle")
           .classed("neuron", true)
-          .attr("cy", this.displayTopPadding + j * this.neuronOffsetY + this.calculateCurrentYOffset(this.neuralNetwork.nn.layers[i].neurons.length) )
+          .attr("cy", this.displayTopPadding + j * this.neuronOffsetY + this.calculateCurrentYOffset(this.parent.neuralNetwork.nn.layers[i].neurons.length) )
           .attr("cx", (i + 1) * this.layerWidth + this.layerWidth / 2 )
           .attr("cursor", "pointer")
           .on("mouseenter", (event : any, d : any) => {
@@ -777,12 +661,12 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   private AddOuputNeurons(){
     
     this.outputNeurons.selectAll("circle")
-      .data(this.neuralNetwork.conf.outputs)
+      .data(this.parent.neuralNetwork.conf.outputs)
       .enter()
         .append("circle")
         .classed("neuron", true)
-        .attr("cy", (d: any, i: number) => {return i * this.neuronOffsetY + this.displayTopPadding + this.calculateCurrentYOffset(this.neuralNetwork.conf.outputs.length)})
-        .attr("cx", (this.neuralNetwork.nn.layers.length) * this.layerWidth + (this.layerWidth / 2))
+        .attr("cy", (d: any, i: number) => {return i * this.neuronOffsetY + this.displayTopPadding + this.calculateCurrentYOffset(this.parent.neuralNetwork.conf.outputs.length)})
+        .attr("cx", (this.parent.neuralNetwork.nn.layers.length) * this.layerWidth + (this.layerWidth / 2))
         .attr("cursor", "pointer")
         
         .on("mouseenter", (event : any, d : any) => {
@@ -797,36 +681,38 @@ export class NeuralNetworkDisplayComponent implements OnInit {
                 .duration(250)
                 .attr("r", (this.neuronWidth / 2))
         })
+        /*
         .on("click", (event : any, d : any) => {
           this.RemoveOutputClick(d);
         })  
+        */
         
         .transition()
-        .duration((this.neuralNetwork.nn.layers.length) * 150)
+        .duration(500)
           .attr("r", this.neuronWidth / 2)
       
     this.outputNeurons.selectAll("text")
-      .data(this.neuralNetwork.conf.outputs)
+      .data(this.parent.neuralNetwork.conf.outputs)
       .enter()
         .append("text")
         .classed("label", true)
         .text((d: any) => {return d;})
-        .attr("y", (d: any, i: number) => {return i * this.neuronOffsetY + this.displayTopPadding + + this.calculateCurrentYOffset(this.neuralNetwork.conf.outputs.length) - (this.neuronWidth / 2) - 10})
-        .attr("x", (this.neuralNetwork.nn.layers.length + 1) * this.layerWidth - (this.layerWidth / 3))
+        .attr("y", (d: any, i: number) => {return i * this.neuronOffsetY + this.displayTopPadding + + this.calculateCurrentYOffset(this.parent.neuralNetwork.conf.outputs.length) - (this.neuronWidth / 2) - 10})
+        .attr("x", (this.parent.neuralNetwork.nn.layers.length + 1) * this.layerWidth - (this.layerWidth / 3))
           
   }
   
   private AddConnections(){
     
-    for(let i = 1; i < this.neuralNetwork.nn.layers.length - 1; i++){
+    for(let i = 1; i < this.parent.neuralNetwork.nn.layers.length - 1; i++){
         
-      let leftAddedOffsetY = (this.caluculateMaxVerticalNeurons() - this.neuralNetwork.nn.layers[i - 1].neurons.length) * 0.5 * this.neuronOffsetY;
+      let leftAddedOffsetY = (this.caluculateMaxVerticalNeurons() - this.parent.neuralNetwork.nn.layers[i - 1].neurons.length) * 0.5 * this.neuronOffsetY;
       
-      for(let j = 0; j < this.neuralNetwork.nn.layers[i].neurons.length; j++){
+      for(let j = 0; j < this.parent.neuralNetwork.nn.layers[i].neurons.length; j++){
         
-        let rightAddedOffsetY = (this.caluculateMaxVerticalNeurons() - this.neuralNetwork.nn.layers[i].neurons.length) * 0.5 * this.neuronOffsetY;
+        let rightAddedOffsetY = (this.caluculateMaxVerticalNeurons() - this.parent.neuralNetwork.nn.layers[i].neurons.length) * 0.5 * this.neuronOffsetY;
         
-        for(let k = 0; k < this.neuralNetwork.nn.layers[i].neurons[j].weights.length; k++)
+        for(let k = 0; k < this.parent.neuralNetwork.nn.layers[i].neurons[j].weights.length; k++)
           this.connections
             .append("path")
             .classed("connection", true)
@@ -841,7 +727,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
               
             })
             .style('fill', 'none')
-            .style('stroke', () => { if (this.neuralNetwork.nn.layers[i].neurons[j].weights[k] >= 0) { return "#113A69"; } else { return "#762020"; }})
+            .style('stroke', () => { if (this.parent.neuralNetwork.nn.layers[i].neurons[j].weights[k] >= 0) { return "#113A69"; } else { return "#A10000"; }})
             .attr('cursor', "pointer")
             .attr("stroke-linecap", "round") 
             
@@ -851,7 +737,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
             
             .transition()
               .duration(500)
-              .attr("stroke-width", () => { return this.Clamp(this.neuralNetwork.nn.layers[i].neurons[j].weights[k]); })
+              .attr("stroke-width", () => { return this.Clamp(this.parent.neuralNetwork.nn.layers[i].neurons[j].weights[k]); })
             
       }
     }  
@@ -859,11 +745,11 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   }
   
   private AddInputConnections(){
-    let inputAddedOffsetY = this.calculateCurrentYOffset(this.neuralNetwork.conf.inputs.length)
-    let firstLayerAddedOffsetY = this.calculateCurrentYOffset(this.neuralNetwork.nn.layers[0].neurons.length)
+    let inputAddedOffsetY = this.calculateCurrentYOffset(this.parent.neuralNetwork.conf.inputs.length)
+    let firstLayerAddedOffsetY = this.calculateCurrentYOffset(this.parent.neuralNetwork.nn.layers[0].neurons.length)
     
-    for(let i = 0; i < this.neuralNetwork.nn.layers[0].neurons.length; i++)
-      for(let j = 0; j < this.neuralNetwork.nn.layers[0].neurons[i].weights.length; j++)
+    for(let i = 0; i < this.parent.neuralNetwork.nn.layers[0].neurons.length; i++)
+      for(let j = 0; j < this.parent.neuralNetwork.nn.layers[0].neurons[i].weights.length; j++)
         this.inputConnections
           .append("path")
           .classed("connection", true)
@@ -878,7 +764,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
             
           })
           .style('fill', 'none')
-          .style('stroke', '#113A69')
+          .style('stroke', () => { if (this.parent.neuralNetwork.nn.layers[0].neurons[i].weights[j] >= 0) { return "#113A69"; } else { return "#A10000"; }})
           .attr('cursor', "pointer")
           .attr("stroke-linecap", "round") 
           
@@ -888,18 +774,18 @@ export class NeuralNetworkDisplayComponent implements OnInit {
           
           .transition()
             .duration(500)
-            .attr("stroke-width", () => { return this.Clamp(this.neuralNetwork.nn.layers[0].neurons[i].weights[j]); })
+            .attr("stroke-width", () => { return this.Clamp(this.parent.neuralNetwork.nn.layers[0].neurons[i].weights[j]); })
           
   }
   
   private AddOutputConnections(){
-    let layerCount = this.neuralNetwork.nn.layers.length;
+    let layerCount = this.parent.neuralNetwork.nn.layers.length;
     
-    let outputAddedOffsetY = this.calculateCurrentYOffset(this.neuralNetwork.conf.outputs.length)
-    let lastLayerAddedOffsetY = this.calculateCurrentYOffset(this.neuralNetwork.nn.layers[layerCount - 2].neurons.length)
+    let outputAddedOffsetY = this.calculateCurrentYOffset(this.parent.neuralNetwork.conf.outputs.length)
+    let lastLayerAddedOffsetY = this.calculateCurrentYOffset(this.parent.neuralNetwork.nn.layers[layerCount - 2].neurons.length)
     
-    for(let i = 0; i < this.neuralNetwork.nn.layers[layerCount - 1].neurons.length; i++)
-      for(let j = 0; j < this.neuralNetwork.nn.layers[layerCount - 1].neurons[i].weights.length; j++)
+    for(let i = 0; i < this.parent.neuralNetwork.nn.layers[layerCount - 1].neurons.length; i++)
+      for(let j = 0; j < this.parent.neuralNetwork.nn.layers[layerCount - 1].neurons[i].weights.length; j++)
         this.outputConnections
           .append("path")
           .classed("connection", true)
@@ -914,7 +800,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
             
           })
           .style('fill', 'none')
-          .style('stroke', '#113A69')
+          .style('stroke', () => { if (this.parent.neuralNetwork.nn.layers[layerCount - 1].neurons[i].weights[j] >= 0) { return "#113A69"; } else { return "#A10000"; }})
           .attr('cursor', "pointer")
           .attr("stroke-linecap", "round") 
           
@@ -924,18 +810,18 @@ export class NeuralNetworkDisplayComponent implements OnInit {
           
           .transition()
             .duration(500)
-            .attr("stroke-width", () => { return this.Clamp(this.neuralNetwork.nn.layers[layerCount - 1].neurons[i].weights[j]); })
+            .attr("stroke-width", () => { return this.Clamp(this.parent.neuralNetwork.nn.layers[layerCount - 1].neurons[i].weights[j]); })
   }
   
   
   
   
   private AddNeuronButtons(){
-    for(let i = 0; i < this.neuralNetwork.nn.layers.length - 1; i++)
+    for(let i = 0; i < this.parent.neuralNetwork.nn.layers.length - 1; i++)
     this.addNeuronButtons
       .append("circle")
       .classed("addNeuronButton", true)
-      .attr("cy", this.displayTopPadding + this.neuralNetwork.nn.layers[i].neurons.length * this.neuronOffsetY + this.calculateCurrentYOffset(this.neuralNetwork.nn.layers[i].neurons.length) )
+      .attr("cy", this.displayTopPadding + this.parent.neuralNetwork.nn.layers[i].neurons.length * this.neuronOffsetY + this.calculateCurrentYOffset(this.parent.neuralNetwork.nn.layers[i].neurons.length) )
       .attr("cx", (i + 1) * this.layerWidth + this.layerWidth / 2 )
       .attr("cursor", "pointer")
       
@@ -963,7 +849,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   
   private AddLayerButtons(){
     
-    for(let i = 0; i < this.neuralNetwork.nn.layers.length; i++)
+    for(let i = 0; i < this.parent.neuralNetwork.nn.layers.length; i++)
     this.addLayerButtons
       .append("image")
       .classed("addNeuronButton", true)
@@ -1001,7 +887,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   
   
   private AddActivationCombos(){
-    for(let i = 0; i < this.neuralNetwork.conf.actPerLayer.length; i++)
+    for(let i = 0; i < this.parent.neuralNetwork.conf.actPerLayer.length; i++)
       this.actPerLayerCombos
         .append("select")
         .classed("activationCombo", true)
@@ -1015,7 +901,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
         .append("option")
         .text(this.possibleActivations[i])
         .attr("value", this.possibleActivations[i])
-        .attr('selected', (d: any, j: number) => { if(this.neuralNetwork.conf.actPerLayer[j] == this.possibleActivations[i]) { return ""; } else { return null; } })
+        .attr('selected', (d: any, j: number) => { if(this.parent.neuralNetwork.conf.actPerLayer[j] == this.possibleActivations[i]) { return ""; } else { return null; } })
       
   }
   
@@ -1024,7 +910,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
     .append("select")
     .classed("activationCombo", true)
     .style("top", 60 + "px")
-    .style("left", () => { return ( (this.neuralNetwork.conf.actPerLayer.length + 1) * this.layerWidth + this.layerWidth / 2 - 45) + "px"})
+    .style("left", () => { return ( (this.parent.neuralNetwork.conf.actPerLayer.length + 1) * this.layerWidth + this.layerWidth / 2 - 45) + "px"})
     .on("change", (event: any, d: any) => { this.ChangeOutputActivation(event.target.value) }) 
     
     for(let i = 0; i < this.possibleActivations.length; i++)
@@ -1032,11 +918,38 @@ export class NeuralNetworkDisplayComponent implements OnInit {
         .append("option")
         .text(this.possibleActivations[i])
         .attr("value", this.possibleActivations[i])
-        .attr('selected', () => { if(this.neuralNetwork.conf.actOut == this.possibleActivations[i]) { return ""; } else { return null; } })
+        .attr('selected', () => { if(this.parent.neuralNetwork.conf.actOut == this.possibleActivations[i]) { return ""; } else { return null; } })
+ }
+  
+ 
+ private AddEditInputOutputButtons(){
+   this.editInputOutputButtons
+    .append("button")
+    .classed("editInputOutputButton", true)
+    .text("Input / Output")
+    .style("top", () => { return this.calculateCurrentYOffset(this.parent.neuralNetwork.conf.inputs.length) + this.displayTopPadding + (this.parent.neuralNetwork.conf.inputs.length * this.neuronOffsetY) + "px" })
+    .style("left", () => { return (  this.layerWidth / 2 - 50) + "px"})
+    .on("click", () => { this.ShowChangeInputOutputWindow() });
+    
+    this.editInputOutputButtons
+    .append("button")
+    .classed("editInputOutputButton", true)
+    .text("Input / Output")
+    .style("top", () => { return this.calculateCurrentYOffset(this.parent.neuralNetwork.conf.outputs.length) + this.displayTopPadding + (this.parent.neuralNetwork.conf.outputs.length * this.neuronOffsetY) + "px" })
+    .style("left", () => { return ( (this.parent.neuralNetwork.nn.layers.length * this.layerWidth) + this.layerWidth / 2 - 50) + "px"})
+    .on("click", () => { this.ShowChangeInputOutputWindow() });
  }
   
   
-  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
   
   
   /* POCETAK STAROG KODA =============================================================================================================

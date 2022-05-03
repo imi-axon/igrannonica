@@ -194,6 +194,13 @@
         "pass4": "Password",
         "submit4": "Edit",
         "image": "Choose image"
+    },
+    
+    "edit-input-output":{
+        "title": "Edit inputs/outputs",
+        "inputs": "Inputs",
+        "outputs": "Outputs",
+        "unused": "Unused"
     }
 
 }

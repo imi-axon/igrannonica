@@ -197,8 +197,13 @@
         "submit4": "Izmeni",
         "image": "Izaberite sliku"
 
+    },
+    
+    "edit-input-output":{
+        "title": "Izmeni ulaze/izlaze",
+        "inputs": "Ulazi",
+        "outputs": "Izlazi",
+        "unused": "Nekorišćeni"
     }
-
-
 
 }

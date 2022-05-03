@@ -37,19 +37,45 @@ svg{
 }
 
 .activationCombo{
-    background-color: #2F5EA6;
+    background: linear-gradient(60deg, #2f92ef 0%, #154a9a 100%) #1b427d;
     color: #FFFFFF;
     position: absolute;
-    border: none;
+    border: solid 1px #2F5EA6;
     border-radius: 5px;
     cursor: pointer;
     text-align: center;
+    font-size: 14px;
     
-    height: 25px;
     width: 90px;
+    height: 25px;
+    
+    &:hover{
+        background: linear-gradient(60deg, #1779d5 0%, #063273 100%) #1b427d;
+    }
     
     &:focus{
         border-radius: 5px 5px 0px 0px;
         outline: none;
     }
+}
+
+
+.editInputOutputButton{
+    background: linear-gradient(60deg, #2a7ecd 0%, #123f82 100%);
+    color: #FFFFFF;
+    position: absolute;
+    border: solid 1px #2F5EA6;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 12px;
+    line-height: 100%;
+    
+    width: 100px;
+    height: 35px;
+    
+    &:hover{
+        background: linear-gradient(60deg, #1862a8 0%, #002760 100%);
+    }
+    
 }
