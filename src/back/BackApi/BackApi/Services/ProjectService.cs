@@ -1,5 +1,6 @@
 ﻿using BackApi.Entities;
 using BackApi.Models;
+using System.Diagnostics;
 using System.Text;
 
 namespace BackApi.Services
@@ -11,6 +12,7 @@ namespace BackApi.Services
         string ListProjects(int userid,int pubuserid);
         string ListPublicProjects();
         string GetProjById(int projid, int userid);
+        string GetUserByProj(int projid, out bool ind);
         bool SetNote(int projid, int userid, string note);
         Boolean EditProject(int projid, ProjectPostPut proj,int userid);
         int getProjectId(ProjectPostPut model);
@@ -129,10 +131,9 @@ namespace BackApi.Services
             List<Project> listapub = context.Projects.Where(x => x.Public == true).ToList();
             foreach (Project p in listapub)
             {
-                rez.Append("{");
+                rez.Append("[{");
                 var user = context.Users.Find(p.UserId);
-                if(user != null)
-                    rez.Append("\"" + "Username" + "\":" + "\"" + user.Username + "\",");
+         
                 rez.Append("\"" + "ProjectId" + "\":" + "\"" + p.ProjectId + "\",");
                 rez.Append("\"" + "Name" + "\":" + "\"" + p.Name + "\",");
                 rez.Append("\"" + "Public" + "\":" + "\"" + p.Public + "\",");
@@ -144,12 +145,60 @@ namespace BackApi.Services
                     rez.Append("\"" + "hasDataset" + "\":" + "\"" + "false" + "\",");
                 rez.Append("\"" + "Description" + "\":" + "\"" + p.Description + "\"");
                 rez.Append("},");
+
+                if (user != null)
+                {
+                    string photopath = user.PhotoPath;
+                    if (photopath == "" || photopath == null)
+                        photopath = Path.Combine("Storage", "profilna.png");
+
+                    string b = System.IO.File.ReadAllText(photopath);
+                    rez.Append("{");
+                    rez.Append("\"" + "UseId" + "\":" + "\"" + user.UserId + "\",");
+                    rez.Append("\"" + "Name" + "\":" + "\"" + user.Name + "\",");
+                    rez.Append("\"" + "Lastname" + "\":" + "\"" + user.Lastname + "\",");
+                    rez.Append("\"" + "Username" + "\":" + "\"" + user.Username + "\",");
+                    rez.Append("\"" + "Username" + "\":" + "\"" + user.Email + "\",");
+                    rez.Append("\"" + "Photo" + "\":" + "\"" + b + "\"");
+                    rez.Append("}],");
+                }
             }
             if (rez.Length > 2) rez.Remove(rez.Length - 1, 1);
             rez.Append("]");
             return rez.ToString();
         }
+        public string GetUserByProj(int projid, out bool ind)
+        {
+            var rez = new StringBuilder();
+            var proj = context.Projects.FirstOrDefault(x => x.ProjectId == projid);
+            if (proj == null)
+            {
+                ind = false;
+                return "project";
+            }
 
+            var user = context.Users.FirstOrDefault(x => x.UserId == proj.UserId);
+            if (user == null)
+            {
+                ind = false;
+                return "user";
+            }
+
+            string photopath = user.PhotoPath;
+            if (photopath == "" || photopath == null)
+                photopath = Path.Combine("Storage", "profilna.png");
+
+            string b = System.IO.File.ReadAllText(photopath);
+            rez.Append("{");
+            rez.Append("\"" + "Name" + "\":" + "\"" + user.Name + "\",");
+            rez.Append("\"" + "Lastname" + "\":" + "\"" + user.Lastname + "\",");
+            rez.Append("\"" + "Username" + "\":" + "\"" + user.Username + "\",");
+            rez.Append("\"" + "Photo" + "\":" + "\"" + b + "\"");
+            rez.Append("}");
+
+            ind = true;
+            return rez.ToString();
+        }
         public string GetProjById(int projid, int userid)
         {
             var rez = new StringBuilder();

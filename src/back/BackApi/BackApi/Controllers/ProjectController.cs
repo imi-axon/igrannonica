@@ -14,10 +14,12 @@ namespace BackApi.Controllers
     {
         private IProjectService service;
         private IJwtService jwtsrv;
-        public ProjectController(IProjectService service,IJwtService jwtServis)
+        private IUserService userService;
+        public ProjectController(IProjectService service, IJwtService jwtServis, IUserService userService)
         {
             this.service = service;
             this.jwtsrv = jwtServis;
+            this.userService = userService;
         }
 
         [HttpPost]
@@ -64,6 +66,17 @@ namespace BackApi.Controllers
             if (ind)
                 return Ok(rez);
             else return NotFound();
+        }
+        [HttpGet("{projid}/getuser")]
+        public async Task<ActionResult<string>> GetUserByProjectId(int projid)
+        {
+            bool ind = false;
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return "Uloguj se";//Unauthorized("Ulogujte se");
+            var rez = service.GetUserByProj(projid, out ind);
+            if (ind == false)
+                return NotFound(rez);
+            else return Ok(rez);
         }
         [HttpGet("{projid}")]
         public async Task<ActionResult<string>> GetProjectById(int projid)
