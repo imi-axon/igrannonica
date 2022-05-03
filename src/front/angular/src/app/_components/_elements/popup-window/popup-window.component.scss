@@ -1,0 +1,28 @@
+
+.poruka {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: large;
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #FFFFFF;
+}
+
+.yes {
+    color: #AD3535;
+    border: #AD3535;
+}
+
+.no {
+    color: #FFFFFF;
+    border: #FFFFFF;
+}
+
+.opomena{
+    color:#FF0000;
+}
+
+//izgled popup-a se nalazi u styles.scss .mat-dialog-container 

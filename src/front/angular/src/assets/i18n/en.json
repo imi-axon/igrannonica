@@ -202,5 +202,9 @@
         "outputs": "Outputs",
         "unused": "Unused"
     }
+    ,
+"popup-window":{
+    "dataset":"Are you sure you want to remove this dataset?"
+}
 
 }

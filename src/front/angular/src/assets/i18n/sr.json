@@ -204,6 +204,9 @@
         "inputs": "Ulazi",
         "outputs": "Izlazi",
         "unused": "Nekorišćeni"
+    },
+    "popup-window":{
+        "dataset":"Da li ste sigurni da želite da izbrišete ova skup podataka?"
     }
 
 }

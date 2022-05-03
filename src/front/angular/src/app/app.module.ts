@@ -70,7 +70,8 @@ import { ExperimentNetworkComponent } from './_components/_elements/experiment-n
 import { ExperimentDatasetComponent } from './_components/_elements/experiment-dataset/experiment-dataset.component';
 import { ExperimentPageComponent } from './_components/_pages/experiment-page/experiment-page.component';
 import { PageControlsComponent } from './_components/_elements/page-controls/page-controls.component';
-
+import { PopupWindowComponent } from './_components/_elements/popup-window/popup-window.component';
+import {MatDialogModule} from '@angular/material/dialog';
 
 
 @NgModule({
@@ -131,7 +132,8 @@ import { PageControlsComponent } from './_components/_elements/page-controls/pag
     ExperimentNetworkComponent,
     ExperimentDatasetComponent,
     ExperimentPageComponent,
-    PageControlsComponent
+    PageControlsComponent,
+    PopupWindowComponent
   ],
   imports: [
     NgxCsvParserModule,
@@ -143,6 +145,7 @@ import { PageControlsComponent } from './_components/_elements/page-controls/pag
     MatTooltipModule,
     MatSelectModule,
     NgChartsModule,
+    MatDialogModule,
     TranslateModule.forRoot({
       loader:{
         provide:TranslateLoader,

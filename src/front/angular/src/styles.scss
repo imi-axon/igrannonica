@@ -1,7 +1,6 @@
-
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@use '@angular/material' as mat;
+@use '@angular/material'as mat;
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -20,13 +19,10 @@ $angular-warn: mat.define-palette(mat.$red-palette);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$angular-theme: mat.define-light-theme((
-  color: (
-    primary: $angular-primary,
-    accent: $angular-accent,
-    warn: $angular-warn,
-  )
-));
+$angular-theme: mat.define-light-theme((color: (primary: $angular-primary,
+            accent: $angular-accent,
+            warn: $angular-warn,
+        )));
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
@@ -44,28 +40,28 @@ $angular-theme: mat.define-light-theme((
 @import "./network_display";
 
 
-*{
+* {
     font-family: 'Raleway', sans-serif;
 }
 
-html{
+html {
     height: 100%;
     margin: 0px;
     box-sizing: border-box;
 }
 
-body{
+body {
     margin: 0px;
     width: 100%;
     height: 100%;
     background: #ffffff;
 }
 
-.hidden{
+.hidden {
     display: none;
 }
 
-#threeCanvas{
+#threeCanvas {
     width: 100%;
     height: 100%;
     display: block;
@@ -77,7 +73,7 @@ body{
 }
 
 // Sadrzaj pored navbara
-.content{
+.content {
     // 250px sirine sidebar-a
     padding-left: 250px;
     // 50px visine navbar-a
@@ -87,19 +83,19 @@ body{
     align-items: center;
 }
 
-#sidebar{
+#sidebar {
     background-color: #1B2E5E;
     // 100% visina ekrana - 50px visine navbara  
     height: calc(100% - 50px);
     width: 250px;
     float: left;
     padding: 10px;
-    
+
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: space-between;
-    
+
     position: fixed;
     left: 0px;
     // 50px visine navbara
@@ -108,34 +104,36 @@ body{
 }
 
 @media screen and (max-width: 1000px) {
-    #sidebar{
+    #sidebar {
         display: none;
     }
-    
-    .content{
+
+    .content {
         padding-left: 0px;
     }
-    
+
 }
 
 
 /* ============================= TAMNE STRANICE ============================= */
-.landing_page_theme{
+.landing_page_theme {
     margin: 0px;
     width: 100%;
     height: 100%;
     background-color: #00020A;
-    
+
     overflow-y: hidden;
-    
+
     // SAKRIVANJE SCROLLBAR-A
-    &::-webkit-scrollbar{
+    &::-webkit-scrollbar {
         display: none;
     }
-    -ms-overflow-style: none;  /* IE and Edge */
+
+    -ms-overflow-style: none;
+    /* IE and Edge */
     scrollbar-width: none;
-    
-    
+
+
 }
 
 
@@ -143,41 +141,46 @@ body{
 /* ============================= TAMNE STRANICE ============================= */
 
 
-.light_theme{
-    
-    p{
+.light_theme {
+
+    p {
         color: $text_color_L;
         font-size: 13px;
         text-decoration: none;
     }
-    
-    h1,h2,h3,h4,h5,h6{
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
         color: $text_color_L;
         text-decoration: none;
         letter-spacing: 2px;
     }
-    
-    a{
+
+    a {
         @extend p;
-        
+
         font-size: 16px;
         padding: 10px;
         transition: ease-in 0.2s;
-        
-        &:hover{
+
+        &:hover {
             color: $mid_color_L;
             transition: ease-out 0.2s;
         }
     }
-    
-    .disabled{
-        &:disabled{
+
+    .disabled {
+        &:disabled {
             border: solid 1px $disabled_color_L;
             background: none;
             color: $disabled_color;
             cursor: default;
-            
-            &:hover{
+
+            &:hover {
                 border: solid 1px $disabled_color_L;
                 background: none;
                 color: $disabled_color_L;
@@ -185,7 +188,30 @@ body{
             }
         }
     }
-    
+
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+
+.mat-dialog-container {
+    background: linear-gradient(124.78deg, #002B6B 0%, #081648 100%) !important;
+    border: 1px solid #FFFFFF;
+    box-sizing: border-box;
+    border-radius: 5px;
+    overflow: hidden !important;
+    width:30em !important;
+    height: 20em !important;
+}
+.cdk-global-overlay-wrapper{
+    backdrop-filter: blur(70px) ;
+    z-index: 100000001;
+}

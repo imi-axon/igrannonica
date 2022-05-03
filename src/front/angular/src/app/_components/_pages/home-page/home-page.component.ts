@@ -5,7 +5,9 @@ import {AmbientLight, PointLight, Color, Mesh, IcosahedronGeometry, MeshStandard
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
 import { LandingPageSelectorComponent } from '../../_elements/landing-page-selector/landing-page-selector.component';
-
+import {MatDialog} from '@angular/material/dialog';
+import { PopupWindowComponent } from '../../_elements/popup-window/popup-window.component';
+import { TranslateService } from '@ngx-translate/core';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,7 +17,15 @@ gsap.registerPlugin(ScrollTrigger);
   styleUrls: ['./home-page.component.scss']
 })
 export class HomePageComponent implements OnInit, AfterViewInit {
-  constructor() { document.body.className = "landing_page_theme"; }
+  constructor(
+    private dialog :MatDialog, private translate:TranslateService
+  ) { document.body.className = "landing_page_theme"; }
+
+  porukaPopup:String="";
+  openDialog(){
+    this.porukaPopup=this.translate.instant("popup-window.dataset");
+    this.dialog.open(PopupWindowComponent, {data:{poruka:this.porukaPopup}});
+  }
   
   private subscription: Subscription;
 
@@ -78,8 +88,6 @@ export class HomePageComponent implements OnInit, AfterViewInit {
     });
     
   }
-  
-  
   
   private setBackgroudnIcosahedrons(){
     this.backgroundIcosahedrons = [];
