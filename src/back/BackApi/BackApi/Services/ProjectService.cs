@@ -12,6 +12,7 @@ namespace BackApi.Services
         string ListProjects(int userid,int pubuserid);
         string ListPublicProjects();
         string GetProjById(int projid, int userid);
+        string GetUserByProj(int projid, out bool ind);
         bool SetNote(int projid, int userid, string note);
         Boolean EditProject(int projid, ProjectPostPut proj,int userid);
         int getProjectId(ProjectPostPut model);
@@ -166,7 +167,38 @@ namespace BackApi.Services
             rez.Append("]");
             return rez.ToString();
         }
+        public string GetUserByProj(int projid, out bool ind)
+        {
+            var rez = new StringBuilder();
+            var proj = context.Projects.FirstOrDefault(x => x.ProjectId == projid);
+            if (proj == null)
+            {
+                ind = false;
+                return "project";
+            }
 
+            var user = context.Users.FirstOrDefault(x => x.UserId == proj.UserId);
+            if (user == null)
+            {
+                ind = false;
+                return "user";
+            }
+
+            string photopath = user.PhotoPath;
+            if (photopath == "" || photopath == null)
+                photopath = Path.Combine("Storage", "profilna.png");
+
+            string b = System.IO.File.ReadAllText(photopath);
+            rez.Append("{");
+            rez.Append("\"" + "Name" + "\":" + "\"" + user.Name + "\",");
+            rez.Append("\"" + "Lastname" + "\":" + "\"" + user.Lastname + "\",");
+            rez.Append("\"" + "Username" + "\":" + "\"" + user.Username + "\",");
+            rez.Append("\"" + "Photo" + "\":" + "\"" + b + "\"");
+            rez.Append("}");
+
+            ind = true;
+            return rez.ToString();
+        }
         public string GetProjById(int projid, int userid)
         {
             var rez = new StringBuilder();
