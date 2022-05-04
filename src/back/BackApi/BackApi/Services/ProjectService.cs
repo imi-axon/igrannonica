@@ -52,7 +52,8 @@ namespace BackApi.Services
             }
             Project project = new Project();
             project.Name = name;
-            project.Description = "Project description goes here...";
+            string opis = "Project description goes here...";
+            project.Description = opis;
             project.UserId = userid;
             project.Public = false;
             project.CreationDate = DateTime.Now;
@@ -171,7 +172,7 @@ namespace BackApi.Services
                     rez.Append("\"" + "Name" + "\":" + "\"" + user.Name + "\",");
                     rez.Append("\"" + "Lastname" + "\":" + "\"" + user.Lastname + "\",");
                     rez.Append("\"" + "Username" + "\":" + "\"" + user.Username + "\",");
-                    rez.Append("\"" + "Username" + "\":" + "\"" + user.Email + "\",");
+                    rez.Append("\"" + "Email" + "\":" + "\"" + user.Email + "\",");
                     rez.Append("\"" + "Photo" + "\":" + "\"data:image/jpeg;base64," + slikaBase64 + "\"");
                     rez.Append("}],");
                 }
@@ -276,7 +277,7 @@ namespace BackApi.Services
                 return "user";
             }
 
-            var project = context.Projects.FirstOrDefault(x => x.UserId == userid && x.Name==proj.name);
+            var project = context.Projects.FirstOrDefault(x => x.UserId == userid && x.Name == proj.name && x.ProjectId != projid);
             if (project != null)
             {
                 ind = false;

@@ -5,7 +5,7 @@
 <div class="content">
     
     <div id="header">
-        <h1>{{project.Name}}</h1>
+        <input #titleInput type="text" class="titleInput" [value]="project.Name" (blur)="ChangeExperimentTitleRequest()">
         
         <div id="cards">
             <div class="experiment-card" (click)="SwitchCard('.')" [class.selected-card]="currentCard=='.'">
@@ -40,7 +40,7 @@
     </div>
     
     <div id="pageOutlet">
-        <router-outlet></router-outlet>
+        <router-outlet (activate)="OnActivate($event)"></router-outlet>
     </div>
     
 </div>

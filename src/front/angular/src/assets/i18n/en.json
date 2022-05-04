@@ -119,7 +119,8 @@
         "dataset": "Dataset",
         "mreza": "Network",
         "opis": "Description",
-        "kreiran": "Created on"
+        "kreiran": "Created on",
+        "javni": "Public experiment"
     },
     
     "statistics-table":{

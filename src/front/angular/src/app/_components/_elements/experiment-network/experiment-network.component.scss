@@ -1,4 +1,5 @@
 #changeInputOutputWindow{
+    transition: 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955);
     position: fixed;
     display: none;
     width: 100%;
@@ -11,6 +12,7 @@
     
     
     h2{
+        transition: 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955);
         position: absolute;
         color: #FFFFFF;
         left: 50%;
@@ -41,6 +43,7 @@
         
         
         img{
+            transition: 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955);
             width: 15px;
             height: 15px;
             
@@ -63,6 +66,7 @@
     }
     
     .mainPanel{
+        transition: 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955);
         position: absolute;
         width: 80%;
         height: 75vh;
@@ -213,7 +217,7 @@
     
     
     #confingContainer{
-        background-color: #FFFFFF99;
+        background-color: #FFFFFF77;
         backdrop-filter: blur(7px);
         border: solid 1px #0091ff;
     }
@@ -225,7 +229,7 @@
         grid-template-columns: 72% 25%;
         
         #networkDisplay{
-            background-color: #FFFFFFAA;
+            background-color: #FFFFFF77;
             backdrop-filter: blur(7px);
             border: solid 1px #0091ff;
 
@@ -234,7 +238,7 @@
         }
         
         #trainingDisplay{
-            background-color: #FFFFFF99;
+            background-color: #FFFFFF77;
             backdrop-filter: blur(7px);
             border: solid 1px #0091ff;
 

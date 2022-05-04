@@ -20,6 +20,7 @@
     <div id="descriptionContainer">
         <div id="descriptionHeader">
             <img [src]="owner.Photo">
+            
             <div>
                 <h2> {{owner.Name}} {{owner.Lastname}} </h2>
                 <p> @{{owner.Username}} </p>
@@ -28,10 +29,12 @@
         
         <div id="description">
             <h2>{{"experiment.opis"|translate}}</h2>
-            <p> 
-                {{project.Description}}
-            </p>
+            <!-- [value]="project.Description" -->
+            <textarea #descriptionTextArea class="descriptionInput" maxlength="250" (blur)="SendEditProject()">{{project.Description}}</textarea>
         </div>
+        
+        <label for="publicCheckbox"> {{"experiment.javni" |translate}} </label>
+        <input #publicCheckbox type="checkbox" id="publicCheckbox" (change)="SendEditProject()" [checked]="project.Public.toString() == 'True'">
         
         <div id="descriptionFooter">
             <div><p>{{"experiment.kreiran"|translate}}: {{project.Creationdate}}</p> </div>

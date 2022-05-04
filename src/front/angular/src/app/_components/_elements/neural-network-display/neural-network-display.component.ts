@@ -377,8 +377,8 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   public ShowWeightChangeInput(event: MouseEvent, layerIndex: number, neuronIndex: number, weightIndex: number){
     
     let relativeClickPosition : any = {
-      x: event.x - this.parent.display.nativeElement.offsetLeft + this.parent.display.nativeElement.scrollLeft,
-      y: event.y - this.parent.display.nativeElement.offsetTop + this.parent.display.nativeElement.scrollTop
+      x: event.x - this.parent.display.nativeElement.offsetLeft + this.parent.display.nativeElement.scrollLeft + window.scrollX,
+      y: event.y - this.parent.display.nativeElement.offsetTop + this.parent.display.nativeElement.scrollTop + window.scrollY
     }
     
     this.weightInput.nativeElement.setAttribute("style", "display: block; left: " + relativeClickPosition.x + "px; top: " + relativeClickPosition.y + "px");

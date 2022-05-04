@@ -105,7 +105,6 @@ export class UserApiService {
       responseType : "blob",
       headers:HeaderUtil.jwtOnlyHeaders()
     });
-    console.log(response);
     return response;
   }
 }

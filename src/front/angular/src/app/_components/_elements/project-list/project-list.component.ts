@@ -67,11 +67,11 @@ export class ProjectListComponent implements OnInit {
     if (this.publicExp == false) {
       console.log("pozivam fj1");
       this.myExp = true;
-      this.projectsService.userProjects(this.username, this, this.handleSuccess, this.handleError);
+      this.projectsService.userProjects(this.username, this, this.handleSuccess, this.handleSuccess);
     }
     else {
       console.log("pozivam fj2");
-      this.projectsService.getProjects(this, this.handleSuccess, this.handleError);
+      this.projectsService.getProjects(this, this.handleSuccess, this.handleSuccess);
     }
 
   }
@@ -81,7 +81,13 @@ export class ProjectListComponent implements OnInit {
   }
 
   loadProjectsCallback(self: any) {
-    self.projectsService.userProjects(self.username, self, self.handleSuccess, self.handleError);
+    if (self.publicExp == false) {
+      self.myExp = true;
+      self.projectsService.userProjects(self.username, self, self.handleSuccess, self.handleSuccess);
+    }
+    else
+      self.projectsService.getProjects(self, self.handleSuccess, self.handleSuccess);
+    
   }
 
   handleSuccess(self: any, projects: Project[]) {
@@ -142,6 +148,7 @@ export class ProjectListComponent implements OnInit {
   RemoveProject(event: any, projectId: number) { 
     this.projectsService.removeProject(projectId, this, this.loadProjectsCallback);
     event.stopPropagation();
+    
   }
 
 }

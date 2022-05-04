@@ -37,6 +37,18 @@ export class ProjectsApiService {
     return response;
   }
   
+  editProject(projectId: number, edits: any){
+    let response = this.http.put(
+      this.url + "/projects/" + projectId,
+      edits,
+      {
+        observe: "response",
+        headers:HeaderUtil.jwtOnlyHeaders()
+      }
+    );
+    return response;
+  }
+  
   getProject(projectId: number){
     let response = this.http.get(
       this.url + "/projects/" + projectId,
@@ -48,6 +60,7 @@ export class ProjectsApiService {
     )
     return response;
   }
+  
 
   getProjects():Observable<HttpResponse<Project[]>>{
     let response = this.http.get<Project[]>(

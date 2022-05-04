@@ -331,9 +331,6 @@ export class ExperimentNetworkComponent implements OnInit {
     
     // Change cursor
     this.display.nativeElement.setAttribute("style", "cursor: grab;");
-    
-    
-    console.log(this.dragging)
   }
 
 }

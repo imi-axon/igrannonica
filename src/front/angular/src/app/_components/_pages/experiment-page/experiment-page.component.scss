@@ -11,9 +11,15 @@
     border-bottom: solid 1px #2C5D96;
     
     
-    h1{
+    .titleInput{
         margin: 0px;
         font-size: 28px;
+        background: transparent;
+        border: none;
+        
+        &:focus{
+            outline: none;
+        }
     }
     
     #cards{
