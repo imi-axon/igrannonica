@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { EditDatasetComponent } from './_components/_elements/edit-dataset/edit-dataset.component';
-import { NeuralNetworkDisplayComponent } from './_components/_elements/neural-network-display/neural-network-display.component';
 import { ChangepassPageComponent } from './_components/_pages/changepass-page/changepass-page.component';
 import { DataSetPageComponent } from './_components/_pages/data-set-page/data-set-page.component';
 // import { EditDatasetPageComponent } from './_components/_pages/edit-dataset-page/edit-dataset-page.component';
@@ -25,6 +24,7 @@ import { ExperimentOverviewComponent } from './_components/_elements/experiment-
 import { ExperimentDatasetComponent } from './_components/_elements/experiment-dataset/experiment-dataset.component';
 import { ExperimentNetworkComponent } from './_components/_elements/experiment-network/experiment-network.component';
 import { ExperimentPageComponent } from './_components/_pages/experiment-page/experiment-page.component';
+import { ExperimentStatisticsComponent } from './_components/_elements/experiment-statistics/experiment-statistics.component';
 
 const routes: Routes = [
  // {path:'train/:ProjectId/:Inputs/:Outputs',component:ProjectPageComponent},
@@ -51,14 +51,14 @@ const routes: Routes = [
     path:'project/:ProjectId',
     component:ExperimentPageComponent,
     children:[
-      {path:'',component:ExperimentOverviewComponent},
+      {path:'', component:ExperimentOverviewComponent},
+      {path:'statistics', component:ExperimentStatisticsComponent},
       {path:'dataset', component:ExperimentDatasetComponent},
-      {path:'network',component:ExperimentNetworkComponent}
+      {path:'network', component:ExperimentNetworkComponent}
     ]
-  }
+  },
   //TESTIRANJE - OBRISATI KASNIJE
-  , {path:'neural-network-display', component:NeuralNetworkDisplayComponent}
-  , {path:'edit-profile', component:EditProfilePageComponent},
+  {path:'edit-profile', component:EditProfilePageComponent},
   {path:'new-nn',component:CreateNeuralNetworkComponent}
 ];
 
@@ -74,7 +74,5 @@ export const routingComponents=[
   DataSetPageComponent, LoginPageComponent, RegistrationPageComponent,
   
   HomePageComponent,MyProjectsPageComponent,ProfilPageComponent,VerificationComponent,ProjectPageStatisticsEditComponent,
-  StatisticsComponent,EditDatasetComponent,TrainingPageComponent,CreateNeuralNetworkComponent,NnPageComponent,PublicExpPageComponent,
-
-  //TESTIRANJE - OBRISATI KASNIJE
-  NeuralNetworkDisplayComponent];
+  StatisticsComponent,EditDatasetComponent,TrainingPageComponent,CreateNeuralNetworkComponent,NnPageComponent,PublicExpPageComponent, ExperimentStatisticsComponent
+];

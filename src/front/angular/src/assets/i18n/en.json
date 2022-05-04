@@ -114,13 +114,20 @@
     
     "experiment":{
         "pregled": "Overview",
+        "statistika": "Statistics",
         "dataset": "Dataset",
         "mreza": "Network",
         "opis": "Description",
         "kreiran": "Created on"
     },
     
-    
+    "statistics-table":{
+        "minimum": "Minimum",
+        "maksimum": "Maximum",
+        "prosek": "Average",
+        "medijana": "Median",
+        "prazna": "Null fields"
+    },
 
 
 

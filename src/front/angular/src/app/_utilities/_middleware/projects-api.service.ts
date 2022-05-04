@@ -2,7 +2,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { apiProperties } from '../_constants/api-properties';
-import { Project } from '../_data-types/models';
+import { OwnerInfo, Project } from '../_data-types/models';
 import { HeaderUtil } from '../_helpers/http-util';
 
 @Injectable({
@@ -55,6 +55,17 @@ export class ProjectsApiService {
       {
         observe: "response",
         headers:HeaderUtil.jwtOnlyHeaders()
+      }
+    );
+    return response;
+  }
+  
+  getOwner(projectId: number):Observable<any>{
+    let response = this.http.get<any>(
+      this.url + "/projects/" + projectId + "/getuser",
+      {
+        observe: "response",
+        headers: HeaderUtil.jwtOnlyHeaders()
       }
     );
     return response;

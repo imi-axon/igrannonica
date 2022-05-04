@@ -4,7 +4,7 @@
     <div class="mb-3">
       <!-- <label for="exampleInputEmail1" class="form-label">Username</label> -->
       <input type="text" placeholder="{{'login.username_placeholder'|translate}}" name="username" ngModel required #username="ngModel" [(ngModel)]="login.username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-      [class.invalid]="(username.touched || username.dirty ) && invalidUsername" (blur)="checkUsername()" (input)="checkUsername()">
+      [class.invalid]="username.touched && invalidUsername" (blur)="checkUsername()" (input)="checkUsername()">
     </div>
     <div class="mb-3">
       <!-- <label for="exampleInputPassword1" class="form-label">Lozinka</label> -->

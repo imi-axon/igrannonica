@@ -16,17 +16,19 @@
     
     #datasetContainer{
         max-height: 80vh;
-        border: solid 1px #2C5D96;
-        border-radius: 5px;
+        background-color: #FFFFFFAA;
+        backdrop-filter: blur(7px);
+        border: solid 1px #0091ff;
         overflow-x: scroll;
         scroll-behavior: smooth;
     }
     
     
     #controls{
+        background-color: #FFFFFFAA;
+        backdrop-filter: blur(7px);
+        border: solid 1px #0091ff;
         height: fit-content;
-        border: solid 1px #2C5D96;
-        border-radius: 5px;
         padding: 5px 0px 5px 0px;
     }
     
@@ -42,8 +44,9 @@
 #descriptionContainer{
     max-height: 100%;
     height: fit-content;
-    border: solid 1px #2C5D96;
-    border-radius: 5px;
+    background-color: #FFFFFFAA;
+    backdrop-filter: blur(7px);
+    border: solid 1px #0091ff;
     padding: 20px 30px 20px 30px;
     
     #descriptionHeader{
@@ -55,7 +58,6 @@
             height: 42px;
             width: 42px;
             border: solid 1px #2C5D96;
-            border-radius: 5px;
         }
         
         h2{

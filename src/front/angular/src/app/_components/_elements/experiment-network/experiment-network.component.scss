@@ -213,8 +213,9 @@
     
     
     #confingContainer{
-        border: solid 1px #2C5D96;
-        
+        background-color: #FFFFFF99;
+        backdrop-filter: blur(7px);
+        border: solid 1px #0091ff;
     }
     
     
@@ -224,14 +225,20 @@
         grid-template-columns: 72% 25%;
         
         #networkDisplay{
-            border: solid 1px #2C5D96;
+            background-color: #FFFFFFAA;
+            backdrop-filter: blur(7px);
+            border: solid 1px #0091ff;
+
             overflow: auto;
             cursor: grab;
         }
         
         #trainingDisplay{
+            background-color: #FFFFFF99;
+            backdrop-filter: blur(7px);
+            border: solid 1px #0091ff;
+
             height: 400px;
-            border: solid 1px #2C5D96;
         }
         
     }

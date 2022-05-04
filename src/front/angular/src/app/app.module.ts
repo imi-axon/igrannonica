@@ -72,6 +72,7 @@ import { ExperimentPageComponent } from './_components/_pages/experiment-page/ex
 import { PageControlsComponent } from './_components/_elements/page-controls/page-controls.component';
 import { PopupWindowComponent } from './_components/_elements/popup-window/popup-window.component';
 import {MatDialogModule} from '@angular/material/dialog';
+import { StatisticsTableComponent } from './_components/_elements/statistics-table/statistics-table.component';
 
 
 @NgModule({
@@ -133,7 +134,8 @@ import {MatDialogModule} from '@angular/material/dialog';
     ExperimentDatasetComponent,
     ExperimentPageComponent,
     PageControlsComponent,
-    PopupWindowComponent
+    PopupWindowComponent,
+    StatisticsTableComponent
   ],
   imports: [
     NgxCsvParserModule,

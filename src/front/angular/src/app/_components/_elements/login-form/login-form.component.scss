@@ -1,17 +1,19 @@
 .invalid {
-    border: solid 1px #8d0000 !important;
-    background-color: #ff9a9a59;
+    border: solid 1px #ff000066 !important;
+    border-radius: 0px;
+    background-color: #ff9a9a33;
+    
 
     &:hover {
-        background-color: #ff6e6e !important;
+        background-color: #ff6e6e33 !important;
     }
 
     &:focus {
-        background-color: #ff6e6e !important;
+        background-color: #ff6e6e33 !important;
     }
 
     &::placeholder {
-        color: #EEEEEE;
+        color: #ff8484cc;
     }
 }
 
