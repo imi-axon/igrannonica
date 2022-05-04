@@ -213,5 +213,7 @@ body {
 }
 .cdk-global-overlay-wrapper{
     backdrop-filter: blur(70px) ;
-    z-index: 100000001;
+}
+.cdk-overlay-container{
+    z-index: 10000001;
 }

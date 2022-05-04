@@ -22,9 +22,11 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   ) { document.body.className = "landing_page_theme"; }
 
   porukaPopup:String="";
+
   openDialog(){
     this.porukaPopup=this.translate.instant("popup-window.dataset");
-    this.dialog.open(PopupWindowComponent, {data:{poruka:this.porukaPopup}});
+    let dialogRef = this.dialog.open(PopupWindowComponent, {data:{poruka:this.porukaPopup}});
+    dialogRef.afterClosed().subscribe(result=>{console.log(`Dialog res: ${result}`);});
   }
   
   private subscription: Subscription;
