@@ -18,16 +18,9 @@ gsap.registerPlugin(ScrollTrigger);
 })
 export class HomePageComponent implements OnInit, AfterViewInit {
   constructor(
-    private dialog :MatDialog, private translate:TranslateService
+    private translate:TranslateService
   ) { document.body.className = "landing_page_theme"; }
 
-  porukaPopup:String="";
-
-  openDialog(){
-    this.porukaPopup=this.translate.instant("popup-window.dataset");
-    let dialogRef = this.dialog.open(PopupWindowComponent, {data:{poruka:this.porukaPopup}});
-    dialogRef.afterClosed().subscribe(result=>{console.log(`Dialog res: ${result}`);});
-  }
   
   private subscription: Subscription;
 

@@ -204,7 +204,11 @@
     }
     ,
 "popup-window":{
-    "dataset":"Are you sure you want to remove this dataset?"
+    "dataset":"Are you sure you want to remove this dataset?",
+    "project":"Are you sure you want to remove this project?",
+    "opomena":"This action is irreversible!",
+    "da":"Yes",
+    "ne":"No"
 }
 
 }

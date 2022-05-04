@@ -12,7 +12,7 @@
     
     <div *ngIf="project.Username==authService.korisnickoIme || myExp==true" class="projectRight">
       
-      <button type="button" class="remove-button d-flex align-items-center justify-content-center" (click)="RemoveProject($event, project.ProjectId)"> 
+      <button type="button" class="remove-button d-flex align-items-center justify-content-center" (click)="openDialog($event, project.ProjectId)"> 
         <i class="bi bi-trash"></i> 
       </button>
       
