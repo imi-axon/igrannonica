@@ -7,15 +7,15 @@ namespace BackApi.Services
 {
     public interface IProjectService
     {
-        Boolean CreateProject(ProjectPostPut model,int userid);
+        string CreateProject(int userid);
         Boolean DeleteProject(int projid,int userid);
         string ListProjects(int userid,int pubuserid);
         string ListPublicProjects();
         string GetProjById(int projid, int userid);
         string GetUserByProj(int projid, out bool ind);
         bool SetNote(int projid, int userid, string note);
-        Boolean EditProject(int projid, ProjectPostPut proj,int userid);
-        int getProjectId(ProjectPostPut model);
+        string EditProject(int projid, ProjectEdit proj,int userid, out bool ind);
+        int getProjectId(string name);
         public Boolean projectOwnership(int userid, int projid);
         string GetNote(int projid, int userid, out bool ind);
     }
@@ -34,18 +34,27 @@ namespace BackApi.Services
             this.configuration = configuration;
             this.nnService = nNservice;
         }
-        public Boolean CreateProject(ProjectPostPut model,int userid)
+        public string CreateProject(int userid)
         {
-            if(context.Projects.Any(x=> x.Name == model.name))
+            string constname = "Untitled-Experiment";
+            string name = constname;
+            int exp = 2;
+            while (true)
             {
-                return false;
+                if (context.Projects.Any(x => x.UserId == userid && x.Name == name))
+                {
+                    name = constname;
+                    name = name + "-" + exp;
+                    exp = exp+1;
+                }
+                else
+                    break;
             }
-
             Project project = new Project();
-            project.Name = model.name;
-            project.Description = model.description;
+            project.Name = name;
+            project.Description = "Project description goes here...";
             project.UserId = userid;
-            project.Public = model.ispublic;
+            project.Public = false;
             project.CreationDate = DateTime.Now;
 
             context.Projects.Add(project);
@@ -53,7 +62,7 @@ namespace BackApi.Services
 
             storageService.CreateProject(project.ProjectId);
 
-            return true;
+            return name;
         }
 
         public Boolean DeleteProject(int projid, int userid) //manual cascade delete
@@ -252,25 +261,40 @@ namespace BackApi.Services
             ind = true;
             return proj.Notes;
         }
-        public Boolean EditProject(int projid,ProjectPostPut proj,int userid)
+        public string EditProject(int projid,ProjectEdit proj,int userid, out bool ind)
         {
             Boolean rez;
             var edited = context.Projects.Find(projid);
-            if(edited == null)
-                return rez = false;
+            if (edited == null)
+            {
+                ind = false;
+                return "project";
+            }
             if (edited.UserId != userid)
-                return rez = false;
+            {
+                ind = false;
+                return "user";
+            }
+
+            var project = context.Projects.FirstOrDefault(x => x.UserId == userid && x.Name==proj.name);
+            if (project != null)
+            {
+                ind = false;
+                return "name";
+            }
             edited.Name = proj.name;
             edited.Description = proj.description;
             edited.Public = proj.ispublic;
             context.SaveChanges();
-            rez = true;
-            return rez;
+            ind = true;
+            return "uspesno";
         }
 
-        public int getProjectId(ProjectPostPut model)
+        public int getProjectId(string name)
         {
-            var tmp = context.Projects.Where(x => x.Name == model.name).FirstOrDefault();
+            var tmp = context.Projects.Where(x => x.Name == name).FirstOrDefault();
+            if (tmp == null)
+                return -1;
             return tmp.ProjectId;
         }
 

@@ -23,14 +23,14 @@ namespace BackApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> NewProject([FromBody] ProjectPostPut req)
+        public async Task<ActionResult<string>> NewProject()
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
-            Boolean rez;
-            rez = service.CreateProject(req,userid);
-            int id = service.getProjectId(req);
-            if (rez)
+            string rez;
+            rez = service.CreateProject(userid);
+            int id = service.getProjectId(rez);
+            if (id!=-1)
                 return id+"";
             else return BadRequest();
         }
@@ -100,14 +100,15 @@ namespace BackApi.Controllers
         }
 
         [HttpPut("{projid}")]
-        public async Task<ActionResult<string>> EditProject(int projid,ProjectPostPut req)
+        public async Task<ActionResult<string>> EditProject(int projid,ProjectEdit req)
         {
+            bool ind = false;
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized("Ulogujte se");
-            Boolean rez = service.EditProject(projid,req,userid);
-            if (rez)
-                return Ok("Uspesno Izmenjeni Detalji");
-            else return NotFound("Projekat ne postoji ili vi niste vlasnik");
+            string rez = service.EditProject(projid,req,userid,out ind);
+            if (ind)
+                return Ok();
+            else return BadRequest(rez);
         }
     }
 }
