@@ -4,11 +4,12 @@
 }
 
 .project{
-    background-color: white;
+    background-color: #FFFFFF55;
+    backdrop-filter: blur(7px);
+    border: solid 1px #0091ff;
     padding: 20px;
     margin-top: 25px;
-    border-radius: 5px;
-    border: solid 1px #2C5D96;
+    
     
     display: grid;
     grid-template-columns: 70% 30%;

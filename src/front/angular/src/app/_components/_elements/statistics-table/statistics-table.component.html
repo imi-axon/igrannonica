@@ -1,10 +1,11 @@
 <table>
     
     <thead>
-        
         <!-- RED ZA KOLONE -->
         <tr>
-            <th scope="col"></th>
+            <th scope="col">
+                
+            </th>
             
             <th scope="col" *ngFor="let column of columns">
                 {{column}}
@@ -14,15 +15,14 @@
     
     <tbody>
         <!-- RED PODATAKA -->
-        <tr *ngFor="let i = index; let column of columns">
+        <tr *ngFor="let i = index; let row of statistics">
             
-            <!-- CELIJE ZA NAZIV REDOVA -->
             <td class="firstCol">
-                {{column}}
+                {{"statistics-table." + statisticsCols[i] | translate}}
             </td>
             
-            <!-- CELIJE IZ KORELACIONE TABELE -->
-            <td *ngFor="let cell of correlationMatrix[i]" [ngStyle]="GetCorrelationColor(cell)" >
+            <!-- CELIJA U REDU -->
+            <td *ngFor="let cell of row">
                 {{cell | number : '.2-2'}}
             </td>
 
@@ -30,4 +30,3 @@
     </tbody>
 
 </table>
-            

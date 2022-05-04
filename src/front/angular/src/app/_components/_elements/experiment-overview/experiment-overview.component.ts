@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Project } from 'src/app/_utilities/_data-types/models';
+import { OwnerInfo, Project } from 'src/app/_utilities/_data-types/models';
 import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
 import { ProjectsService } from 'src/app/_utilities/_services/projects.service';
 import { DataSetTableComponent } from '../data-set-table/data-set-table.component';
@@ -16,12 +16,12 @@ const ROW_COUNT = 20;
 export class ExperimentOverviewComponent implements OnInit{
   
   public project: Project = new Project();
+  public owner: OwnerInfo = new OwnerInfo();
   
   private getProjectId(): number{
     let p = this.activatedRoute.snapshot.paramMap.get("ProjectId");
-    if (p != null)  {
+    if (p != null)
       return Number.parseInt(p);
-    }
     return -1;
   }
   
@@ -30,9 +30,9 @@ export class ExperimentOverviewComponent implements OnInit{
   
   @ViewChild("dataset")
   public datasetComponent: DataSetTableComponent;
-  
   @ViewChild("pageControls")
   public controlsComponent: PageControlsComponent; 
+  
   
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -42,7 +42,18 @@ export class ExperimentOverviewComponent implements OnInit{
   
   ngOnInit(): void {
     this.projectService.getProject(this.getProjectId(), this, this.handleSuccesfulGetProjectCallback);
+    this.projectService.getOwner(this.getProjectId(), this, this.handleSuccesfulGetOwnerCallback);
   }
+  
+  
+  
+  
+  
+  private handleSuccesfulGetOwnerCallback(self: any, response: any){
+    console.log(response)
+  }
+  
+  
   
   
   
@@ -78,7 +89,9 @@ export class ExperimentOverviewComponent implements OnInit{
   
   
   
-  public UplodaDatasetFile(file: File){
+  
+  
+  public UploadDatasetFile(file: File){
     let formData : FormData = new FormData();
     formData.append("dataset", file);
     

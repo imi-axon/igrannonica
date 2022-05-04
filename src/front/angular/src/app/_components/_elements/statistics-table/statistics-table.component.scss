@@ -10,17 +10,29 @@ thead{
         height: 30px;
         top: 0px;
         border: none;
-        background-color: #2C5D96;
+        background-color: #3167a5;
         color: #FFFFFF;
         
         th{
             font-weight: 400;
             border-right: solid 1px #16387c;
+            border-bottom: solid 1px #16387c;
             
             &:hover{
                 background-color: #184982;
             }
         }
+    }
+}
+
+.firstCol{
+    background-color: #1f4b7d;
+    color: #FFFFFF;
+    font-weight: 400;
+    border-bottom: solid 1px #19356c;
+    
+    &:hover{
+        background-color: #184982 !important;
     }
 }
 

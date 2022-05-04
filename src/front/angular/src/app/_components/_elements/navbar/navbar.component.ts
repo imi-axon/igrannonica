@@ -30,8 +30,6 @@ export class NavbarComponent implements OnInit{
   
   private loadUserImage(self: any, image: string){
     self.userImage = image;
-    console.log("SLIKA")
-    console.log(image)
   }
   
   logout()

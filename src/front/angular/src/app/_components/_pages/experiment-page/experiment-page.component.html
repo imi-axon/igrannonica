@@ -11,6 +11,9 @@
             <div class="experiment-card" (click)="SwitchCard('.')" [class.selected-card]="currentCard=='.'">
                 <a>{{"experiment.pregled" | translate}}</a>
             </div>
+            <div class="experiment-card" (click)="SwitchCard('statistics')" [class.selected-card]="currentCard=='statistics'">
+                <a>{{"experiment.statistika" | translate}}</a>
+            </div>
             <div class="experiment-card" (click)="SwitchCard('dataset')" [class.selected-card]="currentCard=='dataset'">
                 <a>{{"experiment.dataset" | translate}}</a>
             </div>
@@ -22,6 +25,9 @@
         <select id="cards_dropdown" (change)="SwitchCardCombo($event)">
             <option value="." [selected]="currentCard=='.'">
                 <a>{{"experiment.pregled" | translate}}</a>
+            </option>
+            <option value="statistics" [selected]="currentCard=='statistics'">
+                <a>{{"experiment.statistika" | translate}}</a>
             </option>
             <option value="dataset" [selected]="currentCard=='dataset'">
                 <a>{{"experiment.dataset" | translate}}</a>

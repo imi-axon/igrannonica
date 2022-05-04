@@ -157,7 +157,7 @@ export class ExperimentNetworkComponent implements OnInit {
   
   
   private getProjectId(): number{
-    let p = this.activatedRoute.snapshot.paramMap.get("ProjectId");
+    let p = this.activatedRoute.parent?.snapshot.paramMap.get("ProjectId");
     if (p != null)  {
       return Number.parseInt(p);
     }

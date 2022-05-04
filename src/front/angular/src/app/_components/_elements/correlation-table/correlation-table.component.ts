@@ -16,7 +16,7 @@ export class CorrelationTableComponent implements OnInit {
     
   }
   
-  public LoadCorrelationMatrix(columns: string[], correlationMatrix: number[][]){
+  public LoadCorrelationData(columns: string[], correlationMatrix: number[][]){
     this.columns = columns;
     this.correlationMatrix = correlationMatrix;
   }

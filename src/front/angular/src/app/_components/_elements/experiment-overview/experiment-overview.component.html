@@ -13,16 +13,16 @@
     </div>
     
     <div id="datasetInput" *ngIf="showsFileInput">
-        <app-file-input #fileInput (fileSubmited)="UplodaDatasetFile($event)"></app-file-input>
+        <app-file-input #fileInput (fileSubmited)="UploadDatasetFile($event)"></app-file-input>
     </div>
     
     <!-- OPIS PANEL -->
     <div id="descriptionContainer">
         <div id="descriptionHeader">
-            <img src="/assets/Images/profilna.png">
+            <img [src]="owner.Photo">
             <div>
-                <h2> Petar Petrovic </h2>
-                <p> @petko123 </p>
+                <h2> {{owner.Name}} {{owner.Lastname}} </h2>
+                <p> @{{owner.Username}} </p>
             </div>
         </div>
         

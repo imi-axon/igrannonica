@@ -80,6 +80,17 @@ export class ProjectsService {
     )
 
   }
+  
+  
+  getOwner(projectId: number, self?: any, successCallback?: Function){
+    this.projectsApi.getOwner(projectId).subscribe(
+      (response) => {
+        if (response.status == HttpStatusCode.Ok && response.body)
+          if(self && successCallback)
+            successCallback(self, response.body);
+      }
+    )
+  }
 
 
 }

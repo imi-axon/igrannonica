@@ -114,12 +114,19 @@
     "experiment":{
         "pregled": "Pregled",
         "dataset": "Dataset",
+        "statistika": "Statistika",
         "mreza": "Mreža",
         "opis": "Opis",
         "kreiran": "Kreiran"
     },
 
-    
+    "statistics-table":{
+        "minimum": "Minimum",
+        "maksimum": "Maksimum",
+        "prosek": "Prosek",
+        "medijana": "Medijana",
+        "prazna": "Prazna polja"
+    },
     
     
 
