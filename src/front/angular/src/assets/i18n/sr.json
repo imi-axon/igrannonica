@@ -56,7 +56,8 @@
         "moji_eksperimenti":"Moji Eksperimenti",
         "kreiran":"Kreiran: ",
         "nema":"List eksperimenata je prazna!",
-        "search":"Pretražite..."
+        "search":"Pretražite...",
+        "novi_eksperiment": "Novi Eksperiment"
     },
     "lista-mreza":{
         "nema":"Nemate nijednu neuronsku mrežu",

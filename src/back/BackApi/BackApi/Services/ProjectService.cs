@@ -152,14 +152,18 @@ namespace BackApi.Services
                     if (photopath == "" || photopath == null)
                         photopath = Path.Combine("Storage", "profilna.png");
 
-                    string b = System.IO.File.ReadAllText(photopath);
+                    //string b = System.IO.File.ReadAllText(photopath);
+
+                    byte[] imageArray = System.IO.File.ReadAllBytes(photopath);
+                    string slikaBase64 = Convert.ToBase64String(imageArray);
+
                     rez.Append("{");
                     rez.Append("\"" + "UseId" + "\":" + "\"" + user.UserId + "\",");
                     rez.Append("\"" + "Name" + "\":" + "\"" + user.Name + "\",");
                     rez.Append("\"" + "Lastname" + "\":" + "\"" + user.Lastname + "\",");
                     rez.Append("\"" + "Username" + "\":" + "\"" + user.Username + "\",");
                     rez.Append("\"" + "Username" + "\":" + "\"" + user.Email + "\",");
-                    rez.Append("\"" + "Photo" + "\":" + "\"" + b + "\"");
+                    rez.Append("\"" + "Photo" + "\":" + "\"data:image/jpeg;base64," + slikaBase64 + "\"");
                     rez.Append("}],");
                 }
             }
@@ -188,12 +192,18 @@ namespace BackApi.Services
             if (photopath == "" || photopath == null)
                 photopath = Path.Combine("Storage", "profilna.png");
 
-            string b = System.IO.File.ReadAllText(photopath);
+            //string b = System.IO.File.ReadAllText(photopath);
+
+            byte[] imageArray = System.IO.File.ReadAllBytes(photopath);
+            string slikaBase64 = Convert.ToBase64String(imageArray);
+
             rez.Append("{");
             rez.Append("\"" + "Name" + "\":" + "\"" + user.Name + "\",");
             rez.Append("\"" + "Lastname" + "\":" + "\"" + user.Lastname + "\",");
             rez.Append("\"" + "Username" + "\":" + "\"" + user.Username + "\",");
-            rez.Append("\"" + "Photo" + "\":" + "\"" + b + "\"");
+
+            // Ovde treba da se proveri i zameni tip slike (nzm kako se to radi)
+            rez.Append("\"" + "Photo" + "\":" + "\"data:image/jpeg;base64," + slikaBase64 + "\"");
             rez.Append("}");
 
             ind = true;

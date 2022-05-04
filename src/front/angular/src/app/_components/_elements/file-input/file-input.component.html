@@ -7,9 +7,9 @@
 -->
 
 
-<div class="dropzone">
+<div #fileInput class="dropzone">
     
-    <input type="file" #fileInputRef id="fileInput" accept=".csv" required=".csv" (change)="AddFile($event)" >
+    <input type="file" #fileInputRef id="fileInput" accept=".csv" required=".csv" (change)="AddFile($event)" (dragenter)="onDragEnter($event)" (dragleave)="onDragLeave($event)">
     <img src="/assets/Images/file.svg">
     <h2>{{"file-input.dodajFajl"|translate}}</h2>
     

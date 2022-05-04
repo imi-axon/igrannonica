@@ -1,6 +1,6 @@
 import { HttpStatusCode } from '@angular/common/http';
 import { Injectable, Input } from '@angular/core';
-import { Project } from '../_data-types/models';
+import { OwnerInfo, Project } from '../_data-types/models';
 import { JWTUtil } from '../_helpers/jwt-util';
 import { ProjectsApiService } from '../_middleware/projects-api.service';
 
@@ -86,8 +86,10 @@ export class ProjectsService {
     this.projectsApi.getOwner(projectId).subscribe(
       (response) => {
         if (response.status == HttpStatusCode.Ok && response.body)
-          if(self && successCallback)
-            successCallback(self, response.body);
+          if(self && successCallback){
+            let owner: OwnerInfo = response.body;
+            successCallback(self, owner);
+          }
       }
     )
   }

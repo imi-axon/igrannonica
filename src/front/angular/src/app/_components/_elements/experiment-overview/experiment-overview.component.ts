@@ -50,7 +50,7 @@ export class ExperimentOverviewComponent implements OnInit{
   
   
   private handleSuccesfulGetOwnerCallback(self: any, response: any){
-    console.log(response)
+    self.owner = response;
   }
   
   

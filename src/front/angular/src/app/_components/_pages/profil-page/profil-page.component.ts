@@ -17,7 +17,7 @@ export class ProfilPageComponent implements OnInit {
   profilePictureRef: ElementRef;
   
   public userInfo: any = new UserInfo();
-  public profilePicture: string;
+  public profilePicture: string = "/assets/Images/profilna.png";
   
   constructor(
     public auth:AuthService, 

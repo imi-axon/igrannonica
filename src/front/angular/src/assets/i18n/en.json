@@ -56,7 +56,8 @@
         "moji_eksperimenti":"My Experiments",
         "kreiran":"Created on: ",
         "nema":"Your experiment list is empty!",
-        "search":"Search..."
+        "search":"Search...",
+        "novi_eksperiment": "New Experiment"
     },
     "lista-mreza":{
         "nema":"There is no neural network for this project",

@@ -203,7 +203,7 @@ export class OwnerInfo{
     public Name: string = "";
     public Lastname: string = "";
     public Username: string = "";
-    public Photo: Blob = new Blob();
+    public Photo: string = "/assets/Images/profilna.png";
 }
 /* PROJEKAT */
 

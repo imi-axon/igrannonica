@@ -1,4 +1,5 @@
 .dropzone{
+    transition: 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
     width: 100%;
     height: 100%;
     text-align: center;
@@ -26,6 +27,7 @@
     }
     
     img{
+        transition: 0.5s cubic-bezier(0.23, 1, 0.320, 1);
         width: 75%;
         height: 75%;
         position: absolute;
@@ -35,6 +37,7 @@
     }
     
     h2{
+        transform-origin: center;
         color: #6F8BB6;
         font-weight: bold;
         font-size: calc(6vw + 24px);
@@ -59,6 +62,34 @@
     label{
         color: #6F8BB6;
         
+    }
+    
+    
+    &:hover{
+        transition: 0.5s cubic-bezier(0.68, -0.85, 0.265, 1.55);
+        
+        img{
+            transition: 0.5s cubic-bezier(0.68, -0.85, 0.265, 1.55);
+            width: 80%;
+            height: 80%;
+        }
+    }
+    
+}
+
+.dragHovering{
+    transition: 0.5s cubic-bezier(0.265, 0.54, 0.44, 1);
+    background-color: #002f7155;
+    
+    h2, h3{
+        transition: 0.5s cubic-bezier(0.265, 0.54, 0.44, 1);
+        color: #30467a;
+    }
+    
+    img{
+        transition: 0.5s cubic-bezier(0.18, -0.25, 0.265, 1.55);
+        width: 80%;
+        height: 80%;
     }
     
 }
