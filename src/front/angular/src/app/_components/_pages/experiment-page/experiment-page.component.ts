@@ -56,7 +56,10 @@ export class ExperimentPageComponent implements OnInit {
     }
   }
   
-  public ChangeExperimentTitleRequest(){
+  public ChangeExperimentTitleRequest(event?: KeyboardEvent){
+    if(event && event.key != "Enter")
+      return;
+    
     let description = this.overviewComponent.description.nativeElement.value;
     let isPublic = this.overviewComponent.publicCheckbox.nativeElement.checked;
     this.ChangeExperiment(
@@ -75,6 +78,8 @@ export class ExperimentPageComponent implements OnInit {
     }
     
     this.projectsService.editProject(this.projectId, fullEdits);
+    
+    this.inputTitle.nativeElement.blur();
   }
   
   

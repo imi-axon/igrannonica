@@ -5,7 +5,7 @@
 <div class="content">
     
     <div id="header">
-        <input #titleInput type="text" class="titleInput" [value]="project.Name" (blur)="ChangeExperimentTitleRequest()">
+        <input #titleInput type="text" class="titleInput" [value]="project.Name" (blur)="ChangeExperimentTitleRequest()" (keydown)="ChangeExperimentTitleRequest($event)">
         
         <div id="cards">
             <div class="experiment-card" (click)="SwitchCard('.')" [class.selected-card]="currentCard=='.'">

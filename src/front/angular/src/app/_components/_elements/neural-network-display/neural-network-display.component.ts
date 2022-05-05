@@ -377,12 +377,13 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   public ShowWeightChangeInput(event: MouseEvent, layerIndex: number, neuronIndex: number, weightIndex: number){
     
     let relativeClickPosition : any = {
-      x: event.x - this.parent.display.nativeElement.offsetLeft + this.parent.display.nativeElement.scrollLeft + window.scrollX,
-      y: event.y - this.parent.display.nativeElement.offsetTop + this.parent.display.nativeElement.scrollTop + window.scrollY
+      x: event.x - this.parent.display.nativeElement.offsetLeft + this.parent.display.nativeElement.scrollLeft + window.scrollX - 60,
+      y: event.y - this.parent.display.nativeElement.offsetTop + this.parent.display.nativeElement.scrollTop + window.scrollY - 30
     }
     
     this.weightInput.nativeElement.setAttribute("style", "display: block; left: " + relativeClickPosition.x + "px; top: " + relativeClickPosition.y + "px");
     this.weightInput.nativeElement.value = this.parent.neuralNetwork.nn.layers[layerIndex].neurons[neuronIndex].weights[weightIndex];
+    this.weightInput.nativeElement.focus();
     
     this.weightToChange = {
       "layerIndex": layerIndex,
@@ -392,8 +393,19 @@ export class NeuralNetworkDisplayComponent implements OnInit {
     
     this.weightInputShown = true;
   }
+  public ChangeNetworkWeightFromEvent(event: any){
+    this.parent.neuralNetwork.nn.layers[this.weightToChange.layerIndex].neurons[this.weightToChange.neuronIndex].weights[this.weightToChange.weightIndex] = event.target.value;
+  }
+  
   public ChangeNetworkWeight(event: any){
     this.parent.neuralNetwork.nn.layers[this.weightToChange.layerIndex].neurons[this.weightToChange.neuronIndex].weights[this.weightToChange.weightIndex] = event.target.value;
+  }
+  
+  public ChangeNetworkWeightFromKey(event: KeyboardEvent){
+    if(event.key == "Enter"){
+      this.parent.neuralNetwork.nn.layers[this.weightToChange.layerIndex].neurons[this.weightToChange.neuronIndex].weights[this.weightToChange.weightIndex] = this.weightInput.nativeElement.value;
+      this.weightInput.nativeElement.setAttribute("style", "display: none;");
+    }
   }
   
   

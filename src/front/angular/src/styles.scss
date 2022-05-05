@@ -94,6 +94,7 @@ body {
     align-items: center;
 }
 
+
 #sidebar {
     background-color: #1B2E5E;
     // 100% visina ekrana - 50px visine navbara  
@@ -125,14 +126,24 @@ body {
 
 }
 
-
-/* ============================= TAMNE STRANICE ============================= */
+/* ============================= POCETNE STRANICE ============================= */
 .landing_page_theme {
     margin: 0px;
     width: 100%;
     height: 100%;
-    background-color: #00020A;
-
+    
+    background: 
+        radial-gradient(60% 60% at 40% -5%,#0099ff35 0%, #0073ff00 100%),
+        radial-gradient(60% 60% at 2% 90%, #001aff35 0%, #2600ff00 100%), 
+        radial-gradient(60% 60% at 98% 90%, #4c00ff35 0%, #0000ff00 100%);
+    
+    background-color: #00020e;
+    
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    
+    animation: gradient ease-in 10s infinite;
+    
     overflow-y: hidden;
 
     // SAKRIVANJE SCROLLBAR-A
@@ -144,12 +155,54 @@ body {
     /* IE and Edge */
     scrollbar-width: none;
 
+}
 
+@-webkit-keyframes gradient {
+	0% {
+		background-color: #00030e;
+	}
+	25% {
+		background-color: #000000;
+	}
+	50% {
+		background-color: #00060e;
+	}
+	100% {
+		background-color: #00030e;
+	}
+}
+@keyframes gradient {
+	0% {
+		background-color: #00030e;
+	}
+	25% {
+		background-color: #000000;
+	}
+	50% {
+		background-color: #00060e;
+	}
+	100% {
+		background-color: #00030e;
+	}
+}
+
+.log_reg_page{
+    background: 
+        radial-gradient(60% 60% at 40% -5%,#0099ff35 0%, #0073ff00 100%),
+        radial-gradient(60% 60% at 2% 90%, #001aff35 0%, #2600ff00 100%), 
+        radial-gradient(60% 60% at 98% 90%, #4c00ff35 0%, #0000ff00 100%);
+    
+    background-color: #00020e;
+    
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    
+    animation: gradient ease-in 10s infinite;
 }
 
 
 
-/* ============================= TAMNE STRANICE ============================= */
+
 
 
 .light_theme {
@@ -214,16 +267,16 @@ body {
 
 
 .mat-dialog-container {
-    background: linear-gradient(124.78deg, #002B6B 0%, #081648 100%) !important;
+    background: linear-gradient(124.78deg, #144a9c 0%, #1d3073 100%) !important;
     border: 1px solid #FFFFFF;
     box-sizing: border-box;
-    border-radius: 5px;
+    border-radius: 0px !important;
     overflow: hidden !important;
     width:30em !important;
     height: 20em !important;
 }
 .cdk-global-overlay-wrapper{
-    backdrop-filter: blur(70px) ;
+    backdrop-filter: blur(3px) ;
 }
 .cdk-overlay-container{
     z-index: 10000001;
