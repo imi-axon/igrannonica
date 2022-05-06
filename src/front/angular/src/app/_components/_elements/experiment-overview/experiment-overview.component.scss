@@ -2,8 +2,8 @@
     width: 100%;
     
     display: grid;
-    column-gap: 2%;
-    grid-template-columns: 73% 25%;
+    column-gap: 1%;
+    grid-template-columns: 74% 25%;
     
 }
 
@@ -40,6 +40,29 @@
     border: dashed 5px #a6c0e7;
 }
 
+.settingsButton{
+    float: right;
+    border: none;
+    background: transparent;
+    padding: 0px !important;
+    width: 24px;
+    height: 24px;
+    transform-origin: center;
+    transition: 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+    
+    svg{
+        width: 24px;
+        height: 24px;
+        path{
+            fill: #0077ff;
+        }
+    }
+    
+    &:hover{
+        transform: scale(1.2);
+        transition: 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+}
 
 #descriptionContainer{
     max-height: 100%;
@@ -50,6 +73,7 @@
     padding: 20px 30px 20px 30px;
     
     #descriptionHeader{
+        width: 100%;
         display: flex;
         align-items: flex-start;
         column-gap: 8px;

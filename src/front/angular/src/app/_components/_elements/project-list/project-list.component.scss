@@ -59,18 +59,23 @@
 }
 
 .remove-button{
+    transition: 0.25s cubic-bezier(0.455, 0.03, 0.515, 0.955);
     background-color: #c83030; 
-    color: white; 
+    border: solid 1px #7a0000;
+    color: #FFFFFF; 
     font-weight: bold;
     float: right;
-    border: none;
-    border-radius: 3px;
     
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     
     &:hover{
-        background-color: #ab2525;
+        transition: 0.25s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+        background-color: #970000;
+    }
+    
+    &:focus{
+        outline: none;
     }
 }
 

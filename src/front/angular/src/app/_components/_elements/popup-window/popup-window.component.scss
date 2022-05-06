@@ -10,15 +10,69 @@
 
     color: #FFFFFF;
 }
+.exitButton{
+    transition: 0.25s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+    
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    border: solid 2px red;
+    font-weight: bold;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-origin: center;
+    
+    
+    img{
+        transition: 0.25s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+        width: 15px;
+        height: 15px;
+        filter: saturate(100%), brightness(100%);
+        width: 14px;
+        height: 14px;
+    }
+    
+    &:hover{
+        transition: 0.25s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+        background-color: red;
+        
+        img{
+            filter: saturate(0%) brightness(1000%);
+        }
+        
+    }
+}
 .yesButton{
+    font-weight: bold;
     background: transparent;
     border: solid 2px #FF0000;
-    width:15%;
+    color: #FF0000;
+    width:30%;
+    padding: 10px 15px 10px 15px;
+    transition: 0.25s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+    
+    &:hover{
+        transition: 0.25s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+        color: #FFFFFF;
+        background-color: #FF0000;
+    }
 }
-.ноButton{
+.noButton{
+    font-weight: bold;
     color: #FFFFFF;
-    border: #FFFFFF;
-    width:15%;
+    background: transparent;
+    border: solid 2px #FFFFFF;
+    width:30%;
+    padding: 10px 15px 10px 15px;
+    transition: 0.25s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+    
+    &:hover{
+        transition: 0.25s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+        color: #193A82;
+        background-color: #FFFFFF;
+    }
 }
 
 .closeButton{

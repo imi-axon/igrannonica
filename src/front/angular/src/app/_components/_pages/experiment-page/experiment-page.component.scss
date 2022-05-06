@@ -12,6 +12,7 @@
     
     
     .titleInput{
+        width: 50%;
         margin: 0px;
         font-size: 28px;
         background: transparent;
@@ -23,6 +24,7 @@
     }
     
     #cards{
+        margin-left: 10px;
         display: flex;
         align-items: center;
         justify-content: space-around;
@@ -76,6 +78,10 @@
     
     #header{
         
+        .titleInput{
+            width: 80%;
+        }
+        
         #cards{
             display: none;
         }
@@ -91,6 +97,10 @@
 @media screen and (max-width: 850px) {
     
     #header{
+        
+        .titleInput{
+            width: 70%;
+        }
         
         #cards_dropdown{
             font-size: 16px;
@@ -108,6 +118,17 @@
         
         #cards_dropdown{
             display: inherit;
+        }
+    }
+    
+}
+
+// 500 PX ======================================
+@media screen and (max-width: 500px) {
+    
+    #header{
+        .titleInput{
+            width: 60%;
         }
     }
     
