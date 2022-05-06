@@ -2,7 +2,7 @@ svg{
         
     .neuron{
         fill: url(#blueGradient);
-        stroke: #3465aa;
+        stroke: #005ca2;
         stroke-width: 1px;
     }
     
@@ -40,7 +40,7 @@ svg{
     background: linear-gradient(60deg, #2f92ef 0%, #154a9a 100%) #1b427d;
     color: #FFFFFF;
     position: absolute;
-    border: solid 1px #2F5EA6;
+    border: none;
     cursor: pointer;
     text-align: center;
     font-size: 14px;
@@ -48,12 +48,17 @@ svg{
     width: 90px;
     height: 25px;
     
+    transition: 0.3s ease-in;
+    
     &:hover{
+        transition: 0.3s ease-out;
+        transform-origin: center;
+        
+        transform: scale(1.05);
         background: linear-gradient(60deg, #1779d5 0%, #063273 100%) #1b427d;
     }
     
     &:focus{
-        border-radius: 5px 5px 0px 0px;
         outline: none;
     }
 }
@@ -63,7 +68,7 @@ svg{
     background: linear-gradient(60deg, #2a7ecd 0%, #123f82 100%);
     color: #FFFFFF;
     position: absolute;
-    border: solid 1px #2F5EA6;
+    border: none;
     cursor: pointer;
     text-align: center;
     font-size: 12px;
@@ -72,7 +77,13 @@ svg{
     width: 100px;
     height: 35px;
     
+    transition: 0.3s ease-in;
+    
     &:hover{
+        transition: 0.3s ease-out;
+        transform-origin: center;
+        
+        transform: scale(1.05);
         background: linear-gradient(60deg, #1862a8 0%, #002760 100%);
     }
     

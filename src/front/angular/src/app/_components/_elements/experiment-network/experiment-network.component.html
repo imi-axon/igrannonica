@@ -76,7 +76,7 @@
         
         <div #networkDisplay id="networkDisplay" (mousedown)="MouseDownHandler($event)" (mouseup)="MouseUpHandler($event)" (mousemove)="MouseMoveHandler($event)" (mouseleave)="MouseUpHandler($event)">
             
-            <app-neural-network-display [parent]="this" #networkComponent></app-neural-network-display>
+            <neural-network-display [parent]="this" #networkComponent></neural-network-display>
         </div>
         
         <div id="trainingDisplay">

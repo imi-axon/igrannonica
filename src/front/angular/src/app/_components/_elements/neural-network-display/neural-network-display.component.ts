@@ -7,7 +7,7 @@ const MIN_CLAMP_OUT = 1;
 const MAX_CLAMP_OUT = 6;
 
 @Component({
-  selector: 'app-neural-network-display',
+  selector: 'neural-network-display',
   templateUrl: './neural-network-display.component.html',
   styleUrls: ['./neural-network-display.component.scss']
 })
@@ -65,8 +65,6 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   private actPerLayerCombos: any;
   private outputActivationComboDiv: any;
   
-  private editInputOutputButtons: any;
-  
   
   private Clamp(value: number): number{
     let clampedValue = Math.abs(value / 3);
@@ -74,7 +72,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
       return MIN_CLAMP_OUT;
     if (clampedValue >= MAX_CLAMP_OUT)
       return MAX_CLAMP_OUT;
-    return clampedValue;
+    return clampedValue + 1;
   }
   
   // INIT FUNCTION
@@ -418,9 +416,54 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   }
   
   
+  private RemoveLayer(layerIndex: number){
+    if(this.parent.neuralNetwork.nn.layers.length > 2){
+      
+      // If first hidden layer is going to be removed connect next to input
+      if(layerIndex == 0){
+        
+        for(let i = 0; i < this.parent.neuralNetwork.nn.layers[1].neurons.length; i++){
+          this.parent.neuralNetwork.nn.layers[1].neurons[i].weights = [];
+          for(let j = 0; j < this.parent.neuralNetwork.conf.inputs.length; j++)
+            this.parent.neuralNetwork.nn.layers[1].neurons[i].weights.push(1);
+        }
+        
+      }
+      
+      
+      // Otherwise connect previous to next / last hidden (output)
+      else
+      {
+        
+        for(let i = 0; i < this.parent.neuralNetwork.nn.layers[layerIndex + 1].neurons.length; i++){
+          this.parent.neuralNetwork.nn.layers[layerIndex + 1].neurons[i].weights = [];
+          for(let j = 0; j < this.parent.neuralNetwork.nn.layers[layerIndex - 1].neurons.length; j++)
+            this.parent.neuralNetwork.nn.layers[layerIndex + 1].neurons[i].weights.push(1)
+        }
+        
+      }
+      
+      // Remove current empty layer
+      this.parent.neuralNetwork.nn.layers.splice(layerIndex, 1);
+      
+      // Remove act from actPerLayer - in conf
+      this.parent.neuralNetwork.conf.actPerLayer.splice(layerIndex, 1);
+      
+      this.parent.neuralNetwork.conf.neuronsPerLayer.splice(layerIndex, 1);
+    }
+    
+    this.Refresh();
+  }
+  
+  
+  
+  
+  /*
   private ShowChangeInputOutputWindow(){
     this.parent.OpenChangeInputOutputWindow();
   }
+  */
+  
   
   // END OF NETWORK CONTROLS ===================================================
   
@@ -502,8 +545,6 @@ export class NeuralNetworkDisplayComponent implements OnInit {
     
     this.outputActivationComboDiv = select("#outputActivationCombo");
     
-    this.editInputOutputButtons = select("#editInputOutputButtons");
-    
   }
   
   private d3Setup(){
@@ -524,7 +565,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
     this.AddActivationCombos();
     this.AddOutputActivationCombo();
     
-    this.AddEditInputOutputButtons();
+    //this.AddEditInputOutputButtons();
   }
   
   
@@ -589,7 +630,37 @@ export class NeuralNetworkDisplayComponent implements OnInit {
         .text("Layer " + (i + 1))
         .attr("y", 30)
         .attr("x", (i + 1) * this.layerWidth + this.layerWidth / 2);
-  
+    
+    // Layer remove buttons
+    for(let i = 0; i < this.parent.neuralNetwork.nn.layers.length - 1; i++)
+      this.layers
+        .append("image")
+          .attr("href", "/assets/Images/Icons/remove_icon.svg")
+          .attr("y", 26)
+          .attr("x", (i + 1) * this.layerWidth + this.layerWidth / 2  + this.neuronWidth / 2 + 10)
+          .attr("cursor", "pointer")
+          .attr("width", 16)
+          .attr("height", 16)
+          .on("mouseenter", (event : any, d : any) => {
+            select(event.currentTarget)
+              .transition()
+                .attr("y", 25)
+                .attr("x", (i + 1) * this.layerWidth + this.layerWidth / 2  + this.neuronWidth / 2 + 9)
+                .attr("width", 18)
+                .attr("height", 18)
+          })
+          .on("mouseleave", (event : any, d : any) => {
+              select(event.currentTarget)
+                .transition()
+                  .attr("y", 26)
+                  .attr("x", (i + 1) * this.layerWidth + this.layerWidth / 2  + this.neuronWidth / 2 + 10)
+                  .attr("width", 16)
+                  .attr("height", 16)
+          })
+          .on("click", (event : any, d : any) => {
+            this.RemoveLayer(i);
+          })  
+      
   }
   
   
@@ -604,6 +675,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
         .classed("neuron", true)
         .attr("cy", (d: any, i: number) => {return i * this.neuronOffsetY + this.displayTopPadding + this.calculateCurrentYOffset(this.parent.neuralNetwork.conf.inputs.length)})
         .attr("cx", this.layerWidth / 2)
+        .attr("r", this.neuronWidth / 2)
         .attr("cursor", "pointer")
         
         .on("mouseenter", (event : any, d : any) => {
@@ -623,9 +695,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
           this.RemoveInputClick(d);
         })
         */
-        .transition()
-        .duration(50)
-          .attr("r", this.neuronWidth / 2)
+          
       
     this.inputNeurons.selectAll("text")
       .data(this.parent.neuralNetwork.conf.inputs)
@@ -648,6 +718,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
           .classed("neuron", true)
           .attr("cy", this.displayTopPadding + j * this.neuronOffsetY + this.calculateCurrentYOffset(this.parent.neuralNetwork.nn.layers[i].neurons.length) )
           .attr("cx", (i + 1) * this.layerWidth + this.layerWidth / 2 )
+          .attr("r", this.neuronWidth / 2)
           .attr("cursor", "pointer")
           .on("mouseenter", (event : any, d : any) => {
               select(event.currentTarget)
@@ -661,12 +732,38 @@ export class NeuralNetworkDisplayComponent implements OnInit {
                   .duration(250)
                   .attr("r", (this.neuronWidth / 2))
           })
+          
+    
+    for(let i = 0; i < this.parent.neuralNetwork.nn.layers.length - 1; i++)
+      for(let j = 0; j < this.parent.neuralNetwork.nn.layers[i].neurons.length; j++)
+        this.neurons
+          .append("image")
+          .attr("href", "/assets/Images/Icons/remove_icon.svg")
+          .attr("y", this.displayTopPadding + j * this.neuronOffsetY + this.calculateCurrentYOffset(this.parent.neuralNetwork.nn.layers[i].neurons.length) - this.neuronWidth / 2 - 14)
+          .attr("x", (i + 1) * this.layerWidth + this.layerWidth / 2  + this.neuronWidth / 2 - 8)
+          .attr("cursor", "pointer")
+          .attr("width", 20)
+          .attr("height", 20)
+          .on("mouseenter", (event : any, d : any) => {
+            select(event.currentTarget)
+              .transition()
+                .attr("y", this.displayTopPadding + j * this.neuronOffsetY + this.calculateCurrentYOffset(this.parent.neuralNetwork.nn.layers[i].neurons.length) - this.neuronWidth / 2 - 16)
+                .attr("x", (i + 1) * this.layerWidth + this.layerWidth / 2  + this.neuronWidth / 2 - 10)
+                .attr("width", 24)
+                .attr("height", 24)
+          })
+          .on("mouseleave", (event : any, d : any) => {
+              select(event.currentTarget)
+                .transition()
+                  .attr("y", this.displayTopPadding + j * this.neuronOffsetY + this.calculateCurrentYOffset(this.parent.neuralNetwork.nn.layers[i].neurons.length) - this.neuronWidth / 2 - 14)
+                  .attr("x", (i + 1) * this.layerWidth + this.layerWidth / 2  + this.neuronWidth / 2 - 8)
+                  .attr("width", 20)
+                  .attr("height", 20)
+          })
           .on("click", (event : any, d : any) => {
             this.RemoveHiddenClick(i, j);
           })  
-          .transition()
-          .duration(250)
-            .attr("r", this.neuronWidth / 2)
+    
             
   }
   
@@ -679,6 +776,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
         .classed("neuron", true)
         .attr("cy", (d: any, i: number) => {return i * this.neuronOffsetY + this.displayTopPadding + this.calculateCurrentYOffset(this.parent.neuralNetwork.conf.outputs.length)})
         .attr("cx", (this.parent.neuralNetwork.nn.layers.length) * this.layerWidth + (this.layerWidth / 2))
+        .attr("r", this.neuronWidth / 2)
         .attr("cursor", "pointer")
         
         .on("mouseenter", (event : any, d : any) => {
@@ -698,10 +796,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
           this.RemoveOutputClick(d);
         })  
         */
-        
-        .transition()
-        .duration(500)
-          .attr("r", this.neuronWidth / 2)
+          
       
     this.outputNeurons.selectAll("text")
       .data(this.parent.neuralNetwork.conf.outputs)
@@ -739,13 +834,27 @@ export class NeuralNetworkDisplayComponent implements OnInit {
               
             })
             .style('fill', 'none')
-            .style('stroke', () => { if (this.parent.neuralNetwork.nn.layers[i].neurons[j].weights[k] >= 0) { return "#113A69"; } else { return "#A10000"; }})
+            //.style('stroke', () => { if (this.parent.neuralNetwork.nn.layers[i].neurons[j].weights[k] >= 0) { return "#113A69"; } else { return "#A10000"; }})
+            .style('stroke', () => { return "#113A69"; })
             .attr('cursor', "pointer")
             .attr("stroke-linecap", "round") 
             
             .on("click", (event : any) => {
               this.ShowWeightChangeInput(event, i, j, k);
-            })   
+            })  
+            
+            .on("mouseenter", (event : any) => {
+              select(event.currentTarget)
+                .transition()
+                  .duration(50)
+                  .attr("stroke-width", () => { return this.Clamp(this.parent.neuralNetwork.nn.layers[i].neurons[j].weights[k]) + 3;})
+            })
+            .on("mouseleave", (event : any) => {
+              select(event.currentTarget)
+                .transition()
+                  .duration(50)
+                  .attr("stroke-width", () => { return this.Clamp(this.parent.neuralNetwork.nn.layers[i].neurons[j].weights[k]); })
+            })
             
             .transition()
               .duration(500)
@@ -776,13 +885,27 @@ export class NeuralNetworkDisplayComponent implements OnInit {
             
           })
           .style('fill', 'none')
-          .style('stroke', () => { if (this.parent.neuralNetwork.nn.layers[0].neurons[i].weights[j] >= 0) { return "#113A69"; } else { return "#A10000"; }})
+          //.style('stroke', () => { if (this.parent.neuralNetwork.nn.layers[0].neurons[i].weights[j] >= 0) { return "#113A69"; } else { return "#A10000"; }})
+          .style('stroke', () => { return "#113A69"; })
           .attr('cursor', "pointer")
           .attr("stroke-linecap", "round") 
           
           .on("click", (event : any) => {
             this.ShowWeightChangeInput(event, 0, i, j);
-          })  
+          })
+          
+          .on("mouseenter", (event : any) => {
+            select(event.currentTarget)
+              .transition()
+                .duration(50)
+                .attr("stroke-width", () => { return this.Clamp(this.parent.neuralNetwork.nn.layers[0].neurons[i].weights[j]) + 3;})
+          })
+          .on("mouseleave", (event : any) => {
+            select(event.currentTarget)
+              .transition()
+                .duration(50)
+                .attr("stroke-width", () => { return this.Clamp(this.parent.neuralNetwork.nn.layers[0].neurons[i].weights[j]); })
+          })
           
           .transition()
             .duration(500)
@@ -812,13 +935,27 @@ export class NeuralNetworkDisplayComponent implements OnInit {
             
           })
           .style('fill', 'none')
-          .style('stroke', () => { if (this.parent.neuralNetwork.nn.layers[layerCount - 1].neurons[i].weights[j] >= 0) { return "#113A69"; } else { return "#A10000"; }})
+          //.style('stroke', () => { if (this.parent.neuralNetwork.nn.layers[layerCount - 1].neurons[i].weights[j] >= 0) { return "#113A69"; } else { return "#A10000"; }})
+          .style('stroke', () => { return "#113A69"; })
           .attr('cursor', "pointer")
           .attr("stroke-linecap", "round") 
           
           .on("click", (event : any) => {
             this.ShowWeightChangeInput(event, layerCount - 1, i, j);
-          })  
+          })
+          
+          .on("mouseenter", (event : any) => {
+            select(event.currentTarget)
+              .transition()
+                .duration(50)
+                .attr("stroke-width", () => { return this.Clamp(this.parent.neuralNetwork.nn.layers[layerCount - 1].neurons[i].weights[j]) + 3;})
+          })
+          .on("mouseleave", (event : any) => {
+            select(event.currentTarget)
+              .transition()
+                .duration(50)
+                .attr("stroke-width", () => { return this.Clamp(this.parent.neuralNetwork.nn.layers[layerCount - 1].neurons[i].weights[j]); })
+          })
           
           .transition()
             .duration(500)
@@ -831,25 +968,32 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   private AddNeuronButtons(){
     for(let i = 0; i < this.parent.neuralNetwork.nn.layers.length - 1; i++)
     this.addNeuronButtons
-      .append("circle")
+      .append("image")
       .classed("addNeuronButton", true)
-      .attr("cy", this.displayTopPadding + this.parent.neuralNetwork.nn.layers[i].neurons.length * this.neuronOffsetY + this.calculateCurrentYOffset(this.parent.neuralNetwork.nn.layers[i].neurons.length) )
-      .attr("cx", (i + 1) * this.layerWidth + this.layerWidth / 2 )
+      .attr("width", 50)
+      .attr("height", 50)
+      .attr("y", this.displayTopPadding + this.parent.neuralNetwork.nn.layers[i].neurons.length * this.neuronOffsetY + this.calculateCurrentYOffset(this.parent.neuralNetwork.nn.layers[i].neurons.length) - this.neuronWidth / 2)
+      .attr("x", (i + 1) * this.layerWidth + this.layerWidth / 2 - this.neuronWidth / 2)
+      .attr("href", "/assets/Images/Icons/addNeuron_icon.svg")
       .attr("cursor", "pointer")
       
       .on("mouseenter", (event : any, d : any) => {
         select(event.currentTarget)
             .transition()
             .duration(250)
-            .attr("stroke-dashoffset", 30)
-            .attr("r", (this.neuronWidth / 2) + 2)
+            .attr("y", this.displayTopPadding + this.parent.neuralNetwork.nn.layers[i].neurons.length * this.neuronOffsetY + this.calculateCurrentYOffset(this.parent.neuralNetwork.nn.layers[i].neurons.length) - this.neuronWidth / 2 - 3)
+            .attr("x", (i + 1) * this.layerWidth + this.layerWidth / 2 - this.neuronWidth / 2 - 3)
+            .attr("width", 56)
+            .attr("height", 56)
       })
       .on("mouseout", (event : any, d : any) => {
           select(event.currentTarget)
               .transition()
               .duration(250)
-              .attr("stroke-dashoffset", 0)
-              .attr("r", (this.neuronWidth / 2))
+              .attr("y", this.displayTopPadding + this.parent.neuralNetwork.nn.layers[i].neurons.length * this.neuronOffsetY + this.calculateCurrentYOffset(this.parent.neuralNetwork.nn.layers[i].neurons.length) - this.neuronWidth / 2 )
+              .attr("x", (i + 1) * this.layerWidth + this.layerWidth / 2 - this.neuronWidth / 2 )
+              .attr("width", 50)
+              .attr("height", 50)
       })
       .on("click", (event : any, d : any) => {
         this.AddNeuronToLayer(i);
@@ -934,6 +1078,8 @@ export class NeuralNetworkDisplayComponent implements OnInit {
  }
   
  
+ 
+ /*
  private AddEditInputOutputButtons(){
    this.editInputOutputButtons
     .append("button")
@@ -951,7 +1097,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
     .style("left", () => { return ( (this.parent.neuralNetwork.nn.layers.length * this.layerWidth) + this.layerWidth / 2 - 50) + "px"})
     .on("click", () => { this.ShowChangeInputOutputWindow() });
  }
-  
+  */
   
  
  
