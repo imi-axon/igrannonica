@@ -86,6 +86,26 @@ namespace BackApi
             return result;
         }
 
+        public static async Task<HttpResponseMessage> StopTraining(int userid,int nnid)
+        {
+            HttpClient client = new HttpClient();
+            var result = await client.GetAsync(Urls.mlWs + "/api/user" + userid + "/nn" + nnid + "/stop");
+
+            return result;
+        }
+        public static async Task<HttpResponseMessage> PasiveTraining(int userid, int nnid,ApiNNTrain req)
+        {
+            HttpClient client = new HttpClient();
+
+            var myContent = JsonConvert.SerializeObject(req);
+            var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+            var byteContent = new ByteArrayContent(buffer);
+            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            var result = await client.PostAsync(Urls.ml + "/api/user" + userid + "/nn" + nnid + "/pasive", byteContent);
+
+            return result;
+        }
+
         /*public static async Task<dynamic> getRequest(string tekst)
         {
             Debug.WriteLine(tekst);

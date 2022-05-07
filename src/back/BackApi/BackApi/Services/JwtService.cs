@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using BackApi.Entities;
 using Microsoft.AspNetCore.Http;
 
 namespace BackApi.Services
@@ -10,8 +11,12 @@ namespace BackApi.Services
     public class JwtService: IJwtService
     {
         private readonly IHttpContextAccessor httpContext;
-        public JwtService(IHttpContextAccessor httpContextAccessor)
+        private DataBaseContext kontext;
+        private readonly IConfiguration configuration;
+        public JwtService(IHttpContextAccessor httpContextAccessor, DataBaseContext datasetContext, IConfiguration configuration)
         {
+            this.kontext = datasetContext;
+            this.configuration = configuration;
             this.httpContext = httpContextAccessor;
         }
         public int GetUserId()
@@ -20,6 +25,9 @@ namespace BackApi.Services
             if (httpContext.HttpContext.User.FindFirstValue("id") != null)
             {
                 rez = int.Parse(httpContext.HttpContext.User.FindFirstValue("id"));
+                var dbid=kontext.Users.Find(rez);
+                if (dbid == null)
+                    rez = -1;
             }
             return rez;
         }

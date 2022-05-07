@@ -38,7 +38,7 @@ namespace BackApi.Services
 
         public async Task<Boolean> MlTraining(WebSocket webSocket,ApiNNTrain packet,WebSocket webSocketMl)
         {
-            //prosledjivanje pocetne konfiguracije ml delu, za pocetak treniranja se "ceka play"
+            //prosledjivanje pocetne konfiguracije ml delu
             var buffer = new byte[1024 * 4];
             var fromFrontconf = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
             packet.newconf = Encoding.UTF8.GetString(buffer, 0, fromFrontconf.Count);
@@ -61,17 +61,17 @@ namespace BackApi.Services
                 for (int i = 0; i < epnum; i++)
                 {
                     resultml = await webSocketMl.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                    var tmp = Encoding.UTF8.GetString(buffer, 0, resultml.Count);
-                    var toFronttrain = Encoding.UTF8.GetBytes(tmp);
-                    await webSocket.SendAsync(new ArraySegment<byte>(toFronttrain, 0, tmp.Length), resultml.MessageType, resultml.EndOfMessage, CancellationToken.None);
+                    var tmpprev = Encoding.UTF8.GetString(buffer, 0, resultml.Count);
+                    var toFronttrainprev = Encoding.UTF8.GetBytes(tmpprev);
+                    await webSocket.SendAsync(new ArraySegment<byte>(toFronttrainprev, 0, tmpprev.Length), resultml.MessageType, resultml.EndOfMessage, CancellationToken.None);
                 }
                 
-                var fromFronttrain = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                /*var fromFronttrain = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                 var playstop = Encoding.UTF8.GetString(buffer, 0, fromFronttrain.Count);
-                while (playstop == "\"play\"")//sve dok sa fronta stize "play" salju im se rezultati sledece epohe
-                {
-                    var toMLtrain= Encoding.UTF8.GetBytes(playstop);
-                    await webSocketMl.SendAsync(new ArraySegment<byte>(toMLtrain, 0, playstop.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+                while (playstop == "\"play\"")*///sve dok sa fronta stize "play" salju im se rezultati sledece epohe
+                //{
+                    /*var toMLtrain= Encoding.UTF8.GetBytes(playstop);
+                    await webSocketMl.SendAsync(new ArraySegment<byte>(toMLtrain, 0, playstop.Length), WebSocketMessageType.Text, true, CancellationToken.None);*/
                     resultml = await webSocketMl.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                     var tmp = Encoding.UTF8.GetString(buffer, 0, resultml.Count);
                     if(tmp == "end") //ako se trening zavrsio do kraja bez stop, posalji json mreze i zatvori sockete
@@ -89,10 +89,10 @@ namespace BackApi.Services
                     await webSocket.SendAsync(new ArraySegment<byte>(toFronttrain, 0, tmp.Length), resultml.MessageType, resultml.EndOfMessage, CancellationToken.None);
 
 
-                    fromFronttrain = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                    playstop = Encoding.UTF8.GetString(buffer, 0, fromFronttrain.Count);
-                }
-                if (playstop == "stop")//kad sa fronta stigne stop, zaustavlja se treniranje, i salje se json mreze i zatvaraju se socketi
+                    /*fromFronttrain = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                    playstop = Encoding.UTF8.GetString(buffer, 0, fromFronttrain.Count);*/
+                //}
+                /*if (playstop == "stop")//kad sa fronta stigne stop, zaustavlja se treniranje, i salje se json mreze i zatvaraju se socketi
                 {
                     var toMLtrain = Encoding.UTF8.GetBytes(playstop);
                     await webSocketMl.SendAsync(new ArraySegment<byte>(toMLtrain, 0, playstop.Length), WebSocketMessageType.Text, true, CancellationToken.None);
@@ -104,7 +104,7 @@ namespace BackApi.Services
                     await webSocketMl.CloseAsync(WebSocketCloseStatus.NormalClosure, "Client stopped training", CancellationToken.None);
                     await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Client stopped training", CancellationToken.None);
                     return true;
-                }
+                }*/
                     
             }
             await webSocketMl.CloseAsync(WebSocketCloseStatus.NormalClosure, "Client closing w handshake", CancellationToken.None);
