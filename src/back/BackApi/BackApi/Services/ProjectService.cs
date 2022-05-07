@@ -10,6 +10,8 @@ namespace BackApi.Services
         string CreateProject(int userid);
         Boolean DeleteProject(int projid,int userid);
         string ListProjects(int userid,int pubuserid);
+        string PageProject(int userid, int page, int number);
+        string PagePublicProject(int page, int number);
         string ListPublicProjects();
         string GetProjById(int projid, int userid);
         string GetUserByProj(int projid, out bool ind);
@@ -134,6 +136,100 @@ namespace BackApi.Services
             return rez.ToString();
         }
 
+        public string PageProject(int userid, int page, int number)
+        {
+            var rez = new StringBuilder();
+            
+            List<Project> projects = context.Projects.Where(x => x.UserId == userid).ToList();
+            if (projects == null)
+                return "project";
+            rez.Append("{\"Projekti\": ");
+            rez.Append("\"");
+            rez.Append("[");
+            for (int i = (page-1)*number; i < (page - 1) * number + number; i++)
+            {
+                if (i >= projects.Count)
+                    break;
+                rez.Append("{");
+                rez.Append("\"" + "ProjectId" + "\":" + "\"" + projects[i].ProjectId + "\",");
+                rez.Append("\"" + "Name" + "\":" + "\"" + projects[i].Name + "\",");
+                rez.Append("\"" + "Public" + "\":" + "\"" + projects[i].Public + "\",");
+                rez.Append("\"" + "Creationdate" + "\":" + "\"" + projects[i].CreationDate + "\",");
+                var pom = context.Datasets.FirstOrDefault(x => x.ProjectId == projects[i].ProjectId);
+                if (pom != null)
+                    rez.Append("\"" + "hasDataset" + "\":" + "\"" + "true" + "\",");
+                else
+                    rez.Append("\"" + "hasDataset" + "\":" + "\"" + "false" + "\",");
+                rez.Append("\"" + "Description" + "\":" + "\"" + projects[i].Description + "\"");
+                rez.Append("},");
+            }
+            if (rez[rez.Length-1] == ',') rez.Remove(rez.Length - 1, 1);
+            rez.Append("]\",");
+            int stranice = projects.Count / number;
+            if (projects.Count % number > 0)
+                stranice = stranice + 1;
+            rez.Append("\"Stranice\" :" + "\"" + stranice + "\"}");
+            Debug.WriteLine(stranice);
+            return rez.ToString();
+        }
+        public string PagePublicProject(int page, int number)
+        {
+            var rez = new StringBuilder();
+
+            List<Project> projects = context.Projects.Where(x => x.Public == true).ToList();
+            if (projects == null)
+                return "project";
+            rez.Append("{\"Projekti\": ");
+            rez.Append("\"");
+            rez.Append("[");
+            for (int i = (page - 1) * number; i < (page - 1) * number + number; i++)
+            {
+                if (i >= projects.Count)
+                    break;
+                var user = context.Users.Find(projects[i].UserId);
+                rez.Append("[{");
+                rez.Append("\"" + "ProjectId" + "\":" + "\"" + projects[i].ProjectId + "\",");
+                rez.Append("\"" + "Name" + "\":" + "\"" + projects[i].Name + "\",");
+                rez.Append("\"" + "Public" + "\":" + "\"" + projects[i].Public + "\",");
+                rez.Append("\"" + "Creationdate" + "\":" + "\"" + projects[i].CreationDate + "\",");
+                var pom = context.Datasets.FirstOrDefault(x => x.ProjectId == projects[i].ProjectId);
+                if (pom != null)
+                    rez.Append("\"" + "hasDataset" + "\":" + "\"" + "true" + "\",");
+                else
+                    rez.Append("\"" + "hasDataset" + "\":" + "\"" + "false" + "\",");
+                rez.Append("\"" + "Description" + "\":" + "\"" + projects[i].Description + "\"");
+                rez.Append("},");
+
+                if (user != null)
+                {
+                    string photopath = user.PhotoPath;
+                    if (photopath == "" || photopath == null)
+                        photopath = Path.Combine("Storage", "profilna.png");
+
+                    //string b = System.IO.File.ReadAllText(photopath);
+
+                    byte[] imageArray = System.IO.File.ReadAllBytes(photopath);
+                    string slikaBase64 = Convert.ToBase64String(imageArray);
+
+                    rez.Append("{");
+                    rez.Append("\"" + "UseId" + "\":" + "\"" + user.UserId + "\",");
+                    rez.Append("\"" + "Name" + "\":" + "\"" + user.Name + "\",");
+                    rez.Append("\"" + "Lastname" + "\":" + "\"" + user.Lastname + "\",");
+                    rez.Append("\"" + "Username" + "\":" + "\"" + user.Username + "\",");
+                    rez.Append("\"" + "Email" + "\":" + "\"" + user.Email + "\",");
+                    rez.Append("\"" + "Photo" + "\":" + "\"data:image/jpeg;base64," + slikaBase64 + "\"");
+                    rez.Append("}],");
+                }
+            }
+            if (rez[rez.Length - 1] == ',') rez.Remove(rez.Length - 1, 1);
+            rez.Append("]\",");
+            int stranice = projects.Count / number;
+            if (projects.Count % number > 0)
+                stranice = stranice + 1;
+            rez.Append("\"Stranice\" :" + "\"" + stranice + "\"}");
+            Debug.WriteLine(stranice);
+            return rez.ToString();
+        }
         public string ListPublicProjects()
         {
             var rez = new StringBuilder();

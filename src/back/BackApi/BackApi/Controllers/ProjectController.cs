@@ -99,6 +99,21 @@ namespace BackApi.Controllers
             else return NotFound();
         }
 
+        [HttpGet("private/pagging/{page}/{number}")]
+        public async Task<ActionResult<string>> PagingProj(int page, int number)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized("Ulogujte se");
+            var rez = service.PageProject(userid, page, number);
+            return rez;
+        }
+
+        [HttpGet("public/pagging/{page}/{number}")]
+        public async Task<ActionResult<string>> PagingPublicProj(int page, int number)
+        {
+            var rez = service.PagePublicProject(page, number);
+            return rez;
+        }
         [HttpPut("{projid}")]
         public async Task<ActionResult<string>> EditProject(int projid,ProjectEdit req)
         {
