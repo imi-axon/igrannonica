@@ -39,10 +39,15 @@ export class ExperimentPageComponent implements OnInit {
   
   ngOnInit(): void {
     this.checkProjectId();
-    this.projectsService.getProject(this.projectId, this, this.handleSuccesfulGetProjectCallback);
+    
+    this.RefreshProject();
     
     if(this.activatedRoute.children[0].snapshot.routeConfig?.path)
       this.currentCard = this.activatedRoute.children[0].snapshot.routeConfig?.path;
+  }
+  
+  public RefreshProject(){
+    this.projectsService.getProject(this.projectId, this, this.handleSuccesfulGetProjectCallback);
   }
   
   
@@ -50,6 +55,7 @@ export class ExperimentPageComponent implements OnInit {
     
     // TRENUTNA KARTICA JE OVERVIEW
     if(component instanceof ExperimentOverviewComponent){
+      
       this.overviewComponent = component;
       
       this.overviewComponent.EditExperimentEvent.subscribe( (edits: any) => this.ChangeExperiment(edits) );
@@ -98,11 +104,17 @@ export class ExperimentPageComponent implements OnInit {
   
   // SWITCH ===================================================================================
   public SwitchCard(cardName: string){
+    if(this.project.hasDataset.toString() == "False")
+      return;
+      
     this.currentCard = cardName;
     this.router.navigate([this.currentCard],{relativeTo:this.activatedRoute});
   }
   
   public SwitchCardCombo(comboEvent: any){
+    if(this.project.hasDataset.toString() == "False")
+      return;
+    
     this.currentCard = comboEvent.currentTarget.value;
     this.router.navigate([this.currentCard],{relativeTo:this.activatedRoute});
   }

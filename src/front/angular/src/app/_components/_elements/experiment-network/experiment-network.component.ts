@@ -53,37 +53,7 @@ export class ExperimentNetworkComponent implements OnInit {
           ]
         },
         
-        // LAYER 2 - 3 NEURONA
-        {
-          "neurons": [
-            {
-              "weights": [
-                -1.38,
-                1.6,
-                -5.7
-              ],
-              "bias": 3.11
-            },
-            {
-              "weights": [
-                -1.11,
-                5.8,
-                7.35
-              ],
-              "bias": 1.2
-            },
-            {
-              "weights": [
-                2.13,
-                1.3,
-                4.37
-              ],
-              "bias": 1.2
-            }
-          ]
-        },
-        
-        // LAYER 3 - 2 NEURONA
+        // LAYER 2 - 2 NEURONA
         {
           "neurons": [
             {
@@ -131,9 +101,9 @@ export class ExperimentNetworkComponent implements OnInit {
       "inputs": ["A INPUT", "B INPUT", "C INPUT"],
       "outputs": ["Z OUTPUT", "Y OUTPUT"],
       
-      "neuronsPerLayer": [3, 3, 2],
+      "neuronsPerLayer": [3, 2, 2],
       
-      "actPerLayer": ["Linear", "Sigmoid", "Tahn"],
+      "actPerLayer": ["Linear", "Sigmoid"],
       "actOut": "ReLU",
       
       "learningRate": 0.03,

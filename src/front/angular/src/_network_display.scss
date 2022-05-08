@@ -48,13 +48,13 @@ svg{
     width: 90px;
     height: 25px;
     
-    transition: 0.3s ease-in;
+    transition: 0.5s ease-in;
     
     &:hover{
-        transition: 0.3s ease-out;
+        transition: 0.5s ease-out;
         transform-origin: center;
         
-        transform: scale(1.05);
+        transform: scale(1.03);
         background: linear-gradient(60deg, #1779d5 0%, #063273 100%) #1b427d;
     }
     
