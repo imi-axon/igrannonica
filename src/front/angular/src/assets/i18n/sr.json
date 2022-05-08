@@ -41,7 +41,7 @@
         "dugme":"Ulogujte se",
         "forgot1":"Zavboravili ste lozinku?",
         "forgot2":"Promenite je",
-        "login-greska":"Pogresni podaci ili korisnik nije verifikovan!"
+        "login-greska":"Pogrešni podaci ili korisnik nije verifikovan!"
     },
     "csv":{
         "format":"Uneti fajl mora biti u .csv formatu!",
@@ -78,7 +78,7 @@
         "dodajFajl": "Dodaj Fajl",
         "klikniIliPrevuci": "Kliknite ili prevucite fajl ovde",
         "nemaFajla": "Fajl nije pronadjen!",
-        "pogresanTipFajla": "Fajl je pogresnog tipa!",
+        "pogresanTipFajla": "Fajl je pogrešnog tipa!",
         "prazanFajl": "Fajl je prazan!"
     },
     
@@ -114,8 +114,7 @@
     
     "experiment":{
         "pregled": "Pregled",
-        "dataset": "Dataset",
-        "statistika": "Statistika",
+        "edit": "Podešavanja",
         "mreza": "Mreža",
         "opis": "Opis",
         "kreiran": "Kreiran",
@@ -141,7 +140,7 @@
         "naslov2":"Meteorološka analiza V1"
     },
     "data-set-options":{
-        "save":"Sacuvaj",
+        "save":"Sačuvaj",
         "discard":"Odbaci",
         "download":"Preuzmi"
     },
@@ -162,9 +161,9 @@
         "e-mail": "E-mail",
         "rodjen": "Rodjen",
         "pol": "Pol",
-        "muski": "Muski",
-        "zenski": "Zenski",
-        "korisnickiOpis": "Korisnicki opis"
+        "muski": "Muški",
+        "zenski": "Ženski",
+        "korisnickiOpis": "Korisnički opis"
     },
     "registration-successful":{
         "uspeh":"Uspešna registracija",
@@ -193,7 +192,7 @@
         "title1":"Izmenite profil",
         "pass1":"Lozinka",
         "submit1":"Izmeni",
-        "title2":"Izmenite email",
+        "title2":"Izmenite e-mail",
         "pass2":"Lozinka",
         "submit2":"Izmeni",
         "title3":"Izmenite lozinku",

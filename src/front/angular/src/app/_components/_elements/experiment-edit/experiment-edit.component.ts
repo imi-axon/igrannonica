@@ -5,15 +5,27 @@ import { CorrelationTableComponent } from '../correlation-table/correlation-tabl
 import { DataSetTableComponent } from '../data-set-table/data-set-table.component';
 
 @Component({
-  selector: 'app-experiment-statistics',
-  templateUrl: './experiment-statistics.component.html',
-  styleUrls: ['./experiment-statistics.component.scss']
+  selector: 'app-experiment-edit',
+  templateUrl: './experiment-edit.component.html',
+  styleUrls: ['./experiment-edit.component.scss']
 })
-export class ExperimentStatisticsComponent implements OnInit {
+export class ExperimentEditComponent implements OnInit {
   constructor( 
     private activatedRoute : ActivatedRoute,
     private statisticsService: StatisticsService
   ) { }
+  
+  
+  // KOMPONENTE ===============================================
+  
+  @ViewChild("correlationComponent")
+  private correlationComponent: CorrelationTableComponent;
+  
+  @ViewChild("statisticsComponent")
+  private statisticsComponent: DataSetTableComponent;
+  
+  // KRAJ KOMPONENTI ==========================================
+  
   
   private getProjectId(): number{
     let p = this.activatedRoute.parent?.snapshot.paramMap.get("ProjectId");
@@ -22,17 +34,20 @@ export class ExperimentStatisticsComponent implements OnInit {
     return -1;
   }
   
-  @ViewChild("correlationComponent")
-  private correlationComponent: CorrelationTableComponent;
-  
-  @ViewChild("statisticsComponent")
-  private statisticsComponent: DataSetTableComponent;
-  
-
   ngOnInit(): void {
     this.statisticsService.GetStatistics(this.getProjectId(), true, this, this.handleStatisticsGetSuccess);
   }
   
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  // STATISTIKA =============================================================================================
   
   private handleStatisticsGetSuccess(self: any, response: any){
     let statistics = JSON.parse(response.statistics);
@@ -46,6 +61,7 @@ export class ExperimentStatisticsComponent implements OnInit {
     
     self.statisticsComponent.LoadStatisticsData(columnStats, colnulls);
   }
+  
   
   public parseCorrelationData(columns: string[], cormat: number[]){
     
@@ -74,4 +90,6 @@ export class ExperimentStatisticsComponent implements OnInit {
     return parsedMatrix;
   }
   
+  // KRAJ STATISTIKE ========================================================================================
+
 }

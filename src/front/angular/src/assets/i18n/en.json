@@ -115,8 +115,7 @@
     
     "experiment":{
         "pregled": "Overview",
-        "statistika": "Statistics",
-        "dataset": "Dataset",
+        "edit": "Edit",
         "mreza": "Network",
         "opis": "Description",
         "kreiran": "Created on",

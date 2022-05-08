@@ -28,8 +28,8 @@
     </div>
 
     <div id="jump_section">
-        <button [class.disabled]="pageCount <= 1 || this.pageInput == undefined || this.pageInput > this.pageCount || this.pageInput == this.currentPage" 
-                [disabled]="pageCount <= 1 || this.pageInput == undefined || this.pageInput > this.pageCount || this.pageInput == this.currentPage" 
+        <button [class.disabled]="pageCount <= 1 || this.pageInput == undefined || this.pageInput > this.pageCount || this.pageInput == this.currentPage || this.pageInput < 1" 
+                [disabled]="pageCount <= 1 || this.pageInput == undefined || this.pageInput > this.pageCount || this.pageInput == this.currentPage || this.pageInput < 1" 
                 (click)="GoToPage();">
                     {{'data-set-table.jump'|translate}}
         </button>
