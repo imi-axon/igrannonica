@@ -74,6 +74,7 @@ import { PopupWindowComponent } from './_components/_elements/popup-window/popup
 import {MatDialogModule} from '@angular/material/dialog';
 import { StatisticsTableComponent } from './_components/_elements/statistics-table/statistics-table.component';
 import { FallingStarParticleComponent } from './_components/_elements/falling-star-particle/falling-star-particle.component';
+import { ThemeComponent } from './_components/_elements/theme/theme.component';
 
 
 @NgModule({
@@ -137,7 +138,8 @@ import { FallingStarParticleComponent } from './_components/_elements/falling-st
     PageControlsComponent,
     PopupWindowComponent,
     StatisticsTableComponent,
-    FallingStarParticleComponent
+    FallingStarParticleComponent,
+    ThemeComponent
   ],
   imports: [
     NgxCsvParserModule,

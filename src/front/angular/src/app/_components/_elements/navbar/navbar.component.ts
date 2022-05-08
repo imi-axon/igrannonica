@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
-import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
 import { AuthService } from 'src/app/_utilities/_services/auth.service';
 import { UserService } from 'src/app/_utilities/_services/user.service';
 import { AppComponent } from 'src/app/app.component';
@@ -17,10 +15,8 @@ export class NavbarComponent implements OnInit {
 
 
   constructor(
-    private router: Router,
     public auth: AuthService,
     private userService: UserService,
-    private appComp:AppComponent
   ) { }
 
   ngOnInit(): void {
@@ -38,8 +34,6 @@ export class NavbarComponent implements OnInit {
     this.auth.logout();
   }
 
-  switchTheme() {
-this.appComp.switchTheme();
-  }
+
 
 }
