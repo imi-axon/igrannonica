@@ -217,6 +217,8 @@
     "popup-window":{
         "dataset":"Da li ste sigurni da želite da izbrišete ovaj skup podataka?",
         "project":"Da li ste sigurni da želite da izbrišete ovaj projekat?",
+        "neuron":"Da li ste sigurni da želite da izbrišete ovaj neuron?",
+        "sloj":"Da li ste sigurni da želite da izbrišete ovaj sloj?",
         "opomena":"Ova akcija je nepovratna!",
         "da":"Da",
         "ne":"Ne"

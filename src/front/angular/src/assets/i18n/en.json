@@ -215,6 +215,8 @@
 "popup-window":{
     "dataset":"Are you sure you want to remove this dataset?",
     "project":"Are you sure you want to remove this project?",
+    "neuron":"Are you sure you want to remove this neuron?",
+    "sloj":"Are you sure you want to remove this layer?",
     "opomena":"This action is irreversible!",
     "da":"Yes",
     "ne":"No"

@@ -1,7 +1,10 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { TranslateService } from '@ngx-translate/core';
 import { select } from 'd3';
 import { fromEvent, Subscription } from 'rxjs';
 import { ExperimentNetworkComponent } from '../experiment-network/experiment-network.component';
+import { PopupWindowComponent } from '../popup-window/popup-window.component';
 
 const MIN_CLAMP_OUT = 1;
 const MAX_CLAMP_OUT = 6;
@@ -12,7 +15,7 @@ const MAX_CLAMP_OUT = 6;
   styleUrls: ['./neural-network-display.component.scss']
 })
 export class NeuralNetworkDisplayComponent implements OnInit {
-  constructor() { }
+  constructor(private translate:TranslateService,  private dialog: MatDialog,) { }
   private subscription: Subscription;
     
   @ViewChild("container")
@@ -29,6 +32,11 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   private weightInputShown: boolean = false;
   private weightInputId: string = "weightInput";
   private weightToChange: any = { "layerIndex": -1, "neuronIndex": -1, "weightIndex": -1 }
+
+  //popup poruka
+  porukaPopupNeuron: String = "";
+  porukaPopupLayer: String = "";
+
   
   
   // Parametri
@@ -658,7 +666,17 @@ export class NeuralNetworkDisplayComponent implements OnInit {
                   .attr("height", 16)
           })
           .on("click", (event : any, d : any) => {
-            this.RemoveLayer(i);
+            this.porukaPopupLayer = this.translate.instant("popup-window.sloj");
+            let dialogRef = this.dialog.open(PopupWindowComponent, { data: { poruka: this.porukaPopupLayer } });
+            dialogRef.afterClosed().subscribe(result => {
+              console.log(`Dialog res: ${result}`);
+              if(result=='yes') 
+              {
+                console.log(result);
+                this.RemoveLayer(i);
+              }
+            });
+       
           })  
       
   }
@@ -761,7 +779,17 @@ export class NeuralNetworkDisplayComponent implements OnInit {
                   .attr("height", 20)
           })
           .on("click", (event : any, d : any) => {
-            this.RemoveHiddenClick(i, j);
+            this.porukaPopupNeuron = this.translate.instant("popup-window.neuron");
+            let dialogRef = this.dialog.open(PopupWindowComponent, { data: { poruka: this.porukaPopupNeuron } });
+            dialogRef.afterClosed().subscribe(result => {
+              console.log(`Dialog res: ${result}`);
+              if(result=='yes') 
+              {
+                console.log(result);
+                this.RemoveHiddenClick(i, j);
+              }
+            });
+           
           })  
     
             
