@@ -9,7 +9,7 @@
 
     <div id="controls">
       <app-language></app-language>
-      <img src="assets/Images/Icons/theme_icon.png">
+      <img src="assets/Images/Icons/theme_icon.png" (click)="switchTheme()">
     </div>
       <div *ngIf="auth.logovan" id="user" routerLink="/profil">
         <p> {{userFullname}} </p>

@@ -286,3 +286,55 @@ body {
 .cdk-overlay-container{
     z-index: 1000;
 }
+
+
+
+.dark_theme {
+
+    p {
+        color: $text_color_D;
+        font-size: 13px;
+        text-decoration: none;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        color: $text_color_D;
+        text-decoration: none;
+        letter-spacing: 2px;
+    }
+
+    a {
+        @extend p;
+
+        font-size: 16px;
+        padding: 10px;
+        transition: ease-in 0.2s;
+
+        &:hover {
+            color: $mid_color_D;
+            transition: ease-out 0.2s;
+        }
+    }
+
+    .disabled {
+        &:disabled {
+            border: solid 1px $disabled_color_D;
+            background: none;
+            color: $disabled_color;
+            cursor: default;
+
+            &:hover {
+                border: solid 1px $disabled_color_D;
+                background: none;
+                color: $disabled_color_D;
+                cursor: default;
+            }
+        }
+    }
+
+}
