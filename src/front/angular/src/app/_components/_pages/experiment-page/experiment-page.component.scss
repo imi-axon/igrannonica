@@ -34,7 +34,7 @@
         width: 120px;
         padding-bottom: 3px;
         text-align: center;
-        color: #444444;
+        color: #222222;
         cursor: pointer;
         
         &:hover{
@@ -46,8 +46,19 @@
         border-bottom: solid 3px #2C5D96;
         padding-bottom: 0px;
         font-weight: 600;
+        cursor: default;
+        
         &:hover{
-            color: #444444;
+            color: #222222;
+        }
+    }
+    
+    .disabled-card{
+        color: #999999;
+        cursor: default;
+        
+        &:hover{
+            color: #999999;
         }
     }
     

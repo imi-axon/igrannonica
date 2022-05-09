@@ -12,7 +12,8 @@
     width: 60%;
     
     .newProject{
-        background-color: #FFFFFF55;
+        transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+        background-color: #FFFFFF33;
         backdrop-filter: blur(7px);
         border: solid 1px #0091ff;
         margin-top: 60px;
@@ -21,6 +22,11 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
+        
+        &:hover{
+            transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+            background-color: #FFFFFF55;
+        }
         
         h3{
             text-align: center;

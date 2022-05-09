@@ -67,7 +67,6 @@ import { LanguageComponent } from './_components/_elements/language/language.com
 import { ThreeBackgroundCanvasComponent } from './_components/_elements/three-background-canvas/three-background-canvas.component';
 import { ExperimentOverviewComponent } from './_components/_elements/experiment-overview/experiment-overview.component';
 import { ExperimentNetworkComponent } from './_components/_elements/experiment-network/experiment-network.component';
-import { ExperimentDatasetComponent } from './_components/_elements/experiment-dataset/experiment-dataset.component';
 import { ExperimentPageComponent } from './_components/_pages/experiment-page/experiment-page.component';
 import { PageControlsComponent } from './_components/_elements/page-controls/page-controls.component';
 import { PopupWindowComponent } from './_components/_elements/popup-window/popup-window.component';
@@ -129,12 +128,6 @@ import { ThemeComponent } from './_components/_elements/theme/theme.component';
     TelNavComponent,
     LanguageComponent,
     ThreeBackgroundCanvasComponent,
-    ExperimentPageComponent,
-    ExperimentOverviewComponent,
-    ExperimentOverviewComponent,
-    ExperimentNetworkComponent,
-    ExperimentDatasetComponent,
-    ExperimentPageComponent,
     PageControlsComponent,
     PopupWindowComponent,
     StatisticsTableComponent,

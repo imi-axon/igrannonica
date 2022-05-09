@@ -4,15 +4,19 @@
 }
 
 .project{
-    background-color: #FFFFFF55;
-    backdrop-filter: blur(7px);
+    transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+    background-color: #FFFFFF33;
+    backdrop-filter: blur(3px);
     border: solid 1px #0091ff;
     padding: 20px;
     margin-top: 25px;
-    
-    
     display: grid;
     grid-template-columns: 70% 30%;
+    
+    &:hover{
+        transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+        background-color: #FFFFFF55;
+    }
     
     .projectLeft{
         .title{

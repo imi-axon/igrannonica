@@ -21,10 +21,9 @@ import { CreateNeuralNetworkComponent } from './_components/_elements/create-neu
 import { NnPageComponent } from './_components/_pages/nn-page/nn-page.component';
 import { PublicExpPageComponent } from './_components/_pages/public-exp-page/public-exp-page.component';
 import { ExperimentOverviewComponent } from './_components/_elements/experiment-overview/experiment-overview.component';
-import { ExperimentDatasetComponent } from './_components/_elements/experiment-dataset/experiment-dataset.component';
 import { ExperimentNetworkComponent } from './_components/_elements/experiment-network/experiment-network.component';
 import { ExperimentPageComponent } from './_components/_pages/experiment-page/experiment-page.component';
-import { ExperimentStatisticsComponent } from './_components/_elements/experiment-statistics/experiment-statistics.component';
+import { ExperimentEditComponent } from './_components/_elements/experiment-edit/experiment-edit.component';
 
 const routes: Routes = [
  // {path:'train/:ProjectId/:Inputs/:Outputs',component:ProjectPageComponent},
@@ -52,8 +51,7 @@ const routes: Routes = [
     component:ExperimentPageComponent,
     children:[
       {path:'', component:ExperimentOverviewComponent},
-      {path:'statistics', component:ExperimentStatisticsComponent},
-      {path:'dataset', component:ExperimentDatasetComponent},
+      {path:'edit', component:ExperimentEditComponent},
       {path:'network', component:ExperimentNetworkComponent}
     ]
   },
@@ -74,5 +72,7 @@ export const routingComponents=[
   DataSetPageComponent, LoginPageComponent, RegistrationPageComponent,
   
   HomePageComponent,MyProjectsPageComponent,ProfilPageComponent,VerificationComponent,ProjectPageStatisticsEditComponent,
-  StatisticsComponent,EditDatasetComponent,TrainingPageComponent,CreateNeuralNetworkComponent,NnPageComponent,PublicExpPageComponent, ExperimentStatisticsComponent
+  StatisticsComponent,EditDatasetComponent,TrainingPageComponent,CreateNeuralNetworkComponent,NnPageComponent,PublicExpPageComponent, 
+  
+  ExperimentPageComponent,ExperimentOverviewComponent,ExperimentEditComponent,ExperimentNetworkComponent
 ];
