@@ -1,5 +1,4 @@
-import { DOCUMENT } from '@angular/common';
-import { Component, Inject, Renderer2, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { FullscreenLoaderComponent } from './_components/_elements/fullscreen-loader/fullscreen-loader.component';
@@ -9,14 +8,14 @@ import { FullscreenLoaderComponent } from './_components/_elements/fullscreen-lo
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   theme : Theme  = 'light_theme';
   title = 'angular';
   
   @ViewChild("fullscreenLoader")
   fullscreenLoader: FullscreenLoaderComponent;
 
-  constructor(public translate:TranslateService, private router: Router, @Inject(DOCUMENT) private document: Document, private renderer:Renderer2)
+  constructor(public translate:TranslateService, private router: Router)
   {
     translate.addLangs(['en','sr']);
     translate.setDefaultLang('en');
@@ -34,18 +33,14 @@ export class AppComponent {
         }
       )
   }
-
-  ngOnInit(){
-    this.initializeTheme();
-  }
-  initializeTheme =():void=>this.renderer.addClass(this.document.body, this.theme);
   
-  switchTheme(){
-    console.log("menjam " + this.theme);
-    this.document.body.classList.replace(this.theme, this.theme==='light_theme'?(this.theme='dark_theme'):(this.theme='light_theme'))
-    console.log("promenjeno " + this.theme);
-  }
+  
+ngOnInit(){
+  localStorage.setItem('theme',this.theme);
+}
   
 }
 
 export type Theme ='light_theme' | 'dark_theme';
+
+
