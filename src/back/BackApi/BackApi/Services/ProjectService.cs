@@ -7,15 +7,15 @@ namespace BackApi.Services
 {
     public interface IProjectService
     {
-        string CreateProject(int userid);
+        int CreateProject(int userid);
         Boolean DeleteProject(int projid,int userid);
         string ListProjects(int userid,int pubuserid);
         string ListPublicProjects();
         string GetProjById(int projid, int userid);
         string GetUserByProj(int projid, out bool ind);
         bool SetNote(int projid, int userid, string note);
-        Boolean EditProject(int projid, ProjectPostPut proj,int userid);
-        int getProjectId(ProjectPostPut model,int userid);
+        Boolean EditProject(int projid, ProjectEdit proj,int userid);
+        int getProjectId(ProjectEdit model,int userid);
         public Boolean projectOwnership(int userid, int projid);
         string GetNote(int projid, int userid, out bool ind);
         public Boolean projectExists(int projid);
@@ -36,7 +36,7 @@ namespace BackApi.Services
             this.configuration = configuration;
             this.nnService = nNservice;
         }
-        public string CreateProject(int userid)
+        public int CreateProject(int userid)
         {
             string constname = "Untitled-Experiment";
             string name = constname;
@@ -65,7 +65,7 @@ namespace BackApi.Services
 
             storageService.CreateProject(project.ProjectId);
 
-            return name;
+            return project.ProjectId;
         }
 
         public Boolean DeleteProject(int projid, int userid) //manual cascade delete
@@ -272,7 +272,7 @@ namespace BackApi.Services
             ind = true;
             return proj.Notes;
         }
-        public string EditProject(int projid,ProjectEdit proj,int userid, out bool ind)
+        public Boolean EditProject(int projid,ProjectEdit proj,int userid)
         {
             var edited = context.Projects.Find(projid);
             edited.Name = proj.name;
@@ -282,7 +282,7 @@ namespace BackApi.Services
             return true;
         }
 
-        public int getProjectId(ProjectPostPut model, int userid)
+        public int getProjectId(ProjectEdit model, int userid)
         {
             var tmp = context.Projects.Where(x => x.Name == model.name && x.UserId==userid).FirstOrDefault();
             return tmp.ProjectId;

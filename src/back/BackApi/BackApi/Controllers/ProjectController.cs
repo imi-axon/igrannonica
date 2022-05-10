@@ -26,10 +26,9 @@ namespace BackApi.Controllers
         public async Task<ActionResult<string>> NewProject()
         {
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized();
-            string rez;
-            rez = service.CreateProject(userid);
-            int id = service.getProjectId(rez);
+            if (userid == -1) return Unauthorized();        
+            var id = service.CreateProject(userid);
+           
             if (id!=-1)
                 return id+"";
             else return BadRequest("project");
