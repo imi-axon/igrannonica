@@ -43,12 +43,29 @@ namespace BackApi.Controllers
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
-            if (!projsrv.projectOwnership(userid, projid)) return Forbid();
+            if (!projsrv.projectExists(projid)) return NotFound();
+            if(!projsrv.projectIsPublic(projid))
+                if (!projsrv.projectOwnership(userid, projid)) return BadRequest("user");
 
             var path = storsrv.GetDataset(datasrv.ProjIdToPath(projid, false));
             var bytes = await System.IO.File.ReadAllBytesAsync(path);
 
             return File(bytes, "text/csv",Path.GetFileName(path));
+        }
+
+        [HttpGet("Storage/proj{projid}/mreze/trainrez{nnid}.txt")]
+        public async Task<ActionResult> DownloadTrainrez(int projid,int nnid)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            if (!projsrv.projectExists(projid)) return NotFound();
+            if (!projsrv.projectIsPublic(projid))
+                if (!projsrv.projectOwnership(userid, projid)) return Forbid();
+
+            var path = storsrv.CreateNNtrainrez(projid,nnid);
+            var bytes = await System.IO.File.ReadAllBytesAsync(path);
+
+            return File(bytes, "text/plain", Path.GetFileName(path));
         }
 
         [HttpGet("Storage/proj{pid}/data/data{did}.csv"), AllowAnonymous] //Host(backUrl, mlUrl)] //adresa ml mikroserivsa
@@ -65,7 +82,6 @@ namespace BackApi.Controllers
         [HttpPut("Storage/proj{pid}/mreze/mreza{nnid}.h5")]
         public async Task<ActionResult> PutNNFile(int pid, int nnid, IFormFile file ) 
         {
-            //Debug.WriteLine("PUT NN");
             var path = storsrv.CreateNNFile(pid, nnid);
             storsrv.SaveFile(path, file);
             return Ok();
@@ -74,8 +90,14 @@ namespace BackApi.Controllers
         [HttpPut("Storage/proj{pid}/mreze/cfg{nnid}.json")]
         public async Task<ActionResult> PutNNCfg(int pid, int nnid, IFormFile file)
         {
-            //Debug.WriteLine("PUT CFG");
             var path = storsrv.CreateNNCfg(pid, nnid);
+            storsrv.SaveFile(path, file);
+            return Ok();
+        }
+        [HttpPut("Storage/proj{pid}/mreze/trainrez{nnid}.txt")]
+        public async Task<ActionResult> PutNNTrainrez(int pid, int nnid, IFormFile file)
+        {
+            var path = storsrv.CreateNNtrainrez(pid, nnid);
             storsrv.SaveFile(path, file);
             return Ok();
         }
@@ -85,7 +107,7 @@ namespace BackApi.Controllers
             var path = storsrv.CreateNNFile(pid, nnid);
             var bytes = await System.IO.File.ReadAllBytesAsync(path);
 
-            return File(bytes, "text/csv", Path.GetFileName(path));
+            return File(bytes, "text/plain", Path.GetFileName(path));
         }
         [HttpGet("Storage/proj{pid}/mreze/cfg{nnid}.json"), AllowAnonymous] //Host(backUrl, mlUrl)] //adresa ml mikroserivsa
         public async Task<ActionResult> PassCfgToML(int pid, int nnid)
@@ -93,7 +115,7 @@ namespace BackApi.Controllers
             var path = storsrv.CreateNNCfg(pid, nnid);
             var bytes = await System.IO.File.ReadAllBytesAsync(path);
 
-            return File(bytes, "text/csv", Path.GetFileName(path));
+            return File(bytes, "text/plain", Path.GetFileName(path));
         }
         [HttpGet("Storage/{pagepath}")]
         public async Task<ActionResult> PassPageToML(string pagepath)

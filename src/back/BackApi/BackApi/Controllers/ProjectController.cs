@@ -32,25 +32,31 @@ namespace BackApi.Controllers
             int id = service.getProjectId(rez);
             if (id!=-1)
                 return id+"";
-            else return BadRequest();
+            else return BadRequest("project");
         }
 
         [HttpDelete("{projid}/delete")]
         public async Task<ActionResult<string>> DeleteProject(int projid)
         {
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized("Ulogujte se");
+            if (userid == -1) return Unauthorized();
+            if (!service.projectExists(projid)) return NotFound("project");
+            if (!service.projectOwnership(userid, projid)) return BadRequest("user");
+
             Boolean rez = service.DeleteProject(projid,userid);
             if (rez)
-                return Ok("Projekat izbrisan");
-            else return BadRequest("Greska pri brisanju");
+                return Ok();
+            else return BadRequest("project");
         }
 
         [HttpPut("{projid}/notes")]
         public async Task<ActionResult<string>> SetNotes(int projid, [FromBody]NotePut note)
         {
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return "Uloguj se";
+            if (userid == -1) return Unauthorized();
+            if (!service.projectExists(projid)) return NotFound("project");
+            if (!service.projectOwnership(userid, projid)) return BadRequest("user");
+
             var rez = service.SetNote(projid, userid, note.note);
             if (rez)
                 return Ok("uspesno");
@@ -61,7 +67,11 @@ namespace BackApi.Controllers
         {
             bool ind = false;
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return "Uloguj se";
+            if (userid == -1) return Unauthorized();
+            if (!service.projectExists(projid)) return NotFound("project");
+            if (!service.projectIsPublic(projid))
+                if (!service.projectOwnership(userid, projid)) return BadRequest("user");
+
             var rez = service.GetNote(projid, userid, out ind);
             if (ind)
                 return Ok(rez);
@@ -82,33 +92,41 @@ namespace BackApi.Controllers
         public async Task<ActionResult<string>> GetProjectById(int projid)
         {
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return "Uloguj se";//Unauthorized("Ulogujte se");
+            if (userid == -1) return Unauthorized();
+            if (!service.projectExists(projid)) return NotFound("project");
+            if (!service.projectIsPublic(projid))
+                if (!service.projectOwnership(userid, projid)) return BadRequest("user");
+
             var rez = service.GetProjById(projid, userid);
             if (rez != "")
                 return Ok(rez);
-            else return NotFound();
+            else return NotFound("project");
         }
         [HttpGet]
         public async Task<ActionResult<string>> ListProjects()
         {
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized("Ulogujte se");
+            if (userid == -1) return Unauthorized();
+
             var rez = service.ListProjects(userid,userid);
             if (rez != "[]")
                 return Ok(rez);
-            else return NotFound();
+            else return NotFound("project");
         }
 
         [HttpPut("{projid}")]
         public async Task<ActionResult<string>> EditProject(int projid,ProjectEdit req)
         {
-            bool ind = false;
+            bool tmp = false;
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized("Ulogujte se");
-            string rez = service.EditProject(projid,req,userid,out ind);
-            if (ind)
+            if (userid == -1) return Unauthorized();
+            if (!service.projectExists(projid)) return NotFound("project");
+            if (!service.projectOwnership(userid, projid)) return BadRequest("user");
+
+            Boolean rez = service.EditProject(projid,req,userid);
+            if (rez)
                 return Ok();
-            else return BadRequest(rez);
+            else return NotFound("user");
         }
     }
 }

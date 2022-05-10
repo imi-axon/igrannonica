@@ -14,10 +14,12 @@ namespace BackApi.Services
         string GetProjById(int projid, int userid);
         string GetUserByProj(int projid, out bool ind);
         bool SetNote(int projid, int userid, string note);
-        string EditProject(int projid, ProjectEdit proj,int userid, out bool ind);
-        int getProjectId(string name);
+        Boolean EditProject(int projid, ProjectPostPut proj,int userid);
+        int getProjectId(ProjectPostPut model,int userid);
         public Boolean projectOwnership(int userid, int projid);
         string GetNote(int projid, int userid, out bool ind);
+        public Boolean projectExists(int projid);
+        public Boolean projectIsPublic(int projid);
     }
     public class ProjectService:IProjectService
     {
@@ -113,21 +115,24 @@ namespace BackApi.Services
                 rez.Append("\"" + "Description" + "\":" + "\"" + p.Description + "\"");
                 rez.Append("},");
             }
-            List<Project> listapriv= context.Projects.Where(x => x.UserId == pubuserid && x.Public==false).ToList();
-            foreach(Project p in listapriv)
+            if (pubuserid == userid)
             {
-                rez.Append("{");
-                rez.Append("\"" +"ProjectId"+ "\":" + "\"" +p.ProjectId+ "\",");
-                rez.Append("\"" + "Name" + "\":" + "\"" + p.Name + "\",");
-                rez.Append("\"" + "Public" + "\":" + "\"" + p.Public + "\",");
-                rez.Append("\"" + "Creationdate" + "\":" + "\"" + p.CreationDate + "\",");
-                var pom = context.Datasets.FirstOrDefault(x => x.ProjectId == p.ProjectId);
-                if (pom != null)
-                    rez.Append("\"" + "hasDataset" + "\":" + "\"" + "true" + "\",");
-                else
-                    rez.Append("\"" + "hasDataset" + "\":" + "\"" + "false" + "\",");
-                rez.Append("\"" + "Description" + "\":" + "\"" + p.Description + "\"");
-                rez.Append("},");
+                List<Project> listapriv = context.Projects.Where(x => x.UserId == pubuserid && x.Public == false).ToList();
+                foreach (Project p in listapriv)
+                {
+                    rez.Append("{");
+                    rez.Append("\"" + "ProjectId" + "\":" + "\"" + p.ProjectId + "\",");
+                    rez.Append("\"" + "Name" + "\":" + "\"" + p.Name + "\",");
+                    rez.Append("\"" + "Public" + "\":" + "\"" + p.Public + "\",");
+                    rez.Append("\"" + "Creationdate" + "\":" + "\"" + p.CreationDate + "\",");
+                    var pom = context.Datasets.FirstOrDefault(x => x.ProjectId == p.ProjectId);
+                    if (pom != null)
+                        rez.Append("\"" + "hasDataset" + "\":" + "\"" + "true" + "\",");
+                    else
+                        rez.Append("\"" + "hasDataset" + "\":" + "\"" + "false" + "\",");
+                    rez.Append("\"" + "Description" + "\":" + "\"" + p.Description + "\"");
+                    rez.Append("},");
+                }
             }
             if(rez.Length>2) rez.Remove(rez.Length - 1, 1); //posto kasnije gleda da li je rez="[]" tj prazan array
             rez.Append("]");
@@ -223,20 +228,25 @@ namespace BackApi.Services
         {
             var rez = new StringBuilder();
             Boolean tmp;
-            var proj = context.Projects.FirstOrDefault(x => x.UserId == userid && x.ProjectId == projid);
-            if (proj == null)
-                return null;
+            var proj = context.Projects.FirstOrDefault(x =>x.ProjectId == projid);
             var dset=context.Datasets.FirstOrDefault(x=> x.ProjectId == projid);
             if (dset != null)
                 tmp = true;
             else tmp = false;
+
+            Boolean loggedUserIsOwner;
+            if(proj.UserId == userid)
+                loggedUserIsOwner = true;
+            else loggedUserIsOwner= false;
 
             rez.Append("{");
             rez.Append("\"" + "ProjectId" + "\":" + "\"" + proj.ProjectId + "\",");
             rez.Append("\"" + "Name" + "\":" + "\"" + proj.Name + "\",");
             rez.Append("\"" + "Public" + "\":" + "\"" + proj.Public + "\",");
             rez.Append("\"" + "Description" + "\":" + "\"" + proj.Description + "\",");
+            //rez.Append("\"" + "loggedUserIsOwner" + "\":" + "\"" + loggedUserIsOwner + "\"");
             rez.Append("\"" + "hasDataset" + "\":" + "\"" + tmp + "\"");
+
             rez.Append("}");
 
             return rez.ToString();
@@ -264,44 +274,38 @@ namespace BackApi.Services
         }
         public string EditProject(int projid,ProjectEdit proj,int userid, out bool ind)
         {
-            Boolean rez;
             var edited = context.Projects.Find(projid);
-            if (edited == null)
-            {
-                ind = false;
-                return "project";
-            }
-            if (edited.UserId != userid)
-            {
-                ind = false;
-                return "user";
-            }
-
-            var project = context.Projects.FirstOrDefault(x => x.UserId == userid && x.Name == proj.name && x.ProjectId != projid);
-            if (project != null)
-            {
-                ind = false;
-                return "name";
-            }
             edited.Name = proj.name;
             edited.Description = proj.description;
             edited.Public = proj.ispublic;
             context.SaveChanges();
-            ind = true;
-            return "uspesno";
+            return true;
         }
 
-        public int getProjectId(string name)
+        public int getProjectId(ProjectPostPut model, int userid)
         {
-            var tmp = context.Projects.Where(x => x.Name == name).FirstOrDefault();
-            if (tmp == null)
-                return -1;
+            var tmp = context.Projects.Where(x => x.Name == model.name && x.UserId==userid).FirstOrDefault();
             return tmp.ProjectId;
         }
 
         public Boolean projectOwnership(int userid,int projid)
         {
             var tmp=context.Projects.FirstOrDefault(x=> x.UserId==userid && x.ProjectId ==projid);
+            if (tmp == null) return false;
+            return true;
+        }
+
+        public Boolean projectIsPublic(int projid)
+        {
+            var tmp = context.Projects.FirstOrDefault(x=> x.ProjectId == projid);
+            if (tmp.Public == true)
+                return true;
+            return false;
+
+        }
+        public Boolean projectExists(int projid)
+        {
+            var tmp = context.Projects.FirstOrDefault(x=> x.ProjectId == projid);
             if (tmp == null) return false;
             return true;
         }

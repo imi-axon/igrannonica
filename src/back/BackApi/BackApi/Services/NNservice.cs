@@ -18,6 +18,7 @@ namespace BackApi.Services
         public string NNIdToPath(int nnid);
         public string ListNN(int userid, int projid);
         public string NNIdToCfg(int nnid);
+        public string NNIdToTrainrez(int nnid);
         public Boolean DeleteNN(int nnid);
         public bool AddNote(int projid, int nnid, string note);
         public string GetNote(int projid, int nnid, out bool ind);
@@ -44,8 +45,8 @@ namespace BackApi.Services
             var MlJson = JsonConvert.SerializeObject(packet);
             var toMLconf = Encoding.UTF8.GetBytes(MlJson);
             await webSocketMl.SendAsync(new ArraySegment<byte>(toMLconf, 0, MlJson.Length), WebSocketMessageType.Text , true, CancellationToken.None);
-            var resultml = await webSocketMl.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-
+            var resultml = await webSocketMl.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None); // 0 novo treniranje, inace broj prethodnih epoha
+            
             while (!resultml.CloseStatus.HasValue)
             {
                 if (webSocket.CloseStatus.HasValue)//ako korisnik brzo otkaze trening
@@ -54,16 +55,23 @@ namespace BackApi.Services
                     await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure,"Client closing w handshake", CancellationToken.None);
                     return true;
                 }
+
+                var strepnum= Encoding.UTF8.GetString(buffer, 0, resultml.Count);//prikaz prethodno istreniranih epoha
+                int epnum= int.Parse(strepnum);
+                for (int i = 0; i < epnum; i++)
+                {
+                    resultml = await webSocketMl.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                    var tmp = Encoding.UTF8.GetString(buffer, 0, resultml.Count);
+                    var toFronttrain = Encoding.UTF8.GetBytes(tmp);
+                    await webSocket.SendAsync(new ArraySegment<byte>(toFronttrain, 0, tmp.Length), resultml.MessageType, resultml.EndOfMessage, CancellationToken.None);
+                }
+                
                 var fromFronttrain = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                 var playstop = Encoding.UTF8.GetString(buffer, 0, fromFronttrain.Count);
-                Debug.WriteLine(">>>>>>>>>>>> " + playstop);
                 while (playstop == "\"play\"")//sve dok sa fronta stize "play" salju im se rezultati sledece epohe
                 {
-                    Debug.WriteLine(" >>>>>> While Loop <<<<< ");
                     var toMLtrain= Encoding.UTF8.GetBytes(playstop);
-                    Debug.WriteLine(">>>>>>>>>>>> Send To ML" + playstop);
                     await webSocketMl.SendAsync(new ArraySegment<byte>(toMLtrain, 0, playstop.Length), WebSocketMessageType.Text, true, CancellationToken.None);
-                    Debug.WriteLine(">>>>>>>>>>>> Wait From ML");
                     resultml = await webSocketMl.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                     var tmp = Encoding.UTF8.GetString(buffer, 0, resultml.Count);
                     if(tmp == "end") //ako se trening zavrsio do kraja bez stop, posalji json mreze i zatvori sockete
@@ -120,17 +128,25 @@ namespace BackApi.Services
                 response.StatusCode = HttpStatusCode.NotFound;
                 return response;
             }
-            //File.Create(xd.nn);
             xd.conf = NNAddConfig(nnid);
             if (xd.conf == null)
             {
                 response.StatusCode = HttpStatusCode.NotFound;
                 return response;
             }
-            //File.Create(xd.conf);
+            xd.trainrez = NNAddTrainRez(nnid);
+            if (xd.trainrez == null)
+            {
+                response.StatusCode = HttpStatusCode.NotFound;
+                return response;
+            }
+            /*await File.WriteAllTextAsync(xd.trainrez, "");
+            await File.WriteAllTextAsync(xd.nn, "");
+            await File.WriteAllTextAsync(xd.conf, "");*/
 
             xd.nn = xd.nn.Replace('\\', '/');
             xd.conf = xd.conf.Replace('\\', '/');
+            xd.trainrez = xd.trainrez.Replace('\\', '/');
 
             var myContent = JsonConvert.SerializeObject(xd);
             var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
@@ -153,6 +169,7 @@ namespace BackApi.Services
             nn.NNName=name;
             nn.DataPath = "";
             nn.ConfPath = "";
+            nn.TrainrezPath = "";
             nn.Notes = "";
 
             kontext.Add(nn);
@@ -183,9 +200,6 @@ namespace BackApi.Services
         }
         public string ListNN(int userid, int projid)
         {
-            var tmp = kontext.Projects.FirstOrDefault(x => x.ProjectId == projid && x.UserId == userid);
-            if (tmp == null)
-                return "Projekat za datog korisnika ne postoji";
 
             var rez = new StringBuilder();
             rez.Append("[");
@@ -215,11 +229,32 @@ namespace BackApi.Services
 
             return path;
         }
+        public string NNAddTrainRez(int nnid)
+        {
+            var nn = kontext.NNs.FirstOrDefault(x => x.NNId == nnid);
+            if (nn == null)
+                return null;
+
+            var path = storageService.CreateNNtrainrez(nn.ProjectId, nnid);
+            nn.TrainrezPath = path;
+
+            kontext.Entry(nn).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            kontext.SaveChanges();
+
+            return path;
+        }
         public string NNIdToCfg(int nnid)
         {
             NN nn = kontext.NNs.FirstOrDefault(x => x.NNId == nnid);
             if (nn != null)
                 return nn.ConfPath;
+            return null;
+        }
+        public string NNIdToTrainrez(int nnid)
+        {
+            NN nn = kontext.NNs.FirstOrDefault(x => x.NNId == nnid);
+            if (nn != null)
+                return nn.TrainrezPath;
             return null;
         }
 
@@ -230,6 +265,7 @@ namespace BackApi.Services
                 return false;
             storageService.DeletePath(nn.ConfPath);
             storageService.DeletePath(nn.DataPath);
+            storageService.DeletePath(nn.TrainrezPath);
 
             kontext.NNs.Remove(nn);
             kontext.SaveChanges();

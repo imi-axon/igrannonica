@@ -14,6 +14,7 @@
         public string dataset { get; set; }
         public string nn { get; set; }
         public string conf { get; set; }
+        public string trainrez { get; set; }
         public string newconf { get; set; }
     }
     public class NNCreate
@@ -21,6 +22,7 @@
         public string headers { get; set; }
         public string nn { set; get; }
         public string conf { set; get; }
+        public string trainrez { set; get; }
     }
 
     public class ApiNNGet
