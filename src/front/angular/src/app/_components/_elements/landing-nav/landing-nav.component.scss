@@ -29,73 +29,197 @@
     margin: 0px;
 }
 
+
+
+
+
+// ZA MOBILNE TELEFONE
+$light_color:#FFFFFF;
+
+.toggler{
+    z-index: 1000;
+    position: fixed;
+    top: 60px;
+    right: calc(4% + 12px);
+    width:40px;
+    height:40px;
+    border-radius: 2px;
+    background-color: #009DF5;
+    border: none;
+    display: none;
+}
+.navbar-toggler-icon{
+    color:$light_color;
+    width: 24px;
+    height: 24px;
+}
+
+
+
+div{
+    color:$light_color;
+}
+a{
+    text-decoration: none;
+    color:$light_color;
+    font-size: xx-large;
+}
+
+.navDiv{
+    position:fixed;
+    z-index: 500;
+    background: linear-gradient(344.95deg, rgba(12, 12, 51, 0.97) 0%, rgba(11, 20, 44, 0.97) 100%);
+    backdrop-filter: blur(1px);
+    height: 1000%;
+    width:100%;
+    top: 0%;
+    left: 0%;
+}
+
+.div1{
+    margin-bottom: 5%;
+}
+li{
+    margin-bottom: 5%;
+    text-align: center;
+}
+.lista{
+    margin-top: 10%;
+}
+
+#controls{
+    img{
+        height: 22px;
+        cursor: pointer;
+        border-radius: 50%;
+        
+        &:hover:first-child{
+            outline: solid 1px #FFFFFF;
+        }
+        
+        &:first-child{
+            margin-right: 10px;
+        }
+        &:last-child{
+            margin-left: 10px;
+        }
+    }
+}
+hr{
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+#naslov{
+    font-family: Raleway;
+    font-size: xxx-large;
+    font-weight: 400;
+    letter-spacing: 0em;
+    text-align: center;
+    margin-bottom: 0%;
+}
+#igrannonica img{
+    width: 12%;
+    height: auto;
+    position: relative;
+    top: -27px;
+}
+#igrannonica{
+    margin-top: 5%;
+}
+
+
+
+
+
+
 @media (max-width: 575px) { 
-    
-    .nav-item a{
-        font-size: 20px;
-        line-height: 23px;
-    }
-    .nav-item a:hover{
-        font-weight: bold;
-    }
-    .nav-item a.active{
-        font-weight: bold;
-    }
-    
-    #logo{
-        display: none;
+    .navbar{
+        .nav-item a{
+            font-size: 20px;
+            line-height: 23px;
+        }
+        .nav-item a:hover{
+            font-weight: bold;
+        }
+        .nav-item a.active{
+            font-weight: bold;
+        }
+        
+        #logo{
+            display: none;
+        }
     }
 }
 @media (min-width: 576px) { 
-    
-    .nav-link{
-        user-select: none;
-    }
-    
-    .navbar-nav
-    {
-        top: 0px;
-        height: 150px;
-        width: 500px;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-around;
-    }
-    
-    .nav-item a{
-        font-style: normal;
-        font-weight: 400;
-        font-size: 20px;
-        line-height: 23px;
-        white-space: nowrap;
-    }
-    .nav-item a:hover{
-        color: #FFFFFF;
-    }
-    .nav-item a.active{
-        font-weight: bold;
-    }
-    
-    
-    
-    #navbarSupportedContent{
-        padding-left: 7%;
-        padding-right: 7%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    
-    #logo a{
-        font-size: 28px;
-        color: #FFFFFF;
-        cursor: pointer;
-        transition: ease-in 0.15s;
+    .navbar{
         
-        &:hover{
-            transition: ease-out 0.15s;
-            color: #00aaff;
+        .nav-link{
+            user-select: none;
         }
+        
+        .navbar-nav
+        {
+            top: 0px;
+            height: 150px;
+            width: 500px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-around;
+        }
+        
+        .nav-item{
+            margin: 0px !important;
+        }
+        
+        .nav-item a{
+            font-style: normal;
+            font-weight: 400;
+            font-size: 20px;
+            line-height: 23px;
+            white-space: nowrap;
+        }
+        
+        .nav-item a:hover{
+            color: #FFFFFF;
+        }
+        .nav-item a.active{
+            font-weight: bold;
+        }
+        
+        
+        
+        #navbarSupportedContent{
+            padding-left: 7%;
+            padding-right: 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        #logo a{
+            font-size: 28px;
+            color: #FFFFFF;
+            cursor: pointer;
+            transition: ease-in 0.15s;
+            
+            &:hover{
+                transition: ease-out 0.15s;
+                color: #00aaff;
+            }
+        }
+    }
+}
+
+
+@media (max-width:1000px) {
+    .navbar{
+        .navbar-nav{
+            display:none;
+        }
+    }
+    
+    .toggler{
+        display: block;
     }
 }

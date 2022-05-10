@@ -1,0 +1,90 @@
+svg{
+        
+    .neuron{
+        fill: url(#blueGradient);
+        stroke: #005ca2;
+        stroke-width: 1px;
+    }
+    
+    .label{
+        font-size: 14px;
+        fill: #1d59ac;
+        text-anchor: middle;
+    }
+    
+    .layerRect{
+        fill: #FFFFFF;
+        stroke: #a9cde9;
+        stroke-width: 1px;
+    }
+    
+    .layerTitle{
+        font-size: 18px;
+        font-weight: bold;
+        text-anchor: middle;
+        fill: #568AC6;
+    }
+    
+    .addNeuronButton{
+        fill: url(#blueGradient);
+        fill-opacity: 0.5;
+        stroke: #598dd6;
+        stroke-width: 3px;
+        stroke-dasharray: 5px;
+        stroke-linecap: round;
+    }
+    
+}
+
+.activationCombo{
+    background: linear-gradient(60deg, #2f92ef 0%, #154a9a 100%) #1b427d;
+    color: #FFFFFF;
+    position: absolute;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    font-size: 14px;
+    
+    width: 90px;
+    height: 25px;
+    
+    transition: 0.5s ease-in;
+    
+    &:hover{
+        transition: 0.5s ease-out;
+        transform-origin: center;
+        
+        transform: scale(1.03);
+        background: linear-gradient(60deg, #1779d5 0%, #063273 100%) #1b427d;
+    }
+    
+    &:focus{
+        outline: none;
+    }
+}
+
+
+.editInputOutputButton{
+    background: linear-gradient(60deg, #2a7ecd 0%, #123f82 100%);
+    color: #FFFFFF;
+    position: absolute;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    font-size: 12px;
+    line-height: 100%;
+    
+    width: 100px;
+    height: 35px;
+    
+    transition: 0.3s ease-in;
+    
+    &:hover{
+        transition: 0.3s ease-out;
+        transform-origin: center;
+        
+        transform: scale(1.05);
+        background: linear-gradient(60deg, #1862a8 0%, #002760 100%);
+    }
+    
+}

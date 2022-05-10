@@ -1,8 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { Project } from 'src/app/_utilities/_data-types/models';
 import { AuthService } from 'src/app/_utilities/_services/auth.service';
 import { ProjectsService } from 'src/app/_utilities/_services/projects.service';
+import { PopupWindowComponent } from '../popup-window/popup-window.component';
 
 @Component({
   selector: 'app-project-list',
@@ -12,6 +15,8 @@ import { ProjectsService } from 'src/app/_utilities/_services/projects.service';
 export class ProjectListComponent implements OnInit {
 
   constructor(
+    private dialog: MatDialog,
+    private translate: TranslateService,
     private projectsService: ProjectsService,
     public authService: AuthService,
     private router: Router
@@ -24,7 +29,7 @@ export class ProjectListComponent implements OnInit {
   public key: string = 'sort';
 
   private _searchTerm: string;
-  public myExp:boolean=false;
+  public myExp: boolean = false;
 
   get searchTerm(): string {
     return this._searchTerm;
@@ -54,19 +59,19 @@ export class ProjectListComponent implements OnInit {
           if (this.key == 'sortRev') this.sortRev();
   }
 
-  @Input() publicExp:boolean; //true-JAVNI eksperimenti, false-Moji eksperimenti //public-exp-page i my-projects-page
+  @Input() publicExp: boolean; //true-JAVNI eksperimenti, false-Moji eksperimenti //public-exp-page i my-projects-page
   ngOnInit(): void {
 
-    this.myExp=false;
-    console.log("primio "+this.publicExp);
-    if (this.publicExp==false) {
+    this.myExp = false;
+    console.log("primio " + this.publicExp);
+    if (this.publicExp == false) {
       console.log("pozivam fj1");
-      this.myExp=true;
-      this.projectsService.userProjects(this.username, this, this.handleSuccess, this.handleError);
+      this.myExp = true;
+      this.projectsService.userProjects(this.username, this, this.handleSuccess, this.handleSuccess);
     }
     else {
       console.log("pozivam fj2");
-      this.projectsService.getProjects(this, this.handleSuccess, this.handleError);
+      this.projectsService.getProjects(this, this.handleSuccess, this.handleSuccess);
     }
 
   }
@@ -76,7 +81,13 @@ export class ProjectListComponent implements OnInit {
   }
 
   loadProjectsCallback(self: any) {
-    self.projectsService.userProjects(self.username, self, self.handleSuccess, self.handleError);
+    if (self.publicExp == false) {
+      self.myExp = true;
+      self.projectsService.userProjects(self.username, self, self.handleSuccess, self.handleSuccess);
+    }
+    else
+      self.projectsService.getProjects(self, self.handleSuccess, self.handleSuccess);
+    
   }
 
   handleSuccess(self: any, projects: Project[]) {
@@ -116,12 +127,28 @@ export class ProjectListComponent implements OnInit {
   }
 
   onClick(projId: any) {
-    this.router.navigate(['/project/'+projId]);
+    this.router.navigate(['/project/' + projId]);
   }
 
-  RemoveProject(event: any, projectId: number) {
+  porukaPopup: String = "";
+  
+  openDialog(event: any, projectId: number){
+    this.porukaPopup = this.translate.instant("popup-window.project");
+    let dialogRef = this.dialog.open(PopupWindowComponent, { data: { poruka: this.porukaPopup } });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog res: ${result}`);
+      if(result=='yes') 
+      {
+        console.log(result);
+        this.RemoveProject(event,projectId);
+      }
+    });
+  }
+
+  RemoveProject(event: any, projectId: number) { 
     this.projectsService.removeProject(projectId, this, this.loadProjectsCallback);
     event.stopPropagation();
+    
   }
 
 }

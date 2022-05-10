@@ -2,8 +2,8 @@
     width: 100%;
     
     display: grid;
-    column-gap: 2%;
-    grid-template-columns: 73% 25%;
+    column-gap: 1%;
+    grid-template-columns: 74% 25%;
     
 }
 
@@ -16,17 +16,19 @@
     
     #datasetContainer{
         max-height: 80vh;
-        border: solid 1px #2C5D96;
-        border-radius: 5px;
+        background-color: #FFFFFF77;
+        backdrop-filter: blur(7px);
+        border: solid 1px #0091ff;
         overflow-x: scroll;
         scroll-behavior: smooth;
     }
     
     
     #controls{
+        background-color: #FFFFFF77;
+        backdrop-filter: blur(7px);
+        border: solid 1px #0091ff;
         height: fit-content;
-        border: solid 1px #2C5D96;
-        border-radius: 5px;
         padding: 5px 0px 5px 0px;
     }
     
@@ -38,15 +40,40 @@
     border: dashed 5px #a6c0e7;
 }
 
+.settingsButton{
+    float: right;
+    border: none;
+    background: transparent;
+    padding: 0px !important;
+    width: 24px;
+    height: 24px;
+    transform-origin: center;
+    transition: 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+    
+    svg{
+        width: 24px;
+        height: 24px;
+        path{
+            fill: #0077ff;
+        }
+    }
+    
+    &:hover{
+        transform: scale(1.2);
+        transition: 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+}
 
 #descriptionContainer{
     max-height: 100%;
     height: fit-content;
-    border: solid 1px #2C5D96;
-    border-radius: 5px;
+    background-color: #FFFFFF77;
+    backdrop-filter: blur(7px);
+    border: solid 1px #0091ff;
     padding: 20px 30px 20px 30px;
     
     #descriptionHeader{
+        width: 100%;
         display: flex;
         align-items: flex-start;
         column-gap: 8px;
@@ -54,8 +81,7 @@
         img{
             height: 42px;
             width: 42px;
-            border: solid 1px #2C5D96;
-            border-radius: 5px;
+            border: solid 1px #333333;
         }
         
         h2{
@@ -80,13 +106,37 @@
             margin: 0px;
         }
         
-        p{
+        .descriptionInput{
+            resize: none;
+            border: none;
+            width: 100%;
+            height: 160px;
             
+            background: transparent;
             margin-top: 10px;
             font-size: 12px;
-            color: #333333;
+            color: #555555;
+            
+            &::content{
+                overflow-y: visible;
+            }
+            
+            &:focus{
+                outline: none;
+                border: solid 1px #AAAAAA;
+            }
         }
     }
+    
+    label{  
+        font-size: 16px;
+        color: #2C5D96;
+    }
+    #publicCheckbox{
+        cursor: pointer;
+        margin-left: 5px;
+    }
+    
     
     #descriptionFooter{
         margin-top: 30px;

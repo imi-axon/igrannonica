@@ -57,8 +57,8 @@ export class StatisticsComponent implements OnInit {
     this.colnulls = statistics.colnulls
     
     setTimeout(() => {
-      this.correlationTable.LoadCorrelationMatrix(this.columns, this.correlationMatrix);
-      this.statisticsTable.LoadStatisticsData(this.columnStats, this.colnulls);
+      this.correlationTable.LoadCorrelationData(this.columns, this.correlationMatrix);
+      //this.statisticsTable.LoadStatisticsData(this.columnStats, this.colnulls);
       
       this.correlationLoader.stop();
       this.statisticsLoader.stop();

@@ -1,16 +1,18 @@
 ﻿using BackApi.Entities;
 using BackApi.Models;
+using System.Diagnostics;
 using System.Text;
 
 namespace BackApi.Services
 {
     public interface IProjectService
     {
-        Boolean CreateProject(ProjectPostPut model,int userid);
+        string CreateProject(int userid);
         Boolean DeleteProject(int projid,int userid);
         string ListProjects(int userid,int pubuserid);
         string ListPublicProjects();
         string GetProjById(int projid, int userid);
+        string GetUserByProj(int projid, out bool ind);
         bool SetNote(int projid, int userid, string note);
         Boolean EditProject(int projid, ProjectPostPut proj,int userid);
         int getProjectId(ProjectPostPut model,int userid);
@@ -34,18 +36,28 @@ namespace BackApi.Services
             this.configuration = configuration;
             this.nnService = nNservice;
         }
-        public Boolean CreateProject(ProjectPostPut model,int userid)
+        public string CreateProject(int userid)
         {
-            if(context.Projects.Any(x=> x.Name == model.name && x.UserId==userid))
+            string constname = "Untitled-Experiment";
+            string name = constname;
+            int exp = 2;
+            while (true)
             {
-                return false;
+                if (context.Projects.Any(x => x.UserId == userid && x.Name == name))
+                {
+                    name = constname;
+                    name = name + "-" + exp;
+                    exp = exp+1;
+                }
+                else
+                    break;
             }
-
             Project project = new Project();
-            project.Name = model.name;
-            project.Description = model.description;
+            project.Name = name;
+            string opis = "Project description goes here...";
+            project.Description = opis;
             project.UserId = userid;
-            project.Public = model.ispublic;
+            project.Public = false;
             project.CreationDate = DateTime.Now;
 
             context.Projects.Add(project);
@@ -53,7 +65,7 @@ namespace BackApi.Services
 
             storageService.CreateProject(project.ProjectId);
 
-            return true;
+            return name;
         }
 
         public Boolean DeleteProject(int projid, int userid) //manual cascade delete
@@ -134,10 +146,9 @@ namespace BackApi.Services
             List<Project> listapub = context.Projects.Where(x => x.Public == true).ToList();
             foreach (Project p in listapub)
             {
-                rez.Append("{");
+                rez.Append("[{");
                 var user = context.Users.Find(p.UserId);
-                if(user != null)
-                    rez.Append("\"" + "Username" + "\":" + "\"" + user.Username + "\",");
+         
                 rez.Append("\"" + "ProjectId" + "\":" + "\"" + p.ProjectId + "\",");
                 rez.Append("\"" + "Name" + "\":" + "\"" + p.Name + "\",");
                 rez.Append("\"" + "Public" + "\":" + "\"" + p.Public + "\",");
@@ -149,12 +160,70 @@ namespace BackApi.Services
                     rez.Append("\"" + "hasDataset" + "\":" + "\"" + "false" + "\",");
                 rez.Append("\"" + "Description" + "\":" + "\"" + p.Description + "\"");
                 rez.Append("},");
+
+                if (user != null)
+                {
+                    string photopath = user.PhotoPath;
+                    if (photopath == "" || photopath == null)
+                        photopath = Path.Combine("Storage", "profilna.png");
+
+                    //string b = System.IO.File.ReadAllText(photopath);
+
+                    byte[] imageArray = System.IO.File.ReadAllBytes(photopath);
+                    string slikaBase64 = Convert.ToBase64String(imageArray);
+
+                    rez.Append("{");
+                    rez.Append("\"" + "UseId" + "\":" + "\"" + user.UserId + "\",");
+                    rez.Append("\"" + "Name" + "\":" + "\"" + user.Name + "\",");
+                    rez.Append("\"" + "Lastname" + "\":" + "\"" + user.Lastname + "\",");
+                    rez.Append("\"" + "Username" + "\":" + "\"" + user.Username + "\",");
+                    rez.Append("\"" + "Email" + "\":" + "\"" + user.Email + "\",");
+                    rez.Append("\"" + "Photo" + "\":" + "\"data:image/jpeg;base64," + slikaBase64 + "\"");
+                    rez.Append("}],");
+                }
             }
             if (rez.Length > 2) rez.Remove(rez.Length - 1, 1);
             rez.Append("]");
             return rez.ToString();
         }
+        public string GetUserByProj(int projid, out bool ind)
+        {
+            var rez = new StringBuilder();
+            var proj = context.Projects.FirstOrDefault(x => x.ProjectId == projid);
+            if (proj == null)
+            {
+                ind = false;
+                return "project";
+            }
 
+            var user = context.Users.FirstOrDefault(x => x.UserId == proj.UserId);
+            if (user == null)
+            {
+                ind = false;
+                return "user";
+            }
+
+            string photopath = user.PhotoPath;
+            if (photopath == "" || photopath == null)
+                photopath = Path.Combine("Storage", "profilna.png");
+
+            //string b = System.IO.File.ReadAllText(photopath);
+
+            byte[] imageArray = System.IO.File.ReadAllBytes(photopath);
+            string slikaBase64 = Convert.ToBase64String(imageArray);
+
+            rez.Append("{");
+            rez.Append("\"" + "Name" + "\":" + "\"" + user.Name + "\",");
+            rez.Append("\"" + "Lastname" + "\":" + "\"" + user.Lastname + "\",");
+            rez.Append("\"" + "Username" + "\":" + "\"" + user.Username + "\",");
+
+            // Ovde treba da se proveri i zameni tip slike (nzm kako se to radi)
+            rez.Append("\"" + "Photo" + "\":" + "\"data:image/jpeg;base64," + slikaBase64 + "\"");
+            rez.Append("}");
+
+            ind = true;
+            return rez.ToString();
+        }
         public string GetProjById(int projid, int userid)
         {
             var rez = new StringBuilder();
@@ -203,7 +272,7 @@ namespace BackApi.Services
             ind = true;
             return proj.Notes;
         }
-        public Boolean EditProject(int projid,ProjectPostPut proj,int userid)
+        public string EditProject(int projid,ProjectEdit proj,int userid, out bool ind)
         {
             var edited = context.Projects.Find(projid);
             edited.Name = proj.name;

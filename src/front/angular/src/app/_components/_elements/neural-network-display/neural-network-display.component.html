@@ -1,15 +1,31 @@
 
-
-<div id="container">
-    <div id="controls">
-        <button (click)="ZoomIn()"> <i class="fa-solid fa-magnifying-glass-plus"></i> </button>
-        <button (click)="ZoomOut()"> <i class="fa-solid fa-magnifying-glass-minus"></i> </button>
+<div #container id="graphicsContainer">
+    
+    <input #weightInput id="weightInput" type="number" (input)="ChangeNetworkWeightFromEvent($event)" (blur)="Refresh()" (keypress)="ChangeNetworkWeightFromKey($event)">
+    
+    <div id="activationCombos">
+        
+    </div>
+    
+    <div id="outputActivationCombo">
+        
+    </div>
+    
+    <div id="editInputOutputButtons">
+        
     </div>
     
     <svg>
-        <g>
-            
-        </g>
+        <linearGradient id="blueGradient" gradientTransform="rotate(45)">
+            <stop offset="%"  stop-color="#69B7FF" />
+            <stop offset="100%" stop-color="#2F5EA6" />
+        </linearGradient>
+        
+        
+        
+        <g class="d3Container"> </g>
+          
     </svg>
     
 </div>
+

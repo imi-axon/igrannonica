@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { FullscreenLoaderComponent } from './_components/_elements/fullscreen-loader/fullscreen-loader.component';
@@ -8,7 +8,8 @@ import { FullscreenLoaderComponent } from './_components/_elements/fullscreen-lo
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  theme : Theme  = 'light_theme';
   title = 'angular';
   
   @ViewChild("fullscreenLoader")
@@ -34,5 +35,12 @@ export class AppComponent {
   }
   
   
+ngOnInit(){
+  localStorage.setItem('theme',this.theme);
+}
   
 }
+
+export type Theme ='light_theme' | 'dark_theme';
+
+

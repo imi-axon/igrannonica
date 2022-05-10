@@ -10,6 +10,10 @@
         <list-controls (OnSearch)="projectList.SetSearchTerm($event)" (OnOrderBy)="projectList.OrderBy($event)"></list-controls>
         
         <app-project-list #projectList [publicExp]=publicExp> </app-project-list>
+        
+        <div class="newProject" (click)="NewExperiment();">
+            <h3>{{'lista-projekata.novi_eksperiment' |translate}}</h3>
+        </div>
     </div>
     
 </div>

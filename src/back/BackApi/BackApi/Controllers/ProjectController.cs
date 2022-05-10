@@ -14,21 +14,23 @@ namespace BackApi.Controllers
     {
         private IProjectService service;
         private IJwtService jwtsrv;
-        public ProjectController(IProjectService service,IJwtService jwtServis)
+        private IUserService userService;
+        public ProjectController(IProjectService service, IJwtService jwtServis, IUserService userService)
         {
             this.service = service;
             this.jwtsrv = jwtServis;
+            this.userService = userService;
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> NewProject([FromBody] ProjectPostPut req)
+        public async Task<ActionResult<string>> NewProject()
         {
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
-            bool rez;
-            rez = service.CreateProject(req,userid);
-            int id = service.getProjectId(req,userid);
-            if (rez)
+            string rez;
+            rez = service.CreateProject(userid);
+            int id = service.getProjectId(rez);
+            if (id!=-1)
                 return id+"";
             else return BadRequest("project");
         }
@@ -75,6 +77,17 @@ namespace BackApi.Controllers
                 return Ok(rez);
             else return NotFound();
         }
+        [HttpGet("{projid}/getuser")]
+        public async Task<ActionResult<string>> GetUserByProjectId(int projid)
+        {
+            bool ind = false;
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return "Uloguj se";//Unauthorized("Ulogujte se");
+            var rez = service.GetUserByProj(projid, out ind);
+            if (ind == false)
+                return NotFound(rez);
+            else return Ok(rez);
+        }
         [HttpGet("{projid}")]
         public async Task<ActionResult<string>> GetProjectById(int projid)
         {
@@ -102,7 +115,7 @@ namespace BackApi.Controllers
         }
 
         [HttpPut("{projid}")]
-        public async Task<ActionResult<string>> EditProject(int projid,ProjectPostPut req)
+        public async Task<ActionResult<string>> EditProject(int projid,ProjectEdit req)
         {
             bool tmp = false;
             int userid = jwtsrv.GetUserId();

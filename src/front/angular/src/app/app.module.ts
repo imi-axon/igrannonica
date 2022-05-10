@@ -67,10 +67,13 @@ import { LanguageComponent } from './_components/_elements/language/language.com
 import { ThreeBackgroundCanvasComponent } from './_components/_elements/three-background-canvas/three-background-canvas.component';
 import { ExperimentOverviewComponent } from './_components/_elements/experiment-overview/experiment-overview.component';
 import { ExperimentNetworkComponent } from './_components/_elements/experiment-network/experiment-network.component';
-import { ExperimentDatasetComponent } from './_components/_elements/experiment-dataset/experiment-dataset.component';
 import { ExperimentPageComponent } from './_components/_pages/experiment-page/experiment-page.component';
 import { PageControlsComponent } from './_components/_elements/page-controls/page-controls.component';
-
+import { PopupWindowComponent } from './_components/_elements/popup-window/popup-window.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import { StatisticsTableComponent } from './_components/_elements/statistics-table/statistics-table.component';
+import { FallingStarParticleComponent } from './_components/_elements/falling-star-particle/falling-star-particle.component';
+import { ThemeComponent } from './_components/_elements/theme/theme.component';
 
 
 @NgModule({
@@ -125,13 +128,11 @@ import { PageControlsComponent } from './_components/_elements/page-controls/pag
     TelNavComponent,
     LanguageComponent,
     ThreeBackgroundCanvasComponent,
-    ExperimentPageComponent,
-    ExperimentOverviewComponent,
-    ExperimentOverviewComponent,
-    ExperimentNetworkComponent,
-    ExperimentDatasetComponent,
-    ExperimentPageComponent,
-    PageControlsComponent
+    PageControlsComponent,
+    PopupWindowComponent,
+    StatisticsTableComponent,
+    FallingStarParticleComponent,
+    ThemeComponent
   ],
   imports: [
     NgxCsvParserModule,
@@ -143,6 +144,7 @@ import { PageControlsComponent } from './_components/_elements/page-controls/pag
     MatTooltipModule,
     MatSelectModule,
     NgChartsModule,
+    MatDialogModule,
     TranslateModule.forRoot({
       loader:{
         provide:TranslateLoader,

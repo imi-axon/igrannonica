@@ -198,7 +198,7 @@ export class UserService {
           let reader = new FileReader();
           reader.addEventListener("load", () => {
             self.imageBlobUrl = reader.result;
-            successCallback(self, res);
+            successCallback(self, reader.result);
           }, false);
           reader.readAsDataURL(res.body);
         }

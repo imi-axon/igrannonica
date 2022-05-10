@@ -1,39 +1,33 @@
-<div class="container m-0">
-    <div class="tabela">
+<table>
+    
+    <thead>
         
-        <table class="tabela1 table table-bordered table-hover table-responsive ">
+        <!-- RED ZA KOLONE -->
+        <tr>
+            <th scope="col"></th>
             
-            <thead>
-                <!-- REZ NA NAZIVE KOLONA -->
-                <tr class=""> 
-                    
-                    <!-- DODATNA KOLONA-->
-                    <th style="font-weight: bold; background-color: #CED4DA;"></th>
-                    
-                    <th scope="col" *ngFor="let column of columns"> 
-                        {{column}}
-                    </th> 
-                </tr>
-            </thead>
+            <th scope="col" *ngFor="let column of columns">
+                {{column}}
+            </th>
+        </tr>
+    </thead>
+    
+    <tbody>
+        <!-- RED PODATAKA -->
+        <tr *ngFor="let i = index; let column of columns">
             
-            <tbody>
-                
-                <tr *ngFor="let row of columns; let i = index">
-                    
-                    <!-- CELIJE ZA NAZIV REDOVA -->
-                    <td style="font-weight: bold; border-right: solid 2px black;">
-                        {{row}}
-                    </td>
-                    
-                    <!-- CELIJE IZ KORELACIONE TABELE -->
-                    <td class="" *ngFor="let cell of correlationMatrix[i]" [ngStyle]="GetCorrelationColor(cell)" >
-                        {{cell}}
-                    </td>
-                    
-                </tr>
-                
-            </tbody>
+            <!-- CELIJE ZA NAZIV REDOVA -->
+            <td class="firstCol">
+                {{column}}
+            </td>
             
-        </table>
-    </div>
-</div>
+            <!-- CELIJE IZ KORELACIONE TABELE -->
+            <td *ngFor="let cell of correlationMatrix[i]" [ngStyle]="GetCorrelationColor(cell)" >
+                {{cell | number : '.2-2'}}
+            </td>
+
+        </tr>
+    </tbody>
+
+</table>
+            

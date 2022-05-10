@@ -5,16 +5,16 @@
 <div class="content">
     
     <div id="header">
-        <h1>{{project.Name}}</h1>
+        <input #titleInput type="text" class="titleInput" [value]="project.Name" (blur)="ChangeExperimentTitleRequest()" (keydown)="ChangeExperimentTitleRequest($event)">
         
         <div id="cards">
             <div class="experiment-card" (click)="SwitchCard('.')" [class.selected-card]="currentCard=='.'">
                 <a>{{"experiment.pregled" | translate}}</a>
             </div>
-            <div class="experiment-card" (click)="SwitchCard('dataset')" [class.selected-card]="currentCard=='dataset'">
-                <a>{{"experiment.dataset" | translate}}</a>
+            <div class="experiment-card" [class.disabled-card]="this.project.hasDataset.toString() == 'False'" (click)="SwitchCard('edit')" [class.selected-card]="currentCard=='edit'">
+                <a>{{"experiment.edit" | translate}}</a>
             </div>
-            <div class="experiment-card" (click)="SwitchCard('network')" [class.selected-card]="currentCard=='network'">
+            <div class="experiment-card" [class.disabled-card]="this.project.hasDataset.toString() == 'False'" (click)="SwitchCard('network')" [class.selected-card]="currentCard=='network'">
                 <a>{{"experiment.mreza" | translate}}</a>
             </div>
         </div>
@@ -23,10 +23,10 @@
             <option value="." [selected]="currentCard=='.'">
                 <a>{{"experiment.pregled" | translate}}</a>
             </option>
-            <option value="dataset" [selected]="currentCard=='dataset'">
-                <a>{{"experiment.dataset" | translate}}</a>
+            <option *ngIf="this.project.hasDataset.toString() == 'True'" value="edit" [selected]="currentCard=='edit'" >
+                <a>{{"experiment.edit" | translate}}</a>
             </option>
-            <option value="network" [selected]="currentCard=='network'">
+            <option *ngIf="this.project.hasDataset.toString() == 'True'" value="network" [selected]="currentCard=='network'">
                 <a>{{"experiment.mreza" | translate}}</a>
             </option>
         </select>
@@ -34,7 +34,7 @@
     </div>
     
     <div id="pageOutlet">
-        <router-outlet></router-outlet>
+        <router-outlet (activate)="OnActivate($event)"></router-outlet>
     </div>
     
 </div>

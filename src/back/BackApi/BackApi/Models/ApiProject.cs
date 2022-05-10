@@ -1,6 +1,6 @@
 ﻿namespace BackApi.Models
 {
-    public class ProjectPostPut
+    public class ProjectEdit
     {
         public string name { get; set; }
         public Boolean ispublic { get; set; }

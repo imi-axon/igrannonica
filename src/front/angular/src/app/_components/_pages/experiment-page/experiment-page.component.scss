@@ -11,12 +11,20 @@
     border-bottom: solid 1px #2C5D96;
     
     
-    h1{
+    .titleInput{
+        width: 50%;
         margin: 0px;
         font-size: 28px;
+        background: transparent;
+        border: none;
+        
+        &:focus{
+            outline: none;
+        }
     }
     
     #cards{
+        margin-left: 10px;
         display: flex;
         align-items: center;
         justify-content: space-around;
@@ -26,7 +34,7 @@
         width: 120px;
         padding-bottom: 3px;
         text-align: center;
-        color: #444444;
+        color: #222222;
         cursor: pointer;
         
         &:hover{
@@ -38,8 +46,19 @@
         border-bottom: solid 3px #2C5D96;
         padding-bottom: 0px;
         font-weight: 600;
+        cursor: default;
+        
         &:hover{
-            color: #444444;
+            color: #222222;
+        }
+    }
+    
+    .disabled-card{
+        color: #999999;
+        cursor: default;
+        
+        &:hover{
+            color: #999999;
         }
     }
     
@@ -70,6 +89,10 @@
     
     #header{
         
+        .titleInput{
+            width: 80%;
+        }
+        
         #cards{
             display: none;
         }
@@ -85,6 +108,10 @@
 @media screen and (max-width: 850px) {
     
     #header{
+        
+        .titleInput{
+            width: 70%;
+        }
         
         #cards_dropdown{
             font-size: 16px;
@@ -102,6 +129,17 @@
         
         #cards_dropdown{
             display: inherit;
+        }
+    }
+    
+}
+
+// 500 PX ======================================
+@media screen and (max-width: 500px) {
+    
+    #header{
+        .titleInput{
+            width: 60%;
         }
     }
     

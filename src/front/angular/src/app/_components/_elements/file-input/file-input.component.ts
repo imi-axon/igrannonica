@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Papa } from 'ngx-papaparse';
 
@@ -12,6 +12,9 @@ export class FileInputComponent implements OnInit {
   public inputFile: File;
   public errorMessage: String = "";
   public showsError = false;
+  
+  @ViewChild("fileInput")
+  private fileInput: ElementRef;
   
   @Output() fileChosen = new EventEmitter<null>();
   @Output() fileError = new EventEmitter<null>();
@@ -67,6 +70,20 @@ export class FileInputComponent implements OnInit {
       
       this.fileSubmited.emit(file);
     }
+  }
+  
+  
+  
+  
+  // Fajl prevucen preko inputa ==========
+  
+  public onDragEnter(event: any){
+    this.fileInput.nativeElement.classList.add("dragHovering");
+    console.log("EVENT")
+  }
+  
+  public onDragLeave(event: any){
+    this.fileInput.nativeElement.classList.remove("dragHovering");
   }
   
 }

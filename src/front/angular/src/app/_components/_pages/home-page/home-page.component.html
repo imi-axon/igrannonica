@@ -9,10 +9,8 @@
 -->
 
 <app-landing-nav #landingNav id="landingNav"></app-landing-nav>
-<app-tel-nav id="telnav" class=""></app-tel-nav>
+
 <app-landing-page-selector #selector (OptionSelected)="ChangePage($event)" id="selector"></app-landing-page-selector>
-
-
 
 <canvas #canvas id="threeCanvas"></canvas>
 
@@ -34,8 +32,12 @@
 </div>
 
 
+
 <svg viewBox="0 0 39 24" id="downScroller" (click)="selector.NextSelection()">
     <path d="M1.939,1.939l17.5,7.317l17.5,-7.317"/>
     <path d="M1.939,8.28l17.5,7.317l17.5,-7.317"/>
     <path d="M1.939,14.622l17.5,7.317l17.5,-7.317"/>
 </svg>
+
+
+<falling-star-particle></falling-star-particle>

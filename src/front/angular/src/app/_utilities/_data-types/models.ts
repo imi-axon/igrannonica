@@ -198,6 +198,13 @@ export class Project
         this.Username="";
     }
 }
+
+export class OwnerInfo{
+    public Name: string = "";
+    public Lastname: string = "";
+    public Username: string = "";
+    public Photo: string = "/assets/Images/profilna.png";
+}
 /* PROJEKAT */
 
 
@@ -218,20 +225,53 @@ export class NN{
         this.id=-1;
     }
 }
-/*
-class Neuron{
-    weights: number[] = [];
-    bias: number;
+
+
+
+
+
+
+
+
+
+/* MREZA */
+
+export class NeuralNetwork{
+    network: Network = new Network();
+    configuration: NetworkConfiguration = new NetworkConfiguration();
 }
-class Layer{
-    neurons: Neuron[] = [];
-}
+
 class Network{
     layers: Layer[] = [];
 }
-export class NeuralNetwork{
-    network: Network = new Network();
-    configuration: any;
+
+class Layer{
+    neurons: Neuron[] = [];
 }
-*/
+
+class Neuron{
+    weights: number[] = [];
+    bias: number = 0;
+}
+
+export class NetworkConfiguration{
+    inputs: string[] = [];
+    outputs: string[] = [];
+    
+    neuronsPerLayer: number[] = [];
+    
+    actPerLayer: string[] = [];
+    actOut: string = "";
+    
+    learningRate: number = 0;
+    reg: string = "";
+    regRate: number = 0;
+    batchSize: number = 0;
+    
+    problemType: string = "";
+    
+    splitType: string = "";
+    trainSplit: number = 0;
+    valSplit: number = 0;
+}
 /* MREZA */

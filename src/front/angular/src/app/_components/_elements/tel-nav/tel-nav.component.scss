@@ -8,14 +8,18 @@ a{
     color:$light_color;
     font-size: xx-large;
 }
-.navbar-toggler{
-    width:50px;
-    height:50px;
+.toggler{
+    width:36px;
+    height:36px;
+    border-radius: 2px;
     background-color: #009DF5;
     z-index: 1000001;
+    border: none;
 }
 .navbar-toggler-icon{
-    color:$light_color ;
+    color:$light_color;
+    width: 24px;
+    height: 24px;
 }
 
 .navDiv{
@@ -77,4 +81,8 @@ hr{
 }
 #igrannonica{
     margin-top: 5%;
+}
+
+.container{
+    margin-right: 0%;
 }

@@ -20,14 +20,12 @@
                 height: 30px;
                 line-height: 27px;
                 background-color: #14447a;
-                border-radius: 5px;
-                border: solid 1px #1a477b;
                 color: #FFFFFF;
                 text-align: center;
                 font-size: 14px;
                 
                 &:hover{
-                    background-color: #1a477b;
+                    background-color: #0f3868;
                 }
             }
             
@@ -35,16 +33,14 @@
                 width: 30px;
                 height: 30px;
                 background-color: #2C5D96;
-                border-radius: 5px;
                 border: none;
                 color: #FFFFFF;
                 text-align: center;
                 font-size: 12px;
                 font-weight: bold;
-                border: solid 1px #0e3868;
                 
                 &:hover{
-                    background-color: #1a477b;
+                    background-color: #0f3868;
                 }
             }
             
@@ -72,10 +68,9 @@
             width: 80px;
             height: 30px;
             background-color: #2C5D96;
-            border-radius: 5px 0px 0px 5px;
+            border: solid 1px #2C5D96;
             border: none;
             color: #FFFFFF;
-            border: solid 1px #0e3868;
             text-align: center;
             font-size: 12px;
             
@@ -97,7 +92,6 @@
             width: 80px;
             height: 30px;
             border: solid 1px #2C5D96;
-            border-radius: 0px 5px 5px 0px;
             
             &:focus{
                 outline: none;

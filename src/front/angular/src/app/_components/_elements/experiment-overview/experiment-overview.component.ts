@@ -1,8 +1,9 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Project } from 'src/app/_utilities/_data-types/models';
+import { OwnerInfo, Project } from 'src/app/_utilities/_data-types/models';
 import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
 import { ProjectsService } from 'src/app/_utilities/_services/projects.service';
+import { EventEmitter } from '@angular/core';
 import { DataSetTableComponent } from '../data-set-table/data-set-table.component';
 import { PageControlsComponent } from '../page-controls/page-controls.component';
 
@@ -16,23 +17,33 @@ const ROW_COUNT = 20;
 export class ExperimentOverviewComponent implements OnInit{
   
   public project: Project = new Project();
+  public owner: OwnerInfo = new OwnerInfo();
   
   private getProjectId(): number{
     let p = this.activatedRoute.snapshot.paramMap.get("ProjectId");
-    if (p != null)  {
+    if (p != null)
       return Number.parseInt(p);
-    }
     return -1;
   }
   
   public showsFileInput: boolean = false;
   public showsDataset: boolean = false;
   
+  
+  @Output() EditExperimentEvent: EventEmitter<any> = new EventEmitter<any>();
+  
+  @ViewChild("descriptionTextArea")
+  public description: ElementRef;
+  @ViewChild("publicCheckbox")
+  public publicCheckbox: ElementRef;
+  
+  
   @ViewChild("dataset")
   public datasetComponent: DataSetTableComponent;
-  
   @ViewChild("pageControls")
   public controlsComponent: PageControlsComponent; 
+  
+  
   
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -42,13 +53,22 @@ export class ExperimentOverviewComponent implements OnInit{
   
   ngOnInit(): void {
     this.projectService.getProject(this.getProjectId(), this, this.handleSuccesfulGetProjectCallback);
+    this.projectService.getOwner(this.getProjectId(), this, this.handleSuccesfulGetOwnerCallback);
   }
   
   
   
+  
+  // CALLBACKS =======================================================================================
+  
+  private handleSuccesfulGetOwnerCallback(self: any, response: any){
+    self.owner = response;
+  }
+  
+  
   private handleSuccesfulGetProjectCallback(self: ExperimentOverviewComponent, response: any){
     self.project = response;
-    
+    console.log(response)
     console.log(self.project.hasDataset)
     
     // self.project.hasDataset se ponasa i izgleda kao string a prepoznaje se kao boolean
@@ -66,6 +86,10 @@ export class ExperimentOverviewComponent implements OnInit{
     }
   }
   
+  
+  
+  
+  
   private datasetPageRecieved(self: ExperimentOverviewComponent, response: any){
     // VRLO GLUPO ALI NE ZNAM ZASTO OVO RADI
     self.datasetComponent.LoadDataset(JSON.parse(JSON.parse(response.dataset).dataset));
@@ -77,8 +101,26 @@ export class ExperimentOverviewComponent implements OnInit{
   }
   
   
+  public SendEditProject(){
+    this.EditExperimentEvent.emit(
+      {
+        "description": this.description.nativeElement.value, 
+        "isPublic": this.publicCheckbox.nativeElement.checked
+      }
+    );
+  }
   
-  public UplodaDatasetFile(file: File){
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  public UploadDatasetFile(file: File){
     let formData : FormData = new FormData();
     formData.append("dataset", file);
     

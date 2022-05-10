@@ -1,0 +1,79 @@
+#grid{
+    width: 100%;
+    
+    display: grid;
+    column-gap: 10px;
+    grid-template-columns: 74% 25%;
+    
+    #firstColumn{
+        display: grid;
+        row-gap: 10px;
+        grid-template-rows: 45vh 25vh;
+        
+        
+        #statisticsContainer{
+            background-color: #FFFFFF88;
+            backdrop-filter: blur(5px);
+            overflow-x: auto;
+        }
+        
+        #correlationContainer{
+            background-color: #FFFFFF88;
+            backdrop-filter: blur(5px);
+            overflow-x: auto;
+        }
+        
+    }
+    
+    #secondColumn{
+        display: grid;
+        row-gap: 2%;
+        grid-template-rows: 35vh 35vh;
+        
+        #statisticsGraph{
+            background-color: #FFFFFF88;
+            backdrop-filter: blur(5px); 
+            border: solid 1px #0091ff;
+        }
+        
+        #TEMP_OTHER{
+            background-color: #FFFFFF88;
+            backdrop-filter: blur(5px);
+            border: solid 1px #0091ff;
+        }
+        
+        
+    }
+    
+    
+}
+
+
+// 1600px =================================
+@media screen and (max-width: 1600px) {
+    #grid{
+        grid-template-columns: 100%;
+        grid-template-rows: 70vh 40vh;
+        row-gap: 25px;
+        margin-bottom: 30px;
+        
+        #secondColumn{
+            column-gap: 2%;
+            grid-template-columns: 49% 49%;
+            grid-template-rows: none;
+        }
+    }
+}
+
+// 660px =================================
+@media screen and (max-width: 660px) {
+    #grid{
+        grid-template-rows: 70vh 80vh;
+        
+        #secondColumn{
+            row-gap: 2%;
+            grid-template-columns: 100%;
+            grid-template-rows: 49% 49%;
+        }
+    }
+}

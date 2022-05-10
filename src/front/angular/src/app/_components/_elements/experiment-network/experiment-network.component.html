@@ -1,0 +1,89 @@
+<div #changeInputOutputWindow id="changeInputOutputWindow">
+    <h2>{{"edit-input-output.title"|translate}}</h2>
+    
+    <button class="exitButton" (click)="CloseChangeInputOutputWindow();">
+        <img src="/assets/Images/Icons/x.svg">
+    </button>
+    
+    <div class="mainPanel">
+        
+        <div class="panel">
+            <h3>{{"edit-input-output.inputs"|translate}}</h3>
+            
+            <div class="panelContainer">
+                <div class="columnItem" *ngFor="let i = index; let input of neuralNetwork.conf.inputs" 
+                (click)="SelectDeselectInput(i)"
+                [class.selected]="selectedInputs[i]">
+                    <p> {{input}} </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="buttonContainer">
+            <button (click)="MoveInputsToUnused()"> 
+                <img src="/assets/Images/Icons/Move_icon.svg">
+            </button>
+            
+            <button class="flipped" (click)="MoveUnusedToInputs()"> 
+                <img src="/assets/Images/Icons/Move_icon.svg">
+            </button>
+        </div>
+        
+        <div class="panel">
+            <h3>{{"edit-input-output.unused"|translate}}</h3>
+            
+            <div class="panelContainer">
+                <div class="columnItem" *ngFor="let i = index; let column of unusedColumns" 
+                (click)="SelectDeselectUnused(i)"
+                [class.selected]="selectedUnused[i]">
+                    <p> {{column}} </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="buttonContainer">
+            <button (click)="MoveUnusedToOutputs()"> 
+                <img src="/assets/Images/Icons/Move_icon.svg">
+            </button>
+            
+            <button class="flipped" (click)="MoveOutputsToUnused()"> 
+                <img src="/assets/Images/Icons/Move_icon.svg">
+            </button>
+        </div>
+        
+        <div class="panel">
+            <h3>{{"edit-input-output.outputs"|translate}}</h3>
+            
+            <div class="panelContainer">
+                <div class="columnItem" *ngFor="let i = index; let output of neuralNetwork.conf.outputs" 
+                (click)="SelectDeselectOutput(i)"
+                [class.selected]="selectedOutputs[i]">
+                    <p> {{output}} </p>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<div id="grid">
+    
+    <div id="confingContainer">
+        
+    </div>
+    
+    <div id="secondRow">
+        
+        <div #networkDisplay id="networkDisplay" (mousedown)="MouseDownHandler($event)" (mouseup)="MouseUpHandler($event)" (mousemove)="MouseMoveHandler($event)" (mouseleave)="MouseUpHandler($event)">
+            
+            <neural-network-display [parent]="this" #networkComponent></neural-network-display>
+        </div>
+        
+        <div id="trainingDisplay">
+            
+        </div>
+        
+    </div>
+    
+    
+</div>

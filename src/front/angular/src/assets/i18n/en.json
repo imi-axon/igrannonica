@@ -56,7 +56,8 @@
         "moji_eksperimenti":"My Experiments",
         "kreiran":"Created on: ",
         "nema":"Your experiment list is empty!",
-        "search":"Search..."
+        "search":"Search...",
+        "novi_eksperiment": "New Experiment"
     },
     "lista-mreza":{
         "nema":"There is no neural network for this project",
@@ -105,8 +106,8 @@
     },
 
     "sortiranje":{
-        "starije":"Date(old->new)",
-        "novije":"Date(new->old)"
+        "starije":"Date",
+        "novije":"Date"
     },
 
 
@@ -114,13 +115,20 @@
     
     "experiment":{
         "pregled": "Overview",
-        "dataset": "Dataset",
+        "edit": "Edit",
         "mreza": "Network",
         "opis": "Description",
-        "kreiran": "Created on"
+        "kreiran": "Created on",
+        "javni": "Public experiment"
     },
     
-    
+    "statistics-table":{
+        "minimum": "Minimum",
+        "maksimum": "Maximum",
+        "prosek": "Average",
+        "medijana": "Median",
+        "prazna": "Null fields"
+    },
 
 
 
@@ -194,6 +202,23 @@
         "pass4": "Password",
         "submit4": "Edit",
         "image": "Choose image"
+    },
+    
+    "edit-input-output":{
+        "title": "Edit inputs/outputs",
+        "inputs": "Inputs",
+        "outputs": "Outputs",
+        "unused": "Unused"
     }
+    ,
+"popup-window":{
+    "dataset":"Are you sure you want to remove this dataset?",
+    "project":"Are you sure you want to remove this project?",
+    "neuron":"Are you sure you want to remove this neuron?",
+    "sloj":"Are you sure you want to remove this layer?",
+    "opomena":"This action is irreversible!",
+    "da":"Yes",
+    "ne":"No"
+}
 
 }

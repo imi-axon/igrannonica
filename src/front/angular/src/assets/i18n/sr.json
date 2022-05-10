@@ -41,7 +41,7 @@
         "dugme":"Ulogujte se",
         "forgot1":"Zavboravili ste lozinku?",
         "forgot2":"Promenite je",
-        "login-greska":"Pogresni podaci ili korisnik nije verifikovan!"
+        "login-greska":"Pogrešni podaci ili korisnik nije verifikovan!"
     },
     "csv":{
         "format":"Uneti fajl mora biti u .csv formatu!",
@@ -56,7 +56,8 @@
         "moji_eksperimenti":"Moji Eksperimenti",
         "kreiran":"Kreiran: ",
         "nema":"List eksperimenata je prazna!",
-        "search":"Pretražite..."
+        "search":"Pretražite...",
+        "novi_eksperiment": "Novi Eksperiment"
     },
     "lista-mreza":{
         "nema":"Nemate nijednu neuronsku mrežu",
@@ -77,7 +78,7 @@
         "dodajFajl": "Dodaj Fajl",
         "klikniIliPrevuci": "Kliknite ili prevucite fajl ovde",
         "nemaFajla": "Fajl nije pronadjen!",
-        "pogresanTipFajla": "Fajl je pogresnog tipa!",
+        "pogresanTipFajla": "Fajl je pogrešnog tipa!",
         "prazanFajl": "Fajl je prazan!"
     },
     
@@ -104,8 +105,8 @@
         "submit":"Potvrdi"
     },
     "sortiranje":{
-        "starije":"Datum(staro->novo)",
-        "novije":"Datum(novo->staro)"
+        "starije":"Datum",
+        "novije":"Datum"
     },
 
 
@@ -113,13 +114,20 @@
     
     "experiment":{
         "pregled": "Pregled",
-        "dataset": "Dataset",
+        "edit": "Podešavanja",
         "mreza": "Mreža",
         "opis": "Opis",
-        "kreiran": "Kreiran"
+        "kreiran": "Kreiran",
+        "javni": "Javni eksperiment"
     },
 
-    
+    "statistics-table":{
+        "minimum": "Minimum",
+        "maksimum": "Maksimum",
+        "prosek": "Prosek",
+        "medijana": "Medijana",
+        "prazna": "Prazna polja"
+    },
     
     
 
@@ -132,7 +140,7 @@
         "naslov2":"Meteorološka analiza V1"
     },
     "data-set-options":{
-        "save":"Sacuvaj",
+        "save":"Sačuvaj",
         "discard":"Odbaci",
         "download":"Preuzmi"
     },
@@ -153,9 +161,9 @@
         "e-mail": "E-mail",
         "rodjen": "Rodjen",
         "pol": "Pol",
-        "muski": "Muski",
-        "zenski": "Zenski",
-        "korisnickiOpis": "Korisnicki opis"
+        "muski": "Muški",
+        "zenski": "Ženski",
+        "korisnickiOpis": "Korisnički opis"
     },
     "registration-successful":{
         "uspeh":"Uspešna registracija",
@@ -184,7 +192,7 @@
         "title1":"Izmenite profil",
         "pass1":"Lozinka",
         "submit1":"Izmeni",
-        "title2":"Izmenite email",
+        "title2":"Izmenite e-mail",
         "pass2":"Lozinka",
         "submit2":"Izmeni",
         "title3":"Izmenite lozinku",
@@ -197,8 +205,22 @@
         "submit4": "Izmeni",
         "image": "Izaberite sliku"
 
+    },
+    
+    "edit-input-output":{
+        "title": "Izmeni ulaze/izlaze",
+        "inputs": "Ulazi",
+        "outputs": "Izlazi",
+        "unused": "Nekorišćeni"
+    },
+    "popup-window":{
+        "dataset":"Da li ste sigurni da želite da izbrišete ovaj skup podataka?",
+        "project":"Da li ste sigurni da želite da izbrišete ovaj projekat?",
+        "neuron":"Da li ste sigurni da želite da izbrišete ovaj neuron?",
+        "sloj":"Da li ste sigurni da želite da izbrišete ovaj sloj?",
+        "opomena":"Ova akcija je nepovratna!",
+        "da":"Da",
+        "ne":"Ne"
     }
-
-
 
 }
