@@ -131,127 +131,127 @@
 
 
 
-.light_theme{
+// .light_theme{
 
-    label{
-        @extend p;
-        font-size: 14px;
-    }
+//     label{
+//         @extend p;
+//         font-size: 14px;
+//     }
 
-    input[type=text]{
-        @extend .disabled;
+//     input[type=text]{
+//         @extend .disabled;
         
-        box-sizing: border-box;
+//         box-sizing: border-box;
         
-        width: 200px;
-        height: 32px;
-        padding-left: 10px;
+//         width: 200px;
+//         height: 32px;
+//         padding-left: 10px;
         
-        color: $clear_color_L;
-        background-color: #FFFFFF;
-        border: 1px solid $light_color_L;
+//         color: $clear_color_L;
+//         background-color: #FFFFFF;
+//         border: 1px solid $light_color_L;
         
-        transition: ease-in 0.2s;
+//         transition: ease-in 0.2s;
         
-        &:hover{
-            background-color: $mid_color_L;
-            border-color: $highlight_color_L;
-            color: #FFFFFF;
-        }
+//         &:hover{
+//             background-color: $mid_color_L;
+//             border-color: $highlight_color_L;
+//             color: #FFFFFF;
+//         }
         
-        &:focus{
-            border-color: $highlight_color_L;
-            color: #FFFFFF;
-            outline: none;
-        }
+//         &:focus{
+//             border-color: $highlight_color_L;
+//             color: #FFFFFF;
+//             outline: none;
+//         }
         
-        &::placeholder{
-            font-family: 'Montserrat', sans-serif;
-            color: $highlight_color_L;
-        }
+//         &::placeholder{
+//             font-family: 'Montserrat', sans-serif;
+//             color: $highlight_color_L;
+//         }
         
-    }
+//     }
 
-    input[type=date]{
-        @extend .inputStyle;
-    }
+//     input[type=date]{
+//         @extend .inputStyle;
+//     }
 
-    input[type=datetime]{
-        @extend .inputStyle;
-    }
+//     input[type=datetime]{
+//         @extend .inputStyle;
+//     }
             
-    input[type=datetime-local]{
-        @extend .inputStyle;
-    }
+//     input[type=datetime-local]{
+//         @extend .inputStyle;
+//     }
 
-    // Kasnije doraditi
-    // Ili slika ili css podesavanje
-    input[type=checkbox]{
-        @extend .disabled;
-        width: 15px;
-        height: 15px; 
-    }
+//     // Kasnije doraditi
+//     // Ili slika ili css podesavanje
+//     input[type=checkbox]{
+//         @extend .disabled;
+//         width: 15px;
+//         height: 15px; 
+//     }
 
-    input[type=email]{
-        @extend .inputStyle;
-    }
+//     input[type=email]{
+//         @extend .inputStyle;
+//     }
 
-    input[type=month]{
-        @extend .inputStyle;
-    }
+//     input[type=month]{
+//         @extend .inputStyle;
+//     }
 
-    input[type=week]{
-        @extend .inputStyle;
-    }
+//     input[type=week]{
+//         @extend .inputStyle;
+//     }
 
-    input[type=number]{
-        @extend .inputStyle;
-    }
+//     input[type=number]{
+//         @extend .inputStyle;
+//     }
 
-    input[type=password]{
-        @extend .inputStyle;
-    }
+//     input[type=password]{
+//         @extend .inputStyle;
+//     }
 
-    input[type=radio]{
-        @extend .disabled;
-        width: 15px;
-        height: 15px;
-    }
+//     input[type=radio]{
+//         @extend .disabled;
+//         width: 15px;
+//         height: 15px;
+//     }
 
-    /*
-    input[type=range]{
+//     /*
+//     input[type=range]{
         
-    }
-    */
+//     }
+//     */
 
-    input[type=submit]{
-        @extend .disabled;
-        @extend button;
-    }
+//     input[type=submit]{
+//         @extend .disabled;
+//         @extend button;
+//     }
 
-    input[type=reset]{
-        @extend .disabled;
-        @extend button;
-    }
+//     input[type=reset]{
+//         @extend .disabled;
+//         @extend button;
+//     }
 
 
 
-    input[type=search]{
-        @extend .inputStyle;
-    }
+//     input[type=search]{
+//         @extend .inputStyle;
+//     }
 
-    input[type=tel]{
-        @extend .inputStyle;
-    }
+//     input[type=tel]{
+//         @extend .inputStyle;
+//     }
 
-    input[type=time]{
-        @extend .inputStyle;
-        width: 80px;
-    }
+//     input[type=time]{
+//         @extend .inputStyle;
+//         width: 80px;
+//     }
 
-    input[type=url]{
-        @extend .inputStyle;
-    }
+//     input[type=url]{
+//         @extend .inputStyle;
+//     }
     
     
-}
+// }

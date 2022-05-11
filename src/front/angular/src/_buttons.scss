@@ -48,50 +48,50 @@
 
 
 
-.light_theme{
+// .light_theme{
 
-    button{
-        @extend .disabled;
+//     button{
+//         @extend .disabled;
         
-        background-color: $mid_color_L;
+//         background-color: $mid_color_L;
         
-        color: #FFFFFF;
+//         color: #FFFFFF;
         
-        border: none;
-        width: 120px;
-        height: 35px;
+//         border: none;
+//         width: 120px;
+//         height: 35px;
         
-        transition: ease-in 0.15s;
+//         transition: ease-in 0.15s;
         
-        &:hover{
-            cursor: pointer;
-            color: #FFFFFF;
-            background-color: $dark_color_L;
-            border: solid 1px $light_color_L;
-        }
-    }
+//         &:hover{
+//             cursor: pointer;
+//             color: #FFFFFF;
+//             background-color: $dark_color_L;
+//             border: solid 1px $light_color_L;
+//         }
+//     }
 
-    .primary_button{
-        @extend button;
-    }
+//     .primary_button{
+//         @extend button;
+//     }
 
-    .secondary_button{
-        @extend .disabled;
+//     .secondary_button{
+//         @extend .disabled;
         
-        background-color: transparent;
-        color: $dark_color_L;
-        border: solid 1px $dark_color_L;
-        width: 120px;
-        height: 35px;
+//         background-color: transparent;
+//         color: $dark_color_L;
+//         border: solid 1px $dark_color_L;
+//         width: 120px;
+//         height: 35px;
         
-        transition: ease-in 0.15s;
+//         transition: ease-in 0.15s;
         
-        &:hover{
-            cursor: pointer;
-            border: none;
-            color: #FFFFFF;
-            background-color: $dark_color_L;
-        }
-    }
+//         &:hover{
+//             cursor: pointer;
+//             border: none;
+//             color: #FFFFFF;
+//             background-color: $dark_color_L;
+//         }
+//     }
     
-}
+// }
