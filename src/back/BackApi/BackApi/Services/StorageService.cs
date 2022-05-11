@@ -21,6 +21,7 @@
         public void ChangesWriteLine(int projid, Boolean main, string line);
         public void fwtest(string path, string tekst);
         public void wipemainchanges(int projid);
+        public string MetaFilePath(int projid, Boolean main);
     }
     public class StorageService : IStorageService
     {
@@ -44,7 +45,7 @@
             Directory.CreateDirectory(mrezapath);
         }
 
-        public string CreateDataset(int projid,int datasetid)
+        public string CreateDataset(int projid, int datasetid)
         {
             var basepath = @"Storage";
             var projfolder = "proj" + projid;
@@ -68,7 +69,7 @@
         public void DeletePath(string path)
         {
             var basepath = @"";
-            basepath = Path.Combine(basepath,path);
+            basepath = Path.Combine(basepath, path);
             File.Delete(basepath);
         }
         public string GetDataset(string tmp)
@@ -78,7 +79,7 @@
             return path;
         }
 
-        public string CreateNNFile(int projid,int nnid)
+        public string CreateNNFile(int projid, int nnid)
         {
             var path = @"Storage";
             var tmp = "proj" + projid;
@@ -86,11 +87,11 @@
             path = Path.Combine(path, "mreze");
             //tmp = "mreza" + nnid + ".txt";
             tmp = "mreza" + nnid + ".h5";
-            path = Path.Combine(path,tmp);
+            path = Path.Combine(path, tmp);
             return path;
         }
 
-        public string CreateNNCfg(int projid,int nnid)
+        public string CreateNNCfg(int projid, int nnid)
         {
             var path = @"Storage";
             var tmp = "proj" + projid;
@@ -114,26 +115,26 @@
 
         public string ReadCfg(string path)
         {
-            var rez=File.ReadAllText(path);
+            var rez = File.ReadAllText(path);
             return rez;
         }
 
-        public void SaveFile(string path,IFormFile file)
+        public void SaveFile(string path, IFormFile file)
         {
-            using(Stream stream = File.Open(path, FileMode.Create))
+            using (Stream stream = File.Open(path, FileMode.Create))
             {
-                file.CopyTo(stream);  
+                file.CopyTo(stream);
                 stream.Flush();
             }
         }
 
-        public string DsetPage(int projid,Boolean main)
+        public string DsetPage(int projid, Boolean main)
         {
-            var rng= new Random();
-            int xd=rng.Next(1000000,2000000);
-            var path= @"Storage";
-            var tmp = "Tmp" + projid + "Main" + main+xd+".csv";
-            path=Path.Combine(path,tmp);
+            var rng = new Random();
+            int xd = rng.Next(1000000, 2000000);
+            var path = @"Storage";
+            var tmp = "Tmp" + projid + "Main" + main + xd + ".csv";
+            path = Path.Combine(path, tmp);
             return path;
         }
 
@@ -148,7 +149,7 @@
             return path;
         }
 
-        public string ChangesFilePath(int projid,Boolean main)
+        public string ChangesFilePath(int projid, Boolean main)
         {
             var path = @"Storage";
             var tmp = "proj" + projid;
@@ -167,22 +168,34 @@
                 stream.Flush();
             }
         }
-        public void ChangesWriteLine(int projid,Boolean main, string line) 
+        public void ChangesWriteLine(int projid, Boolean main, string line)
         {
-            var path=ChangesFilePath(projid,main);
+            var path = ChangesFilePath(projid, main);
             using (StreamWriter sw = File.AppendText(path))
             {
                 sw.WriteLine(line);
             }
         }
-        public void fwtest(string path,string tekst)
+        public void fwtest(string path, string tekst)
         {
             File.WriteAllText(path, tekst);
         }
         public void wipemainchanges(int projid)
         {
             var chmain = ChangesFilePath(projid, true);
-            File.WriteAllText(chmain,"");
+            File.WriteAllText(chmain, "");
+        }
+
+        public string MetaFilePath(int projid, Boolean main)
+        {
+            var path = @"Storage";
+            var tmp = "proj" + projid;
+            path = Path.Combine(path, tmp);
+            path = Path.Combine(path, "data");
+            if (main) tmp = "metamain.txt";
+            else tmp = "metaedit.txt";
+            path = Path.Combine(path, tmp);
+            return path;
         }
     }
 }

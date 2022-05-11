@@ -78,6 +78,29 @@ namespace BackApi.Controllers
             return File(bytes, "text/csv", Path.GetFileName(path));
         }
 
+        [HttpGet("Storage/proj{pid}/data/meta{txt}.txt"), AllowAnonymous]
+        public async Task<ActionResult> PassMetaToML(int pid, string txt)
+        {
+            Boolean main;
+            if (txt == "main") main = true;
+            else main = false;
+            var path = storsrv.MetaFilePath(pid, main);
+            var bytes = await System.IO.File.ReadAllBytesAsync(path);
+
+            return File(bytes, "text/plain", Path.GetFileName(path));
+        }
+
+        [HttpPut("Storage/proj{pid}/data/meta{txt}.txt"), AllowAnonymous]
+        public async Task<ActionResult> PutMeta(int pid, string txt, IFormFile file)
+        {
+            Boolean main;
+            if (txt == "main") main = true;
+            else main = false;
+            var path = storsrv.MetaFilePath(pid, main);
+
+            storsrv.SaveFile(path, file);
+            return Ok();
+        }
 
         [HttpPut("Storage/proj{pid}/mreze/mreza{nnid}.h5")]
         public async Task<ActionResult> PutNNFile(int pid, int nnid, IFormFile file ) 

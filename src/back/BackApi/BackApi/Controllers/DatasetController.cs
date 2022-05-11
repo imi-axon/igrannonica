@@ -129,6 +129,8 @@ namespace BackApi.Controllers
             DatasetMLPost snd = new DatasetMLPost();
             snd.dataset = dataset.dataset;
             snd.actions = act.actions;
+            snd.metapath=storsrv.MetaFilePath(id,main);
+            snd.metapath = snd.metapath.Replace("\\", "/");
             var response = await MLconnection.editDataset(snd);
             if(response.StatusCode == HttpStatusCode.OK)
             {
@@ -214,6 +216,8 @@ namespace BackApi.Controllers
             snd.actions = datasrv.RevertToLine(id, ln);
             if (snd.actions == null || snd.dataset == null)
                 return BadRequest();
+            snd.metapath = storsrv.MetaFilePath(id, false);
+            snd.metapath = snd.metapath.Replace("\\", "/");
             var response = await MLconnection.editDataset(snd);
 
             if (response.StatusCode == HttpStatusCode.OK)
@@ -259,6 +263,18 @@ namespace BackApi.Controllers
 
             var ret= datasrv.ListChanges(projid,main);
             if(ret== null) return NotFound();
+            return Ok(ret);
+        }
+        [HttpGet("{projid}/dataset/{main}/metadata")]
+        public async Task<ActionResult> Metadata(int projid, Boolean main)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            if (!projsrv.projectExists(projid)) return NotFound();
+            if (!projsrv.projectOwnership(userid, projid)) return Forbid();
+
+            var ret = datasrv.ReadMetadata(projid, main);
+            if (ret == null) return NotFound();
             return Ok(ret);
         }
 

@@ -88,6 +88,62 @@ namespace BackApi.Controllers
             return Ok();
         }
 
+        [HttpGet("{id}/nn/{nnid}/train/pasive")]
+        public async Task<ActionResult> TrainPasive(int id, int nnid,[FromBody] ApiNNCfg conf)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            if (!projsrv.projectExists(id)) return NotFound();
+            if (!projsrv.projectOwnership(userid, id)) return Forbid();
+
+            var packet = new ApiNNTrain();
+            packet.dataset = datasrv.ProjIdToPath(id, true);
+            if (packet.dataset == null) return BadRequest("dataset");
+            packet.dataset = packet.dataset.Replace('\\', '/');
+            packet.nn = nnsrv.NNIdToPath(nnid);
+            if (packet.nn == null) return BadRequest("network");
+            packet.nn = packet.nn.Replace('\\', '/');
+            packet.conf = nnsrv.NNIdToCfg(nnid);
+            if (packet.conf == null) return BadRequest("network");
+            packet.conf = packet.nn.Replace('\\', '/');
+            packet.trainrez = nnsrv.NNIdToTrainrez(nnid);
+            if (packet.trainrez == null) return BadRequest("network");
+            packet.trainrez = packet.nn.Replace('\\', '/');
+            packet.newconf = conf.conf;
+
+            if (!wsq.CheckInDict(nnid))
+            {
+                var resp = await MLconnection.PasiveTraining(userid, nnid,packet);
+                if (resp.StatusCode == HttpStatusCode.OK)
+                {
+                    wsq.AddToDict(nnid, null);
+                    return Ok();
+                }
+                return BadRequest("error");
+            }
+            else
+            {
+                return BadRequest("error");
+            }
+        }
+
+        [HttpGet("{id}/nn/{nnid}/train/stop")]
+        public async Task<ActionResult> TrainStop(int id, int nnid)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            if (!projsrv.projectExists(id)) return NotFound();
+            if (!projsrv.projectOwnership(userid, id)) return Forbid();
+
+            var resp = await MLconnection.StopTraining(userid, nnid);
+            if (resp.StatusCode == HttpStatusCode.OK)
+            {
+                wsq.DeleteFromDict(nnid);
+                return Ok();
+            }
+            return BadRequest();
+        }
+
         [HttpPost("{id}/nn")]
         public async Task<ActionResult> CreateNN(int id,[FromBody] ApiNNTempCreate req)
         {

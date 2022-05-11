@@ -11,6 +11,7 @@
     {
         public string dataset { get; set; }
         public string actions { get; set; }
+        public string metapath { get; set; }
     }
 
     public class ActionsPut

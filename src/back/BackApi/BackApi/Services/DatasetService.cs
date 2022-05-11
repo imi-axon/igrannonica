@@ -25,6 +25,7 @@ namespace BackApi.Services
         public Boolean RevertToInit(int projid);
         public string RevertToLine(int projid, int linenum);
         public string ListChanges(int projid, Boolean main);
+        public string ReadMetadata(int projid, Boolean main);
     }
 
     public class DatasetService : IDatasetService
@@ -85,6 +86,9 @@ namespace BackApi.Services
             var chmain = storageService.ChangesFilePath(projid, true);
             var chedit= storageService.ChangesFilePath(projid, false);
             var initpath=storageService.InitialFilePath(projid);
+
+            var metamain = storageService.MetaFilePath(projid, true);
+            var metaedit = storageService.MetaFilePath(projid, false);
             using (FileStream stream = System.IO.File.Create(initpath))
             {
                 model.CopyTo(stream);
@@ -105,6 +109,14 @@ namespace BackApi.Services
                 stream.Flush();
             }
             using (FileStream stream = System.IO.File.Create(chedit))
+            {
+                stream.Flush();
+            }
+            using (FileStream stream = System.IO.File.Create(metamain))
+            {
+                stream.Flush();
+            }
+            using (FileStream stream = System.IO.File.Create(metaedit))
             {
                 stream.Flush();
             }
@@ -164,6 +176,10 @@ namespace BackApi.Services
             var chedit = storageService.ChangesFilePath(projid, false);
             storageService.DeletePath(chmain);
             storageService.DeletePath(chedit);
+            var metamain = storageService.MetaFilePath(projid, true);
+            var metaedit = storageService.MetaFilePath(projid, false);
+            storageService.DeletePath(metamain);
+            storageService.DeletePath(metaedit);
             foreach (Dataset d in lista)
             {
                 storageService.DeletePath(d.Path);
@@ -296,6 +312,9 @@ namespace BackApi.Services
         {
             var main =@""+ ProjIdToPath(projid, true);
             var edit =@""+ ProjIdToPath(projid, false);
+            var metamain = @"" + storageService.MetaFilePath(projid, true);
+            var metaedit = @"" + storageService.MetaFilePath(projid, false);
+            File.Copy(metaedit,metamain,true);
             File.Copy(edit, main, true);
             var chedit = storageService.ChangesFilePath(projid, false);
             string[] lines = File.ReadAllLines(chedit);
@@ -317,6 +336,9 @@ namespace BackApi.Services
         {
             var main = @"" + ProjIdToPath(projid, true);
             var edit = @"" + ProjIdToPath(projid, false);
+            var metamain = @"" + storageService.MetaFilePath(projid, true);
+            var metaedit = @"" + storageService.MetaFilePath(projid, false);
+            File.Copy(metamain, metaedit, true);
             File.Copy(main, edit, true);
             var chedit = storageService.ChangesFilePath(projid, false);
             //clear unsaved editing history
@@ -339,6 +361,8 @@ namespace BackApi.Services
             File.Copy(init, main, true);
             var chedit = storageService.ChangesFilePath(projid, false);
             var chmain = storageService.ChangesFilePath(projid, true);
+            var metamain = @"" + storageService.MetaFilePath(projid, true);
+            var metaedit = @"" + storageService.MetaFilePath(projid, false);
             using (FileStream fs = File.Open(chedit, FileMode.OpenOrCreate, FileAccess.ReadWrite))
             {
                 lock (fs)
@@ -347,6 +371,20 @@ namespace BackApi.Services
                 }
             }
             using (FileStream fs = File.Open(chmain, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                lock (fs)
+                {
+                    fs.SetLength(0);
+                }
+            }
+            using (FileStream fs = File.Open(metaedit, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                lock (fs)
+                {
+                    fs.SetLength(0);
+                }
+            }
+            using (FileStream fs = File.Open(metamain, FileMode.OpenOrCreate, FileAccess.ReadWrite))
             {
                 lock (fs)
                 {
@@ -363,7 +401,15 @@ namespace BackApi.Services
             File.Copy(init, edit, true);
             var chedit = storageService.ChangesFilePath(projid, false);
             var chmain = storageService.ChangesFilePath(projid, true);
+            var metaedit = @"" + storageService.MetaFilePath(projid, false);
             using (FileStream fs = File.Open(chedit, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                lock (fs)
+                {
+                    fs.SetLength(0);
+                }
+            }
+            using (FileStream fs = File.Open(metaedit, FileMode.OpenOrCreate, FileAccess.ReadWrite))
             {
                 lock (fs)
                 {
@@ -406,6 +452,12 @@ namespace BackApi.Services
             actions.Append("]");
             var str = actions.ToString();
             return str;
+        }
+        public string ReadMetadata(int projid, Boolean main)
+        {
+            var meta= storageService.MetaFilePath(projid,main);
+            var ret = File.ReadAllText(meta);
+            return ret;
         }
     }
 }
