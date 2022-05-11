@@ -10,4 +10,9 @@
     {
         public string note { get; set; }
     }
+
+    public class CommentPost
+    {
+        public string comment { get; set; }
+    }
 }

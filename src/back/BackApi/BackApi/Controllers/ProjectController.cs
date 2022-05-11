@@ -127,5 +127,31 @@ namespace BackApi.Controllers
                 return Ok();
             else return NotFound("user");
         }
+
+        [HttpPost("{projid}/comment/{parentcommentid}")]
+        public async Task<ActionResult<string>> AddCommment(int projid, int parentcommentid, CommentPost comm)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            if (!service.projectExists(projid)) return NotFound("project");
+
+            Boolean rez = service.AddComment(projid, userid, parentcommentid, comm);
+            if (rez)
+                return Ok();
+            else return NotFound("user");
+        }
+
+        [HttpGet("{projid}/comments")]
+        public async Task<ActionResult<string>> GetCommments(int projid)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            if (!service.projectExists(projid)) return NotFound("project");
+
+            string rez = service.GetComment(projid);
+            if (rez != "")
+                return Ok(rez);
+            else return NotFound("user");
+        }
     }
 }
