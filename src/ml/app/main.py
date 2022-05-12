@@ -20,7 +20,6 @@ from util.csv import csv_is_valid, csv_decode, csv_decode_2, get_csv_dialect
 from util.json import json_encode, json_decode
 import util.http as httpc
 from util.filemngr import FileMngr
-from util.ttm import TTM, TrainingThread
 
 # ML
 from middleware.statistics import StatisticsMiddleware
@@ -28,6 +27,9 @@ from middleware.dataset_editor import DatasetEditor
 from middleware.training import TrainingInstance
 from middleware.model import NNModelMiddleware
 from middleware.NN import NN_Middleware as NNJsonConverter
+
+# Training Thread Manager
+from util.ttm import TTM, TrainingThread
 
 
 app = FastAPI()
@@ -238,10 +240,25 @@ def get_default_nn_conf():
     return FileResponse(f.path())
 
 
-# ==== WebSockets ====
+# ==== Training ====
 
+# Training START
+@app.post('/api/user{uid}/nn{nnid}/pasive')     # << Kasnije treba promeniti u "/start"
+def nn_train_start(uid: int, nnid: int):
+    pass
+
+
+# Training STOP
+@app.get('/api/user{uid}/nn{nnid}/stop')
+def nn_train_stop(uid: int, nnid: int):
+    
+    if TTM.nn_exist(uid, nnid):
+        TTM.get_tt(uid, nnid).flags['stop'] = True
+
+
+# Training WATCH
 @app.websocket("/api/user{uid}/nn{nnid}/train")
-async def training_stream(ws: WebSocket, uid: int, nnid: int):
+async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
 
     start_time = time()
     await ws.accept() # ws <ACCEPT>
@@ -256,6 +273,7 @@ async def training_stream(ws: WebSocket, uid: int, nnid: int):
     datasetlink = data['dataset']
     nnlink = data['nn']
     conflink = data['conf']
+    trainrezlink = data['trainrez']
     conf = json_decode(data['newconf'])
 
     # TEMP
@@ -290,24 +308,24 @@ async def training_stream(ws: WebSocket, uid: int, nnid: int):
         TTM.pretty_print()
 
         finished = False
-        await_command = True
+        # await_command = True
 
         while not finished:
 
-            command = 'play'
+            # command = 'play'
 
-            if await_command:
-                command = await ws.receive_text() # ws <<<<
-                await_command = False
+            # if await_command:
+            #     command = await ws.receive_text() # ws <<<<
+            #     await_command = False
             
-            if command == 'stop':
-                flags['stop'] = True
-                finished = True
+            # if command == 'stop':
+            #     flags['stop'] = True
+            #     finished = True
             
             lock.acquire(blocking=True) # [ X ]
 
             if len(buff) > 0:
-                await_command = True
+                # await_command = True
                 
                 burst_buff = buff.copy()
                 buff.clear()
