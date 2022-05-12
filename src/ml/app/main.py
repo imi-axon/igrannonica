@@ -344,6 +344,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
             else:
                 lock.release() # [   ]
 
+        TTM.remove(uid, nnid)
         print(f'time: { time() - start_time }')
         await ws.close(code = 1000) # ws <CLOSE>
 

@@ -114,7 +114,7 @@ class TrainingInstance():
         print('-- Treniranje --')
 
         #self.service.start_training(100, trainConf['valSplit'])              # na kraju treninga ima lock.acquire() # [ X ]
-        self.service.start_training(1000, 0.2)
+        self.service.start_training(200, 0.2)
         self.service.save_model(fm_model.directory(), fm_model.name())      # h5 fajl sa putanjom za koju je vezan fm_model FileMngr
         self.lock.release()                                                 # zbog lock-a na kraju treniranja # [   ]
         

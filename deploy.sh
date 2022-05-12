@@ -1,4 +1,4 @@
-echo "Skriptu je potrebno pokrenuti iz src direktorijuma projekta!"
+echo "Skriptu je potrebno pokrenuti iz root direktorijuma projekta!"
 echo "Pre pokretanja ove skripte pripremiti direktorijume na serveru! (u /home/Axon/prod/ je potrebno da postoje prazni front, back i ml direktorijumi)"
 echo "Nastaviti sa pokretanjem skripte? (yes/no)"
 
@@ -32,9 +32,19 @@ then
     echo "Done."; echo ""
 fi
 
-if [ "$1" == "srv" -o "$2" == "srv" -o "$3" == "srv" ]
+if [ "$1" == "srv" -o "$2" == "srv" ]
 then
     echo "Deploying JS Server..."
     scp sandbox/server/server.js Axon@softeng.pmf.kg.ac.rs:/home/Axon/prod/front
     echo "Done."; echo ""
 fi
+
+if [ "$1" == "sql" -o "$2" == "sql" ]
+then
+    read sqlname
+    echo "Deploying JS Server..."
+    scp "src/back/BackApi/BackApi/obj/Debug/net6.0/$sqlname.sql" Axon@softeng.pmf.kg.ac.rs:/home/Axon/prod/latest.sql
+    echo "Done."; echo ""
+fi
+
+# src\back\BackApi\BackApi\obj\Debug\net6.0
