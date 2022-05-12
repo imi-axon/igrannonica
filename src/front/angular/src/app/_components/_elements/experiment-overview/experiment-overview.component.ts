@@ -43,7 +43,7 @@ export class ExperimentOverviewComponent implements OnInit{
   @ViewChild("pageControls")
   public controlsComponent: PageControlsComponent; 
   
-  
+  public HasDatasetChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
   
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -126,7 +126,8 @@ export class ExperimentOverviewComponent implements OnInit{
   }
   
   private datasetUploadHandler(self : ExperimentOverviewComponent){
-    self.project.hasDataset = true;
+    self.HasDatasetChanged.emit(true);
+    
     self.showsFileInput = false;
     self.showsDataset = true;
     self.ChangeDatasetPage(1);

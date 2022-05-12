@@ -73,6 +73,7 @@ import { FallingStarParticleComponent } from './_components/_elements/falling-st
 import { ThemeComponent } from './_components/_elements/theme/theme.component';
 import { ExperimentAllNetworksComponent } from './_components/_elements/experiment-all-networks/experiment-all-networks.component';
 import { ExperimentNetworksListComponent } from './_components/_elements/experiments-networks-list/experiments-networks-list.component';
+import { DatasetEditTableComponent } from './_components/_elements/dataset-edit-table/dataset-edit-table.component';
 
 
 @NgModule({
@@ -133,7 +134,8 @@ import { ExperimentNetworksListComponent } from './_components/_elements/experim
     FallingStarParticleComponent,
     ThemeComponent,
     ExperimentAllNetworksComponent,
-    ExperimentNetworksListComponent
+    ExperimentNetworksListComponent,
+    DatasetEditTableComponent
   ],
   imports: [
     NgxCsvParserModule,

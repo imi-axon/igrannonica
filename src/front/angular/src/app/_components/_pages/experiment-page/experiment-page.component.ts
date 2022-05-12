@@ -59,6 +59,7 @@ export class ExperimentPageComponent implements OnInit {
       this.overviewComponent = component;
       
       this.overviewComponent.EditExperimentEvent.subscribe( (edits: any) => this.ChangeExperiment(edits) );
+      this.overviewComponent.HasDatasetChanged.subscribe( (hasDataset: boolean) => this.project.hasDataset = hasDataset );
     }
   }
   

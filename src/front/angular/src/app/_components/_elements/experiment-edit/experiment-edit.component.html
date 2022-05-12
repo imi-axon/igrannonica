@@ -1,35 +1,55 @@
 <div id="grid">
     
     
+    <div id="firstRow">
+        
+        <!-- KORELACIONA TABELA -->
+        <div id="correlationContainer">
+            <correlation-table #correlationComponent></correlation-table>
+        </div>
+        
+        
+        <!-- GRAFIK -->
+        <div id="statisticsGraph">
+            
+        </div>
+    </div>
+    
+    
     <div id="datasetRow">
         
-        <div id="datasetContainer">
+        <!-- DATASET I KONTROLE ZA STRANU -->
+        <div id="datasetControlsContainer">
+            
+            <!-- DATASET -->
+            <div id="datasetContainer">
+                <dataset-edit-table #datasetEditTable></dataset-edit-table>
+            </div>
+            
+            <!-- KONTROLE ZA STRANU -->
+            <div id="controlsContainer">
+                <page-controls #pageControls (ChangePageEvent)="ChangeDatasetPage($event)"></page-controls>
+            </div>
             
         </div>
         
+        <!-- VERZIJE -->
         <div id="optionsContainer">
             
         </div>
         
     </div>
     
-    <div id="firstRow">
-        
-        <div id="correlationContainer">
-            <correlation-table #correlationComponent></correlation-table>
-        </div>
-        
-        <div id="statisticsGraph">
-            
-        </div>
-    </div>
     
     <div id="secondRow">
         
+        <!-- STATISTIKA -->
         <div id="statisticsContainer">
             <app-statistics-table #statisticsComponent> </app-statistics-table>
         </div>
         
+        
+        <!-- OSTALE MANJE INFORMACIJE -->
         <div id="TEMP_OTHER">
             
         </div>

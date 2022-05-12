@@ -1,8 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
 import { StatisticsService } from 'src/app/_utilities/_services/statistics.service';
 import { CorrelationTableComponent } from '../correlation-table/correlation-table.component';
 import { DataSetTableComponent } from '../data-set-table/data-set-table.component';
+import { DatasetEditTableComponent } from '../dataset-edit-table/dataset-edit-table.component';
+import { PageControlsComponent } from '../page-controls/page-controls.component';
+
+const ROW_COUNT = 20
 
 @Component({
   selector: 'app-experiment-edit',
@@ -11,12 +16,19 @@ import { DataSetTableComponent } from '../data-set-table/data-set-table.componen
 })
 export class ExperimentEditComponent implements OnInit {
   constructor( 
-    private activatedRoute : ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
+    private datasetService: DatasetService,
     private statisticsService: StatisticsService
   ) { }
   
   
   // KOMPONENTE ===============================================
+  
+  @ViewChild("datasetEditTable")
+  private datasetEditTable: DatasetEditTableComponent;
+  
+  @ViewChild("pageControls")
+  private pageControls: PageControlsComponent;
   
   @ViewChild("correlationComponent")
   private correlationComponent: CorrelationTableComponent;
@@ -35,10 +47,29 @@ export class ExperimentEditComponent implements OnInit {
   }
   
   ngOnInit(): void {
+    this.datasetService.GetDatasetPage(this.getProjectId(), true, 1, 20, this, this.handleDatasetGetSuccess)
     this.statisticsService.GetStatistics(this.getProjectId(), true, this, this.handleStatisticsGetSuccess);
   }
   
   
+  
+  
+  
+  
+  
+  // DATASET ================================================================================================
+  
+  private handleDatasetGetSuccess(self: ExperimentEditComponent, response: any){
+    // VRLO GLUPO ALI NE ZNAM ZASTO OVO RADI
+    self.datasetEditTable.LoadDataset(JSON.parse(JSON.parse(response.dataset).dataset));
+    self.pageControls.SetPageCount(response.pages);
+  }
+  
+  public ChangeDatasetPage(pageNumber: number){
+    this.datasetService.GetDatasetPage(this.getProjectId(), true, pageNumber, ROW_COUNT, this, this.handleDatasetGetSuccess);
+  }
+  
+  // KRAJ DATASETA ==========================================================================================
   
   
   
