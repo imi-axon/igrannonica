@@ -20,38 +20,75 @@ class TrainingThreadsManager():
         self.lock: Lock = Lock()
         self.table = {}
 
+    # Dodaje nit za UID i NNID
     def add(self, tt: TrainingThread, uid, nnid) -> bool: # return True/False <=> Added/NotAdded <=> DidNotExist/Existed
         
+        self.lock.acquire(blocking=True) # [ X ]
+
         if not self.user_exist(uid):
             self.table[uid] = {}
 
         if not self.nn_exist(uid, nnid):
             self.table[uid][nnid] = tt
+            self.lock.release()         # [   ]
             return True
+
+        self.lock.release()             # [   ]
 
         return False
 
+    
+    # Uklanja iz tabele nit za UID i NNID
+    def remove(self, uid, nnid):
+        
+        self.lock.acquire(blocking=True) # [ X ]
+        try:
+            if self.nn_exist(uid, nnid):
+                self.table[uid].pop(nnid, "NEMA") # brise NN
+                if len(list(self.table[uid].keys())) == 0:
+                    self.table.pop(uid, "NEMA") # brise User-a
+        finally:
+            self.lock.release()         # [   ]
+
+
     def get_tt(self, uid, nid) -> TrainingThread:
+        self.lock.acquire(blocking=True) # [ X ]
         try:
             return self.table[uid][nid]
         except:
             return None
+        finally:
+            self.lock.release()         # [   ]
+
 
     def get_user_nns(self, uid):
+        self.lock.acquire(blocking=True) # [ X ]
         try:
             return self.table[uid]
         except:
             return None
+        finally:
+            self.lock.release()         # [   ]
+
 
     def user_exist(self, uid) -> bool:
-        return list(self.table.keys()).count(uid) == 1
+        self.lock.acquire(blocking=True) # [ X ]
+        rez = list(self.table.keys()).count(uid) == 1
+        self.lock.release()             # [   ]
+        return rez
+
 
     def nn_exist(self, uid, nnid):
+        self.lock.acquire(blocking=True) # [ X ]
         if self.user_exist(uid):
-            return list(self.table[uid].keys()).count(nnid) == 1
-        else:
-            return False
-        
+            rez = list(self.table[uid].keys()).count(nnid) == 1
+            self.lock.release()         # [   ]
+            return rez
+
+        self.lock.release()             # [   ]
+        return False
+
+
     def pretty_print(self):
         print('======== TTM Status ========')
         print('- ' + 'locked [ X ]' if self.lock.locked else 'unlocked [   ]')
