@@ -65,15 +65,14 @@ import { PublicExpPageComponent } from './_components/_pages/public-exp-page/pub
 import { TelNavComponent } from './_components/_elements/tel-nav/tel-nav.component';
 import { LanguageComponent } from './_components/_elements/language/language.component';
 import { ThreeBackgroundCanvasComponent } from './_components/_elements/three-background-canvas/three-background-canvas.component';
-import { ExperimentOverviewComponent } from './_components/_elements/experiment-overview/experiment-overview.component';
-import { ExperimentNetworkComponent } from './_components/_elements/experiment-network/experiment-network.component';
-import { ExperimentPageComponent } from './_components/_pages/experiment-page/experiment-page.component';
 import { PageControlsComponent } from './_components/_elements/page-controls/page-controls.component';
 import { PopupWindowComponent } from './_components/_elements/popup-window/popup-window.component';
-import {MatDialogModule} from '@angular/material/dialog';
+import { MatDialogModule} from '@angular/material/dialog';
 import { StatisticsTableComponent } from './_components/_elements/statistics-table/statistics-table.component';
 import { FallingStarParticleComponent } from './_components/_elements/falling-star-particle/falling-star-particle.component';
 import { ThemeComponent } from './_components/_elements/theme/theme.component';
+import { ExperimentAllNetworksComponent } from './_components/_elements/experiment-all-networks/experiment-all-networks.component';
+import { ExperimentNetworksListComponent } from './_components/_elements/experiments-networks-list/experiments-networks-list.component';
 
 
 @NgModule({
@@ -132,7 +131,9 @@ import { ThemeComponent } from './_components/_elements/theme/theme.component';
     PopupWindowComponent,
     StatisticsTableComponent,
     FallingStarParticleComponent,
-    ThemeComponent
+    ThemeComponent,
+    ExperimentAllNetworksComponent,
+    ExperimentNetworksListComponent
   ],
   imports: [
     NgxCsvParserModule,

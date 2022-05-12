@@ -1,0 +1,35 @@
+hr{
+    background-color:#555555;
+    height: 0.5rem;
+}
+
+.imeMreze
+{
+    color:black;
+    font-size: large;
+    font-weight: bold;
+    word-wrap: break-word;
+    height: 40%;
+}
+
+.mreza
+{
+    background-color: #FFFFFFAA;
+    border: solid 1px #2aa8e7;
+    height: 15vh;
+    margin-bottom: 10%;
+    
+    cursor: pointer;
+}
+
+// @media (min-width: 781px) {
+
+//     .maliEkran{
+//         display: none;
+//     }
+//   }
+//   @media (max-width: 780px) {
+//     .velikiEkran{
+//         display: none;
+//     }
+//   }

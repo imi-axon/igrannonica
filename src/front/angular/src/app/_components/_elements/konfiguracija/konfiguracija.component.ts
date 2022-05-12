@@ -1,6 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
+import { Component, Input, OnInit } from '@angular/core';
+
 
 @Component({
   selector: 'app-konfiguracija',
@@ -8,56 +7,53 @@ import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
   styleUrls: ['./konfiguracija.component.scss']
 })
 export class KonfiguracijaComponent implements OnInit {
-
-  constructor(private datasetService: DatasetService, private activatedRoute: ActivatedRoute) { }
-
-  public learningRate: number=0.003;
-  public regularization: string='None';
-  public regularizationRate: number=0;
-  public epoch: number=0;
-  public activation:string='Tanh';
-  private selektovano: any;
-  private idSelektovanog: any;
-  public batchSize: number = 15;
-  private projectID: any;
-  public dataset: any;
-  public columns: any = [];
-  public slobodneKolone:any=[];
-  public inputs: string[];
-  public outputs: string[];
-  public prikaziInpute = false;
-  public prikaziOutpute = false;
-  public gotovoInputi = false;
-  public gotovoOutputi = false;
-  public trenutneVr:any=[];
-  public split:string='Random';
-  public trainSplit:number=0; // float
-  public valSplit: number=0;
-  public testSplit:number=0;
-  public krajSplit:boolean=false;
-
-  @Output() inputChanged: EventEmitter<any> = new EventEmitter<any>();
-  @Output() outputChanged: EventEmitter<any> = new EventEmitter<any>();
+  constructor() { }
+  
+  @Input() neuralNetwork: any;
+  
   
   ngOnInit(): void {
-    this.projectID = this.activatedRoute.snapshot.paramMap.get("ProjectId");
     
-    this.inputs = [];
-    this.outputs = [];
+  }
+  
+  
+  public ChangeProblemType(event: any){
+    this.neuralNetwork.conf.problemType = event.srcElement.value;
+  }
+  
+  public ChangeLearningRate(event: any){
+    this.neuralNetwork.conf.learningRate = Number.parseFloat(event.srcElement.value);
+  }
+  
+  public ChangeReg(event: any){
+    this.neuralNetwork.conf.reg = event.srcElement.value;
+  }
+  
+  public ChangeRegRate(event: any){
+    this.neuralNetwork.conf.regRate = Number.parseFloat(event.srcElement.value);
+  }
+  
+  public ChangeBatchSize(event: any){
+    this.neuralNetwork.conf.batchSize = Number.parseInt(event.srcElement.value);
+  }
+  
+  public ChangeSplitType(event: any){
+    this.neuralNetwork.conf.splitType = event.srcElement.value;
     
-    //ZAMENITI F-JOM KOJA DOVLACI SAMO KOLONE
-    this.datasetService.GetDataset(this.projectID, true, this, this.successCallback);
+    if(event.srcElement.value == "random"){
+      this.neuralNetwork.conf.trainSplit = Math.floor(Math.random()*10) / 10;
+      this.neuralNetwork.conf.valSplit = 1 - this.neuralNetwork.conf.trainSplit;
+    }
   }
-
-  successCallback(self: any, data: any) {
-    console.log("uso");
-    console.log(data);
-    self.dataset = JSON.parse(data.dataset);
-    self.columns = Object.keys(self.dataset[0]);
-    console.log(self.dataset);
-    console.log(self.columns);
+  
+  public ChangeTrainValidationSplit(event: any){
+    this.neuralNetwork.conf.trainSplit = Number.parseFloat(event.srcElement.value);
+    this.neuralNetwork.conf.valSplit = (1 - Number.parseFloat(event.srcElement.value));
   }
-
+  
+  
+  
+  /*
   onChange(event: any) {
     this.selektovano = event.target.value;
     this.idSelektovanog = event.target.id;
@@ -172,8 +168,8 @@ export class KonfiguracijaComponent implements OnInit {
     this.trainSplit =  (Math.random() * 100)/100
     this.valSplit =(Math.random() * (100-this.trainSplit))/100;
     this.krajSplit=true;
-   // this.konfiguracija.testSplit =  (Math.random() * (100- (this.konfiguracija.valSplit+this.konfiguracija.trainSplit)))
-
-}
-
+    // this.konfiguracija.testSplit =  (Math.random() * (100- (this.konfiguracija.valSplit+this.konfiguracija.trainSplit))
+  }
+  */
+ 
 }

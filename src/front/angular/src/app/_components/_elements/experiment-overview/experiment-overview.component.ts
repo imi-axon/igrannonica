@@ -68,8 +68,6 @@ export class ExperimentOverviewComponent implements OnInit{
   
   private handleSuccesfulGetProjectCallback(self: ExperimentOverviewComponent, response: any){
     self.project = response;
-    console.log(response)
-    console.log(self.project.hasDataset)
     
     // self.project.hasDataset se ponasa i izgleda kao string a prepoznaje se kao boolean
     // ovo dovodi do toga da ne mozemo da pitamo self.project.hasDataset == true

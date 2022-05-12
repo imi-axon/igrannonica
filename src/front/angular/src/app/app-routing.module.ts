@@ -24,6 +24,7 @@ import { ExperimentOverviewComponent } from './_components/_elements/experiment-
 import { ExperimentNetworkComponent } from './_components/_elements/experiment-network/experiment-network.component';
 import { ExperimentPageComponent } from './_components/_pages/experiment-page/experiment-page.component';
 import { ExperimentEditComponent } from './_components/_elements/experiment-edit/experiment-edit.component';
+import { ExperimentAllNetworksComponent } from './_components/_elements/experiment-all-networks/experiment-all-networks.component';
 
 const routes: Routes = [
  // {path:'train/:ProjectId/:Inputs/:Outputs',component:ProjectPageComponent},
@@ -52,7 +53,8 @@ const routes: Routes = [
     children:[
       {path:'', component:ExperimentOverviewComponent},
       {path:'edit', component:ExperimentEditComponent},
-      {path:'network', component:ExperimentNetworkComponent}
+      {path:'networks', component:ExperimentAllNetworksComponent},
+      {path:'networks/:NetworkId', component:ExperimentNetworkComponent}
     ]
   },
   //TESTIRANJE - OBRISATI KASNIJE

@@ -1,6 +1,9 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Project } from 'src/app/_utilities/_data-types/models';
+import { NeuralNetwork, Project } from 'src/app/_utilities/_data-types/models';
+import { TrainingApiService } from 'src/app/_utilities/_middleware/training-api.service';
+import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
+import { ChartTrainingComponent } from '../chart-training/chart-training.component';
 import { NeuralNetworkDisplayComponent } from '../neural-network-display/neural-network-display.component';
 
 @Component({
@@ -9,6 +12,27 @@ import { NeuralNetworkDisplayComponent } from '../neural-network-display/neural-
   styleUrls: ['./experiment-network.component.scss']
 })
 export class ExperimentNetworkComponent implements OnInit {
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private datasetServie: DatasetService,
+    private wsService: TrainingApiService
+  ) { }
+  
+  private getProjectId(): number{
+    let p = this.activatedRoute.parent?.snapshot.paramMap.get("ProjectId");
+    if (p != null)  {
+      return Number.parseInt(p);
+    }
+    return -1;
+  }
+  
+  private getNetworkId(): number{
+    let p = this.activatedRoute.snapshot.paramMap.get("NetworkId");
+    if(p==null)
+      return -1;
+    return Number.parseInt(p);
+  }
+  
   
   @Input() public project: Project;
   
@@ -21,10 +45,11 @@ export class ExperimentNetworkComponent implements OnInit {
   @ViewChild("changeInputOutputWindow")
   private changeInputOutputWindow: ElementRef;
   
-  
+  @ViewChild("grafik") 
+  private grafik: ChartTrainingComponent;
   
   // NEURAL NETWORK
-  public neuralNetwork = 
+  public neuralNetwork : NeuralNetwork = 
   {
     "nn": {
       "layers": [
@@ -34,19 +59,19 @@ export class ExperimentNetworkComponent implements OnInit {
           "neurons": [
             {
               "weights": [
-                1, -3.47, 1
+                
               ],
               "bias": 2.1
             },
             {
               "weights": [
-                5, -2.78, 3.15
+                
               ],
               "bias": 2.9
             },
             {
               "weights": [
-                1.54, 1.15, -2.0
+                
               ],
               "bias": 3.4
             }
@@ -78,30 +103,17 @@ export class ExperimentNetworkComponent implements OnInit {
         // OUTPUT - 2 NEURONA
         {
           "neurons": [
-            {
-              "weights": [
-                4.28,
-                -1.2
-              ],
-              "bias": 1.71
-            },
-            {
-              "weights": [
-                7.2,
-                6.13
-              ],
-              "bias": 3.11
-            }
+            
           ]
         }
       ]
     },
     "conf":
     {
-      "inputs": ["A INPUT", "B INPUT", "C INPUT"],
-      "outputs": ["Z OUTPUT", "Y OUTPUT"],
+      "inputs": [],
+      "outputs": [],
       
-      "neuronsPerLayer": [3, 2, 2],
+      "neuronsPerLayer": [3, 2, 0],
       
       "actPerLayer": ["Linear", "Sigmoid"],
       "actOut": "ReLU",
@@ -109,150 +121,163 @@ export class ExperimentNetworkComponent implements OnInit {
       "learningRate": 0.03,
       "reg": "None",
       "regRate": 0,
-      "batchSize": 1,
+      "batchSize": 15,
       
       "problemType": "classification",
       
-      "splitType": "random",
+      "splitType": "sequential",
       "trainSplit": 0.5,
       "valSplit": 0.5
     }
   }
   
-  public unusedColumns: string[] = ["UNUSED G", "UNUSED H", "UNUSED I", "UNUSED J"];
+  public runningTraining: Boolean = false;
   
-  public selectedInputs: boolean[] = [];
-  public selectedUnused: boolean[] = [];
-  public selectedOutputs: boolean[] = [];
+  public unusedColumns: string[] = [];
+  public selectedColumns: string[] = [];
   
   
-  private getProjectId(): number{
-    let p = this.activatedRoute.parent?.snapshot.paramMap.get("ProjectId");
-    if (p != null)  {
-      return Number.parseInt(p);
-    }
-    return -1;
-  }
-  
-  constructor(private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.ResetSelectedInputs();
-    this.ResetSelectedUnused();
-    this.ResetSelectedOutputs();
-  }
-  
-  private ResetSelectedInputs(){
-    this.selectedInputs = this.neuralNetwork.conf.inputs.map(() => false)
-  }
-  private ResetSelectedUnused(){
-    this.selectedUnused = this.unusedColumns.map(() => false)
-  }
-  private ResetSelectedOutputs(){
-    this.selectedOutputs = this.neuralNetwork.conf.outputs.map(() => false)
-  }
-  
-  
-  public SelectDeselectInput(index: number){
-    this.selectedInputs[index] = !this.selectedInputs[index];
-  }
-  public SelectDeselectUnused(index: number){
-    this.selectedUnused[index] = !this.selectedUnused[index];
-  }
-  public SelectDeselectOutput(index: number){
-    this.selectedOutputs[index] = !this.selectedOutputs[index];
-  }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  // MOVING SELECTION
-  
-  private countSelected(array: boolean[]){
-    let seletedCount = 0;
-    for(let i = 0; i < array.length; i++)
-      if(array[i])
-        seletedCount++;
-    return seletedCount;
-  }
-  
-  // INPUTS TO UNUSED
-  public MoveInputsToUnused(){
-    if(this.countSelected(this.selectedInputs) < this.selectedInputs.length){
-      for(let i = this.selectedInputs.length - 1; i >= 0; i--)
-        if(this.selectedInputs[i]){
-          this.unusedColumns.push(this.neuralNetwork.conf.inputs[i]);
-          this.networkComponent.RemoveInputClick(this.neuralNetwork.conf.inputs[i]);
-          this.selectedInputs[i] = false;
-        }
-    }
-    else
-      return;
     
+    this.datasetServie.GetDatasetPage(this.getProjectId(), true, 1, 1, this, this.successDatasetCallback)
+  }
+  
+  private successDatasetCallback(self: any, response : any){
+    self.unusedColumns = Object.keys(JSON.parse(JSON.parse(response.dataset).dataset)[0])
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  public StartTraining() {
+    console.log(this.neuralNetwork)
+    
+    
+    
+    this.runningTraining = true;
+    this.wsService.train(this.getProjectId(), this.getNetworkId(), this.neuralNetwork.conf, this, this.updateTrainData);
+  }
+  
+  
+  updateTrainData(self: ExperimentNetworkComponent, data: any) {
+    let tLoss = data['t_loss'];
+    let vLoss = data['v_loss'];
+    let ep = data['epoch'];
+    
+    self.grafik.dataUpdate(ep, tLoss, vLoss)
+    //self.konfiguracija.epoch=ep;
+  }
+  
+    /*
+    let neuronsPerLayer : number [] = [];
+    for(let i = 0; i < this.nnDisplay.network.layers.length - 1; i++)
+      neuronsPerLayer.push(this.nnDisplay.network.layers[i].neurons.length)
+    
+    console.log(neuronsPerLayer)
       
-    this.ResetSelectedInputs();
-    this.ResetSelectedUnused();
-  }
-  
-  // UNUSED TO INPUTS
-  public MoveUnusedToInputs(){
-    for(let i = this.selectedUnused.length - 1; i >= 0; i--)
-      if(this.selectedUnused[i]){
-        this.networkComponent.AddColumnToInput(this.unusedColumns[i]);
-        this.unusedColumns.splice(i, 1);
-        this.selectedInputs[i] = false;
-      }
+    console.log("podaci:"
+      + "\n" + this.konfiguracija.learningRate
+      + "\n" + this.konfiguracija.regularization
+      + "\n" + this.konfiguracija.regularizationRate
+      + "\n" + this.konfiguracija.batchSize
+      + "\n" + this.konfiguracija.inputs
+      + "\n" + this.konfiguracija.outputs
+      
+      // Dodato
+      + "\n" + neuronsPerLayer
+      
+      + "\n" + this.konfiguracija.activation);
+      
+    let conf = {
+      inputs: this.konfiguracija.inputs, //str[]
+      outputs: this.konfiguracija.outputs, //str[]
+      
+      // Dodato
+      neuronsPerLayer: neuronsPerLayer, //int[]
+      
+      actPerLayer: ['sigmoid', 'sigmoid'], //str[]
+      
+      // Dodato
+      actOut: "", //str
+      
+      learningRate: this.konfiguracija.learningRate, //float
+      reg: this.konfiguracija.regularization, //str
+      regRate: this.konfiguracija.regularizationRate, //float
+      batchSize: this.konfiguracija.batchSize //int
+      
+      // Dodato
+      ,
+      trainSplit:this.konfiguracija.trainSplit,
+      valSplit:this.konfiguracija.valSplit,
+      testSplit:this.konfiguracija.testSplit
+     // trainSplit: 0.5, // float
+     // valSplit: 0.5 // float
+    };
     
-    this.ResetSelectedInputs();
-    this.ResetSelectedUnused();
-  }
-  
-  // UNUSED TO OUTPUTS
-  public MoveUnusedToOutputs(){
-    for(let i = this.selectedUnused.length - 1; i >= 0; i--)
-      if(this.selectedUnused[i]){
-        this.networkComponent.AddColumnToOutput(this.unusedColumns[i]);
-        this.unusedColumns.splice(i, 1);
-      }
-    
-    this.ResetSelectedInputs();
-    this.ResetSelectedUnused();
-  }
-  
-  // OUTPUTS TO UNUSED
-  public MoveOutputsToUnused(){
-    if(this.countSelected(this.selectedOutputs) < this.selectedOutputs.length){
-      for(let i = this.selectedOutputs.length - 1; i >= 0; i--)
-        if(this.selectedOutputs[i]){
-          this.unusedColumns.push(this.neuralNetwork.conf.outputs[i]);
-          this.networkComponent.RemoveOutputClick(this.neuralNetwork.conf.outputs[i]);
-        }
+    console.log('--- KONFIGURACIJA ---')
+    console.log(conf)
+    this.wsService.train(this.projectId, this.nnId, conf, this, this.addTrainData);
+
+    console.log(this.konfiguracija.valSplit);
+
+    addTrainData(self: TrainingPageComponent, data: any) {
+      let tLoss = data['t_loss'];
+      let vLoss = data['v_loss'];
+      let ep = data['epoch'];
+
+      self.grafik.dataUpdate(ep, tLoss, vLoss)
+      self.konfiguracija.epoch=ep;
     }
+  */
+  
+  
+  // COLUMN SELECTION
+  
+  private removeStringFromList(list: string[], column: string){
+    for(let i = 0; i < list.length; i++)
+      if(list[i] == column){
+        list.splice(i, 1);
+        return list;
+      }
+    
+    return list;
+  }
+  
+  public SelectColumn(column: string){
+    if(this.IsSelected(column))
+      this.selectedColumns = this.removeStringFromList(this.selectedColumns, column);
     else
-        return;
-        
-    this.ResetSelectedOutputs();
-    this.ResetSelectedUnused();
+      this.selectedColumns.push(column)
+  }
+  
+  public IsSelected(column: string){
+    for(let i = 0; i < this.selectedColumns.length; i++)
+      if(this.selectedColumns[i] == column)
+        return true;
+    return false;
   }
   
   
-  // INTPUT OUTPUT WINDOW CONTROLS
-  public OpenChangeInputOutputWindow(){
-    this.changeInputOutputWindow.nativeElement.setAttribute("style", "display: block;");
+  public MoveToInput(){
+    for(let i = 0; i < this.selectedColumns.length; i++){
+      this.networkComponent.AddColumnToInput(this.selectedColumns[i])
+      this.unusedColumns = this.removeStringFromList(this.unusedColumns, this.selectedColumns[i])
+    }
+    this.selectedColumns = [];
   }
   
-  public CloseChangeInputOutputWindow(){
-    this.changeInputOutputWindow.nativeElement.setAttribute("style", "display: none;");
+  public MoveToOutput(){
+    for(let i = 0; i < this.selectedColumns.length; i++){
+      this.networkComponent.AddColumnToOutput(this.selectedColumns[i])
+      this.unusedColumns = this.removeStringFromList(this.unusedColumns, this.selectedColumns[i])
+    }
+    this.selectedColumns = [];
   }
-  
-  
-  
-  
   
   
   // Dragging controls =====================================================================

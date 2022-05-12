@@ -55,7 +55,7 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   private icosahedronsCount: number = 30;
   private icosahedronsSpreadX: number = 1500;
   private icosahedronsSpreadY: number = 1500;
-  private icosahedronsSpreadZ: number = -600;
+  private icosahedronsSpreadZ: number = -1000;
   private icosahedronScale: number = 10;
   private backgroundIcosahedrons: Mesh[] = [];
   
@@ -89,7 +89,7 @@ export class HomePageComponent implements OnInit, AfterViewInit {
     for(let i = 0; i < this.icosahedronsCount; i++){
       let x = Math.random() * this.icosahedronsSpreadX - this.icosahedronsSpreadX / 2;
       let y = Math.random() * this.icosahedronsSpreadY - this.icosahedronsSpreadY / 2;
-      let z = Math.random() * this.icosahedronsSpreadZ - 400;
+      let z = Math.random() * this.icosahedronsSpreadZ - 500;
       let scale = Math.random() * this.icosahedronScale;
       this.backgroundIcosahedrons.push( new Mesh( new IcosahedronGeometry(1, 0), new MeshPhongMaterial({color: 0x009DF5})) );
       this.backgroundIcosahedrons[i].position.set(x, y, z);

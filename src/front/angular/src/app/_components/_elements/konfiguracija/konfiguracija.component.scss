@@ -1,21 +1,10 @@
-#batchSizeNum{
-    color:blue;
-    font-weight: bold;
+.konfiguracija{
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    
+    
+    
 }
-
-.inout{
-    color:blue;
-}
-.checkBoxovi{
-    overflow: auto;
-    min-height: 20vh;
-    max-height: 60vh;
-}
-.box{
-    width: 1.5rem;
-    height: 1.5rem;
-}
-.sticky-top{
-    top:50%;
-}
-

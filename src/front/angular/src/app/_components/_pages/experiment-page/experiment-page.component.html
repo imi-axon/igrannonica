@@ -14,7 +14,7 @@
             <div class="experiment-card" [class.disabled-card]="this.project.hasDataset.toString() == 'False'" (click)="SwitchCard('edit')" [class.selected-card]="currentCard=='edit'">
                 <a>{{"experiment.edit" | translate}}</a>
             </div>
-            <div class="experiment-card" [class.disabled-card]="this.project.hasDataset.toString() == 'False'" (click)="SwitchCard('network')" [class.selected-card]="currentCard=='network'">
+            <div class="experiment-card" [class.disabled-card]="this.project.hasDataset.toString() == 'False'" (click)="SwitchCard('networks')" [class.selected-card]="currentCard=='networks'">
                 <a>{{"experiment.mreza" | translate}}</a>
             </div>
         </div>
@@ -26,7 +26,7 @@
             <option *ngIf="this.project.hasDataset.toString() == 'True'" value="edit" [selected]="currentCard=='edit'" >
                 <a>{{"experiment.edit" | translate}}</a>
             </option>
-            <option *ngIf="this.project.hasDataset.toString() == 'True'" value="network" [selected]="currentCard=='network'">
+            <option *ngIf="this.project.hasDataset.toString() == 'True'" value="networks" [selected]="currentCard=='networks'">
                 <a>{{"experiment.mreza" | translate}}</a>
             </option>
         </select>

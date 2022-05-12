@@ -1,0 +1,14 @@
+
+    <div id="wrapper">
+        <h1> {{'lista-mreza.mojeMreze' |translate}} </h1>
+        
+        <app-experiments-networks-list [projectId]="this.projectId" #networksList></app-experiments-networks-list>
+        
+        <div class="newNetwork" (click)="NewNetwork();">
+            <h3>{{'lista-mreza.nova' |translate}}</h3>
+        </div>
+    </div>
+    
+
+
+

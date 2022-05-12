@@ -1,150 +1,159 @@
-<div class="container mx-auto mt-3">
-    <div class="row">
-        <div class="col-md-6">
-            <label for="epoch" style="font-weight: bold;">Epoch</label>
-            <p id="epoch" style="font-weight: bolder; font-size: x-large;">{{epoch}}</p>
+<div class="konfiguracija">
+    
+    <div class="opcijaContainer">
+        <label for="ProblemType">Problem type</label>
+        <div class="select">
+            <select id="ProblemType" (change)="ChangeProblemType($event)">
+                <option selected value="regression">Regression</option>
+                <option value="classification">Classification</option>
+            </select>
         </div>
-        <div class="col-md-2">
-            <label for="LearningRate">Learning rate</label>
-            <div class="select">
-                <select id="LearningRate" (change)="onChange($event)">
-                    <option>0.00001</option>
-                    <option>0.0001</option>
-                    <option>0.001</option>
-                    <option selected>0.003</option>
-                    <option>0.01</option>
-                    <option>0.03</option>
-                    <option>0.1</option>
-                    <option>0.3</option>
-                    <option>1</option>
-                    <option>3</option>
-                    <option>10</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <label for="Regularization">Regularization</label>
-            <div class="select">
-                <select id="Regularization" (change)="onChange($event)">
-                    <option selected>None</option>
-                    <option>L1</option>
-                    <option>L2</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <label for="RegularizationRate">RegularizationRate</label>
-            <div class="select">
-                <select id="RegularizationRate" (change)="onChange($event)">
-                    <option selected>0</option>
-                    <option>0.001</option>
-                    <option>0.003</option>
-                    <option>0.01</option>
-                    <option>0.03</option>
-                    <option>0.1</option>
-                    <option>0.3</option>
-                    <option>1</option>
-                    <option>3</option>
-                    <option>10</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-4 mt-5">
-            <label for="Activation">Activation **za sve skrivene slojeve</label>
-            <div class="select">
-                <select id="Activation" (change)="onChange($event)">
-                    <option>ReLU</option>
-                    <option selected>Tanh</option>
-                    <option>Sigmoid</option>
-                    <option>Linear</option>
-                </select>
-            </div>
-        </div>
-        <div id="batchSize" class="col-md-4 mt-5 ">
-            <div class="" style="width:100%">
-                <label for="batchSlider" class="form-label">Batch size: <span
-                        id="batchSizeNum">{{batchSize}}</span></label>
-                <input type="range" class="form-range" id="batchSlider" min="0" max="30" step="1" value="15"
-                    (input)="onChange($event)">
-            </div>
-        </div>
-        <div class="col-md-4 mt-5 d-flex justify-content-center">
-            <div>
-                <label for="Split">Data split</label>
-                <div class="select">
-                    <select id="Split" (click)="onChange($event)">
-                        <option>Random</option>
-                        <option selected>Izaberi</option>
-                    </select>
-                </div>
-                <div *ngIf="krajSplit">
-                    <p> Train:{{trainSplit}}</p>
-                    <p> Val:{{valSplit}}</p>
-                </div>
-            </div>
-        </div>
-
     </div>
-    <div class="row mt-5 ml-0">
-        <div id="input/output" class="col-11 mt-3">
-            <div class="btn-group">
-                <button class="btn btn-primary" (click)="prikaziInput()" [disabled]="gotovoInputi">Izaberi
-                    input-e</button>
-                <button class="btn btn-primary" (click)="prikaziOutput()"
-                    [disabled]="!gotovoInputi || gotovoOutputi">Izaberi output-e</button>
+    
+    <div class="opcijaContainer">
+        <label for="LearningRate">Learning rate</label>
+        <div class="select">
+            <select id="LearningRate" (change)="ChangeLearningRate($event)">
+                <option>0.00001</option>
+                <option>0.0001</option>
+                <option>0.001</option>
+                <option selected>0.003</option>
+                <option>0.01</option>
+                <option>0.03</option>
+                <option>0.1</option>
+                <option>0.3</option>
+                <option>1</option>
+                <option>3</option>
+                <option>10</option>
+            </select>
+        </div>
+    </div>
+    
+    <div></div>
+    <div></div>
+    
+    <div class="opcijaContainer">
+        <label for="Regularization">Regularization</label>
+        <div class="select">
+            <select id="Regularization" (change)="ChangeReg($event)">
+                <option [selected]="neuralNetwork.conf.reg== 'None'">None</option>
+                <option [selected]="neuralNetwork.conf.reg == 'L1'">L1</option>
+                <option [selected]="neuralNetwork.conf.reg == 'L2'">L2</option>
+            </select>
+        </div>
+    </div>
+    
+    
+    <!-- <div class="opcijaContainer" *ngIf="neuralNetwork.conf.reg != 'None'"> -->
+    <div class="opcijaContainer">
+        <label for="RegularizationRate">RegularizationRate</label>
+        <div class="select">
+            <select [disabled]="neuralNetwork.conf.reg == 'None'" id="RegularizationRate" (change)="ChangeRegRate($event)">
+                <option [selected]="neuralNetwork.conf.regRate == 0">0</option>
+                <option [selected]="neuralNetwork.conf.regRate == 0.001">0.001</option>
+                <option [selected]="neuralNetwork.conf.regRate == 0.003">0.003</option>
+                <option [selected]="neuralNetwork.conf.regRate == 0.01">0.01</option>
+                <option [selected]="neuralNetwork.conf.regRate == 0.03">0.03</option>
+                <option [selected]="neuralNetwork.conf.regRate == 0.1">0.1</option>
+                <option [selected]="neuralNetwork.conf.regRate == 0.3">0.3</option>
+                <option [selected]="neuralNetwork.conf.regRate == 1">1</option>
+                <option [selected]="neuralNetwork.conf.regRate == 3">3</option>
+                <option [selected]="neuralNetwork.conf.regRate == 10">10</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="opcijaContainer">
+        <label for="batchSlider" class="form-label">Batch size: <span id="batchSizeNum">{{neuralNetwork.conf.batchSize}}</span></label>
+        <input type="range" class="form-range" id="batchSlider" min="0" max="30" step="1" [value]="neuralNetwork.conf.batchSize" (input)="ChangeBatchSize($event)">
+    </div>
+    
+    <div></div>
+    <div></div>
+    
+    <div class="opcijaContainer">
+        <label for="SplitType">Split type</label>
+        <div class="select">
+            <select id="SplitType" (change)="ChangeSplitType($event)">
+                <option value="random" [selected]="neuralNetwork.conf.splitType == 'random'">Random</option>
+                <option value="sequential" [selected]="neuralNetwork.conf.splitType == 'sequential'">Sequential</option>
+            </select>
+        </div>
+    </div>
+    
+    
+    <!-- <div class="opcijaContainer" *ngIf="neuralNetwork.conf.splitType != 'random'"> -->
+    <div class="opcijaContainer">
+        <label for="TrainSplit" class="form-label">Train / Validation split: <span id="TrainSplit">{{neuralNetwork.conf.trainSplit | number : '.2-2'}}</span></label>
+        <input [disabled]="neuralNetwork.conf.splitType == 'random'" type="range" class="form-range" id="batchSlider" min="0" max="1" step="0.1" [value]="neuralNetwork.conf.trainSplit" (input)="ChangeTrainValidationSplit($event)">
+    </div>
+        
+</div>
+    
+<!--
+<div class="row mt-5 ml-0">
+    <div id="input/output" class="col-11 mt-3">
+        <div class="btn-group">
+            <button class="btn btn-primary" (click)="prikaziInput()" [disabled]="gotovoInputi">Izaberi
+                input-e</button>
+            <button class="btn btn-primary" (click)="prikaziOutput()"
+                [disabled]="!gotovoInputi || gotovoOutputi">Izaberi output-e</button>
+        </div>
+        
+        
+        
+        <div class="boxovi">
+
+            <div class="row checkBoxovi mt-3 border rounded mx-auto" *ngIf="prikaziInpute">
+                <div class="col-9">
+                    <div class="my-3" *ngFor="let c of columns ; index as i">
+
+                        <input class="box" type="checkbox" id="input{{i}}" (click)="inputClick($event)" [value]="c">
+                        {{c}}
+
+                    </div>
+                </div>
+                <br>
+                <div class="col-2">
+                    <button class="potvrdi btn btn-sm btn-primary mt-2 sticky-top ml-0 " (click)="potvrdiInp()"
+                        [disabled]="inputs.length==0">Potvrdi</button>
+                </div>
             </div>
-            <div class="boxovi">
 
-                <div class="row checkBoxovi mt-3 border rounded mx-auto" *ngIf="prikaziInpute">
-                    <div class="col-9">
-                        <div class="my-3" *ngFor="let c of columns ; index as i">
 
-                            <input class="box" type="checkbox" id="input{{i}}" (click)="inputClick($event)" [value]="c">
-                            {{c}}
+            <div class="row checkBoxovi mt-3 border rounded mx-auto" *ngIf="prikaziOutpute">
+                <div class="col-9">
+                    <div class="my-3" *ngFor="let c of slobodneKolone ; index as i">
 
-                        </div>
-                    </div>
-                    <br>
-                    <div class="col-2">
-                        <button class="potvrdi btn btn-sm btn-primary mt-2 sticky-top ml-0 " (click)="potvrdiInp()"
-                            [disabled]="inputs.length==0">Potvrdi</button>
+                        <input class="box" type="checkbox" id="output{{i}}" (click)="outputClick($event)"
+                            [value]="c">
+                        {{c}}
+
                     </div>
                 </div>
-
-
-                <div class="row checkBoxovi mt-3 border rounded mx-auto" *ngIf="prikaziOutpute">
-                    <div class="col-9">
-                        <div class="my-3" *ngFor="let c of slobodneKolone ; index as i">
-
-                            <input class="box" type="checkbox" id="output{{i}}" (click)="outputClick($event)"
-                                [value]="c">
-                            {{c}}
-
-                        </div>
-                    </div>
-                    <br>
-                    <div class="col-2">
-                        <button class=" potvrdi btn btn-sm btn-primary sticky-top " (click)="potvrdiOut()"
-                            [disabled]="outputs.length==0">Potvrdi</button>
-                    </div>
-                </div>
-                <div class="">
-                    <div *ngIf="gotovoInputi">
-                        Izabrani inputi:
-                        <div class="inout d-inline" *ngFor="let i of inputs">
-                            {{i}}
-                        </div>
-                    </div>
-
-                    <div *ngIf="gotovoOutputi">
-                        Izabrani outputi:
-                        <div *ngFor="let o of outputs" class="inout d-inline">
-                            {{o}}
-                        </div>
-                    </div>
-
+                <br>
+                <div class="col-2">
+                    <button class=" potvrdi btn btn-sm btn-primary sticky-top " (click)="potvrdiOut()"
+                        [disabled]="outputs.length==0">Potvrdi</button>
                 </div>
             </div>
+            <div class="">
+                
+            <div *ngIf="gotovoInputi">
+                Izabrani inputi:
+                <div class="inout d-inline" *ngFor="let i of inputs">
+                    {{i}}
+                </div>
+            </div>
+
+            <div *ngIf="gotovoOutputi">
+                Izabrani outputi:
+                <div *ngFor="let o of outputs" class="inout d-inline">
+                    {{o}}
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
+-->

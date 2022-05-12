@@ -150,8 +150,6 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   
   
   public RemoveInputClick(inputName: string){
-    if(this.parent.neuralNetwork.conf.inputs.length <= 1)
-      return;
     
     let inputIndex = -1;
     this.parent.neuralNetwork.conf.inputs.forEach(
@@ -166,12 +164,11 @@ export class NeuralNetworkDisplayComponent implements OnInit {
     for(let i = 0; i < this.parent.neuralNetwork.nn.layers[0].neurons.length; i++)
       this.parent.neuralNetwork.nn.layers[0].neurons[i].weights.splice(inputIndex, 1);
     
+    this.parent.unusedColumns.push(inputName);
    
     this.Refresh();
   }
   public RemoveOutputClick(outputName: string){
-    if(this.parent.neuralNetwork.conf.outputs.length <= 1)
-      return;
     
     let outputIndex = -1;
     // Remove input name from conf
@@ -192,6 +189,8 @@ export class NeuralNetworkDisplayComponent implements OnInit {
         }
       }
     );
+    
+    this.parent.unusedColumns.push(outputName);
    
     this.Refresh();
   }
@@ -723,7 +722,46 @@ export class NeuralNetworkDisplayComponent implements OnInit {
         .text((d: any) => {return d;})
         .attr("y", (d: any, i: number) => { return i * this.neuronOffsetY + this.displayTopPadding + this.calculateCurrentYOffset(this.parent.neuralNetwork.conf.inputs.length) - (this.neuronWidth / 2) - 10})
         .attr("x", this.layerWidth / 3)
+    
+    for(let i = 0; i < this.parent.neuralNetwork.conf.inputs.length; i++)
+      this.inputNeurons
+          .append("image")
+          .attr("href", "/assets/Images/Icons/remove_icon.svg")
+          .attr("y", i * this.neuronOffsetY + this.displayTopPadding + this.calculateCurrentYOffset(this.parent.neuralNetwork.conf.inputs.length) - this.neuronWidth + 10)
+          .attr("x", (this.layerWidth / 2) + (this.neuronWidth / 2) - 5)
           
+          .attr("cursor", "pointer")
+          .attr("width", 20)
+          .attr("height", 20)
+          .on("mouseenter", (event : any, d : any) => {
+            select(event.currentTarget)
+              .transition()
+                .attr("y", i * this.neuronOffsetY + this.displayTopPadding + this.calculateCurrentYOffset(this.parent.neuralNetwork.conf.inputs.length) - this.neuronWidth + 8)
+                .attr("x", (this.layerWidth / 2) + (this.neuronWidth / 2) - 7)
+                .attr("width", 24)
+                .attr("height", 24)
+          })
+          .on("mouseleave", (event : any, d : any) => {
+              select(event.currentTarget)
+                .transition()
+                  .attr("y", i * this.neuronOffsetY + this.displayTopPadding + this.calculateCurrentYOffset(this.parent.neuralNetwork.conf.inputs.length) - this.neuronWidth + 10)
+                  .attr("x", (this.layerWidth / 2) + (this.neuronWidth / 2) - 5)
+                  .attr("width", 20)
+                  .attr("height", 20)
+          })
+          .on("click", (event : any, d : any) => {
+            //this.porukaPopupNeuron = this.translate.instant("popup-window.neuron");
+            //let dialogRef = this.dialog.open(PopupWindowComponent, { data: { poruka: this.porukaPopupNeuron } });
+            //dialogRef.afterClosed().subscribe(result => {
+              //console.log(`Dialog res: ${result}`);
+              //if(result=='yes') 
+              //{
+              //  console.log(result);
+                this.RemoveInputClick(this.parent.neuralNetwork.conf.inputs[i]);
+              //}
+            //});
+            
+          })  
   }
   
   private AddHiddenNeurons(){
@@ -779,16 +817,16 @@ export class NeuralNetworkDisplayComponent implements OnInit {
                   .attr("height", 20)
           })
           .on("click", (event : any, d : any) => {
-            this.porukaPopupNeuron = this.translate.instant("popup-window.neuron");
-            let dialogRef = this.dialog.open(PopupWindowComponent, { data: { poruka: this.porukaPopupNeuron } });
-            dialogRef.afterClosed().subscribe(result => {
-              console.log(`Dialog res: ${result}`);
-              if(result=='yes') 
-              {
-                console.log(result);
+            //this.porukaPopupNeuron = this.translate.instant("popup-window.neuron");
+            //let dialogRef = this.dialog.open(PopupWindowComponent, { data: { poruka: this.porukaPopupNeuron } });
+            //dialogRef.afterClosed().subscribe(result => {
+              //console.log(`Dialog res: ${result}`);
+              //if(result=='yes') 
+              //{
+              //  console.log(result);
                 this.RemoveHiddenClick(i, j);
-              }
-            });
+              //}
+            //});
            
           })  
     
@@ -834,7 +872,48 @@ export class NeuralNetworkDisplayComponent implements OnInit {
         .text((d: any) => {return d;})
         .attr("y", (d: any, i: number) => {return i * this.neuronOffsetY + this.displayTopPadding + + this.calculateCurrentYOffset(this.parent.neuralNetwork.conf.outputs.length) - (this.neuronWidth / 2) - 10})
         .attr("x", (this.parent.neuralNetwork.nn.layers.length + 1) * this.layerWidth - (this.layerWidth / 3))
+    
+    
+    for(let i = 0; i < this.parent.neuralNetwork.conf.outputs.length; i++)
+      this.outputNeurons
+        .append("image")
+        .attr("href", "/assets/Images/Icons/remove_icon.svg")
+        .attr("y", i * this.neuronOffsetY + this.displayTopPadding + this.calculateCurrentYOffset(this.parent.neuralNetwork.conf.outputs.length) - this.neuronWidth + 10)
+        .attr("x", (this.layerWidth * this.parent.neuralNetwork.nn.layers.length) + (this.neuronWidth) + 10)
+        
+        .attr("cursor", "pointer")
+        .attr("width", 20)
+        .attr("height", 20)
+        .on("mouseenter", (event : any, d : any) => {
+          select(event.currentTarget)
+            .transition()
+              .attr("y", i * this.neuronOffsetY + this.displayTopPadding + this.calculateCurrentYOffset(this.parent.neuralNetwork.conf.outputs.length) - this.neuronWidth + 8)
+              .attr("x", (this.layerWidth * this.parent.neuralNetwork.nn.layers.length) + (this.neuronWidth) + 8)
+              .attr("width", 24)
+              .attr("height", 24)
+        })
+        .on("mouseleave", (event : any, d : any) => {
+            select(event.currentTarget)
+              .transition()
+                .attr("y", i * this.neuronOffsetY + this.displayTopPadding + this.calculateCurrentYOffset(this.parent.neuralNetwork.conf.outputs.length) - this.neuronWidth + 10)
+                .attr("x", (this.layerWidth * this.parent.neuralNetwork.nn.layers.length) + (this.neuronWidth) + 10)
+                .attr("width", 20)
+                .attr("height", 20)
+        })
+        .on("click", (event : any, d : any) => {
+          //this.porukaPopupNeuron = this.translate.instant("popup-window.neuron");
+          //let dialogRef = this.dialog.open(PopupWindowComponent, { data: { poruka: this.porukaPopupNeuron } });
+          //dialogRef.afterClosed().subscribe(result => {
+            //console.log(`Dialog res: ${result}`);
+            //if(result=='yes') 
+            //{
+            //  console.log(result);
+              this.RemoveOutputClick(this.parent.neuralNetwork.conf.outputs[i]);
+            //}
+          //});
           
+        })  
+        
   }
   
   private AddConnections(){
@@ -894,7 +973,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   }
   
   private AddInputConnections(){
-    let inputAddedOffsetY = this.calculateCurrentYOffset(this.parent.neuralNetwork.conf.inputs.length)
+    let outputAddedOffsetY = this.calculateCurrentYOffset(this.parent.neuralNetwork.conf.inputs.length)
     let firstLayerAddedOffsetY = this.calculateCurrentYOffset(this.parent.neuralNetwork.nn.layers[0].neurons.length)
     
     for(let i = 0; i < this.parent.neuralNetwork.nn.layers[0].neurons.length; i++)
@@ -905,7 +984,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
           .attr("d", () => {
             
             let xStart = this.layerWidth / 2
-            let yStart = this.displayTopPadding + inputAddedOffsetY + this.neuronOffsetY * j
+            let yStart = this.displayTopPadding + outputAddedOffsetY + this.neuronOffsetY * j
             let xEnd = this.layerWidth + this.layerWidth / 2
             let yEnd = this.displayTopPadding + firstLayerAddedOffsetY + this.neuronOffsetY * i
             

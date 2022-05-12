@@ -231,14 +231,11 @@ export class NN{
 
 
 
-
-
-
 /* MREZA */
 
 export class NeuralNetwork{
-    network: Network = new Network();
-    configuration: NetworkConfiguration = new NetworkConfiguration();
+    nn: Network = new Network();
+    conf: NetworkConfiguration = new NetworkConfiguration();
 }
 
 class Network{

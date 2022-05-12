@@ -34,14 +34,15 @@ namespace BackApi.Controllers
             this.wsq = wsQueue;
         }
 
-        [HttpGet("{id}/nn/{nnid}/train/start")]
+        [HttpGet("{id}/nn/{nnid}/train/start"), AllowAnonymous]
         public async Task<ActionResult> Train(int id, int nnid)
         {
+            /*
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
             if (!projsrv.projectExists(id)) return NotFound();
             if (!projsrv.projectOwnership(userid, id)) return Forbid();
-
+            */
             var packet = new ApiNNTrain();
             packet.dataset = datasrv.ProjIdToPath(id, true);
             if (packet.dataset == null) return BadRequest("dataset");
@@ -63,7 +64,7 @@ namespace BackApi.Controllers
                     var webSocketfront = await HttpContext.WebSockets.AcceptWebSocketAsync();
                     wsq.AddToDict(nnid, webSocketfront);
                     var webSocketMl = new ClientWebSocket();
-                    await webSocketMl.ConnectAsync(new Uri(Urls.mlWs + "/api/user"+userid+"/nn"+nnid+"/train"), CancellationToken.None);
+                    await webSocketMl.ConnectAsync(new Uri(Urls.mlWs + "/api/user"+6+"/nn"+nnid+"/train"), CancellationToken.None);
                     try
                     {
                         var finished=await nnsrv.MlTraining(webSocketfront, packet,webSocketMl);

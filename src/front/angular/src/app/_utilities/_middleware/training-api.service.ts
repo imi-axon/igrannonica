@@ -9,23 +9,29 @@ export class TrainingApiService {
 
   url = apiProperties.wsurl;
 
-  public train(projectId:number, nnId: number ,conf:any, cbObj: any, cbFun: Function){
+  public train(projectId:number, nnId: number ,conf:any, self: any, callback: Function){
+    
+    
     let url=this.url+'/api/projects/'+projectId+'/nn/'+nnId+'/train/start'
-    let ws = webSocket<any>({url:url})
+    
+    let ws = webSocket<any>(
+      {url: url},
+      
+    )
 
     ws.subscribe((val:any)=>{
       console.log("WS MESSAGE")
       console.log(val)
 
-      if (cbObj && cbFun) {
-        cbFun(cbObj, val)
-      }
+      if (self && callback)
+        callback(self, val)
+      
 
-      ws.next('play');
+      //ws.next('play');
     })
 
     ws.next(conf);
-    ws.next('play');
+    //ws.next('play');
 
   }
 

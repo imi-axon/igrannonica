@@ -266,14 +266,14 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
     data = await ws.receive_json() # ws <<<<
 
     # confirm
-    await ws.send_bytes(b'') # ws >>>>
+    await ws.send_bytes(b'0') # ws >>>>
     
     print(data)
 
     datasetlink = data['dataset']
     nnlink = data['nn']
     conflink = data['conf']
-    trainrezlink = data['trainrez']
+    # trainrezlink = data['trainrez']
     conf = json_decode(data['newconf'])
 
     # TEMP
@@ -299,6 +299,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
             th = tt.thread      
             print('> Thread allready exists')
         else:
+            print("TEST")
             th = Thread(target=TrainingInstance(buff, lock, flags).train, args=(datasetlink, nnlink, conf), daemon=True)
             tt = TrainingThread(th, buff, flags, lock)
             TTM.add(tt, uid, nnid)

@@ -56,6 +56,7 @@ namespace BackApi.Services
                     return true;
                 }
 
+                /*
                 var strepnum= Encoding.UTF8.GetString(buffer, 0, resultml.Count);//prikaz prethodno istreniranih epoha
                 int epnum= int.Parse(strepnum);
                 for (int i = 0; i < epnum; i++)
@@ -65,6 +66,7 @@ namespace BackApi.Services
                     var toFronttrainprev = Encoding.UTF8.GetBytes(tmpprev);
                     await webSocket.SendAsync(new ArraySegment<byte>(toFronttrainprev, 0, tmpprev.Length), resultml.MessageType, resultml.EndOfMessage, CancellationToken.None);
                 }
+                */
                 
                 /*var fromFronttrain = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                 var playstop = Encoding.UTF8.GetString(buffer, 0, fromFronttrain.Count);

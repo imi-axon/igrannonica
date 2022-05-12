@@ -1,0 +1,24 @@
+.newNetwork{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    cursor: pointer;
+    width: 250px;
+    height: 60px;
+    border: solid 2px #0e5db6;
+    
+    h3{
+        text-align: center;
+        color: #0e5db6;
+        line-height: 40px;
+    }
+    
+    &:hover{
+        background-color: #0e5db6;
+        
+        h3{
+            color: #FFFFFF;
+        }
+    }
+}

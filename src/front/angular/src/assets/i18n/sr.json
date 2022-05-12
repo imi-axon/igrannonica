@@ -63,7 +63,7 @@
         "nema":"Nemate nijednu neuronsku mrežu",
         "search":"Pretražite...",
         "nova":"Nova mreža",
-        "mojeMreze": "Moje mreže"
+        "mojeMreze": "Moje neuronske mreže"
     },
     "new-project":{
         "name":"Naziv eksperimenta",
