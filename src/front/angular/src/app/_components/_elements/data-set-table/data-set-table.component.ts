@@ -6,7 +6,8 @@ import { EventEmitter } from '@angular/core';
   templateUrl: './data-set-table.component.html',
   styleUrls: ['./data-set-table.component.scss']
 })
-export class DataSetTableComponent implements OnInit, OnChanges{
+export class DataSetTableComponent implements OnInit{
+  constructor() {}
   
   @Output() LoadedEvent = new EventEmitter<null>();
   
@@ -16,13 +17,6 @@ export class DataSetTableComponent implements OnInit, OnChanges{
   
   
   ngOnInit(): void {
-    
-  }
-
-  
-  constructor() {}
-  
-  ngOnChanges(): void {
     
   }
   

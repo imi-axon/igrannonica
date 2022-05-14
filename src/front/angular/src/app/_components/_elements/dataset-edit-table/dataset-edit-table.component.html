@@ -1,0 +1,29 @@
+<table>
+    
+    <thead>
+        <!-- RED ZA KOLONE -->
+        <tr>
+            
+            <!-- <th scope="col" (click)="SelectDeselectAllColumns()"> </th> -->
+            
+            <th scope="col" *ngFor="let column of columns" [class.selectedColumnTH]="selectedColumns.includes(column)" (click)="SelectDeselectColumn(column)">
+                {{column}}
+            </th>
+        </tr>
+    </thead>
+    
+    <tbody>
+        <!-- RED PODATAKA -->
+        <tr *ngFor="let i = index; let row of dataset">
+            
+            <!-- <td> </td> -->
+            
+            <!-- CELIJA U REDU -->
+            <td *ngFor="let j = index; let cell of GetRowData(row)" [class.selectedColumnTR]="selectedColumns.includes(GetRowKeys(row)[j])">
+                {{cell}}
+            </td>
+
+        </tr>
+    </tbody>
+
+</table>

@@ -180,7 +180,7 @@ namespace BackApi.Services
                     string slikaBase64 = Convert.ToBase64String(imageArray);
 
                     rez.Append("{");
-                    rez.Append("\"" + "UseId" + "\":" + "\"" + user.UserId + "\",");
+                    rez.Append("\"" + "UserId" + "\":" + "\"" + user.UserId + "\",");
                     rez.Append("\"" + "Name" + "\":" + "\"" + user.Name + "\",");
                     rez.Append("\"" + "Lastname" + "\":" + "\"" + user.Lastname + "\",");
                     rez.Append("\"" + "Username" + "\":" + "\"" + user.Username + "\",");

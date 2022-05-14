@@ -1,18 +1,18 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Project, PublicProject } from 'src/app/_utilities/_data-types/models';
+import { PublicProject } from 'src/app/_utilities/_data-types/models';
 import { AuthService } from 'src/app/_utilities/_services/auth.service';
 import { ProjectsService } from 'src/app/_utilities/_services/projects.service';
 import { PopupWindowComponent } from '../popup-window/popup-window.component';
 
 @Component({
-  selector: 'app-project-list',
-  templateUrl: './project-list.component.html',
-  styleUrls: ['./project-list.component.scss']
+  selector: 'app-public-project-list',
+  templateUrl: './public-project-list.component.html',
+  styleUrls: ['./public-project-list.component.scss']
 })
-export class ProjectListComponent implements OnInit {
+export class PublicProjectListComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
@@ -22,10 +22,8 @@ export class ProjectListComponent implements OnInit {
     private router: Router
   ) { }
 
-  private username: string = this.authService.korisnickoIme;
-
-  public projects: Project[] = [];
-  public filteredProjects: Project[] = [];
+  public publicProjects: PublicProject[] = [];
+  public filteredPublicProjects: PublicProject[] = [];
   public key: string = 'sort';
 
   private _searchTerm: string;
@@ -35,7 +33,7 @@ export class ProjectListComponent implements OnInit {
   }
   set searchTerm(value: string) {
     this._searchTerm = value;
-    this.filteredProjects = this.filter(value);
+    this.filteredPublicProjects = this.filter(value);
 
     if (this.key == 'sort') this.sortSort();
     else
@@ -47,7 +45,7 @@ export class ProjectListComponent implements OnInit {
   }
   public SetSearchTerm(text: string) {
     this._searchTerm = text;
-    this.filteredProjects = this.filter(text);
+    this.filteredPublicProjects = this.filter(text);
 
     if (this.key == 'sort') this.sortSort();
     else
@@ -57,24 +55,29 @@ export class ProjectListComponent implements OnInit {
         else
           if (this.key == 'sortRev') this.sortRev();
   }
-
+  
   ngOnInit(): void {
-    this.projectsService.userProjects(this.username, this, this.handleSuccess, this.handleSuccess);
+    this.projectsService.getProjects(this, this.handleGetPublicProject, this.handleGetPublicProject);
   }
 
   filter(str: string) {
-    return this.projects.filter(projects => projects.Name.toLowerCase().indexOf(str.toLowerCase()) !== -1)
+    return this.publicProjects.filter(projects => projects.project.Name.toLowerCase().indexOf(str.toLowerCase()) !== -1)
   }
 
   loadProjectsCallback(self: any) {
-    self.projectsService.userProjects(self.username, self, self.handleSuccess, self.handleSuccess);
+    self.projectsService.getProjects(self, self.handleGetPublicProject, self.handleGetPublicProject);
   }
 
-  handleSuccess(self: any, projects: Project[]) {
-    if (projects) {
-      self.projects = projects;
-      self.filteredProjects = projects;
+  handleGetPublicProject(self: any, response: any){
+    let projects = [];
+    for(let i = 0; i < response.length; i++){
+      let project = new PublicProject();
+      project.project = response[i][0]
+      project.owner = response[i][1]
+      projects.push(project)
     }
+    self.publicProjects = projects;
+    self.filteredPublicProjects = projects;
   }
 
   handleError(self: any, message: string) {
@@ -91,19 +94,19 @@ export class ProjectListComponent implements OnInit {
   }
 
   sortAZ() {
-    this.filteredProjects.sort((a, b) => a.Name.localeCompare(b.Name));
+    this.filteredPublicProjects.sort((a, b) => a.project.Name.localeCompare(b.project.Name));
   }
 
   sortZA() {
-    this.filteredProjects.sort((a, b) => b.Name.localeCompare(a.Name));
+    this.filteredPublicProjects.sort((a, b) => b.project.Name.localeCompare(a.project.Name));
   }
 
   sortSort() {
-    this.filteredProjects.sort((a, b) => a.ProjectId - b.ProjectId);
+    this.filteredPublicProjects.sort((a, b) => a.project.ProjectId - b.project.ProjectId);
   }
 
   sortRev() {
-    this.filteredProjects.sort((a, b) => b.ProjectId - a.ProjectId);
+    this.filteredPublicProjects.sort((a, b) => b.project.ProjectId - a.project.ProjectId);
   }
 
   onClick(projId: any) {

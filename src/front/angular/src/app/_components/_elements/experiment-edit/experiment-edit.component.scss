@@ -2,13 +2,13 @@
     width: 100%;
     
     display: grid;
-    row-gap: 25px;
+    row-gap: 100px;
     grid-template-rows: auto auto auto;
     
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     
     
-    #datasetRow{
+    #editSection{
         height: fit-content;
         width: 100%;
         
@@ -16,13 +16,163 @@
         column-gap: 1%;
         grid-template-columns: 74% 25%;
         
-        #datasetContainer{
-            background-color: var(--ExpOverviewDatasetContainer);
-            backdrop-filter: blur(5px);
-            overflow-x: auto;
+        #leftColumn{
+            display: grid;
+            row-gap: 10px;
+            grid-template-rows: auto auto;
+            
+            
+            
+            #optionsContainer{
+                z-index: 3;
+                background-color: var(--ExpOverviewDatasetContainer);
+                backdrop-filter: blur(5px);
+                border: solid 1px #0091ff;
+                min-height: 46px;
+                padding: 5px;
+                
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                
+                .downloadButton{
+                    transition: background-color 0.2s ease, color 0.2 ease;
+                    position: relative;
+                    width: 160px;
+                    height: 36px;
+                    color: #FFFFFFDD;
+                    background-color: #2866a0;
+                    text-align: left;
+                    padding: 0px 10px 0px 10px;
+                    line-height: 36px;
+                    cursor: pointer;
+                    user-select: none;
+                    border: none;
+                    
+                    .downloadIcon{
+                        transition: 0.2s ease;
+                        position: absolute;
+                        right: 14px;
+                        top: 10px;
+                    }
+                    
+                    &:hover{
+                        transition: background-color 0.2s ease, color 0.2 ease;
+                        color: #FFFFFF;
+                        background-color: #0f416f;
+                    }
+                }
+                
+                
+                .optionsWrapper{
+                    display: flex;
+                    align-items: center;
+                    
+                    .optionsDropdown{
+                        transition: background-color 0.2s ease, color 0.2 ease;
+                        position: relative;
+                        width: 160px;
+                        height: 36px;
+                        color: #FFFFFFDD;
+                        background-color: #2866a0;
+                        text-align: left;
+                        padding: 0px 10px 0px 10px;
+                        line-height: 36px;
+                        cursor: pointer;
+                        user-select: none;
+                        margin-right: 10px;
+                        
+                        .dropdownIcon{
+                            transition: 0.2s ease;
+                            position: absolute;
+                            right: 14px;
+                            top: 14px;
+                        }
+                        
+                        &:hover{
+                            transition: background-color 0.2s ease, color 0.2 ease;
+                            color: #FFFFFF;
+                            background-color: #0f416f;
+                            
+                            .submenu{
+                                display: block;
+                            }
+                            
+                            .dropdownIcon{
+                                transition: 0.2s ease;
+                                transform: scaleY(-1);
+                            }
+                        }
+                        
+                        .submenu{
+                            display: none;
+                            list-style: none;
+                            left: 0px;
+                            position: absolute;
+                            padding: 0px;
+                            background-color: #1a4074;
+                            
+                            animation: submenuSlide 0.2s ease;
+                            
+                            button{
+                                transition: background-color 0.2s ease, color 0.2 ease;
+                                width: 220px;
+                                height: 36px;
+                                padding: 0px 10px 0px 10px;
+                                margin: 0px;
+                                font-size: 12px;
+                                border: none;
+                                text-align: left;
+                                color: #FFFFFFDD;
+                                background-color: #235395;
+                                
+                                &:hover{
+                                    transition: background-color 0.2s ease, color 0.2 ease;
+                                    color: #FFFFFF;
+                                    background-color: #1d4b7b;
+                                }
+                                
+                            }
+                        }
+                        
+                        @keyframes submenuSlide {
+                            0% {
+                                opacity: 0;
+                                transform-origin: left;
+                                transform: translateX(15px);
+                            }
+                            100% {
+                                opacity: 1;
+                                transform: none;
+                            }
+                        }
+                    }
+                    
+                }
+                
+            }
+            
+            #datasetContainer{
+                background-color: var(--ExpOverviewDatasetContainer);
+                backdrop-filter: blur(5px);
+                overflow-x: auto;
+                
+                min-height: 560px;
+                width: 100%;
+            }
+            
+            #controlsContainer{
+                background-color: var(--ExpOverviewDatasetContainer);
+                backdrop-filter: blur(5px);
+                border: solid 1px #0091ff;
+                
+                min-height: 40px;
+                width: 100%;
+            }
+            
         }
         
-        #optionsContainer{
+        #rightColumn{
             min-height: 600px;
             max-height: 90vh;
             background-color: var(--ExpOverviewDatasetContainer);

@@ -1,0 +1,57 @@
+table{
+    min-width: 100%;
+    height: 100%;
+    display: table;
+}
+
+thead{
+    tr{
+        position: sticky;
+        height: 30px;
+        top: 0px;
+        border: none;
+        background-color: #2C5D96;
+        color: #FFFFFF;
+        cursor: pointer;
+        
+        th{
+            font-weight: 400;
+            border-right: solid 1px #16387c;
+            
+            &:hover{
+                background-color: #184982;
+            }
+        }
+    }
+    
+    .selectedColumnTH{
+        background-color: #133963;
+    }
+    
+}
+
+th, td{
+    white-space: nowrap;
+    min-width: 100px;
+    padding: 0px 10px 0px 10px;
+    border: solid 1px #2C5D96;
+    font-size: 15px;
+}
+
+tbody{
+    tr{
+        &:hover{
+            background-color: #daecff;
+        }
+    }
+    
+    .selectedColumnTR{
+        background-color: #c9e3ff;
+    }
+    
+    td{
+        &:hover{
+            background-color: #bfdfff;
+        }
+    }
+}

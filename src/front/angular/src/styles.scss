@@ -29,7 +29,7 @@ $angular-theme: mat.define-light-theme((color: (primary: $angular-primary,
 // that you are using.
 @include mat.all-component-themes($angular-theme);
 
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;0,900;1,400&display=swap');
 
 @import "./variables";
 
@@ -193,7 +193,7 @@ $angular-theme: mat.define-light-theme((color: (primary: $angular-primary,
 //////////////////////////////KRAJ TEME////////////////////////////////////////
 
 * {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 html {
@@ -372,15 +372,13 @@ body {
 }
 
 
-
-html,
-body {
-    height: 100%;
+*{
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    margin: 0;
 }
 
-body {
-    margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+html, body {
+    height: 100%;
 }
 
 
