@@ -56,10 +56,18 @@ class StatisticsService:
     def stat_null(self):
         return self.dataset.isnull().sum()
 
-    #f-ja stat_row_null za racuna broj null vrednosti za svaku vrstu
+    #f-ja stat_row_null racuna broj null vrednosti za svaku vrstu
     #povratna vrednost je Series
     def stat_row_null(self):
         return self.dataset.isna().transpose().sum()
+
+    #f-ja stat_categorical_columns vraca statistiku za kategorijske podatke
+    # povratna vrednost je DataFrame
+    def stat_categorical_columns(self):
+        categorical_columns = self.dataset.select_dtypes(include=['object']).columns.tolist()
+        df_categorical_columns = self.dataset[categorical_columns]
+        stat_categorical = df_categorical_columns.describe()
+        return stat_categorical
 
 
 
