@@ -13,9 +13,9 @@
     
     .newProject{
         transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-        background-color: #FFFFFF33;
+        background-color:var(--dugmeNewExp);
         backdrop-filter: blur(7px);
-        border: solid 1px #0091ff;
+        border: solid 1px var(--dugmeNewExpBorder);
         margin-top: 60px;
         height: 130px;
         display: grid;
@@ -25,16 +25,16 @@
         
         &:hover{
             transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-            background-color: #FFFFFF55;
+            background-color: var(--dugmeNewExpHover);
         }
         
         h3{
             text-align: center;
             font-size: 38px;
-            color: #0070c5;
+            color: var(--dugmeNewExpSlova);
             
             &:hover{
-                color: #0091ff;
+                color: var(--dugmeNewExpSlovaHover);
             }
         }
     }

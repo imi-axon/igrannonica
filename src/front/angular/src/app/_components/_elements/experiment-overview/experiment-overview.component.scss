@@ -67,9 +67,9 @@
 #descriptionContainer{
     max-height: 100%;
     height: fit-content;
-    background-color: #FFFFFF77;
+    background-color: var(--ExpOverviewDescriptionCont);
     backdrop-filter: blur(7px);
-    border: solid 1px #0091ff;
+    border: solid 1px var(--ExpOverviewDescriptionContBorder);
     padding: 20px 30px 20px 30px;
     
     #descriptionHeader{
@@ -81,7 +81,7 @@
         img{
             height: 42px;
             width: 42px;
-            border: solid 1px #333333;
+            border: solid 1px var(--ExpOverviewDescriptionContImgBorder);
         }
         
         h2{

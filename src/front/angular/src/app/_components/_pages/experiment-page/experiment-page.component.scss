@@ -17,6 +17,7 @@
         font-size: 28px;
         background: transparent;
         border: none;
+        color: var(--ExpPageTitleInput);
         
         &:focus{
             outline: none;
@@ -34,31 +35,31 @@
         width: 120px;
         padding-bottom: 3px;
         text-align: center;
-        color: #222222;
+        color: var(--ExpPageCards);
         cursor: pointer;
         
         &:hover{
-            color: #2c7896;
+            color:var(--ExpPageCardsHover);
         }
     }
     
     .selected-card{
-        border-bottom: solid 3px #2C5D96;
+        border-bottom: solid 3px var(--ExpPageSelectedCardBorder);
         padding-bottom: 0px;
         font-weight: 600;
         cursor: default;
         
         &:hover{
-            color: #222222;
+            color: var(--ExpPageSelectedCardHover);
         }
     }
     
     .disabled-card{
-        color: #999999;
+        color:var(--ExpPageDisabledCard);
         cursor: default;
         
         &:hover{
-            color: #999999;
+            color: var(--ExpPageDisabledCardHover);
         }
     }
     
