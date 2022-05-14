@@ -33,10 +33,10 @@ class TrainingService():
     #type -> string -> "CLASSIFICATION"/"REGRESSION"
     #batchSize -> int
     #percentage_training -> float - [0,1] -> koliki procenat celog skupa je training skup
-
+    #percentage_validation -> float - [0,1] -> koliki procenat celog skupa je validacioni skup
     def __init__(self, datasetAll, inputs, outputs, actPerLayer, nbperlayer, 
                 actOutput = None, metrics = ['mse'], learning_rate = 0.1, regularization_rate = 0.1, regularization = 'L1', 
-                batchSize = 1, percentage_training = 0.2, problem_type = 'REGRESSION', callbacks = []):
+                batchSize = 1, percentage_training = 0.6, percentage_validation = 0.2, problem_type = 'REGRESSION', callbacks = []):
         
         self.model = None
 
@@ -72,7 +72,9 @@ class TrainingService():
             self.ACT_OUTPUT = actOutput
 
         self.BATCH_SIZE = batchSize
-        self.PERCENTAGE_TRAINING = percentage_training
+        #self.PERCENTAGE_TRAINING = percentage_training
+        #ukupni procenat za trening i validaciju
+        self.PERCENTAGE_TRAINING_AND_VALIDATION = percentage_training + percentage_validation
 
         self.REGRESSION_LOSS = 'mse'
         self.CLASSIFICATION_LOSS = 'categorical_crossentropy'
@@ -80,6 +82,10 @@ class TrainingService():
         # Dataframe
         self.datasetAll = datasetAll
         self.dataframe = self.load_dataframe() #dataframe koji se sastoji samo od ulaznih i izlaznih kolona
+
+        #self.PERCENTAGE_VALIDATION -> procenat validacionog skupa u trening skupu     
+        self.PERCENTAGE_VALIDATION = self.train_val_PercentageSplit(percentage_training, percentage_validation)
+
         #podela na trening i testne podatke
         self.train_dataset, self.test_dataset, self.train_labels, self.test_labels = self.train_test()
         #skaliranje podataka
@@ -110,11 +116,20 @@ class TrainingService():
             dataframe[column] = self.datasetAll[column]
 
         return dataframe
+    
+    #f-ja train_val_PercentageSplit racuna koliki je procenat validacionog skupa u trening skupu, na osnovu procenta trening skupa i validacionog skupa u celokupnom skupu podataka
+    def train_val_PercentageSplit(self, percentageTrain, percentageVal):
+        brVrsta = self.dataframe.shape[0]
+        percentageTrainVal = percentageTrain + percentageVal
+        brVrstaTrainVal = brVrsta * percentageTrainVal
+        brVrstaVal = brVrsta * percentageVal
+        percentageVal_inTraining = brVrstaVal/brVrstaTrainVal
+        return percentageVal_inTraining
 
     #f-ja train_test - podela podataka za treniranje i testiranje
     #outputs - lista stringova (nazivi kolona koji su output)
     def train_test(self):
-        train_dataset = self.dataframe.sample(frac=self.PERCENTAGE_TRAINING,random_state=0) #podaci za treniranje
+        train_dataset = self.dataframe.sample(frac=self.PERCENTAGE_TRAINING_AND_VALIDATION,random_state=0) #podaci za treniranje
         test_dataset = self.dataframe.drop(train_dataset.index) #ostalak podataka za testiranje
         
         train_labels = train_dataset.loc[:,self.outputs]
@@ -216,7 +231,7 @@ class TrainingService():
     def fit_model(self, model, epoch, val_split = 0.2):
         history = model.fit(self.normed_train_dataset, self.train_labels, 
                             epochs = epoch, batch_size = self.BATCH_SIZE, 
-                            validation_split = val_split, 
+                            validation_split = self.PERCENTAGE_VALIDATION, 
                             verbose=0, callbacks=self.CALLBACKS)
 
         return history.history
