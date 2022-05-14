@@ -199,6 +199,32 @@ export class Project
     }
 }
 
+export class ProjectOwner{
+    public UserID: string = "";
+    public Name: string = "";
+    public Lastname: string = "";
+    public Username: string = "";
+    public Email: string = "";
+    public Photo: string = "/assets/Images/profilna.png";
+    
+    constructor()
+    {
+        this.UserID = "";
+        this.Name = "";
+        this.Lastname = "";
+        this.Username = "";
+        this.Email = "";
+        this.Photo = "/assets/Images/profilna.png";
+    }
+}
+
+export class PublicProject
+{
+    public project: Project = new Project();
+    public owner: ProjectOwner = new ProjectOwner();
+}
+
+
 export class OwnerInfo{
     public Name: string = "";
     public Lastname: string = "";

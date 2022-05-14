@@ -11,9 +11,6 @@ export class PublicExpPageComponent implements OnInit {
 
   constructor() { }
 
-  @ViewChild(ProjectListComponent) projectListpublic:ProjectListComponent
-  public publicExp:boolean=true;
-
   ngOnInit(): void {
   }
 

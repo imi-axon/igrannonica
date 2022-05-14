@@ -1,11 +1,11 @@
 
 .poruka {
-    font-family: 'Raleway';
     font-style: normal;
     font-weight: 400;
     font-size: large;
     display: flex;
     align-items: center;
+    justify-content: center;
     text-align: center;
 
     color: #FFFFFF;
@@ -81,7 +81,11 @@
 
 
 .opomena{
-    color:#FF0000;
+    p{
+        margin-top: 20px;
+        font-size: 16px;
+        color:#FF0000;
+    }
 }
 
 //izgled popup-a se nalazi u styles.scss .mat-dialog-container 

@@ -1,0 +1,37 @@
+<div  class="projectsList" *ngIf="publicProjects.length > 0">
+    
+    <div *ngFor="let publicProject of filteredPublicProjects" class="project" > 
+      
+      <div class="projectLeft">
+        <p class="title" (click)="onClick(publicProject.project.ProjectId)"> {{publicProject.project.Name}} </p>
+        
+        <p class="created"> {{'lista-projekata.kreiran'|translate}} {{publicProject.project.Creationdate}} </p>
+      
+        <p class="description">{{publicProject.project.Description}}</p>
+      </div>
+      
+      <div class="projectRight">
+        
+        <div class="userInfoGroup">
+          <div class="nameGroup">
+            <p class="fullname">{{publicProject.owner.Name}}&nbsp;{{publicProject.owner.Lastname}}</p>
+            <p class="username">@{{publicProject.owner.Username}}</p>
+          </div>
+          <img [src]="publicProject.owner.Photo">
+        </div>
+        
+        
+        <div class="counters">
+          
+        </div>
+        
+      </div>
+      
+    </div>
+      
+  </div>
+  
+  <p id="emptyTitle" *ngIf="publicProjects.length == 0"> {{'lista-projekata.nema'|translate}} </p>
+  
+  
+  

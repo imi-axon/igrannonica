@@ -74,6 +74,7 @@ import { ThemeComponent } from './_components/_elements/theme/theme.component';
 import { ExperimentAllNetworksComponent } from './_components/_elements/experiment-all-networks/experiment-all-networks.component';
 import { ExperimentNetworksListComponent } from './_components/_elements/experiments-networks-list/experiments-networks-list.component';
 import { DatasetEditTableComponent } from './_components/_elements/dataset-edit-table/dataset-edit-table.component';
+import { PublicProjectListComponent } from './_components/_elements/public-project-list/public-project-list.component';
 
 
 @NgModule({
@@ -135,7 +136,8 @@ import { DatasetEditTableComponent } from './_components/_elements/dataset-edit-
     ThemeComponent,
     ExperimentAllNetworksComponent,
     ExperimentNetworksListComponent,
-    DatasetEditTableComponent
+    DatasetEditTableComponent,
+    PublicProjectListComponent
   ],
   imports: [
     NgxCsvParserModule,
