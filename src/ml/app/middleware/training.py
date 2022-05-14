@@ -81,14 +81,17 @@ class TrainingInstance():
         fmngr.create(loaded_model)
         return fmngr
 
-    def create_service(self, dataframe, trainConf: Dict):
+    def create_service(self, dataframe, trainConf: Dict, model = None):
         self.service = TrainingService(dataframe, trainConf['inputs'], trainConf['outputs'], trainConf['actPerLayer'], trainConf['neuronsPerLayer']
+            , actOutput = trainConf['actOut']
             , learning_rate = trainConf['learningRate']
             , regularization_rate = trainConf['regRate']
             , regularization = trainConf['reg']
             , batchSize = trainConf['batchSize']
-            #, percentage_training = trainConf['trainSplit']
+            , percentage_training = trainConf['trainSplit']
             , callbacks=[self.callback]
+            , problem_type = trainConf['problemType']
+            , model = model
         
         ) if self.service == None else self.service
 
@@ -107,16 +110,15 @@ class TrainingInstance():
         fm_model = self.create_model(nnUrl)             # h5 FileMngr
         self.create_service(dataframe, trainConf)       # service
         self.service.load_model(fm_model.path())        # load h5 model
-        # self.service.new_model()                        # poziva se odvojeno od start_training da bi bilo iznad UNLOCK-a, zbog performansi
         self.lock.release()                             # zbog lock-a u konstruktoru # [   ]
 
         # -- Treniranje --
         print('-- Treniranje --')
 
-        #self.service.start_training(100, trainConf['valSplit'])              # na kraju treninga ima lock.acquire() # [ X ]
+        #self.service.start_training(100, trainConf['valSplit'])                                # na kraju treninga ima lock.acquire() # [ X ]
         self.service.start_training(200, 0.2)
-        self.service.save_model(fm_model.directory(), fm_model.name())      # h5 fajl sa putanjom za koju je vezan fm_model FileMngr
-        self.lock.release()                                                 # zbog lock-a na kraju treniranja # [   ]
+        trained_model_fpath = self.service.save_model(fm_model.directory(), fm_model.name())    # h5 fajl sa putanjom za koju je vezan fm_model FileMngr
+        self.lock.release()                                                                     # zbog lock-a na kraju treniranja # [   ]
         
         # -- Poruka za kraj treniranja --
         print('-- Poruka za kraj treniranja --')
@@ -125,9 +127,9 @@ class TrainingInstance():
         self.buff.append(b'end')            # indikator za kraj treniranja 
         self.lock.release()                 # [   ]
 
-        # -- POST Request, cuvanje h5 modela --
+        # -- Cuvanje fajlova u Storate na Backu --
 
-        # httpc.put(nnUrl) # PRIVREMENO ZAKOMENTARISANO DOK BACK NE URADI PODRSKU
+        httpc.put(nnUrl, trained_model_fpath)
 
         # -- Poruka za kraj Thread-a --
         # print('-- Poruka za kraj Thread-a --')

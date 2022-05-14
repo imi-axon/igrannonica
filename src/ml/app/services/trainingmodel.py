@@ -36,8 +36,9 @@ class TrainingService():
 
     def __init__(self, datasetAll, inputs, outputs, actPerLayer, nbperlayer, 
                 actOutput = None, metrics = ['mse'], learning_rate = 0.1, regularization_rate = 0.1, regularization = 'L1', 
-                batchSize = 1, percentage_training = 0.2, problem_type = 'REGRESSION', callbacks = [], model = None):
-        self.model = model
+                batchSize = 1, percentage_training = 0.2, problem_type = 'REGRESSION', callbacks = []):
+        
+        self.model = None
 
         self.inputs = inputs
         self.outputs = outputs
@@ -233,7 +234,7 @@ class TrainingService():
         return predictions
 
 
-    # Metode za eksternu upotrebu
+    # --------
 
     def new_model(self):
         self.model = self.build_model()
@@ -250,21 +251,25 @@ class TrainingService():
 
     def start_training(self, epoch, val_split):
 
-        if self.model == None:
+        # TODO - Pozvati funkciju koja ce uporediti konfiguraciju sa kojom je mreza bila istrenirana i novu konfiguraciju sa kojom sad treba da se trenira
+        # U odnosu na rezultat kreirati novi model (pozvati build_model) ili ucitati postojeci iz fajla
+
+        to_load_model = True # TODO - Umesto True ide poziv pomenute funkcije
+
+        if to_load_model:
+            self.load_model()
+        else:
             self.new_model()
-        #self.new_model()
 
         print('Training Started')
-        print(self.model.get_config())
 
         self.fit_model(self.model, epoch, val_split)
-        # for i in range(10):
-        #     print(f'TRAIN {i}')
-        #     self.fit_model(self.model, epoch, val_split)
 
         print('TRAINING FINISHED')
 
-        # results = self.evaluate_model(model)
-        # predictions = self.predict_model(model)
+        results = self.evaluate_model(model)
+        #predictions = self.predict_model(model)
 
-        #return model_path
+        return results
+
+        
