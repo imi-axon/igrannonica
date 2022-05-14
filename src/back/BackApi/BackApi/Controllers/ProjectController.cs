@@ -149,9 +149,49 @@ namespace BackApi.Controllers
             if (!service.projectExists(projid)) return NotFound("project");
 
             string rez = service.GetComment(projid);
-            if (rez != "")
+            if (rez != "[]")
                 return Ok(rez);
-            else return NotFound("user");
+            else return NotFound("comment");
+        }
+
+        [HttpPut("{projid}/comment/{commentid}")]
+        public async Task<ActionResult<string>> EditCommment(int projid, int commentid, CommentPost comm)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            if (!service.projectExists(projid)) return NotFound("project");
+            if (!service.commentExist(commentid)) return NotFound("comment");
+            if (!service.commentOwnership(commentid, userid)) return BadRequest("user");
+            var rez = service.editComment(commentid, comm.comment);
+            if (rez)
+                return Ok();
+            else return NotFound("comment");
+        }
+        [HttpDelete("{projid}/comment/{commentid}")]
+        public async Task<ActionResult<string>> DeleteCommment(int projid, int commentid)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            if (!service.projectExists(projid)) return NotFound("project");
+            if (!service.commentExist(commentid)) return NotFound("comment");
+            if (!service.commentOwnership(commentid, userid)) return BadRequest("user");
+            var rez = service.deleteComment(commentid);
+            if (rez)
+                return Ok();
+            else return NotFound("comment");
+        }
+        [HttpGet("{projid}/replies/{commentid}")]
+        public async Task<ActionResult<string>> GetReplies(int projid, int commentid)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            if (!service.projectExists(projid)) return NotFound("project");
+            if (!service.commentExist(commentid)) return NotFound("comment");
+            if (!service.commentOwnership(commentid, userid)) return BadRequest("user");
+            string rez = service.getReplies(projid, commentid);
+            if (rez != "[]")
+                return Ok(rez);
+            else return NotFound("comment");
         }
     }
 }

@@ -22,6 +22,11 @@ namespace BackApi.Services
         public Boolean projectIsPublic(int projid);
         public Boolean AddComment(int projid, int userid, int parentcommid, CommentPost comm);
         public string GetComment(int projid);
+        public Boolean commentExist(int id);
+        public Boolean commentOwnership(int commid, int userid);
+        public Boolean editComment(int commid, string comm);
+        public Boolean deleteComment(int commid);
+        public string getReplies(int projid, int commid);
     }
     public class ProjectService:IProjectService
     {
@@ -337,7 +342,7 @@ namespace BackApi.Services
 
                 rez.Append("\"" + "Id" + "\":" + "\"" + comm.Id + "\",");
                 rez.Append("\"" + "ProjectId" + "\":" + "\"" + comm.ProjectId + "\",");
-                rez.Append("\"" + "CommId" + "\":" + "\"" + comm.Id + "\",");
+                rez.Append("\"" + "ParentId" + "\":" + "\"" + comm.ParentId + "\",");
                 rez.Append("\"" + "Comment" + "\":" + "\"" + comm.Comment + "\",");
                 rez.Append("\"" + "Creationdate" + "\":" + "\"" + comm.CreationDate + "\"");
                 rez.Append("},");
@@ -366,6 +371,89 @@ namespace BackApi.Services
                 rez.Append("{");
                 rez.Append("\"" + "Replies" + "\":" + "\"" + replies.Count + "\"");
                 rez.Append("}],");
+            }
+            if (rez.Length > 2) rez.Remove(rez.Length - 1, 1);
+            rez.Append("]");
+            return rez.ToString();
+        }
+        public Boolean editComment(int commid, string comment)
+        {
+            var comm = context.Comments.Find(commid);
+            if (comm == null)
+                return false;
+            comm.Comment = comment;
+            context.SaveChanges();
+            return true;
+        }
+        public Boolean commentExist(int id)
+        {
+            var comm = context.Comments.Find(id);
+            if (comm != null)
+                return true;
+            return false;
+        }
+
+        public Boolean commentOwnership(int commid, int userid)
+        {
+            var comm = context.Comments.FirstOrDefault(x => x.Id == commid && x.Userid==userid);
+            if (comm != null)
+                return true;
+            return false;
+        }
+        public Boolean deleteComment(int commid)
+        {
+            var comm = context.Comments.FirstOrDefault(x => x.Id == commid);
+            if (comm == null)
+                return false;
+
+            List<Comments> replies = context.Comments.Where(x => x.ParentId == commid).ToList();
+            foreach(Comments rep in replies)
+            {
+                context.Remove(rep);
+                context.SaveChanges();
+            }
+            context.Remove(comm);
+            context.SaveChanges();
+            return true;
+        }
+        public string getReplies(int projid, int commid)
+        {
+            var rez = new StringBuilder();
+            rez.Append("[");
+            List<Comments> listacomm = context.Comments.Where(x => x.ProjectId == projid && x.ParentId == commid).ToList();
+            foreach (Comments comm in listacomm)
+            {
+                rez.Append("[{");
+                var user = context.Users.Find(comm.Userid);
+
+                rez.Append("\"" + "Id" + "\":" + "\"" + comm.Id + "\",");
+                rez.Append("\"" + "ProjectId" + "\":" + "\"" + comm.ProjectId + "\",");
+                rez.Append("\"" + "ParentId" + "\":" + "\"" + comm.ParentId + "\",");
+                rez.Append("\"" + "Comment" + "\":" + "\"" + comm.Comment + "\",");
+                rez.Append("\"" + "Creationdate" + "\":" + "\"" + comm.CreationDate + "\"");
+                rez.Append("},");
+
+                if (user != null)
+                {
+                    string photopath = user.PhotoPath;
+                    if (photopath == "" || photopath == null)
+                        photopath = Path.Combine("Storage", "profilna.png");
+
+                    //string b = System.IO.File.ReadAllText(photopath);
+
+                    byte[] imageArray = System.IO.File.ReadAllBytes(photopath);
+                    string slikaBase64 = Convert.ToBase64String(imageArray);
+
+                    rez.Append("{");
+                    rez.Append("\"" + "UseId" + "\":" + "\"" + user.UserId + "\",");
+                    rez.Append("\"" + "Name" + "\":" + "\"" + user.Name + "\",");
+                    rez.Append("\"" + "Lastname" + "\":" + "\"" + user.Lastname + "\",");
+                    rez.Append("\"" + "Username" + "\":" + "\"" + user.Username + "\",");
+                    rez.Append("\"" + "Email" + "\":" + "\"" + user.Email + "\",");
+                    rez.Append("\"" + "Photo" + "\":" + "\"data:image/jpeg;base64," + slikaBase64 + "\"");
+                    rez.Append("}],");
+                }
+
             }
             if (rez.Length > 2) rez.Remove(rez.Length - 1, 1);
             rez.Append("]");
