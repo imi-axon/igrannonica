@@ -104,6 +104,14 @@ $angular-theme: mat.define-light-theme((color: (primary: $angular-primary,
     --ExpOverviewDatasetContainerControls: #FFFFFF77;
     --ExpOverviewDatasetContainerBorder:#0091ff;
 
+    
+    //DATASET table
+    //body tr td
+    --datasetTableTrTd:#212529; //TEKST
+    --datasetTableTrTdHover:#212529; //TEKST
+    --datasetTableTrTdHoverBG:#daecff;
+    --datasetTableTrTdHoverBGCell:#bfdfff;
+
 }
 
 .dark_theme {
@@ -155,22 +163,32 @@ $angular-theme: mat.define-light-theme((color: (primary: $angular-primary,
     --ExpPageDisabledCardHover:#999999;
 
     //Eksperimenti- pregled - OPIS
-    --ExpOverviewDescriptionCont:#EBF5FB;
+    --ExpOverviewDescriptionCont:#111122b9;
     --ExpOverviewDescriptionContBorder:#1892c3;
     --ExpOverviewDescriptionContImgBorder:#333333;
-    --ExpOverviewDescriptionContH2:#042d5c;
-    --ExpOverviewDescriptionContP:#042d5c;
-    --ExpOverviewDescriptionContDescH2:#042d5c;
-    --ExpOverviewDescriptionContDescriptionInput:#555555;
+    --ExpOverviewDescriptionContH2:#0091ff;
+    --ExpOverviewDescriptionContP:#0091ff;
+    --ExpOverviewDescriptionContDescH2:#0091ff;
+    --ExpOverviewDescriptionContDescriptionInput:#979393;
     --ExpOverviewDescriptionContDescriptionInputFocusBorder:#AAAAAA;
-    --ExpOverviewDescriptionContLabel:#042d5c;
-    --ExpOverviewDescriptionContDescriptionFooter:#888888;
+    --ExpOverviewDescriptionContLabel:#0091ff;
+    --ExpOverviewDescriptionContDescriptionFooter:#a49f9f;
 
     //ExpOverviewDatasetContainer koristim i za stranu edit
-    --ExpOverviewDatasetContainer:#EBF5FB;
+    --ExpOverviewDatasetContainer:#111122b9;
     --ExpOverviewDatasetContainerBorder:#0091ff;
-    --ExpOverviewDatasetContainerControls: #EBF5FB;
+    --ExpOverviewDatasetContainerControls: #111122b9;
     --ExpOverviewDatasetContainerBorder:#0091ff;
+
+    //DATASET table
+    //body tr td
+    --datasetTableTrTd:#EBF5FB; //TEKST
+    --datasetTableTrTdHover:#212529; //TEKST
+    --datasetTableTrTdHoverBG:#daecff;
+    --datasetTableTrTdHoverBGCell:#bfdfff;
+
+    //statistics table
+    //KORISTIM OVE 4 VARIJABLE IZ DATASET TABLE
 }
 //////////////////////////////KRAJ TEME////////////////////////////////////////
 
