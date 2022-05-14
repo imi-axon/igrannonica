@@ -2,7 +2,7 @@
 
 namespace BackApi.Entities
 {
-    public class DataBaseContext:DbContext
+    public class DataBaseContext : DbContext
     {
         protected readonly IConfiguration Configuration;
         public DataBaseContext(IConfiguration configuration)
@@ -21,5 +21,6 @@ namespace BackApi.Entities
         public DbSet<Project> Projects { get; set; }
         public DbSet<Dataset> Datasets { get; set; }
         public DbSet<NN> NNs { get; set; }
+        public DbSet<Comments> Comments{ get; set; }
     }
 }
