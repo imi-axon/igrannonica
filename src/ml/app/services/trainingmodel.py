@@ -228,7 +228,7 @@ class TrainingService():
 
 
     #obucavanje modela
-    def fit_model(self, model, epoch, val_split = 0.2):
+    def fit_model(self, model, epoch):
         history = model.fit(self.normed_train_dataset, self.train_labels, 
                             epochs = epoch, batch_size = self.BATCH_SIZE, 
                             validation_split = self.PERCENTAGE_VALIDATION, 
@@ -264,7 +264,7 @@ class TrainingService():
         return model_path
 
 
-    def start_training(self, epoch, val_split):
+    def start_training(self, epoch):
 
         # TODO - Pozvati funkciju koja ce uporediti konfiguraciju sa kojom je mreza bila istrenirana i novu konfiguraciju sa kojom sad treba da se trenira
         # U odnosu na rezultat kreirati novi model (pozvati build_model) ili ucitati postojeci iz fajla
@@ -278,7 +278,7 @@ class TrainingService():
 
         print('Training Started')
 
-        self.fit_model(self.model, epoch, val_split)
+        self.fit_model(self.model, epoch)
 
         print('TRAINING FINISHED')
 
