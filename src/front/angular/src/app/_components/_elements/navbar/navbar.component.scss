@@ -174,17 +174,19 @@ hr{
     margin-right: 0%;
 }
 
-
-
-
-
-
 @media screen and (max-width:1000px) {
+
     #rightSide {
       display: none;
     }
     
     .toggler{
         display: block;
+    }
+}
+
+@media screen and (min-width:1001px) {
+    #navTel{
+        display:none;
     }
 }
