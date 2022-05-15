@@ -11,7 +11,7 @@
     color: #FFFFFF;
 }
 .exitButton{
-    transition: 0.25s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+    transition: 0.2s cubic-bezier(0.455, 0.03, 0.515, 0.955);
     
     width: 30px;
     height: 30px;
@@ -26,7 +26,7 @@
     
     
     img{
-        transition: 0.25s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+        transition: 0.2s cubic-bezier(0.455, 0.03, 0.515, 0.955);
         width: 15px;
         height: 15px;
         filter: saturate(100%), brightness(100%);
@@ -35,7 +35,7 @@
     }
     
     &:hover{
-        transition: 0.25s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+        transition: 0.2s cubic-bezier(0.455, 0.03, 0.515, 0.955);
         background-color: red;
         
         img{
@@ -50,11 +50,12 @@
     border: solid 2px #FF0000;
     color: #FF0000;
     width:30%;
-    padding: 10px 15px 10px 15px;
-    transition: 0.25s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+    text-align: center;
+    padding: 10px 0px 10px 0px;
+    transition: 0.2s cubic-bezier(0.455, 0.03, 0.515, 0.955);
     
     &:hover{
-        transition: 0.25s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+        transition: 0.2s cubic-bezier(0.455, 0.03, 0.515, 0.955);
         color: #FFFFFF;
         background-color: #FF0000;
     }
@@ -65,11 +66,12 @@
     background: transparent;
     border: solid 2px #FFFFFF;
     width:30%;
-    padding: 10px 15px 10px 15px;
-    transition: 0.25s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+    text-align: center;
+    padding: 10px 0px 10px 0px;
+    transition: 0.2s cubic-bezier(0.455, 0.03, 0.515, 0.955);
     
     &:hover{
-        transition: 0.25s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+        transition: 0.2s cubic-bezier(0.455, 0.03, 0.515, 0.955);
         color: #193A82;
         background-color: #FFFFFF;
     }
@@ -83,7 +85,7 @@
 .opomena{
     p{
         margin-top: 20px;
-        font-size: 16px;
+        font-size: 18px;
         color:#FF0000;
     }
 }
