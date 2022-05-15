@@ -26,12 +26,15 @@ export class DatasetEditTableComponent implements OnInit {
   
   
   // SELECTING
+  public DeselectAllSelectedColumns(){
+    this.selectedColumns = [];
+  }
   
   public SelectDeselectAllColumns(){
     if(this.selectAll)
       this.selectedColumns = this.columns;
     else
-      this.selectedColumns = [];
+      this.DeselectAllSelectedColumns();
       
     this.selectAll = !this.selectAll;
   }
@@ -41,6 +44,8 @@ export class DatasetEditTableComponent implements OnInit {
       this.selectedColumns.splice(this.selectedColumns.indexOf(column), 1);
     else
       this.selectedColumns.push(column);
+    
+    console.log(this.selectedColumns)
   }
   
   

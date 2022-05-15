@@ -87,14 +87,32 @@
         "statistika":"Statistics",
         "izmeni":"Edit data"
     },
-    "opcije-edit-dataset":{
-        "izbrisiKol":"Delete columns",
-        "nullRedovi":"Delete rows containing null values",
-        "popuni":"Fill in the rows containing the null values",
-        "duplikati":"Delete duplicates",
-        "enkodiranje":"Encoding",
-        "onehot1":"Onehot encoding",
-        "label1":"Label encoding"
+    "edit-dataset":{
+        "korelacionaMatrica(pearson)": "Correlation matrix (Pearsons)",
+        
+        "popuni": "Fill",
+        "koloneSaProsekom": "Columns with average",
+        "koloneSaMedijanom": "Columns with median",
+        "koloneSaNajcescim": "Columns with most common value",
+        
+        "obrisi": "Remove",
+        "izabraneKolona": "Selected columns",
+        "redoveSaNull": "Rows with null values",
+        "redoveDuplikate": "Duplicate rows",
+        
+        "enkodiranje": "Encode",
+        "oneHot": "One-Hot Encoding",
+        "label": "Label Encoding",
+        
+        "preuzmi": "Download",
+        
+        "statistika": "Statistics",
+        
+        "sacuvaneIzmene": "Saved edits",
+        "poslednjeIzmenjen": "Last edited",
+        "odbaci": "Revert",
+        "sacuvaj": "Save",
+        "lokalneIzmene": "Local changes"
     },
     "profil":{
         "izmeni":"Edit data"

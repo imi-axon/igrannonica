@@ -87,14 +87,32 @@
         "statistika":"Statistika",
         "izmeni":"Izmeni podatke"
     },
-    "opcije-edit-dataset":{
-        "izbrisiKol":"Izbriši kolone",
-        "nullRedovi":"Izbriši redove sa null vrednostima",
-        "popuni":"Popuni redove sa null vrednostima",
-        "duplikati":"Izbriši duplikate",
-        "enkodiranje":"Enkodiranje",
-        "onehot1":"Onehot enkodiranje",
-        "label1":"Label enkodiranje"
+    "edit-dataset":{
+        "korelacionaMatrica(pearson)": "Korelaciona matrica (Pearson-ova)",
+        
+        "popuni": "Popuni",
+        "koloneSaProsekom": "Kolone sa njihovim prosekom",
+        "koloneSaMedijanom": "Kolone sa njihovim medijanama",
+        "koloneSaNajcescim": "Kolone sa najčešćim vrednostima",
+        
+        "obrisi": "Obrisi",
+        "izabraneKolona": "Izabrane kolone",
+        "redoveSaNull": "Redove sa praznim poljima",
+        "redoveDuplikate": "Redove duplikate",
+        
+        "enkodiranje": "Enkodiranje",
+        "oneHot": "One-Hot Enkodiranje",
+        "label": "Label Enkodiranje",
+        
+        "preuzmi": "Preuzmi",
+        
+        "statistika": "Statistika",
+        
+        "sacuvaneIzmene": "Sačuvane promene",
+        "poslednjeIzmenjen": "Poslednje izmenjen",
+        "odbaci": "Odbaci",
+        "sacuvaj": "Sačuvaj",
+        "lokalneIzmene": "Lokalne promene"
     },
     "profil":{
         "izmeni":"Izmenite podatke"

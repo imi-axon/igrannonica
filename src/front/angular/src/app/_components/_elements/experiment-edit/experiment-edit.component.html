@@ -4,10 +4,12 @@
     <div id="firstRow">
         
         <!-- KORELACIONA TABELA -->
-        <div id="correlationContainer">
-            <correlation-table #correlationComponent></correlation-table>
+        <div id="correlationWrapper">
+            <p>{{"edit-dataset.korelacionaMatrica(pearson)"|translate}}</p>
+            <div id="correlationContainer">
+                <correlation-table #correlationComponent></correlation-table>
+            </div>
         </div>
-        
         
         <!-- GRAFIK -->
         <div id="statisticsGraph">
@@ -27,51 +29,51 @@
                 <div class="optionsWrapper">
                     
                     <div class="optionsDropdown">
-                        Fill
+                        {{"edit-dataset.popuni"|translate}}
                         
                         <svg class="dropdownIcon" width="18" height="10" viewBox="0 0 18 10" fill="none">
                             <path d="M1 1L8.90661 8L17 1" stroke="white" stroke-width="2"/>
                         </svg>
                         
                         <ul class="submenu">
-                            <li><button> Columns with Average </button></li>
-                            <li><button> Columns with Median </button></li>
-                            <li><button> Columns with most common </button></li>
+                            <li><button (click)="FillColsWithAverage()"> {{"edit-dataset.koloneSaProsekom"|translate}} </button></li>
+                            <li><button (click)="FillColsWithMedian()"> {{"edit-dataset.koloneSaMedijanom"|translate}} </button></li>
+                            <li><button (click)="FillColsWithMostCommon()"> {{"edit-dataset.koloneSaNajcescim"|translate}} </button></li>
                         </ul>
                     </div>
                     
                     <div class="optionsDropdown">
-                        Remove
+                        {{"edit-dataset.obrisi"|translate}}
                         
                         <svg class="dropdownIcon" width="18" height="10" viewBox="0 0 18 10" fill="none">
                             <path d="M1 1L8.90661 8L17 1" stroke="white" stroke-width="2"/>
                         </svg>
                         
                         <ul class="submenu">
-                            <li><button> Selected columns </button></li>
-                            <li><button> Rows with nulls </button></li>
-                            <li><button> Duplicate rows </button></li>
+                            <li><button (click)="RemoveSelectedCols()"> {{"edit-dataset.izabraneKolona"|translate}} </button></li>
+                            <li><button (click)="RemoveRowsWithNulls()"> {{"edit-dataset.redoveSaNull"|translate}} </button></li>
+                            <li><button (click)="RemoveDuplicateRows()"> {{"edit-dataset.redoveDuplikate"|translate}} </button></li>
                         </ul>
                     </div>
                     
                     <div class="optionsDropdown">
-                        Encode
+                        {{"edit-dataset.enkodiranje"|translate}}
                         
                         <svg class="dropdownIcon" width="18" height="10" viewBox="0 0 18 10" fill="none">
                             <path d="M1 1L8.90661 8L17 1" stroke="white" stroke-width="2"/>
                         </svg>
                         
                         <ul class="submenu">
-                            <li><button> OneHot Encoding </button></li>
-                            <li><button> Label Encoding </button></li>
+                            <li><button (click)="OneHotEncoding()"> {{"edit-dataset.oneHot"|translate}} </button></li>
+                            <li><button (click)="LabelEncoding()"> {{"edit-dataset.label"|translate}} </button></li>
                         </ul>
                     </div>
                     
                 </div>
                 
-                <button class="downloadButton"> 
-                    Download
-                    <svg class="downloadIcon" width="13" height="16" viewBox="0 0 13 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <button class="downloadButton" (click)="DownloadCurrentChanges()"> 
+                    {{"edit-dataset.preuzmi"|translate}}
+                    <svg class="downloadIcon" width="13" height="16" viewBox="0 0 13 16">
                         <path d="M6.33923 11.3636V0M6.33923 11.3636L1 6.81818M6.33923 11.3636L12 6.81818M1 15H12" stroke="white" stroke-width="2" stroke-linejoin="bevel"/>
                     </svg>
                 </button>
@@ -93,6 +95,67 @@
         <!-- VERZIJE -->
         <div id="rightColumn">
             
+            <div id="savesContainer">
+                <h3>{{"edit-dataset.sacuvaneIzmene"|translate}}</h3>
+                
+                <div id="saveDisplay">
+                    Save name
+                    <svg width="4" height="20" viewBox="0 0 4 16">
+                        <circle class="dot1" cx="2" cy="2" r="2" fill="#2C5D96"/>
+                        <circle cx="2" cy="8" r="2" fill="#2C5D96"/>
+                        <circle class="dot2" cx="2" cy="14" r="2" fill="#2C5D96"/>
+                    </svg>
+                </div>
+                
+                <p>{{"edit-dataset.poslednjeIzmenjen"|translate}}: </p>
+                
+                <div class="buttonPair">
+                    <button> 
+                        {{"edit-dataset.odbaci"|translate}}
+                        <svg width="18" height="18" viewBox="0 0 18 18">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M6.52588 0.473835C8.47668 -0.225063 10.6006 -0.148644 12.5022 0.688861C14.4038 1.52637 15.9535 3.06788 16.8627 5.02637C17.7718 6.98486 17.9785 9.22684 17.4443 11.3349C16.9101 13.4429 15.6714 15.2733 13.9587 16.4852C12.2461 17.6972 10.1763 18.2081 8.13476 17.9228C6.09322 17.6375 4.21905 16.5755 2.86123 14.9345C1.50342 13.2935 0.754492 11.1853 0.753906 9.00256C0.753778 8.52305 1.12039 8.13422 1.57276 8.13408C2.02513 8.13395 2.39196 8.52256 2.39209 9.00207C2.39256 10.7637 2.99698 12.4651 4.09282 13.7895C5.18866 15.1139 6.70122 15.971 8.34887 16.2012C9.99652 16.4315 11.667 16.0191 13.0491 15.041C14.4313 14.0629 15.4311 12.5857 15.8622 10.8844C16.2934 9.18308 16.1265 7.37366 15.3928 5.79305C14.659 4.21243 13.4084 2.96834 11.8737 2.29242C10.339 1.61651 8.62482 1.55483 7.05041 2.11889C5.95855 2.51005 4.9855 3.18368 4.2137 4.06825H6.36767C6.82004 4.06825 7.18676 4.45697 7.18676 4.93649C7.18676 5.416 6.82004 5.80472 6.36767 5.80472H2.53193C2.07956 5.80472 1.71284 5.416 1.71284 4.93649V0.870608C1.71284 0.391095 2.07956 0.00237305 2.53193 0.00237305C2.9843 0.00237305 3.35102 0.391095 3.35102 0.870608V2.52125C4.24684 1.60567 5.32872 0.902731 6.52588 0.473835Z" fill="white"/>
+                        </svg>
+                    </button>
+                    
+                    <button> 
+                        {{"edit-dataset.sacuvaj"|translate}}
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.1996 10.665C7.1996 9.67046 8.0051 8.86496 8.9996 8.86496C9.9941 8.86496 10.7996 9.67046 10.7996 10.665C10.7996 11.6595 9.9941 12.465 8.9996 12.465C8.0051 12.465 7.1996 11.6595 7.1996 10.665Z" fill="white"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M13.9208 0.42075L17.5792 4.07925C17.8492 4.34925 18 4.71375 18 5.09625V17.28C18 17.6782 17.6782 18 17.28 18H0.72C0.32175 18 0 17.6782 0 17.28V0.72C0 0.32175 0.32175 0 0.72 0H12.9015C13.284 0 13.6507 0.15075 13.9208 0.42075ZM11.8796 1.43996H6.1196V3.95996H11.8796V1.43996ZM5.7596 10.665C5.7596 12.4537 7.21085 13.905 8.9996 13.905C10.7883 13.905 12.2396 12.4537 12.2396 10.665C12.2396 8.87621 10.7883 7.42496 8.9996 7.42496C7.21085 7.42496 5.7596 8.87621 5.7596 10.665Z" fill="white"/>
+                        </svg>
+                    </button>
+                        
+                </div>
+                
+            </div>
+            
+            <div id="localChangesContainer">
+                <h3>{{"edit-dataset.lokalneIzmene"|translate}}&nbsp;</h3>
+                
+                <div id="localChangesDisplay">
+                    
+                    <div class="localChange">
+                        <div class="action">
+                            {{"Fill rows with null values"|slice:0:22}}
+                        </div>
+                        
+                        <div class="affectedColumns">
+                            {{"Kolona 1, Kolona 2, Kolona 3"|slice:0:22}}
+                        </div>
+                        
+                        <button>
+                            <svg width="12" height="15" viewBox="0 0 12 15">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M0.560547 0V4.03846L1.1183 4.61538H5.02259V3.46154H2.21039L3.26008 2.37577C3.62655 1.98852 4.06363 1.68028 4.54603 1.4689C5.02843 1.25752 5.54656 1.14719 6.07045 1.1443C6.59434 1.1414 7.11358 1.246 7.59813 1.45204C8.08268 1.65808 8.52292 1.96147 8.89337 2.34465C9.26382 2.72783 9.55713 3.1832 9.75632 3.6844C9.95552 4.18561 10.0566 4.72269 10.0538 5.26459C10.051 5.80648 9.94438 6.34242 9.74002 6.8414C9.53567 7.34037 9.23767 7.79247 8.86328 8.17154L3.06598 14.1692L3.86915 15L9.66757 9.00231C10.6236 8.01325 11.1607 6.67187 11.1605 5.27325C11.1604 3.87462 10.6232 2.53332 9.66701 1.54442C8.71082 0.555523 7.414 2.4964e-05 6.06185 0.000133148C4.70969 0.000241331 3.41296 0.555947 2.45691 1.545L1.67606 2.35269V0H0.560547Z" fill="white"/>
+                            </svg>
+                        </button>
+                        
+                    </div>
+                    
+                    
+                </div>
+                
+            </div>
+            
         </div>
         
     </div>
@@ -101,10 +164,12 @@
     <div id="secondRow">
         
         <!-- STATISTIKA -->
-        <div id="statisticsContainer">
-            <app-statistics-table #statisticsComponent> </app-statistics-table>
+        <div id="statisticsWrapper">
+            <p>{{"edit-dataset.statistika"|translate}}</p>
+            <div id="statisticsContainer">
+                <app-statistics-table #statisticsComponent> </app-statistics-table>
+            </div>
         </div>
-        
         
         <!-- OSTALE MANJE INFORMACIJE -->
         <div id="TEMP_OTHER">
