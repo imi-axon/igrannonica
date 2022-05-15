@@ -81,7 +81,7 @@ class TrainingInstance():
         fmngr.create(loaded_model)
         return fmngr
 
-    def create_service(self, dataframe, trainConf: Dict, model = None):
+    def create_service(self, dataframe, trainConf: Dict):
         self.service = TrainingService(dataframe, trainConf['inputs'], trainConf['outputs'], trainConf['actPerLayer'], trainConf['neuronsPerLayer']
             , actOutput = trainConf['actOut']
             , learning_rate = trainConf['learningRate']
@@ -91,15 +91,23 @@ class TrainingInstance():
             , percentage_training = trainConf['trainSplit']
             , callbacks=[self.callback]
             , problem_type = trainConf['problemType']
-            , model = model
-        
         ) if self.service == None else self.service
+
+    def load_model(self, filepath, conf, newconf):
+        # TODO - Pozvati funkciju koja ce uporediti konfiguraciju sa kojom je mreza bila istrenirana i novu konfiguraciju sa kojom sad treba da se trenira
+        # U odnosu na rezultat kreirati novi model (pozvati build_model) ili ucitati postojeci iz fajla
+
+        to_load_model = True # TODO - Umesto True ide poziv pomenute funkcije
+
+        if to_load_model:
+            self.service.load_model(filepath)
+            
 
     # def new_model(self, trainConf: Dict):
     #     self.create_service(None, trainConf)
     #     return self.service.new_model()
 
-    def train(self, datasetUrl: str, nnUrl: str, trainConf: Dict):
+    def train(self, datasetUrl: str, nnUrl: str, confUrl: str, trainConf: Dict):
 
         print('Train Function : BEGIN')
 
@@ -109,7 +117,7 @@ class TrainingInstance():
         dataframe = self.create_dataset(datasetUrl)     # dataframe
         fm_model = self.create_model(nnUrl)             # h5 FileMngr
         self.create_service(dataframe, trainConf)       # service
-        self.service.load_model(fm_model.path())        # load h5 model
+        self.load_model(fm_model.path())                               # load h5 model
         self.lock.release()                             # zbog lock-a u konstruktoru # [   ]
 
         # -- Treniranje --

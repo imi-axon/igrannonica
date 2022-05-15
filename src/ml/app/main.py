@@ -227,7 +227,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
     nnlink = data['nn']
     conflink = data['conf']
     # trainrezlink = data['trainrez']
-    conf = json_decode(data['newconf'])
+    newconf = json_decode(data['newconf'])
 
     # TEMP
     # conf['actPerLayer'] = ['relu' for _ in range(3)]
@@ -253,7 +253,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
             print('> Thread allready exists')
         else:
             print("TEST")
-            th = Thread(target=TrainingInstance(buff, lock, flags).train, args=(datasetlink, nnlink, conf), daemon=True)
+            th = Thread(target=TrainingInstance(buff, lock, flags).train, args=(datasetlink, nnlink, conflink, newconf), daemon=True)
             tt = TrainingThread(th, buff, flags, lock)
             TTM.add(tt, uid, nnid)
             th.start()

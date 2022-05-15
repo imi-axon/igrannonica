@@ -264,16 +264,9 @@ class TrainingService():
         return model_path
 
 
-    def start_training(self, epoch):
+    def start_training(self, epoch, model_filepath = "", conf_string = "", newconf_string = ""):
 
-        # TODO - Pozvati funkciju koja ce uporediti konfiguraciju sa kojom je mreza bila istrenirana i novu konfiguraciju sa kojom sad treba da se trenira
-        # U odnosu na rezultat kreirati novi model (pozvati build_model) ili ucitati postojeci iz fajla
-
-        to_load_model = True # TODO - Umesto True ide poziv pomenute funkcije
-
-        if to_load_model:
-            self.load_model()
-        else:
+        if self.mode == None:
             self.new_model()
 
         print('Training Started')
