@@ -107,7 +107,7 @@ class TrainingInstance():
     #     self.create_service(None, trainConf)
     #     return self.service.new_model()
 
-    def train(self, datasetUrl: str, nnUrl: str, confUrl: str, trainConf: Dict):
+    def train(self, datasetUrl: str, nnUrl: str, confUrl: str, trainrezUrl: str, trainConf: Dict):
 
         print('Train Function : BEGIN')
 
