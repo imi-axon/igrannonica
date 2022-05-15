@@ -61,6 +61,31 @@ class TrainingService():
         self.NB_PER_LAYER = nbperlayer
 
         self.METRICS = metrics
+        self.METRICS_REGRESSION = [
+           tf.keras.metrics.MeanSquaredError(),  #MSE - Mean Squared Error
+           tf.keras.metrics.MeanAbsoluteError(), #MAE - Mean Absolute Error
+           tf.keras.metrics.RootMeanSquaredError(), #RMSE - Root Mean Squared Error
+           tf.keras.metrics.MeanAbsolutePercentageError(), #MAPE -  Mean Absolute Percentage Error
+           tf.keras.metrics.MeanSquaredLogarithmicError() #MSLE - Mean Squared Logarithmic Error
+        ]
+
+        self.METRICS_CLASSIFICATION =  [ 
+            tf.keras.metrics.AUC(), #AUC 
+            tf.keras.metrics.CategoricalAccuracy(), #Categorical Accuracy
+            tf.keras.metrics.Precision(), #Precision
+            tf.keras.metrics.Recall(), #Recall
+            tf.keras.metrics.TruePositives(), #True Positives
+            tf.keras.metrics.TrueNegatives(), #True Negatives
+            tf.keras.metrics.FalsePositives(), #False Positives
+            tf.keras.metrics.FalseNegatives() #False Negatives
+        ]
+
+        if(type=="CLASSIFICATION"):
+            self.METRICS = self.METRICS_CLASSIFICATION
+        elif (type=="REGRESSION"):
+            self.METRICS = self.METRICS_REGRESSION
+
+
         self.TYPE = problem_type
 
         if(actOutput==None):
