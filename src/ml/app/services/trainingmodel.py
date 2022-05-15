@@ -61,6 +61,31 @@ class TrainingService():
         self.NB_PER_LAYER = nbperlayer
 
         self.METRICS = metrics
+        self.METRICS_REGRESSION = [
+           tf.keras.metrics.MeanSquaredError(),  #MSE - Mean Squared Error
+           tf.keras.metrics.MeanAbsoluteError(), #MAE - Mean Absolute Error
+           tf.keras.metrics.RootMeanSquaredError(), #RMSE - Root Mean Squared Error
+           tf.keras.metrics.MeanAbsolutePercentageError(), #MAPE -  Mean Absolute Percentage Error
+           tf.keras.metrics.MeanSquaredLogarithmicError() #MSLE - Mean Squared Logarithmic Error
+        ]
+
+        self.METRICS_CLASSIFICATION =  [ 
+            tf.keras.metrics.AUC(), #AUC 
+            tf.keras.metrics.CategoricalAccuracy(), #Categorical Accuracy
+            tf.keras.metrics.Precision(), #Precision
+            tf.keras.metrics.Recall(), #Recall
+            tf.keras.metrics.TruePositives(), #True Positives
+            tf.keras.metrics.TrueNegatives(), #True Negatives
+            tf.keras.metrics.FalsePositives(), #False Positives
+            tf.keras.metrics.FalseNegatives() #False Negatives
+        ]
+
+        if(type=="CLASSIFICATION"):
+            self.METRICS = self.METRICS_CLASSIFICATION
+        elif (type=="REGRESSION"):
+            self.METRICS = self.METRICS_REGRESSION
+
+
         self.TYPE = problem_type
 
         if(actOutput==None):
@@ -264,16 +289,9 @@ class TrainingService():
         return model_path
 
 
-    def start_training(self, epoch):
+    def start_training(self, epoch, model_filepath = "", conf_string = "", newconf_string = ""):
 
-        # TODO - Pozvati funkciju koja ce uporediti konfiguraciju sa kojom je mreza bila istrenirana i novu konfiguraciju sa kojom sad treba da se trenira
-        # U odnosu na rezultat kreirati novi model (pozvati build_model) ili ucitati postojeci iz fajla
-
-        to_load_model = True # TODO - Umesto True ide poziv pomenute funkcije
-
-        if to_load_model:
-            self.load_model()
-        else:
+        if self.mode == None:
             self.new_model()
 
         print('Training Started')
