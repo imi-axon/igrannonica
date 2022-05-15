@@ -191,53 +191,6 @@ def update_with_default_nn(body: NNCreate, response: Response):
     fc.create(json_encode(def_conf))
     # print(f'PUT CONF: {httpc.put(body.conf, fc.path())}')
     fc.delete()
-    
-
-# Get Default NN file ( - DEPRECATED - )
-@app.get('/api/nn/new/default', status_code=200)
-def get_default_nn_model():
-    
-    # TEMP --
-    inputs = ['A']
-    outputs = ['B']
-    # TEMP --
-    
-    nnmodel = NNModelMiddleware()
-    nnmodel.new_default_model(inputs, outputs)
-    fm = FileMngr('h5')
-    nnmodel.save_model(fm.directory(), fm.name())
-    fm.delete()
-
-    return FileResponse(fm.path())
-
-# Get Default NN Config
-@app.get('/api/nn/conf/default', status_code=200)
-def get_default_nn_conf():
-    
-    # TEMP --
-    inputs = ['A']
-    outputs = ['B']
-    # TEMP --
-
-    def_conf = {
-        'inputs' :          [],
-        'outputs' :         [],
-        'neuronsPerLayer' : [3, 2],
-        'actPerLayer' :     ['relu', 'relu'],
-        'actOut' :          'linear',
-        'learningRate' :    0.1,
-        'reg' :             'L1',
-        'regRate' :         0.1,
-        'batchSize' :       1,
-        'trainSplit' :      0.8,
-        'valSplit' :        0.2
-    }
-
-    f = FileMngr('json')
-    f.create(json_encode(def_conf))
-    f.delete()
-
-    return FileResponse(f.path())
 
 
 # ==== Training ====
