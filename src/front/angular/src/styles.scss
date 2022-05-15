@@ -43,6 +43,8 @@ $angular-theme: mat.define-light-theme((color: (primary: $angular-primary,
 ////////////////////////////// TEME////////////////////////////////////////
 .light_theme {
 
+    --svetlaTemaPrimarnaPlava: #0091ff;
+
     --fullname: #333333;
     --username: #555555;
     --location: #777777;
@@ -61,17 +63,17 @@ $angular-theme: mat.define-light-theme((color: (primary: $angular-primary,
     //Strane eksperimenata
     --dugmeNewExp: #FFFFFF33;
     --dugmeNewExpHover:#FFFFFF55;
-    --dugmeNewExpBorder:#0091ff;
+    --dugmeNewExpBorder:var(--svetlaTemaPrimarnaPlava);
     --dugmeNewExpSlova:#0070c5;
-    --slovaDugmeNewExpHover:#0091ff;
+    --slovaDugmeNewExpHover:var(--svetlaTemaPrimarnaPlava);
 
     //Lista projekata
     --projectsListEmptyTitle: #555555;
     --projectListProject:#FFFFFF33;
     --projectListProjectHover:#FFFFFF55;
-    --projectListProjectBorder:#0091ff;
+    --projectListProjectBorder:var(--svetlaTemaPrimarnaPlava);
     --projectListProjectTitle:#2C5D96;
-    --projectListProjectTitleHover:#0091ff;
+    --projectListProjectTitleHover:var(--svetlaTemaPrimarnaPlava);
     --projectListProjectCreated:#888888;
     --projectListProjectDescription:#555555;
     --projectListProjectImgBorder:#FFFFFF;
@@ -89,7 +91,7 @@ $angular-theme: mat.define-light-theme((color: (primary: $angular-primary,
 
     //Eksperimenti- pregled - OPIS
     --ExpOverviewDescriptionCont:#FFFFFF77;
-    --ExpOverviewDescriptionContBorder:#0091ff;
+    --ExpOverviewDescriptionContBorder:var(--svetlaTemaPrimarnaPlava);
     --ExpOverviewDescriptionContImgBorder:#333333;
     --ExpOverviewDescriptionContH2:#333333;
     --ExpOverviewDescriptionContP:#666666;
@@ -100,9 +102,9 @@ $angular-theme: mat.define-light-theme((color: (primary: $angular-primary,
     --ExpOverviewDescriptionContDescriptionFooter:#888888;
 
     --ExpOverviewDatasetContainer:#FFFFFF77;
-    --ExpOverviewDatasetContainerBorder:#0091ff;
+    --ExpOverviewDatasetContainerBorder:var(--svetlaTemaPrimarnaPlava);
     --ExpOverviewDatasetContainerControls: #FFFFFF77;
-    --ExpOverviewDatasetContainerBorder:#0091ff;
+    --ExpOverviewDatasetContainerBorder:var(--svetlaTemaPrimarnaPlava);
 
     
     //DATASET table
@@ -112,11 +114,26 @@ $angular-theme: mat.define-light-theme((color: (primary: $angular-primary,
     --datasetTableTrTdHoverBG:#daecff;
     --datasetTableTrTdHoverBGCell:#bfdfff;
 
+    //statistics table , dataset-edit-table
+    //KORISTIM OVE 4 VARIJABLE IZ DATASET TABLE
+
+    //MREZE
+    --imeMreze:black;
+    --mrezaBg: #FFFFFFAA;
+    --mrezaBorder:#2aa8e7;
+    --mrezaTekst: black;
+
+
+
 }
+
+
 
 .dark_theme {
 
-    
+    --tamnaTemaContainerBg : #111122b9;
+    --tamnaTemaContainerBgHover : #1a1a34b9;
+    --tamnaTemaPrimarnaPlava: #0091ff;
 
     --fullname: white;
     --username: white;
@@ -134,22 +151,22 @@ $angular-theme: mat.define-light-theme((color: (primary: $angular-primary,
     --userDescription : white;
 
     //Strane eksperimenata
-    --dugmeNewExp: #FFFFFF33;
-    --dugmeNewExpHover:#FFFFFF55;
-    --dugmeNewExpBorder:#0091ff;
+    --dugmeNewExp: var(--tamnaTemaContainerBg);
+    --dugmeNewExpHover:var(--tamnaTemaContainerBgHover);
+    --dugmeNewExpBorder:var(--tamnaTemaPrimarnaPlava);
     --dugmeNewExpSlova:#0070c5;
-    --slovaDugmeNewExpHover:#0091ff;
+    --slovaDugmeNewExpHover:var(--tamnaTemaPrimarnaPlava);
 
 
     //Lista projekata
     --projectsListEmptyTitle: #555555;
-    --projectListProject:#FFFFFF33;
-    --projectListProjectHover:#FFFFFF55;
-    --projectListProjectBorder:#0091ff;
-    --projectListProjectTitle:#2C5D96;
-    --projectListProjectTitleHover:#0091ff;
-    --projectListProjectCreated:#888888;
-    --projectListProjectDescription:#555555;
+    --projectListProject:var(--tamnaTemaContainerBg);
+    --projectListProjectHover: var(--tamnaTemaContainerBgHover);
+    --projectListProjectBorder:var(--tamnaTemaPrimarnaPlava);
+    --projectListProjectTitle:#0070c5;
+    --projectListProjectTitleHover:var(--tamnaTemaPrimarnaPlava);
+    --projectListProjectCreated:#979393;
+    --projectListProjectDescription:#979393;
     --projectListProjectImgBorder:#FFFFFF;
     --projectListProjectFullName:#333333;
 
@@ -163,22 +180,22 @@ $angular-theme: mat.define-light-theme((color: (primary: $angular-primary,
     --ExpPageDisabledCardHover:#999999;
 
     //Eksperimenti- pregled - OPIS
-    --ExpOverviewDescriptionCont:#111122b9;
+    --ExpOverviewDescriptionCont:var(--tamnaTemaContainerBg);
     --ExpOverviewDescriptionContBorder:#1892c3;
     --ExpOverviewDescriptionContImgBorder:#333333;
-    --ExpOverviewDescriptionContH2:#0091ff;
-    --ExpOverviewDescriptionContP:#0091ff;
-    --ExpOverviewDescriptionContDescH2:#0091ff;
+    --ExpOverviewDescriptionContH2:var(--tamnaTemaPrimarnaPlava);
+    --ExpOverviewDescriptionContP: var(--tamnaTemaPrimarnaPlava);
+    --ExpOverviewDescriptionContDescH2: var(--tamnaTemaPrimarnaPlava);
     --ExpOverviewDescriptionContDescriptionInput:#979393;
     --ExpOverviewDescriptionContDescriptionInputFocusBorder:#AAAAAA;
-    --ExpOverviewDescriptionContLabel:#0091ff;
+    --ExpOverviewDescriptionContLabel: var(--tamnaTemaPrimarnaPlava);
     --ExpOverviewDescriptionContDescriptionFooter:#a49f9f;
 
     //ExpOverviewDatasetContainer koristim i za stranu edit
-    --ExpOverviewDatasetContainer:#111122b9;
-    --ExpOverviewDatasetContainerBorder:#0091ff;
-    --ExpOverviewDatasetContainerControls: #111122b9;
-    --ExpOverviewDatasetContainerBorder:#0091ff;
+    --ExpOverviewDatasetContainer: var(--tamnaTemaContainerBg);
+    --ExpOverviewDatasetContainerBorder: var(--tamnaTemaPrimarnaPlava);
+    --ExpOverviewDatasetContainerControls: var(--tamnaTemaContainerBg);
+    --ExpOverviewDatasetContainerBorder: var(--tamnaTemaPrimarnaPlava);
 
     //DATASET table
     //body tr td
@@ -187,8 +204,17 @@ $angular-theme: mat.define-light-theme((color: (primary: $angular-primary,
     --datasetTableTrTdHoverBG:#daecff;
     --datasetTableTrTdHoverBGCell:#bfdfff;
 
-    //statistics table
+    //statistics table , dataset-edit-table
     //KORISTIM OVE 4 VARIJABLE IZ DATASET TABLE
+
+    //MREZE
+    --imeMreze:black;
+    --mrezaBg: #FFFFFFAA;
+    --mrezaBorder:#2aa8e7;
+    --mrezaTekst: rgba(227, 225, 230, 0.952);
+
+
+    
 }
 //////////////////////////////KRAJ TEME////////////////////////////////////////
 

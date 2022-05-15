@@ -39,9 +39,11 @@ th, td{
 }
 
 tbody{
+    color: var(--datasetTableTrTd);
     tr{
         &:hover{
-            background-color: #daecff;
+            background-color: var(--datasetTableTrTdHoverBG);
+            color: var(--datasetTableTrTdHover);
         }
     }
     
@@ -51,7 +53,8 @@ tbody{
     
     td{
         &:hover{
-            background-color: #bfdfff;
+            background-color: var(--datasetTableTrTdHoverBGCell);
+            color: var(--datasetTableTrTdHover);
         }
     }
 }
