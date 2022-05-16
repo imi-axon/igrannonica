@@ -6,6 +6,7 @@ Fajl: {
 }
 
 Kolona: {
+    name: string                    // naziv kolone
     type: "num" | "cat" | "enc"     // tip kolone (numericka, kategorijska, enkodirana-numericka)
     trainReady: bool                // da li je spreman za treniranje
     encoding: Encoding | None       // podaci o enkodiranju kolone (nije None ukoliko je type = "enc")
@@ -64,3 +65,4 @@ Kada se promene izvrsene na Editing Dataset-u odbace metamain.json se kopira u m
 ----------------------------------------------------------------------------------------------------
 
 Kada se Dataset vrati na Initial Dataset ML generise podatke koji se prepisuju u metamain.json i metaedit.json
+

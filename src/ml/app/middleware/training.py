@@ -96,15 +96,11 @@ class TrainingInstance():
         ) if self.service == None else self.service
 
     def load_model(self, filepath, conf, newconf):
-        # TODO - Pozvati funkciju koja ce uporediti konfiguraciju sa kojom je mreza bila istrenirana i novu konfiguraciju sa kojom sad treba da se trenira
-        # U odnosu na rezultat kreirati novi model (pozvati build_model) ili ucitati postojeci iz fajla
-
-        to_load_model = compareConfigurations(conf, newconf)    #True # TODO - Umesto True ide poziv pomenute funkcije
-
+        to_load_model = compareConfigurations(conf, newconf)
         if to_load_model:
             self.service.load_model(filepath)
-        else:
-            self.service.new_model()
+        # else:
+        #     self.service.new_model()
             
 
     # def new_model(self, trainConf: Dict):
@@ -121,7 +117,7 @@ class TrainingInstance():
         dataframe = self.create_dataset(datasetUrl)     # dataframe
         fm_model = self.create_model(nnUrl)             # h5 FileMngr
         self.create_service(dataframe, trainConf)       # service
-        self.load_model(fm_model.path())                               # load h5 model
+        self.load_model(fm_model.path(), {}, trainConf) # load h5 model
         self.lock.release()                             # zbog lock-a u konstruktoru # [   ]
 
         # -- Treniranje --
@@ -142,6 +138,7 @@ class TrainingInstance():
         # -- Cuvanje fajlova u Storate na Backu --
 
         httpc.put(nnUrl, trained_model_fpath)
+        # TODO: Cuvanje CONF-a
 
         # -- Poruka za kraj Thread-a --
         # print('-- Poruka za kraj Thread-a --')
