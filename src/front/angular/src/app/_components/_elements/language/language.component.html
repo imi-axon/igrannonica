@@ -1,4 +1,4 @@
-<select #langselect (change)="ChangeLanguage(langselect.value)"> 
+<select id="langSelect" #langselect (change)="ChangeLanguage(langselect.value)"> 
     <!-- translate.use(langselect.value) -->
     <option *ngFor="let lang of translate.getLangs()" [selected]="languageService.language==lang" [value]="lang">
         {{lang}}
