@@ -53,7 +53,7 @@ import { KonfiguracijaComponent } from './_components/_elements/konfiguracija/ko
 import { TrainingPageComponent } from './_components/_pages/training-page/training-page.component';
 
 import { LandingPageSelectorComponent } from './_components/_elements/landing-page-selector/landing-page-selector.component';
-import { ListaMrezaComponent } from './_components/_elements/lista-mreza/lista-mreza.component';
+import { NetworkListComponent } from './_components/_elements/network-list/network-list.component';
 import { ChartTrainingComponent } from './_components/_elements/chart-training/chart-training.component';
 import { NgChartsModule } from 'ng2-charts';
 import { PhotoInputComponent } from './_components/_elements/photo-input/photo-input.component';
@@ -118,7 +118,7 @@ import { PublicProjectListComponent } from './_components/_elements/public-proje
 
     KonfiguracijaComponent,
     TrainingPageComponent,
-    ListaMrezaComponent,
+    NetworkListComponent,
     ChartTrainingComponent,
     PhotoInputComponent,
     NnPageComponent,
@@ -137,7 +137,8 @@ import { PublicProjectListComponent } from './_components/_elements/public-proje
     ExperimentAllNetworksComponent,
     ExperimentNetworksListComponent,
     DatasetEditTableComponent,
-    PublicProjectListComponent
+    PublicProjectListComponent,
+    NetworkListComponent
   ],
   imports: [
     NgxCsvParserModule,

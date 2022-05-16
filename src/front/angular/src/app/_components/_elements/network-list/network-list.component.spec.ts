@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ListaMrezaComponent } from './lista-mreza.component';
+import { NetworkListComponent } from './network-list.component';
 
-describe('ListaMrezaComponent', () => {
-  let component: ListaMrezaComponent;
-  let fixture: ComponentFixture<ListaMrezaComponent>;
+describe('NetworkListComponent', () => {
+  let component: NetworkListComponent;
+  let fixture: ComponentFixture<NetworkListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ListaMrezaComponent ]
+      declarations: [ NetworkListComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ListaMrezaComponent);
+    fixture = TestBed.createComponent(NetworkListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

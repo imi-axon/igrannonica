@@ -1,1 +1,6 @@
-<img [src]="languageIcon" (click)="ChangeLanguage()">
+<select id="langSelect" #langselect (change)="ChangeLanguage(langselect.value)"> 
+    <!-- translate.use(langselect.value) -->
+    <option *ngFor="let lang of translate.getLangs()" [selected]="languageService.language==lang" [value]="lang">
+        {{lang}}
+    </option>
+  </select>

@@ -120,15 +120,9 @@ export class ProjectListComponent implements OnInit {
       if(result=='yes') 
       {
         console.log(result);
-        this.RemoveProject(event,projectId);
+        this.projectsService.removeProject(projectId, this, this.loadProjectsCallback);
       }
     });
-  }
-
-  RemoveProject(event: any, projectId: number) { 
-    this.projectsService.removeProject(projectId, this, this.loadProjectsCallback);
-    event.stopPropagation();
-    
   }
 
 }
