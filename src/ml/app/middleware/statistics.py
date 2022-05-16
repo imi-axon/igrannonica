@@ -185,18 +185,21 @@ class StatisticsMiddleware:
     def add_categorical_stats(self):
         lista = []
         categorical_columns = self.dataframe.select_dtypes(include=['object']).columns.tolist()
-        stat_cat = self.stat.stat_categorical_columns()
-
-        for column in categorical_columns:
-            dict_col = dictionary()
-            dict_col.add("col", column)
-            dict_col.add("count", stat_cat[column]['count'])
-            dict_col.add("unique", stat_cat[column]['unique'])
-            dict_col.add("top", stat_cat[column]['top'])
-            dict_col.add("freq", stat_cat[column]['count'])
-            lista.append(dict_col)    
+        
+        if(len(categorical_columns)>0):
+            stat_cat = self.stat.stat_categorical_columns()
+        
+            for column in categorical_columns:
+                dict_col = dictionary()
+                dict_col.add("col", column)
+                dict_col.add("count", stat_cat[column]['count'])
+                dict_col.add("unique", stat_cat[column]['unique'])
+                dict_col.add("top", stat_cat[column]['top'])
+                dict_col.add("freq", stat_cat[column]['count'])
+                lista.append(dict_col)    
         
         return lista
+        
 
     def statistics_json(self):
         self.dictionary.add("cormat",self.add_cormat())
