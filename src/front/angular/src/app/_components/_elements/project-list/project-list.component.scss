@@ -4,6 +4,7 @@
 }
 
 .project{
+    min-height: 160px;
     transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
     background-color: var(--projectListProject);
     backdrop-filter: blur(3px);
@@ -22,7 +23,7 @@
         .title{
             display: inline;
             font-size: 26px;
-            font-weight: 600;
+            font-weight: 400;
             color: var(--projectListProjectTitle);
             margin: 0px;
             cursor: pointer;

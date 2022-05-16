@@ -116,19 +116,6 @@ class TrainingService():
         #skaliranje podataka
         self.normed_train_dataset, self.normed_test_dataset = self.data_standardization()
 
-        # if datasetAll != None:
-        #     self.setup_dataset(datasetAll)
-
-
-    # def setup_dataset(self, datasetAll):
-    #     # Dataframe
-    #     self.datasetAll = datasetAll
-    #     self.dataframe = self.load_dataframe() #dataframe koji se sastoji samo od ulaznih i izlaznih kolona
-    #     #podela na trening i testne podatke
-    #     self.train_dataset, self.test_dataset, self.train_labels, self.test_labels = self.train_test()
-    #     #skaliranje podataka
-    #     self.normed_train_dataset, self.normed_test_dataset = self.data_standardization()
-
 
     #f-ja load_dataframe od celokupnog dataframe-a pravi dataframe koji se sastoji od kolona koje su potrebne za kreiranje neuronske mreze
     #inputs - lista stringova (nazivi kolona koji su input)
@@ -182,43 +169,6 @@ class TrainingService():
                     columns = self.test_dataset.columns)
         return normed_train_df, normed_test_df
 
-
-    #regression
-    #def build_regression_model(self):
-    #    model = Sequential()
-    #    
-    #    model.add(Dense(self.NB_PER_LAYER[0], kernel_regularizer = self.REGULARIZATION, input_shape=[len(self.inputs)]))
-    #    model.add(Activation(self.ACT_PER_LAYER[0])) 
-    #    
-    #    for i in range(1, len(self.NB_PER_LAYER)):
-    #        model.add(Dense(self.NB_PER_LAYER[i], kernel_regularizer = self.REGULARIZATION))
-    #        model.add(Activation(self.ACT_PER_LAYER[i])) 
-    #    
-    #    model.add(Dense(1))
-    #
-    #    model.compile(loss = self.REGRESSION_LOSS,
-    #            optimizer = self.OPTIMIZER,
-    #            metrics = self.METRICS)
-    #    
-    #    return model
-
-    #classification
-    #def build_classification_model(self):
-    #    model = Sequential()
-    #
-    #    model.add(Dense(self.NB_PER_LAYER[0], kernel_regularizer = self.REGULARIZATION, input_shape=[len(self.inputs)], activation = self.ACT_PER_LAYER[0]))
-    #    
-    #    for i in range(1, len(self.NB_PER_LAYER)):
-    #        model.add(Dense(self.NB_PER_LAYER[i], kernel_regularizer = self.REGULARIZATION, activation=self.ACT_PER_LAYER[i]))
-    #        
-    #    #izlazni sloj
-    #    model.add(Dense(len(self.outputs), activation='softmax'))
-    #
-    #    model.compile(loss = self.CLASSIFICATION_LOSS,
-    #            optimizer = self.OPTIMIZER,
-    #            metrics = self.METRICS)
-    #
-    #    return model
 
     def build_model(self):
         model = Sequential()
@@ -289,7 +239,7 @@ class TrainingService():
         return model_path
 
 
-    def start_training(self, epoch, model_filepath = "", conf_string = "", newconf_string = ""):
+    def start_training(self, epoch):
 
         if self.mode == None:
             self.new_model()

@@ -217,16 +217,16 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
     await ws.accept() # ws <ACCEPT>
 
     data = await ws.receive_json() # ws <<<<
-
+    
     # confirm
     await ws.send_bytes(b'0') # ws >>>>
-    
-    print(data)
+
+    # print(data)
 
     datasetlink = data['dataset']
     nnlink = data['nn']
     conflink = data['conf']
-    # trainrezlink = data['trainrez']
+    trainrezlink = data['trainrez']
     newconf = json_decode(data['newconf'])
 
     # TEMP
@@ -241,26 +241,27 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
     flags = {'stop': False}
     lock: Lock = Lock()
 
+    EP_PACK_SIZE = 100 # broj epoha koje se salju u jednoj poruci
+
     try:
         th: Thread = None
+        training_exists = TTM.nn_exist(uid, nnid)
 
-        if TTM.nn_exist(uid, nnid):
+        if training_exists:
             tt = TTM.get_tt(uid, nnid)
             buff = tt.buffer
             flags = tt.flags
             lock = tt.lock
-            th = tt.thread      
+            th = tt.thread
             print('> Thread allready exists')
         else:
-            print("TEST")
-            th = Thread(target=TrainingInstance(buff, lock, flags).train, args=(datasetlink, nnlink, conflink, newconf), daemon=True)
+            th = Thread(target=TrainingInstance(buff, lock, flags).train, args=(datasetlink, nnlink, conflink, trainrezlink, newconf), daemon=True)
             tt = TrainingThread(th, buff, flags, lock)
             TTM.add(tt, uid, nnid)
             th.start()
             print('> Thread started')
 
-        TTM.pretty_print()
-
+        # TTM.pretty_print()
         finished = False
 
         while not finished:
@@ -273,14 +274,25 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
                 buff.clear()
                 lock.release() # [   ]
 
-                # send EPOCHS in BURST
+                # -- Send EPOCHS in BURST of PACKS --
+                pack = b''
+                pack_i = 0
+
                 for b in burst_buff:
-                    
-                    await ws.send_text(b.decode()) # ws >>>>
-                    print(f'>>>> send bytes: {b}')
-                    
+                    pack_i += 1
                     if b == b'end':
-                        finished = True
+                        finished = True                       # poslednja poruka za kraj (TODO: Mozda dodati neki prekid Burst petlje?)
+                    else:
+                        pack += b + b','
+                        if pack_i == EP_PACK_SIZE:            # 1 pack zavrsen, salje se
+                            pack = b'[' + pack[:-1] + b']'
+                            await ws.send_text(pack.decode()) # ws >>>>
+                            pack = b''
+                            pack_i = 0
+                # -- BURST Finished --
+
+                
+                print(f'>>>> send bytes: {b}')
 
             else:
                 lock.release() # [   ]
@@ -300,5 +312,6 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
         print('-=| Finally - Remove Training Thread |=-')
         TTM.remove(uid, nnid)
 
-    TTM.pretty_print()
-    print('=='*40)
+    # TTM.pretty_print()
+    # print('=='*40)
+

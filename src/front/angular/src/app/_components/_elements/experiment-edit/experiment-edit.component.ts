@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
 import { StatisticsService } from 'src/app/_utilities/_services/statistics.service';
@@ -39,7 +39,7 @@ export class ExperimentEditComponent implements OnInit {
   // KRAJ KOMPONENTI ==========================================
   
   
-  private getProjectId(): number{
+  private GetProjectId(): number{
     let p = this.activatedRoute.parent?.snapshot.paramMap.get("ProjectId");
     if (p != null)
       return Number.parseInt(p);
@@ -47,12 +47,135 @@ export class ExperimentEditComponent implements OnInit {
   }
   
   ngOnInit(): void {
-    this.datasetService.GetDatasetPage(this.getProjectId(), true, 1, 20, this, this.handleDatasetGetSuccess)
-    this.statisticsService.GetStatistics(this.getProjectId(), true, this, this.handleStatisticsGetSuccess);
+    this.datasetService.GetDatasetPage(this.GetProjectId(), false, 1, 20, this, this.handleDatasetGetSuccess)
+    this.statisticsService.GetStatistics(this.GetProjectId(), false, this, this.handleStatisticsGetSuccess);
   }
   
   
   
+  
+  
+  
+  
+  
+  
+  // EDIT OPCIJE ============================================================================================
+  
+  // LISTA IZABRANIH AKCIJA U JSON
+  private getActionsJSON(selectedColumns: string[], selectedAction: string) : any{
+    let editJSON = []
+    for(let i = 0; i < selectedColumns.length; i++)
+      editJSON.push({
+          action: selectedAction,
+          column: selectedColumns[i]
+      });
+    return editJSON;
+  }
+  
+  
+  
+  
+  // FILL
+  public FillColsWithAverage(){
+    let selectedColumns: string[] = this.datasetEditTable.selectedColumns;
+    
+    if(selectedColumns.length <= 0)
+      return;
+    
+    let editJSON = this.getActionsJSON(selectedColumns, 'ins nullrows mean');
+    
+    this.datasetService.EditDataset(editJSON, this.GetProjectId(), false, this, this.successfulEditCallback);
+  }
+  public FillColsWithMedian(){
+    let selectedColumns: string[] = this.datasetEditTable.selectedColumns;
+    
+    if(selectedColumns.length <= 0)
+      return;
+    
+    let editJSON = this.getActionsJSON(selectedColumns, 'ins nullrows median');
+    
+    this.datasetService.EditDataset(editJSON, this.GetProjectId(), false, this, this.successfulEditCallback);
+  }
+  public FillColsWithMostCommon(){
+    let selectedColumns: string[] = this.datasetEditTable.selectedColumns;
+    
+    if(selectedColumns.length <= 0)
+      return;
+    
+    let editJSON = this.getActionsJSON(selectedColumns, 'ins nullrows cat');
+    
+    this.datasetService.EditDataset(editJSON, this.GetProjectId(), false, this, this.successfulEditCallback);
+  }
+  
+  
+  // REMOVE
+  public RemoveSelectedCols(){
+    let selectedColumns: string[] = this.datasetEditTable.selectedColumns;
+    
+    if(selectedColumns.length <= 0)
+      return;
+      
+    let editJSON = this.getActionsJSON(selectedColumns, 'del col');
+    
+    this.datasetService.EditDataset(editJSON, this.GetProjectId(), false, this, this.successfulEditCallback);
+  }
+  public RemoveRowsWithNulls(){
+    let selectedColumns: string[] = this.datasetEditTable.selectedColumns;
+    
+    if(selectedColumns.length <= 0)
+      return;
+      
+    let editJSON = this.getActionsJSON(selectedColumns, 'del nullrows');
+    
+    this.datasetService.EditDataset(editJSON, this.GetProjectId(), false, this, this.successfulEditCallback);
+  }
+  public RemoveDuplicateRows(){
+    let selectedColumns: string[] = this.datasetEditTable.selectedColumns;
+    
+    if(selectedColumns.length != 1)
+      return;
+      
+    let editJSON = [{ action: 'del duplicates' }];
+    
+    
+    this.datasetService.EditDataset(editJSON, this.GetProjectId(), false, this, this.successfulEditCallback);
+  }
+  
+  
+  // ENCODING
+  public OneHotEncoding(){
+    let selectedColumns: string[] = this.datasetEditTable.selectedColumns;
+    
+    if(selectedColumns.length <= 0)
+      return;
+      
+    let editJSON = this.getActionsJSON(selectedColumns, 'enc onehot');
+    
+    this.datasetService.EditDataset(editJSON, this.GetProjectId(), false, this, this.successfulEditCallback);
+  }
+  public LabelEncoding(){
+    let selectedColumns: string[] = this.datasetEditTable.selectedColumns;
+    
+    if(selectedColumns.length <= 0)
+      return;
+      
+    let editJSON = this.getActionsJSON(selectedColumns, 'enc label');
+    
+    this.datasetService.EditDataset(editJSON, this.GetProjectId(), false, this, this.successfulEditCallback);
+  }
+  
+  
+  // DOWNLOAD
+  public DownloadCurrentChanges(){
+    
+  }
+  
+  // AFTER EDIT
+  private successfulEditCallback(self: ExperimentEditComponent){
+    self.statisticsService.GetStatistics(self.GetProjectId(), false, self, self.handleStatisticsGetSuccess);
+    self.datasetEditTable.DeselectAllSelectedColumns();
+    self.ChangeDatasetPage(self.pageControls.currentPage);
+  }
   
   
   
@@ -66,14 +189,10 @@ export class ExperimentEditComponent implements OnInit {
   }
   
   public ChangeDatasetPage(pageNumber: number){
-    this.datasetService.GetDatasetPage(this.getProjectId(), true, pageNumber, ROW_COUNT, this, this.handleDatasetGetSuccess);
+    this.datasetService.GetDatasetPage(this.GetProjectId(), false, pageNumber, ROW_COUNT, this, this.handleDatasetGetSuccess);
   }
   
   // KRAJ DATASETA ==========================================================================================
-  
-  
-  
-  
   
   
   
