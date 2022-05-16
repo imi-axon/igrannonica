@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
 import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
 import { AuthService } from 'src/app/_utilities/_services/auth.service';
+import { LanguageComponent } from '../language/language.component';
+import { TelNavComponent } from '../tel-nav/tel-nav.component';
 
 @Component({
   selector: 'app-landing-nav',
@@ -14,22 +16,12 @@ export class LandingNavComponent implements OnInit {
 
   constructor(private router:Router,public auth:AuthService, public translate:TranslateService) { 
   }
-  lang1:string;
   ngOnInit(): void {
-    this.lang1=localStorage.getItem('lang1') || 'en';
-    this.translate.use(this.lang1);
-    console.log(this.lang1);
   }
   
   logout()
   {
    this.auth.logout();
   }
-  
-  changeLang(lang:string){
-    this.translate.use(lang);
-    localStorage.setItem('lang1', lang);
-  }
-
 
 }
