@@ -12,14 +12,29 @@ export class NnApiService {
 
   constructor(private http:HttpClient) { }
 
-  private url:string=apiProperties.url +'/api/projects/';
+  private url: string = apiProperties.url +'/api/projects/';
 
   projectsNN(projectID:number):Observable<HttpResponse<NN[]>>{
-    let response = this.http.get<NN[]>(this.url+projectID+'/nn',
-    {
-      observe:"response",
-      headers:HeaderUtil.jwtOnlyHeaders()
-    });
+    let response = this.http.get<NN[]>(
+      this.url + projectID + '/nn',
+      {
+        observe:"response",
+        headers:HeaderUtil.jwtOnlyHeaders()
+      }
+    );
     return response;
   }
+  
+  
+  deleteProject(projectId: number, networkId: number){
+    let response = this.http.delete( 
+      this.url + projectId + "/nn/" + networkId,
+      {
+        observe: "response",
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    );
+    return response;
+  }
+  
 }

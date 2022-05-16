@@ -1,0 +1,89 @@
+.networkList{
+    width: 100%;
+    margin-bottom: 30px;
+
+    .network{
+        min-height: 160px;
+        transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+        background-color: var(--projectListProject);
+        backdrop-filter: blur(3px);
+        border: solid 1px var(--projectListProjectBorder);
+        padding: 20px;
+        margin-top: 25px;
+        display: grid;
+        grid-template-columns: 70% 30%;
+        
+        &:hover{
+            transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+            background-color: var(--projectListProjectHover);
+        }
+        
+        .networkLeft{
+            .title{
+                display: inline;
+                font-size: 26px;
+                font-weight: 400;
+                color: var(--projectListProjectTitle);
+                margin: 0px;
+                cursor: pointer;
+                transition: 0.2s ease-in;
+                
+                &:hover{
+                    transition: 0.2s ease-out;
+                    color: var( --projectListProjectTitleHover);
+                }
+            }
+            
+            .created{
+                font-size: 11px;
+                color: var(--projectListProjectCreated);
+            }
+        }
+        
+        .networkRight{
+            img{
+                width: 40px;
+                height: 40px;
+                border: solid 1px var(--projectListProjectImgBorder);
+                border-radius: 4px;
+            }
+            
+            .fullname{
+                color: var(--projectListProjectFullName);
+            }
+        }
+        
+    }
+
+    .remove-button{
+        transition: 0.25s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+        background-color: #c83030; 
+        border: solid 1px #7a0000;
+        color: #FFFFFF; 
+        font-weight: bold;
+        float: right;
+        
+        width: 32px;
+        height: 32px;
+        
+        &:hover{
+            transition: 0.25s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+            background-color: #970000;
+        }
+        
+        &:focus{
+            outline: none;
+        }
+    }
+
+}
+
+#emptyTitle{
+    margin-top: 50px;
+    text-align: center;
+    width: 100%;
+    display: block;
+    font-size: 32px;
+    color: var(--projectListEmptyTitle);
+    cursor: default;
+}

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { CreateNeuralNetworkComponent } from '../../_elements/create-neural-network/create-neural-network.component';
-import { ListaMrezaComponent } from '../../_elements/lista-mreza/lista-mreza.component';
+import { NetworkListComponent } from '../../_elements/network-list/network-list.component';
 
 @Component({
   selector: 'app-nn-page',
@@ -11,7 +11,7 @@ import { ListaMrezaComponent } from '../../_elements/lista-mreza/lista-mreza.com
 export class NnPageComponent implements OnInit {
   constructor(private router:Router) { }
 
-  @ViewChild("lista") listnn:ListaMrezaComponent
+  @ViewChild("lista") listnn:NetworkListComponent
   @ViewChild("newnn") newnn:CreateNeuralNetworkComponent
 
   ngOnInit(): void {

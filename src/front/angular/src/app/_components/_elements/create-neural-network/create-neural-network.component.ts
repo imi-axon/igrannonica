@@ -3,7 +3,6 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NewNN } from 'src/app/_utilities/_data-types/models';
 import { NewNnService } from 'src/app/_utilities/_services/new-nn.service';
-import { ListaMrezaComponent } from '../lista-mreza/lista-mreza.component';
 
 @Component({
   selector: 'app-create-neural-network',
