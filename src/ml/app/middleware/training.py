@@ -18,6 +18,8 @@ from util.json import json_encode
 import util.http as httpc
 from util.csv import get_csv_dialect
 
+from .util import compareConfigurations
+
 from services.trainingmodel import TrainingService
 
 
@@ -97,10 +99,12 @@ class TrainingInstance():
         # TODO - Pozvati funkciju koja ce uporediti konfiguraciju sa kojom je mreza bila istrenirana i novu konfiguraciju sa kojom sad treba da se trenira
         # U odnosu na rezultat kreirati novi model (pozvati build_model) ili ucitati postojeci iz fajla
 
-        to_load_model = True # TODO - Umesto True ide poziv pomenute funkcije
+        to_load_model = compareConfigurations(conf, newconf)    #True # TODO - Umesto True ide poziv pomenute funkcije
 
         if to_load_model:
             self.service.load_model(filepath)
+        else:
+            self.service.new_model()
             
 
     # def new_model(self, trainConf: Dict):
