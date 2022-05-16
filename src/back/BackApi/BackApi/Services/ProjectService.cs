@@ -252,6 +252,7 @@ namespace BackApi.Services
             rez.Append("\"" + "Public" + "\":" + "\"" + proj.Public + "\",");
             rez.Append("\"" + "Description" + "\":" + "\"" + proj.Description + "\",");
             //rez.Append("\"" + "loggedUserIsOwner" + "\":" + "\"" + loggedUserIsOwner + "\"");
+            rez.Append("\"" + "Creationdate" + "\":" + "\"" + proj.CreationDate + "\",");
             rez.Append("\"" + "hasDataset" + "\":" + "\"" + tmp + "\"");
 
             rez.Append("}");

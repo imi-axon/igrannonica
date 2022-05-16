@@ -69,6 +69,8 @@ export class ExperimentOverviewComponent implements OnInit{
   private handleSuccesfulGetProjectCallback(self: ExperimentOverviewComponent, response: any){
     self.project = response;
     
+    console.log(self.project)
+    
     // self.project.hasDataset se ponasa i izgleda kao string a prepoznaje se kao boolean
     // ovo dovodi do toga da ne mozemo da pitamo self.project.hasDataset == true
     
@@ -121,6 +123,8 @@ export class ExperimentOverviewComponent implements OnInit{
   public UploadDatasetFile(file: File){
     let formData : FormData = new FormData();
     formData.append("dataset", file);
+    
+    console.log(formData)
     
     this.datasetService.AddDataset(formData, this.getProjectId(), this, this.datasetUploadHandler, this.badDataFormatHandler, this.unauthorizedHandler);
   }

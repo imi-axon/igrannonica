@@ -24,7 +24,7 @@ export class JWTUtil
             return null;
             
         const payload = jwt.split('.')[1];    
-        console.log(JSON.parse(atob(payload)));
+        // console.log(JSON.parse(atob(payload)));
         return JSON.parse(atob(payload));
     }
 

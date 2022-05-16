@@ -78,6 +78,7 @@ $angular-theme: mat.define-light-theme((color: (primary: $angular-primary,
     --projectListProjectDescription:#555555;
     --projectListProjectImgBorder:#FFFFFF;
     --projectListProjectFullName:#333333;
+    --projectListProjectUserName:#333333;
     
 
     //Eksperimenti - PREGLED
@@ -167,8 +168,9 @@ $angular-theme: mat.define-light-theme((color: (primary: $angular-primary,
     --projectListProjectTitleHover:var(--tamnaTemaPrimarnaPlava);
     --projectListProjectCreated:#979393;
     --projectListProjectDescription:#979393;
-    --projectListProjectImgBorder:#FFFFFF;
-    --projectListProjectFullName:#333333;
+    --projectListProjectImgBorder:var(--tamnaTemaPrimarnaPlava);
+    --projectListProjectFullName:#FFFFFFAA;
+    --projectListProjectUserName:#FFFFFFAA;
 
     //Eksperimenti - PREGLED
     --ExpPageTitleInput : #FFFFFF;
