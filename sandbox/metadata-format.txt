@@ -1,12 +1,11 @@
 =================================================================================================
 
 Fajl: {
-    collumns: Kolona[]
+    columns: { K1: Kolona, K2: Kolona, ... }
     statistics: STATS               // statistika u JSON formatu (definisan na Figmi)
 }
 
 Kolona: {
-    name: string                    // naziv kolone
     type: "num" | "cat" | "enc"     // tip kolone (numericka, kategorijska, enkodirana-numericka)
     trainReady: bool                // da li je spreman za treniranje
     encoding: Encoding | null       // podaci o enkodiranju kolone (nije None ukoliko je type = "enc")
@@ -39,7 +38,7 @@ Prilikom dodavanja dataset-a vrsi se analiza i kreiraju se 2 fajla (metamain.jao
 Fajlovi su u foramtu:
 
 Fajl: {
-    collumns: Kolona[]
+    columns: { K1: Kolona, K2: Kolona, ... }
     statistics: STATS
 }
 
