@@ -175,6 +175,9 @@ namespace BackApi.Services
             byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             response = await client.PutAsync(Urls.ml + "/api/nn/default",byteContent);
 
+            var proj = kontext.Projects.FirstOrDefault(x => x.ProjectId == id);
+            if (proj != null)
+                proj.LastEdit = DateTime.Now;
             return response;
         }
         public string CreateNN(int projid,string name,out int nnid)
@@ -192,6 +195,8 @@ namespace BackApi.Services
             nn.ConfPath = "";
             nn.TrainrezPath = "";
             nn.Notes = "";
+            nn.CreationDate = DateTime.Now;
+            nn.LastEdited = nn.CreationDate;
 
             kontext.Add(nn);
             kontext.SaveChanges();
@@ -211,6 +216,11 @@ namespace BackApi.Services
             if (nn == null)
                 return false;
             nn.NNName = title;
+            nn.LastEdited = DateTime.Now;
+
+            var proj = kontext.Projects.FirstOrDefault(x => x.ProjectId == projid);
+            if (proj != null)
+                proj.LastEdit = nn.LastEdited;
             kontext.SaveChanges();
             return true;
         }
@@ -254,6 +264,7 @@ namespace BackApi.Services
             var path = storageService.CreateNNCfg(nn.ProjectId, nnid);
             nn.ConfPath = path;
 
+            nn.LastEdited = DateTime.Now;
             kontext.Entry(nn).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             kontext.SaveChanges();
 
@@ -268,6 +279,7 @@ namespace BackApi.Services
             var path = storageService.CreateNNtrainrez(nn.ProjectId, nnid);
             nn.TrainrezPath = path;
 
+            nn.LastEdited = DateTime.Now;
             kontext.Entry(nn).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             kontext.SaveChanges();
 
@@ -298,6 +310,9 @@ namespace BackApi.Services
             storageService.DeletePath(nn.TrainrezPath);
 
             kontext.NNs.Remove(nn);
+            var proj = kontext.Projects.FirstOrDefault(x => x.ProjectId == nn.ProjectId);
+            if (proj != null)
+                proj.LastEdit = DateTime.Now;
             kontext.SaveChanges();
 
             return true;
@@ -308,6 +323,10 @@ namespace BackApi.Services
             if (nn==null)
                 return false;
             nn.Notes = note;
+            nn.LastEdited = DateTime.Now;
+            var proj = kontext.Projects.FirstOrDefault(x => x.ProjectId == projid);
+            if (proj != null)
+                proj.LastEdit = nn.LastEdited;
             kontext.SaveChanges();
             return true;
         }

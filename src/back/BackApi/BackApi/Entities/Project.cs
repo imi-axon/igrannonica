@@ -16,5 +16,6 @@ namespace BackApi.Entities
         public string Description { get; set; } = string.Empty;
         public string Notes { get; set; } = string.Empty;
         public Boolean Public { get; set; } = false;
+        public DateTime LastEdit { get; set; }
     }
 }
