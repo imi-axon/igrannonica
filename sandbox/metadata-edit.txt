@@ -1,0 +1,39 @@
+On Generate Metadata
+--------------------------------------------------
+* generise se objekat u metadata formtau:
+
+Fajl: {
+    collumns: Kolona[]
+    statistics: STATS
+}
+
+Kolona: {
+    type: "num" | "cat"
+    trainReady: bool
+    encoding: null    // Nema podataka o enkodiranju
+}
+
+
+On Edit Dataset
+--------------------------------------------------
+* da bi se metadata JSON menjao, prvo je potrebno
+  da se konvertuje u recnik koji ce se menjati,
+
+Row Deleted
+    => Update: columns[1->n].trainReady (bool)
+
+Column Deleted
+    => Delete: columns[i] (Kolona)
+
+Column Changed
+    => Update: columns[i].trainReady (bool)
+
+Column Encoded
+    => Create: columns[i].encoding (Encoding)
+    => Update: columns[i].name (string)
+    => Update: columns[i].type ("num"|"cat"|"enc")
+    => Update: columns[i].trainReady (bool)
+
+
+*nakon sto se izvrse sve Edit akcije
+    => Update: statistics (STATS)

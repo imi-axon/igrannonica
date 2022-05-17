@@ -9,13 +9,13 @@ Kolona: {
     name: string                    // naziv kolone
     type: "num" | "cat" | "enc"     // tip kolone (numericka, kategorijska, enkodirana-numericka)
     trainReady: bool                // da li je spreman za treniranje
-    encoding: Encoding | None       // podaci o enkodiranju kolone (nije None ukoliko je type = "enc")
+    encoding: Encoding | null       // podaci o enkodiranju kolone (nije None ukoliko je type = "enc")
 }
 
 Encoding: {
     type: "onehot" | "label"        // tip enkodiranja koji je primenjen
-    onehot: OneHot | None           // nije None ukoliko je type = "onehot"
-    label: Label | None             // nije None ukoliko je type = "label"
+    onehot: OneHot | null           // nije None ukoliko je type = "onehot"
+    label: Label | null             // nije None ukoliko je type = "label"
 }
 
 OneHot: {
@@ -46,7 +46,7 @@ Fajl: {
 Kolona: {
     type: "num" | "cat"
     trainReady: bool
-    encoding: None    // Nema podataka o enkodiranju
+    encoding: null    // Nema podataka o enkodiranju
 }
 
 ----------------------------------------------------------------------------------------------------
