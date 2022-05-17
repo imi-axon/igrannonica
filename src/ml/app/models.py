@@ -24,7 +24,14 @@ class DatasetEditActions (BaseModel):
 class TrainingRequest (BaseModel):
     dataset: str    # link
     nn: str         # link
-    conf: str
+    conf: str       # link
+    trainrez: str   # link
+    newconf: str
+
+class MetaGenRequest ():
+    dataset: str    # link
+    metamain: str   # link
+    metaedit: str   # link
 
 class NNCreate (BaseModel):
     headers: str

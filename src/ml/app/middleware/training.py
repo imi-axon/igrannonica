@@ -11,6 +11,7 @@ import tensorflow as tf
 from tensorflow import keras
 from keras import layers, Sequential
 from keras.callbacks import Callback
+from ml.app.util.json import json_decode
 
 import util.http as httpc
 from util.filemngr import FileMngr
@@ -77,11 +78,13 @@ class TrainingInstance():
         f.delete()
         return dataframe
 
+
     def create_model(self, nnUrl) -> FileMngr: #  return file mngr
         loaded_model: bytes = httpc.get(nnUrl, decode=False)
         fmngr = FileMngr('h5')
         fmngr.create(loaded_model)
         return fmngr
+
 
     def create_service(self, dataframe, trainConf: Dict):
         self.service = TrainingService(dataframe, trainConf['inputs'], trainConf['outputs'], trainConf['actPerLayer'], trainConf['neuronsPerLayer']
@@ -95,57 +98,68 @@ class TrainingInstance():
             , problem_type = trainConf['problemType']
         ) if self.service == None else self.service
 
+
     def load_model(self, filepath, conf, newconf):
         to_load_model = compareConfigurations(conf, newconf)
         if to_load_model:
             self.service.load_model(filepath)
-        # else:
-        #     self.service.new_model()
-            
 
-    # def new_model(self, trainConf: Dict):
-    #     self.create_service(None, trainConf)
-    #     return self.service.new_model()
 
     def train(self, datasetUrl: str, nnUrl: str, confUrl: str, trainrezUrl: str, trainConf: Dict):
 
-        print('Train Function : BEGIN')
+        try:
+            print('Train Function : BEGIN')
 
-        # -- Inicijalni setup --
-        print('-- Inicijalni setup --')
+            # -- Inicijalni setup --
+            print('-- Inicijalni setup --')
 
-        dataframe = self.create_dataset(datasetUrl)     # dataframe
-        fm_model = self.create_model(nnUrl)             # h5 FileMngr
-        self.create_service(dataframe, trainConf)       # service
-        self.load_model(fm_model.path(), {}, trainConf) # load h5 model
-        self.lock.release()                             # zbog lock-a u konstruktoru # [   ]
+            oldconf = json_decode(httpc.get(confUrl))               # stara konfiguracija
+            dataframe = self.create_dataset(datasetUrl)             # dataframe
+            fm_model = self.create_model(nnUrl)                     # h5 FileMngr
+            self.create_service(dataframe, trainConf)               # service
+            self.load_model(fm_model.path(), oldconf, trainConf)    # load h5 model
+            self.lock.release()                                     # zbog lock-a u konstruktoru # [   ]
 
-        # -- Treniranje --
-        print('-- Treniranje --')
+            # -- Treniranje --
+            print('-- Treniranje --')
 
-        #self.service.start_training(100, trainConf['valSplit'])                                # na kraju treninga ima lock.acquire() # [ X ]
-        self.service.start_training(200)
-        trained_model_fpath = self.service.save_model(fm_model.directory(), fm_model.name())    # h5 fajl sa putanjom za koju je vezan fm_model FileMngr
-        self.lock.release()                                                                     # zbog lock-a na kraju treniranja # [   ]
-        
-        # -- Poruka za kraj treniranja --
-        print('-- Poruka za kraj treniranja --')
+            testrez = self.service.start_training(200)                                                        # na kraju treninga ima lock.acquire() # [ X ]
+            trained_model_fpath = self.service.save_model(fm_model.directory(), fm_model.name())    # h5 fajl sa putanjom za koju je vezan fm_model FileMngr
+            self.lock.release()                                                                     # zbog lock-a na kraju treniranja # [   ]
+            
+            # -- Cuvanje fajlova u Storate na Backu --
 
-        self.lock.acquire(blocking=True)    # [ X ]
-        self.buff.append(b'end')            # indikator za kraj treniranja 
-        self.lock.release()                 # [   ]
+            fm_conf = FileMngr('json')
+            fm_conf.create(json_encode(trainConf))
+            httpc.put(nnUrl, trained_model_fpath)
+            httpc.put(confUrl, fm_conf.path())
 
-        # -- Cuvanje fajlova u Storate na Backu --
 
-        httpc.put(nnUrl, trained_model_fpath)
-        # TODO: Cuvanje CONF-a
+            # -- Poruka za kraj treniranja --
+            print('-- Poruka za kraj treniranja --')
 
-        # -- Poruka za kraj Thread-a --
-        # print('-- Poruka za kraj Thread-a --')
+            self.lock.acquire(blocking=True)                # [ X ]
+            self.buff.append(b'end')                        # indikator za kraj treniranja 
+            self.buff.append(bytes(testrez, 'utf-8'))       # rezultati testiranja ('end' i 'testrez' ce se uvek naci zajedno u baferu jer je ovaj blok atomican)
+            self.lock.release()                             # [   ]
 
-        # self.lock.acquire(blocking=True)    # [ X ]
-        # self.buff.append(b'')               # indikator za kraj Thread-a
-        # print(self.buff)
-        # self.lock.release()                 # [   ]
+            # -- Brisanje fajlova --
+            fm_model.delete()
+            fm_conf.delete()
 
-        print('-'*20)
+            # -- Poruka za kraj Thread-a --
+            # print('-- Poruka za kraj Thread-a --')
+
+            # self.lock.acquire(blocking=True)    # [ X ]
+            # self.buff.append(b'')               # indikator za kraj Thread-a
+            # print(self.buff)
+            # self.lock.release()                 # [   ]
+
+            print('-'*20)
+
+        except:
+            pass
+
+        finally:
+            if self.lock.locked:        # ako je try deo pukao i lock je ostao zakljucan otkljucati ga
+                self.lock.release()
