@@ -198,7 +198,24 @@ def update_with_default_nn(body: NNCreate, response: Response):
 # Training START
 @app.post('/api/user{uid}/nn{nnid}/pasive')     # << Kasnije treba promeniti u "/start"
 def nn_train_start(uid: int, nnid: int):
+
     pass
+    # th: Thread = None
+    # training_exists = TTM.nn_exist(uid, nnid)
+
+    # if training_exists:
+    #     tt = TTM.get_tt(uid, nnid)
+    #     buff = tt.buffer
+    #     flags = tt.flags
+    #     lock = tt.lock
+    #     th = tt.thread
+    #     print('> Thread allready exists')
+    # else:
+    #     th = Thread(target=TrainingInstance(buff, lock, flags).train, args=(datasetlink, nnlink, conflink, trainrezlink, newconf), daemon=True)
+    #     tt = TrainingThread(th, buff, flags, lock)
+    #     TTM.add(tt, uid, nnid)
+    #     th.start()
+    #     print('> Thread started')
 
 
 # Training STOP
@@ -206,7 +223,10 @@ def nn_train_start(uid: int, nnid: int):
 def nn_train_stop(uid: int, nnid: int):
     
     if TTM.nn_exist(uid, nnid):
-        TTM.get_tt(uid, nnid).flags['stop'] = True
+        tt = TTM.get_tt(uid, nnid)
+        tt.lock.acquire(blocking=True)
+        tt.flags['stop'] = True
+        tt.lock.release()
 
 
 # Training WATCH
@@ -219,7 +239,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
     data = await ws.receive_json() # ws <<<<
     
     # confirm
-    await ws.send_bytes(b'0') # ws >>>>
+    await ws.send_bytes(b'0') # ws >>>>     // bice uskoro deprecated (kad back izbaci cekanje ove poruke)
 
     # print(data)
 
