@@ -66,6 +66,7 @@ namespace BackApi.Services
             project.UserId = userid;
             project.Public = false;
             project.CreationDate = DateTime.Now;
+            project.LastEdit = DateTime.Now;
 
             context.Projects.Add(project);
             context.SaveChanges();
@@ -114,6 +115,7 @@ namespace BackApi.Services
                 rez.Append("\"" + "Name" + "\":" + "\"" + p.Name + "\",");
                 rez.Append("\"" + "Public" + "\":" + "\"" + p.Public + "\",");
                 rez.Append("\"" + "Creationdate" + "\":" + "\"" + p.CreationDate + "\",");
+                rez.Append("\"" + "LastEdit" + "\":" + "\"" + p.LastEdit + "\",");
                 var pom = context.Datasets.FirstOrDefault(x => x.ProjectId == p.ProjectId);
                 if(pom != null)
                     rez.Append("\"" + "hasDataset" + "\":" + "\"" + "true" + "\",");
@@ -132,6 +134,7 @@ namespace BackApi.Services
                     rez.Append("\"" + "Name" + "\":" + "\"" + p.Name + "\",");
                     rez.Append("\"" + "Public" + "\":" + "\"" + p.Public + "\",");
                     rez.Append("\"" + "Creationdate" + "\":" + "\"" + p.CreationDate + "\",");
+                    rez.Append("\"" + "LastEdit" + "\":" + "\"" + p.LastEdit + "\",");
                     var pom = context.Datasets.FirstOrDefault(x => x.ProjectId == p.ProjectId);
                     if (pom != null)
                         rez.Append("\"" + "hasDataset" + "\":" + "\"" + "true" + "\",");
@@ -160,6 +163,7 @@ namespace BackApi.Services
                 rez.Append("\"" + "Name" + "\":" + "\"" + p.Name + "\",");
                 rez.Append("\"" + "Public" + "\":" + "\"" + p.Public + "\",");
                 rez.Append("\"" + "Creationdate" + "\":" + "\"" + p.CreationDate + "\",");
+                rez.Append("\"" + "LastEdit" + "\":" + "\"" + p.LastEdit + "\",");
                 var pom = context.Datasets.FirstOrDefault(x => x.ProjectId == p.ProjectId);
                 if (pom != null)
                     rez.Append("\"" + "hasDataset" + "\":" + "\"" + "true" + "\",");
@@ -253,6 +257,7 @@ namespace BackApi.Services
             rez.Append("\"" + "Description" + "\":" + "\"" + proj.Description + "\",");
             //rez.Append("\"" + "loggedUserIsOwner" + "\":" + "\"" + loggedUserIsOwner + "\"");
             rez.Append("\"" + "Creationdate" + "\":" + "\"" + proj.CreationDate + "\",");
+            rez.Append("\"" + "LastEdit" + "\":" + "\"" + proj.LastEdit + "\",");
             rez.Append("\"" + "hasDataset" + "\":" + "\"" + tmp + "\"");
 
             rez.Append("}");
@@ -265,6 +270,7 @@ namespace BackApi.Services
             if (proj == null)
                 return false;
             proj.Notes = note;
+            proj.LastEdit = DateTime.Now;
             context.SaveChanges();
             return true;
 
@@ -283,9 +289,12 @@ namespace BackApi.Services
         public Boolean EditProject(int projid,ProjectEdit proj,int userid)
         {
             var edited = context.Projects.Find(projid);
+            if (edited == null)
+                return false;
             edited.Name = proj.name;
             edited.Description = proj.description;
             edited.Public = proj.ispublic;
+            edited.LastEdit = DateTime.Now;
             context.SaveChanges();
             return true;
         }
