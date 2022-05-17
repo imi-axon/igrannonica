@@ -15,7 +15,11 @@ export class ExperimentPageComponent implements OnInit {
     public projectsService: ProjectsService,
     public activatedRoute: ActivatedRoute,
     public router:Router
-  ) { }
+  ) {
+    this.router.routeReuseStrategy.shouldReuseRoute = function() {
+      return false;
+  };
+   }
   
   @ViewChild("titleInput")
   inputTitle: ElementRef;

@@ -43,6 +43,9 @@
                 </div>
             </li>
             <div class="div1">
+                <li  *ngIf="auth.logovan" class="nav-item" style="cursor: pointer;" (click)="NewExperiment()">
+                    <a><i class="bi bi-file-earmark-plus" style="color:white"></i>&nbsp;{{'lista-projekata.novi_eksperiment' |translate}}</a>
+                </li>
                 <li routerLink="/profil" *ngIf="auth.logovan" class="nav-item">
                     <a routerLink="/profil"><img _ngcontent-apl-c70=""
                             src="assets/Images/Icons/User_icon.svg">&nbsp;{{'navbar.myAccount'|translate}}</a>
