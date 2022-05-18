@@ -94,4 +94,4 @@ class DatasetEditor:
             else:
                 return None
 
-        return service.csv_result()
+        return service.csv_result(), df

@@ -20,7 +20,7 @@ class Statistics (BaseModel):
 class DatasetEditActions (BaseModel):
     actions: str
     dataset: str    # link
-    metadata: str   # link
+    metapath: str   # link
 
 class TrainingRequest (BaseModel):
     dataset: str    # link

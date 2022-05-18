@@ -89,11 +89,14 @@ def edit_dataset(body: DatasetEditActions, response: FileResponse):
     
     actions = [{'action':str.split(a['action']), 'column':(a['column'] if 'column' in a.keys() else '')} for a in json_decode(body.actions)]
     dataset = httpc.get(body.dataset)
-    metadata = json_decode(httpc.get(body.metadata))
+    metadata = json_decode(httpc.get(body.metapath))
     
     dialect = get_csv_dialect(dataset)
 
-    res = DatasetEditor.execute(actions, dataset, dialect.delimiter, dialect.quotechar, metadata)
+    res, df = DatasetEditor.execute(actions, dataset, dialect.delimiter, dialect.quotechar, metadata)   # metadata ce biti promenjen
+    # TODO: Nakon editovanja izracunati statistiku, smestiti je u metadata i azurirati trainReady
+    _ , stats = StatisticsMiddleware(df).get_stat() # _ zanemaruje se json string reprezentacija stats recnika
+    metadata['statistics'] = stats
 
     # print(f'EDIT: dataset {dataset}')
     # print(f'EDIT: dataset {res}')
@@ -121,7 +124,7 @@ def get_statistics(body: Dataset):
 
     dialect = get_csv_dialect(csvstr)
     df = read_str_to_df(csvstr, dialect.delimiter, dialect.quotechar)
-    stats: str = StatisticsMiddleware(df).statistics_json()
+    stats, _ = StatisticsMiddleware(df).get_stat()
 
     # print(stats)
 
