@@ -1,5 +1,6 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { DataSplitSliderComponent } from '../data-split-slider/data-split-slider.component';
+
 
 
 @Component({
@@ -7,7 +8,7 @@ import { DataSplitSliderComponent } from '../data-split-slider/data-split-slider
   templateUrl: './konfiguracija.component.html',
   styleUrls: ['./konfiguracija.component.scss']
 })
-export class KonfiguracijaComponent implements OnInit {
+export class KonfiguracijaComponent implements OnInit, OnChanges {
   constructor() { }
   
   @Input() neuralNetwork: any;
@@ -16,13 +17,15 @@ export class KonfiguracijaComponent implements OnInit {
   dataSplitSlider: DataSplitSliderComponent;
   
   ngOnInit(): void {
+  }
+  
+  ngOnChanges(changes: SimpleChanges): void {
     setTimeout(() => {
       this.dataSplitSlider.slider1Position = this.neuralNetwork.conf.trainSplit;
       this.dataSplitSlider.slider2Position = this.neuralNetwork.conf.trainSplit + this.neuralNetwork.conf.valSplit;
       this.dataSplitSlider.UpdateSlider();
     }, 0);
   }
-  
   
   public ChangeProblemType(event: any){
     this.neuralNetwork.conf.problemType = event.srcElement.value;
@@ -46,16 +49,6 @@ export class KonfiguracijaComponent implements OnInit {
   
   public ChangeSplitType(event: any){
     this.neuralNetwork.conf.splitType = event.srcElement.value;
-    
-    if(event.srcElement.value == "random"){
-      this.neuralNetwork.conf.trainSplit = Math.floor(Math.random() * 10) / 10;
-      this.neuralNetwork.conf.valSplit = 1 - this.neuralNetwork.conf.trainSplit;
-      
-      this.dataSplitSlider.sliderDisabled = true;
-    }
-    else
-      this.dataSplitSlider.sliderDisabled = false;
-    
   }
   
   public ChangeTrainValidationSplit(event: any){

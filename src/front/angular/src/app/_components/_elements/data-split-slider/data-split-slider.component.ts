@@ -64,10 +64,7 @@ export class DataSplitSliderComponent implements OnInit {
   private subscription: Subscription;
   
   ngOnInit(): void {
-    this.subscription = fromEvent(document, 'mouseup').subscribe(
-      e => {
-        this.EndDraggingSliders(e as MouseEvent);
-    });
+    this.subscription = fromEvent(document, 'mouseup').subscribe( e => { this.EndDraggingSliders(e as MouseEvent) });
   }
   
   public UpdateSlider(){

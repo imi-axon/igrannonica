@@ -86,10 +86,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   // INIT FUNCTION
   ngOnInit(): void {
     setTimeout(() => {
-      
       this.subscription = fromEvent(document, 'mouseup').subscribe( e => { this.mouseUpHandler(e as MouseEvent); });
-      this.Refresh();
-      
     }, 0);
   }
   
@@ -1164,7 +1161,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
         .append("option")
         .text(this.possibleActivations[i])
         .attr("value", this.possibleActivations[i])
-        .attr('selected', (d: any, j: number) => { if(this.parent.neuralNetwork.conf.actPerLayer[j] == this.possibleActivations[i]) { return ""; } else { return null; } })
+        .attr('selected', (d: any, j: number) => { if(this.parent.neuralNetwork.conf.actPerLayer[j].toLowerCase() == this.possibleActivations[i].toLowerCase()) { return ""; } else { return null; } })
       
   }
   

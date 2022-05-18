@@ -2,7 +2,7 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NeuralNetwork, Project } from 'src/app/_utilities/_data-types/models';
 import { TrainingApiService } from 'src/app/_utilities/_middleware/training-api.service';
-import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
+import { NetworkService } from 'src/app/_utilities/_services/network.service';
 import { ChartTrainingComponent } from '../chart-training/chart-training.component';
 import { NeuralNetworkDisplayComponent } from '../neural-network-display/neural-network-display.component';
 
@@ -14,7 +14,7 @@ import { NeuralNetworkDisplayComponent } from '../neural-network-display/neural-
 export class ExperimentNetworkComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
-    private datasetServie: DatasetService,
+    private networkService: NetworkService,
     private wsService: TrainingApiService
   ) { }
   
@@ -49,88 +49,7 @@ export class ExperimentNetworkComponent implements OnInit {
   private grafik: ChartTrainingComponent;
   
   // NEURAL NETWORK
-  public neuralNetwork : NeuralNetwork = 
-  {
-    "nn": {
-      "layers": [
-        
-        // LAYER 1 - 3 NEURONA
-        {
-          "neurons": [
-            {
-              "weights": [
-                
-              ],
-              "bias": 2.1
-            },
-            {
-              "weights": [
-                
-              ],
-              "bias": 2.9
-            },
-            {
-              "weights": [
-                
-              ],
-              "bias": 3.4
-            }
-          ]
-        },
-        
-        // LAYER 2 - 2 NEURONA
-        {
-          "neurons": [
-            {
-              "weights": [
-                7.18,
-                -3.64,
-                -7.8
-              ],
-              "bias": 3.11
-            },
-            {
-              "weights": [
-                3.88,
-                5.2,
-                -5.47
-              ],
-              "bias": 1.2
-            }
-          ]
-        },
-        
-        // OUTPUT - 2 NEURONA
-        {
-          "neurons": [
-            
-          ]
-        }
-      ]
-    },
-    "conf":
-    {
-      "inputs": [],
-      "outputs": [],
-      
-      "neuronsPerLayer": [3, 2, 0],
-      
-      "actPerLayer": ["Linear", "Sigmoid"],
-      "actOut": "ReLU",
-      
-      "learningRate": 0.03,
-      "reg": "None",
-      "regRate": 0,
-      "batchSize": 16,
-      
-      "problemType": "classification",
-      
-      "splitType": "sequential",
-      "trainSplit": 0.3,
-      "valSplit": 0.4
-    }
-  }
-  
+  public neuralNetwork : NeuralNetwork = new NeuralNetwork();
   public runningTraining: Boolean = false;
   
   public unusedColumns: string[] = [];
@@ -139,26 +58,28 @@ export class ExperimentNetworkComponent implements OnInit {
   
 
   ngOnInit(): void {
-    
-    this.datasetServie.GetDatasetPage(this.getProjectId(), true, 1, 1, this, this.successDatasetCallback)
+    this.networkService.GetNetwork(this.getProjectId(), this.getNetworkId(), this, this.successGetNetworkCallback)
   }
   
-  private successDatasetCallback(self: any, response : any){
-    self.unusedColumns = Object.keys(JSON.parse(JSON.parse(response.dataset).dataset)[0])
+  private successGetNetworkCallback(self: any, response : any){
+    //self.unusedColumns = Object.keys(JSON.parse(JSON.parse(response.dataset).dataset)[0])
+    self.neuralNetwork = new NeuralNetwork();
+    self.neuralNetwork.conf = JSON.parse(response.conf);
+    self.neuralNetwork.nn = JSON.parse(JSON.parse(response.nn).nn);
+    self.networkComponent.Refresh();
+    console.log(self.neuralNetwork)
   }
   
   
-  
-  
+  // TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP
+  public log(){
+    console.log(this.neuralNetwork);
+  }
   
   
   
   
   public StartTraining() {
-    console.log(this.neuralNetwork)
-    
-    
-    
     this.runningTraining = true;
     this.wsService.train(this.getProjectId(), this.getNetworkId(), this.neuralNetwork.conf, this, this.updateTrainData);
   }
@@ -169,71 +90,8 @@ export class ExperimentNetworkComponent implements OnInit {
     let vLoss = data['v_loss'];
     let ep = data['epoch'];
     
-    self.grafik.dataUpdate(ep, tLoss, vLoss)
-    //self.konfiguracija.epoch=ep;
+    self.grafik.dataUpdate(ep, tLoss, vLoss);
   }
-  
-    /*
-    let neuronsPerLayer : number [] = [];
-    for(let i = 0; i < this.nnDisplay.network.layers.length - 1; i++)
-      neuronsPerLayer.push(this.nnDisplay.network.layers[i].neurons.length)
-    
-    console.log(neuronsPerLayer)
-      
-    console.log("podaci:"
-      + "\n" + this.konfiguracija.learningRate
-      + "\n" + this.konfiguracija.regularization
-      + "\n" + this.konfiguracija.regularizationRate
-      + "\n" + this.konfiguracija.batchSize
-      + "\n" + this.konfiguracija.inputs
-      + "\n" + this.konfiguracija.outputs
-      
-      // Dodato
-      + "\n" + neuronsPerLayer
-      
-      + "\n" + this.konfiguracija.activation);
-      
-    let conf = {
-      inputs: this.konfiguracija.inputs, //str[]
-      outputs: this.konfiguracija.outputs, //str[]
-      
-      // Dodato
-      neuronsPerLayer: neuronsPerLayer, //int[]
-      
-      actPerLayer: ['sigmoid', 'sigmoid'], //str[]
-      
-      // Dodato
-      actOut: "", //str
-      
-      learningRate: this.konfiguracija.learningRate, //float
-      reg: this.konfiguracija.regularization, //str
-      regRate: this.konfiguracija.regularizationRate, //float
-      batchSize: this.konfiguracija.batchSize //int
-      
-      // Dodato
-      ,
-      trainSplit:this.konfiguracija.trainSplit,
-      valSplit:this.konfiguracija.valSplit,
-      testSplit:this.konfiguracija.testSplit
-     // trainSplit: 0.5, // float
-     // valSplit: 0.5 // float
-    };
-    
-    console.log('--- KONFIGURACIJA ---')
-    console.log(conf)
-    this.wsService.train(this.projectId, this.nnId, conf, this, this.addTrainData);
-
-    console.log(this.konfiguracija.valSplit);
-
-    addTrainData(self: TrainingPageComponent, data: any) {
-      let tLoss = data['t_loss'];
-      let vLoss = data['v_loss'];
-      let ep = data['epoch'];
-
-      self.grafik.dataUpdate(ep, tLoss, vLoss)
-      self.konfiguracija.epoch=ep;
-    }
-  */
   
   
   // COLUMN SELECTION
