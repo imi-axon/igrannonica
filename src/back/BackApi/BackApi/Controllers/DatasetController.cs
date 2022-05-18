@@ -45,15 +45,19 @@ namespace BackApi.Controllers
             novi.dataset= datasrv.ProjIdToPath(id,true);
             var response = await MLconnection.validateCSVstring(novi);
 
-            if (response.StatusCode == HttpStatusCode.Created)
-            {
-                return Ok();
-            }
-            else
+            if (response.StatusCode != HttpStatusCode.Created)
             {
                 datasrv.Delete(id);
                 return BadRequest("csv");
             }
+
+            GenerateMetadata data = new GenerateMetadata();
+            data.dataset = datasrv.ProjIdToPath(id, true);
+            data.metamain = storsrv.MetaFilePath(id, true);
+            data.metaedit = storsrv.MetaFilePath(id, false);
+            response = await MLconnection.generateMetaData(data);
+            if (response.StatusCode != HttpStatusCode.Created)
+                return BadRequest("metadata");
             return Ok();
         }
 
@@ -105,12 +109,10 @@ namespace BackApi.Controllers
             if (dataset.dataset == null)
                 return NotFound("dataset");
 
-            var response = await MLconnection.getStatistic(dataset);
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                return await response.Content.ReadAsStringAsync();
-            }
-            return BadRequest("csv");
+
+            var metapath = storsrv.MetaFilePath(id, main);
+            string rez = datasrv.ReadMetadata(id, main);
+            return rez;
         }
 
         [HttpPut("{id}/dataset/{main}/edit")]

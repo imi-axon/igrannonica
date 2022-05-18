@@ -13,7 +13,7 @@ from fastapi import FastAPI, Request, Response, WebSocketDisconnect, status, Web
 from fastapi.responses import PlainTextResponse, FileResponse
 
 # Models
-from models import Dataset, DatasetEditActions, Statistics, TempTrainingInstance, NNOnly, NNCreate
+from models import Dataset, DatasetEditActions, Statistics, TempTrainingInstance, NNOnly, NNCreate, MetaGenRequest, TrainingRequest
 
 # Utils
 from util.csv import csv_is_valid, csv_decode, csv_decode_2, get_csv_dialect
@@ -193,12 +193,43 @@ def update_with_default_nn(body: NNCreate, response: Response):
     fc.delete()
 
 
+@app.put('/api/nn/meta/generate')
+def generate_metadata(body: MetaGenRequest):
+
+    fm_meta = FileMngr('json')
+    
+    dataset = httpc.get(body.dataset)
+    metadata = None                         #TODO: Poziv metode koja generise Metadata
+
+    fm_meta.create(json_encode(metadata))
+
+    httpc.put(body.metaedit, fm_meta.path())
+    httpc.put(body.metamain, fm_meta.path())
+
+    fm_meta.delete()
+
+
 # ==== Training ====
 
 # Training START
 @app.post('/api/user{uid}/nn{nnid}/pasive')     # << Kasnije treba promeniti u "/start"
-def nn_train_start(uid: int, nnid: int):
+def nn_train_start(uid: int, nnid: int, body: TrainingRequest):
     pass
+    # datasetlink = body.dataset
+    # nnlink = body.nn
+    # conflink = body.conf
+    # trainrezlink = body.trainrez
+    # newconf = json_decode(body.newconf)
+
+    # th: Thread = None
+    # training_exists = TTM.nn_exist(uid, nnid)
+
+    # if not training_exists:
+    #     th = Thread(target=TrainingInstance(buff, lock, flags).train, args=(datasetlink, nnlink, conflink, trainrezlink, newconf), daemon=True)
+    #     tt = TrainingThread(th, buff, flags, lock)
+    #     TTM.add(tt, uid, nnid)
+    #     th.start()
+    #     print('> Thread started')
 
 
 # Training STOP
@@ -206,7 +237,10 @@ def nn_train_start(uid: int, nnid: int):
 def nn_train_stop(uid: int, nnid: int):
     
     if TTM.nn_exist(uid, nnid):
-        TTM.get_tt(uid, nnid).flags['stop'] = True
+        tt = TTM.get_tt(uid, nnid)
+        tt.lock.acquire(blocking=True)
+        tt.flags['stop'] = True
+        tt.lock.release()
 
 
 # Training WATCH
@@ -219,7 +253,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
     data = await ws.receive_json() # ws <<<<
     
     # confirm
-    await ws.send_bytes(b'0') # ws >>>>
+    await ws.send_bytes(b'0') # ws >>>>     // bice uskoro deprecated (kad back izbaci cekanje ove poruke)
 
     # print(data)
 
@@ -242,6 +276,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
     lock: Lock = Lock()
 
     EP_PACK_SIZE = 100 # broj epoha koje se salju u jednoj poruci
+    trainrez_buff: List[bytes] = []
 
     try:
         th: Thread = None
@@ -281,14 +316,20 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
                 for b in burst_buff:
                     pack_i += 1
                     if b == b'end':
-                        finished = True                       # poslednja poruka za kraj (TODO: Mozda dodati neki prekid Burst petlje?)
+                        finished = True                         # poslednja poruka za kraj
+                        break
                     else:
                         pack += b + b','
-                        if pack_i == EP_PACK_SIZE:            # 1 pack zavrsen, salje se
+                        if pack_i == EP_PACK_SIZE:              # 1 pack zavrsen, salje se
                             pack = b'[' + pack[:-1] + b']'
-                            await ws.send_text(pack.decode()) # ws >>>>
+                            await ws.send_text(pack.decode())   # ws >>>>
                             pack = b''
                             pack_i = 0
+                
+                trainrez_buff.extend(burst_buff)    # cuvanje rezultata treniranja
+                if finished:                        # ako je kraj sacuvati i rezultate testiranja (cuva se na pocetku bafera)
+                    b = burst_buff[-1]
+                    trainrez_buff = [b] + trainrez_buff
                 # -- BURST Finished --
 
                 
@@ -296,6 +337,14 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
 
             else:
                 lock.release() # [   ]
+
+        # Cuvanje trainrez rezultata u fajl
+        fm_trainrez = FileMngr('txt')
+        fm_trainrez.create(b'\n'.join(trainrez_buff))
+        httpc.put(trainrezlink, fm_trainrez.path())
+        print('---- Saving to File ----')
+        print(fm_trainrez.read_b())
+        fm_trainrez.delete()
 
         print(f'time: { time() - start_time }')
         await ws.close(code = 1000) # ws <CLOSE>

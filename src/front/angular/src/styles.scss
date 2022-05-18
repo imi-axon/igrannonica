@@ -117,15 +117,19 @@ $angular-theme: mat.define-light-theme((color: (primary: $angular-primary,
 
     //statistics table , dataset-edit-table
     //KORISTIM OVE 4 VARIJABLE IZ DATASET TABLE
-
+    --tableDescription: #002547;
+    
     //MREZE
     --imeMreze:black;
     --mrezaBg: #FFFFFFAA;
     --mrezaBorder:#2aa8e7;
     --mrezaTekst: black;
 
-
-
+    //MREZA
+    --configurationBg: #FFFFFF77;
+    --mrezaBg: #FFFFFF77;
+    --sideBg: #FFFFFF77;
+    
 }
 
 
@@ -208,6 +212,7 @@ $angular-theme: mat.define-light-theme((color: (primary: $angular-primary,
 
     //statistics table , dataset-edit-table
     //KORISTIM OVE 4 VARIJABLE IZ DATASET TABLE
+    --tableDescription: #2aa8e7;
 
     //MREZE
     --imeMreze:black;
@@ -215,7 +220,10 @@ $angular-theme: mat.define-light-theme((color: (primary: $angular-primary,
     --mrezaBorder:#2aa8e7;
     --mrezaTekst: rgba(227, 225, 230, 0.952);
 
-
+    //MREZA
+    --configurationBg: var(--tamnaTemaContainerBg);
+    --mrezaBg: var(--tamnaTemaContainerBg);
+    --sideBg: var(--tamnaTemaContainerBg);
     
 }
 //////////////////////////////KRAJ TEME////////////////////////////////////////

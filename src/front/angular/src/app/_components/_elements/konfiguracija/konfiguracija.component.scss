@@ -4,7 +4,40 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-around;
+    padding-bottom: 15px;
     
+    .opcijaContainer{
+        label{
+            font-size: 14px;
+            color: #2C5D96;
+            margin: 0px !important;
+            user-select: none;
+        }
+        
+        select{
+            min-width: 80px;
+            font-size: 14px;
+            background-color: #286dbc;
+            color: #FFFFFF;
+            border: none;
+            height: 28px;
+            padding: 0px 0px 0px 5px;
+            cursor: pointer;
+            
+            &:focus{
+                outline: none;
+            }
+            
+            &:disabled{
+                background-color: #7d98b7;
+                cursor: default;
+            }
+        }
+        
+        input[type="range"]{
+            padding: none;
+        }
+    }
     
     
 }

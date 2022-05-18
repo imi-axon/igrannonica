@@ -1,20 +1,20 @@
 =================================================================================================
 
 Fajl: {
-    collumns: Kolona[]
+    columns: { K1: Kolona, K2: Kolona, ... }
     statistics: STATS               // statistika u JSON formatu (definisan na Figmi)
 }
 
 Kolona: {
     type: "num" | "cat" | "enc"     // tip kolone (numericka, kategorijska, enkodirana-numericka)
     trainReady: bool                // da li je spreman za treniranje
-    encoding: Encoding | None       // podaci o enkodiranju kolone (nije None ukoliko je type = "enc")
+    encoding: Encoding | null       // podaci o enkodiranju kolone (nije None ukoliko je type = "enc")
 }
 
 Encoding: {
     type: "onehot" | "label"        // tip enkodiranja koji je primenjen
-    onehot: OneHot | None           // nije None ukoliko je type = "onehot"
-    label: Label | None             // nije None ukoliko je type = "label"
+    onehot: OneHot | null           // nije None ukoliko je type = "onehot"
+    label: Label | null             // nije None ukoliko je type = "label"
 }
 
 OneHot: {
@@ -38,14 +38,14 @@ Prilikom dodavanja dataset-a vrsi se analiza i kreiraju se 2 fajla (metamain.jao
 Fajlovi su u foramtu:
 
 Fajl: {
-    collumns: Kolona[]
+    columns: { K1: Kolona, K2: Kolona, ... }
     statistics: STATS
 }
 
 Kolona: {
     type: "num" | "cat"
     trainReady: bool
-    encoding: None    // Nema podataka o enkodiranju
+    encoding: null    // Nema podataka o enkodiranju
 }
 
 ----------------------------------------------------------------------------------------------------
@@ -64,3 +64,4 @@ Kada se promene izvrsene na Editing Dataset-u odbace metamain.json se kopira u m
 ----------------------------------------------------------------------------------------------------
 
 Kada se Dataset vrati na Initial Dataset ML generise podatke koji se prepisuju u metamain.json i metaedit.json
+

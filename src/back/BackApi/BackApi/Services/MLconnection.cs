@@ -106,6 +106,16 @@ namespace BackApi
             return result;
         }
 
+        public static async Task<HttpResponseMessage> generateMetaData(GenerateMetadata metadata)
+        {
+            HttpClient client = new HttpClient();
+            var myContent = JsonConvert.SerializeObject(metadata);
+            var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+            var byteContent = new ByteArrayContent(buffer);
+            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            var result = await client.PostAsync(Urls.ml + "/api/nn/meta/generate", byteContent);
+            return result;
+        }
         /*public static async Task<dynamic> getRequest(string tekst)
         {
             Debug.WriteLine(tekst);

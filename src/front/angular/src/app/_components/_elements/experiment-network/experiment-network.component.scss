@@ -4,15 +4,14 @@
     
     display: grid;
     row-gap: 15px;
-    grid-template-rows: 100px 600px;
+    grid-template-rows: 80px 600px;
     
     
     #confingContainer{
-        background-color: #FFFFFF77;
+        background-color: var(--configurationBg);
         backdrop-filter: blur(7px);
         border: solid 1px #0091ff;
     }
-    
     
     #secondRow{
         display: grid;
@@ -20,7 +19,7 @@
         grid-template-columns: 73% 26%;
         
         #networkDisplay{
-            background-color: #FFFFFF77;
+            background-color: var(--mrezaBg);
             backdrop-filter: blur(7px);
             border: solid 1px #0091ff;
 
@@ -29,7 +28,7 @@
         }
         
         #side{
-            background-color: #FFFFFF77;
+            background-color: var(--sideBg);
             backdrop-filter: blur(7px);
             border: solid 1px #0091ff;
             
