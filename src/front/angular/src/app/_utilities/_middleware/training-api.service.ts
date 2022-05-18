@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { webSocket } from 'rxjs/webSocket'
 import { apiProperties } from '../_constants/api-properties';
+import { JWTUtil } from '../_helpers/jwt-util';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,8 @@ export class TrainingApiService {
       //ws.next('play');
     })
 
+    console.log(JWTUtil.get())
+    ws.next(JWTUtil.get());
     ws.next(conf);
     //ws.next('play');
 
