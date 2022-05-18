@@ -18,12 +18,13 @@
         </div>
         <div class="yes_no">
             <div class="d-flex justify-content-center">
-                <button mat-dialog-close mat-dialog-close="yes" class="yesButton mx-2">{{"popup-window.da" | translate }}</button>
-                <button mat-dialog-close mat-dialog-close="no" class="noButton mx-2">{{"popup-window.ne" | translate }}</button>
+                <button *ngIf="auth.logovan"  mat-dialog-close mat-dialog-close="yes" class="yesButton mx-2">{{"popup-window.da" | translate }}</button>
+                <button  *ngIf="auth.logovan" mat-dialog-close mat-dialog-close="no" class="noButton mx-2">{{"popup-window.ne" | translate }}</button>
+                <button  *ngIf="!auth.logovan" mat-dialog-close mat-dialog-close="no" class="noButton mx-2">Ok</button>
             </div>
         </div>
         <br>
-        <div class="opomena d-flex justify-content-center my-4">
+        <div *ngIf="auth.logovan" class="opomena d-flex justify-content-center my-4">
             <p>{{"popup-window.opomena" | translate }}</p>
         </div>
     </div>
