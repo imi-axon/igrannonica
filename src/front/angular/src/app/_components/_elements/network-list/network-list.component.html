@@ -3,7 +3,7 @@
     <div *ngFor="let network of filtriraneMreze" class="network" > 
       
       <div class="networkLeft">
-        <p class="title" (click)="onClick(network.id)"> {{network.name}} </p>
+        <p class="title" (click)="OpenNetwork(network.id)"> {{network.name}} </p>
         
         <!-- <p class="created"> {{'lista-projekata.kreiran'|translate}} {{network.Creationdate}} </p> -->
       </div>

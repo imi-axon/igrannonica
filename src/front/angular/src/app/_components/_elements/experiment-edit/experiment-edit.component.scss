@@ -193,7 +193,7 @@
                 
                 h3{
                     font-size: 20px;
-                    color: #0f416f;
+                    color: var(--tableDescription);
                     margin-bottom: 10px;
                     font-weight: 400;
                 }
@@ -234,7 +234,7 @@
                 }
                 
                 p{
-                    color: #777777;
+                    color: var(--tableDescription);
                     margin: 6px 0px 16px 0px !important;
                     font-size: 12px;
                 }
@@ -283,7 +283,7 @@
                 
                 h3{
                     font-size: 20px;
-                    color: #0f416f;
+                    color: var(--tableDescription);
                     margin-bottom: 15px;
                     font-weight: 400;
                 }
@@ -364,7 +364,7 @@
         
         #correlationWrapper{
             p{
-                color: #002547;
+                color: var(--tableDescription);
                 font-size: 22px;
                 line-height: 40px;
                 height: 40px;
@@ -399,7 +399,7 @@
         
         #statisticsWrapper{
             p{
-                color: #002547;
+                color: var(--tableDescription);
                 font-size: 22px;
                 line-height: 40px;
                 height: 40px;

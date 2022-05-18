@@ -121,13 +121,13 @@ export class ExperimentNetworkComponent implements OnInit {
       "learningRate": 0.03,
       "reg": "None",
       "regRate": 0,
-      "batchSize": 15,
+      "batchSize": 16,
       
       "problemType": "classification",
       
       "splitType": "sequential",
-      "trainSplit": 0.5,
-      "valSplit": 0.5
+      "trainSplit": 0.3,
+      "valSplit": 0.4
     }
   }
   

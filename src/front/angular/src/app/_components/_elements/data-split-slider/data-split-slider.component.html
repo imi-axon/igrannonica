@@ -1,0 +1,22 @@
+<div #container class="sliderContainer" [class.disabled]="sliderDisabled" (mousemove)="DraggingSlider($event)" (mouseleave)="EndDraggingSliders($event)">
+    
+    <p #trainText class="sectionTitle">Train</p>
+    <div #trainSection class="section">
+        {{slider1Position * 100}}%
+    </div>
+    
+    <p #validationText class="sectionTitle middleText">Validation</p>
+    <div #validationSection class="section middleSection">
+        {{slider2Position * 100 - slider1Position * 100}}%
+    </div>
+    
+    <p #testText class="sectionTitle">Test</p>
+    <div #testSection class="section end">
+        {{100 - slider2Position* 100}}%
+    </div>
+    
+    
+    <div #slider1 class="slider" (mousedown)="StartDraggingSlider1($event)" draggable="false"> </div>
+    <div #slider2 class="slider" (mousedown)="StartDraggingSlider2($event)" draggable="false"> </div>
+    
+</div>
