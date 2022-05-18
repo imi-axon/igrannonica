@@ -80,7 +80,7 @@ class NNModelMiddleware():
             'reg': '',
             'regRate': 0,
             'batchSize': 8,
-            'problemType': 'regression' if len(outputs) == 1 else 'classification',
+            'problemType': 'REGRESSION' if len(outputs) == 1 else 'CLASSIFICATION',
             'splitType': 'sequential',
             'trainSplit': 0.7,
             'valSplit': 0.2
