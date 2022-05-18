@@ -14,7 +14,7 @@ namespace BackApi.Controllers
 {
     [Route("api/projects/")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class NNController : ControllerBase
     {
         private INNservice nnsrv;
