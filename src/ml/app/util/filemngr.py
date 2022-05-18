@@ -37,13 +37,18 @@ class FileMngr():
 
     def delete(self, delay: int | None = None):
         def to_delete_file(sleep_time, file_path):
-            print(f'to delete file begin | {self.filename}')
+            print(f'delayed file delete | {self.filename}')
             sleep(sleep_time)
             os.remove(file_path)
-            print(f'to delete file end   | {self.filename}')
+            print(f'deleted file | {self.filename}')
 
-        th = Thread(target = to_delete_file, args=(self.delete_delay if delay == None else delay, self.filepath), daemon=True)
-        th.start()
+        if delay == 0:
+            print(f'instant delete file | {self.filename}')
+            os.remove(self.filepath)
+            print(f'deleted file | {self.filename}')
+        else:
+            th = Thread(target = to_delete_file, args=(self.delete_delay if delay == None else delay, self.filepath), daemon=True)
+            th.start()
 
     def name(self) -> str:
         return self.filename

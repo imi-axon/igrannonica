@@ -28,6 +28,7 @@ from middleware.dataset_editor import DatasetEditor
 from middleware.training import TrainingInstance
 from middleware.model import NNModelMiddleware
 from middleware.NN import NN_Middleware as NNJsonConverter
+from services.metadata import MetadataService
 
 # Training Thread Manager
 from util.ttm import TTM, TrainingThread
@@ -94,9 +95,16 @@ def edit_dataset(body: DatasetEditActions, response: FileResponse):
     dialect = get_csv_dialect(dataset)
 
     res, df = DatasetEditor.execute(actions, dataset, dialect.delimiter, dialect.quotechar, metadata)   # metadata ce biti promenjen
-    # TODO: Nakon editovanja izracunati statistiku, smestiti je u metadata i azurirati trainReady
+    
+    # Racuna se statistika, smesta u metadata i azurira se trainReady
     _ , stats = StatisticsMiddleware(df).get_stat() # _ zanemaruje se json string reprezentacija stats recnika
     metadata['statistics'] = stats
+    metadata = MetadataService().updateTrainReady(metadata, stats)
+    
+    fm_meta = FileMngr('json')
+    fm_meta.create(json_encode(metadata))
+    httpc.put(body.metapath, fm_meta.path())
+    fm_meta.delete(0)
 
     # print(f'EDIT: dataset {dataset}')
     # print(f'EDIT: dataset {res}')
@@ -174,7 +182,7 @@ def update_with_default_nn(body: NNCreate, response: Response):
     nnmodel.save_model(fm.directory(), fm.name())
     r = httpc.put(body.nn, fm.path())
     # print(f'PUT NN: {r}')
-    fm.delete()
+    fm.delete(0)
 
     def_conf = {
         'inputs' :          inputs,
@@ -193,23 +201,27 @@ def update_with_default_nn(body: NNCreate, response: Response):
     fc = FileMngr('json')
     fc.create(json_encode(def_conf))
     httpc.put(body.conf, fc.path())
-    fc.delete()
+    fc.delete(0)
 
 
 @app.put('/api/nn/meta/generate')
 def generate_metadata(body: MetaGenRequest):
 
-    fm_meta = FileMngr('json')
-    
     dataset = httpc.get(body.dataset)
-    metadata = None                         #TODO: Poziv metode koja generise Metadata
+    dialect = get_csv_dialect(dataset)
+    df = read_str_to_df(dataset, dialect.delimiter, dialect.quotechar)
 
+    metadata = MetadataService().generate(df)
+    _ , stats = StatisticsMiddleware(df).get_stat()
+    metadata['statistics'] = stats
+
+    fm_meta = FileMngr('json')
     fm_meta.create(json_encode(metadata))
 
     httpc.put(body.metaedit, fm_meta.path())
     httpc.put(body.metamain, fm_meta.path())
 
-    fm_meta.delete()
+    fm_meta.delete(0)
 
 
 # ==== Training ====
@@ -347,7 +359,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
         httpc.put(trainrezlink, fm_trainrez.path())
         print('---- Saving to File ----')
         print(fm_trainrez.read_b())
-        fm_trainrez.delete()
+        fm_trainrez.delete(0)
 
         print(f'time: { time() - start_time }')
         await ws.close(code = 1000) # ws <CLOSE>
