@@ -11,10 +11,9 @@ import config as cfg
 # FastAPI
 from fastapi import FastAPI, Request, Response, WebSocketDisconnect, status, WebSocket
 from fastapi.responses import PlainTextResponse, FileResponse
-from ml.app.models import MetaGenRequest, TrainingRequest
 
 # Models
-from models import Dataset, DatasetEditActions, Statistics, TempTrainingInstance, NNOnly, NNCreate
+from models import Dataset, DatasetEditActions, Statistics, TempTrainingInstance, NNOnly, NNCreate, MetaGenRequest, TrainingRequest
 
 # Utils
 from util.csv import csv_is_valid, csv_decode, csv_decode_2, get_csv_dialect

@@ -11,11 +11,10 @@ import tensorflow as tf
 from tensorflow import keras
 from keras import layers, Sequential
 from keras.callbacks import Callback
-from ml.app.util.json import json_decode
 
 import util.http as httpc
 from util.filemngr import FileMngr
-from util.json import json_encode
+from util.json import json_encode, json_decode
 import util.http as httpc
 from util.csv import get_csv_dialect
 

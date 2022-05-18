@@ -28,7 +28,7 @@ class TrainingRequest (BaseModel):
     trainrez: str   # link
     newconf: str
 
-class MetaGenRequest ():
+class MetaGenRequest (BaseModel):
     dataset: str    # link
     metamain: str   # link
     metaedit: str   # link
