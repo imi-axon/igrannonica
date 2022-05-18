@@ -15,5 +15,7 @@ namespace BackApi.Entities
         public string ConfPath { get; set; }
         public string TrainrezPath { get; set; }
         public string Notes { get; set; }   
+        public DateTime CreationDate { get; set; }
+        public DateTime LastEdited { get; set; }
     }
 }

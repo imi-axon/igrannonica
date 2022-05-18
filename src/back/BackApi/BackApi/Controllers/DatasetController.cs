@@ -45,15 +45,18 @@ namespace BackApi.Controllers
             novi.dataset= datasrv.ProjIdToPath(id,true);
             var response = await MLconnection.validateCSVstring(novi);
 
-            if (response.StatusCode == HttpStatusCode.Created)
-            {
-                return Ok();
-            }
-            else
+            if (response.StatusCode != HttpStatusCode.Created)
             {
                 datasrv.Delete(id);
                 return BadRequest("csv");
             }
+
+            GenerateMetadata data = new GenerateMetadata();
+            data.dataset = datasrv.ProjIdToPath(id, true);
+            data.metadata = storsrv.MetaFilePath(id, true);
+            response = await MLconnection.generateMetaData(data);
+            if (response.StatusCode != HttpStatusCode.Created)
+                return BadRequest("metadata");
             return Ok();
         }
 

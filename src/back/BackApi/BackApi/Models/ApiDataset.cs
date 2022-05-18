@@ -23,4 +23,13 @@
         public string dataset { get; set; }
         public int pages { get; set; }
     }
+    public class EditNN
+    {
+        public string title { get; set; }
+    }
+    public class GenerateMetadata
+    {
+        public string dataset { get; set; }
+        public string metadata { get; set; }
+    }
 }

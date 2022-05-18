@@ -170,8 +170,8 @@ export class NewProject
 
     constructor()
     {
-        this.name="";
-        this.description="";
+        this.name="Untitled Project";
+        this.description="Project description goes here...";
         this.public=false;
     }
 }

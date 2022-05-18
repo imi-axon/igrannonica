@@ -3,6 +3,12 @@
     
     <div id="navigation_wrapper">
         <div id="routes">
+
+            <div *ngIf="authService.logovan" class="sidebar_button" [routerLinkActive]="['active']" (click)="NewExperiment()">
+                &nbsp;&nbsp;&nbsp; <i class="bi bi-file-earmark-plus" style="color:white"></i>
+                 <p>{{'lista-projekata.novi_eksperiment' |translate}}</p>
+             </div>
+
             <div *ngIf="!authService.logovan" class="sidebar_button" routerLink="/registration" [routerLinkActive]="['active']">
                &nbsp; <i class="bi bi-person-plus" style="color:white"></i>
                 <p>{{'navbar.registration'|translate}}</p>
