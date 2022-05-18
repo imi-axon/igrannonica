@@ -30,6 +30,7 @@
     public class GenerateMetadata
     {
         public string dataset { get; set; }
-        public string metadata { get; set; }
+        public string metamain { get; set; }
+        public string metaedit { get; set; }
     }
 }
