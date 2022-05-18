@@ -56,7 +56,7 @@ namespace BackApi.Controllers
             data.metamain = storsrv.MetaFilePath(id, true);
             data.metaedit = storsrv.MetaFilePath(id, false);
             response = await MLconnection.generateMetaData(data);
-            if (response.StatusCode != HttpStatusCode.Created)
+            if (response.StatusCode != HttpStatusCode.OK)
                 return BadRequest("metadata");
             return Ok();
         }

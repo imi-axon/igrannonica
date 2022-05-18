@@ -4,6 +4,7 @@ from threading import Lock, Thread, current_thread
 from time import sleep, time
 from typing import Dict, List
 from tempfile import TemporaryFile
+import json as JSON
 
 # Cofigs
 import config as cfg
@@ -97,12 +98,13 @@ def edit_dataset(body: DatasetEditActions, response: FileResponse):
     res, df = DatasetEditor.execute(actions, dataset, dialect.delimiter, dialect.quotechar, metadata)   # metadata ce biti promenjen
     
     # Racuna se statistika, smesta u metadata i azurira se trainReady
-    _ , stats = StatisticsMiddleware(df).get_stat() # _ zanemaruje se json string reprezentacija stats recnika
+    sm = StatisticsMiddleware(df)
+    _ , stats = sm.get_stat() # _ zanemaruje se json string reprezentacija stats recnika
     metadata['statistics'] = stats
     metadata = MetadataService().updateTrainReady(metadata, stats)
     
     fm_meta = FileMngr('json')
-    fm_meta.create(json_encode(metadata))
+    fm_meta.create(sm.to_json(metadata))
     httpc.put(body.metapath, fm_meta.path())
     fm_meta.delete(0)
 
@@ -204,7 +206,7 @@ def update_with_default_nn(body: NNCreate, response: Response):
     fc.delete(0)
 
 
-@app.put('/api/nn/meta/generate')
+@app.post('/api/nn/meta/generate')
 def generate_metadata(body: MetaGenRequest):
 
     dataset = httpc.get(body.dataset)
@@ -212,11 +214,18 @@ def generate_metadata(body: MetaGenRequest):
     df = read_str_to_df(dataset, dialect.delimiter, dialect.quotechar)
 
     metadata = MetadataService().generate(df)
-    _ , stats = StatisticsMiddleware(df).get_stat()
+    sm = StatisticsMiddleware(df)
+    _ , stats = sm.get_stat()
     metadata['statistics'] = stats
 
+    # print('PRINT METADATA')
+    # print(metadata)
+    # print('---------')
+    # print(sm.to_json(metadata))
+
     fm_meta = FileMngr('json')
-    fm_meta.create(json_encode(metadata))
+    # fm_meta.create(json_encode(metadata))
+    fm_meta.create(sm.to_json(metadata))
 
     httpc.put(body.metaedit, fm_meta.path())
     httpc.put(body.metamain, fm_meta.path())

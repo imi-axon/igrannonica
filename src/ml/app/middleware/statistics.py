@@ -208,11 +208,16 @@ class StatisticsMiddleware:
         self.dictionary.add("colnulls", self.add_colnulls())
         self.dictionary.add("categorical_colstats", self.add_categorical_stats())
 
-        json_object = json.dumps(self.dictionary, cls=NpEncoder)
-
-        json_object = json_object.replace('NaN','"nan"')
+        json_object = self.stat_to_json()
 
         return json_object, self.dictionary
+
+
+    def stat_to_json(self):
+        return self.to_json(self.dictionary)
+
+    def to_json(self, obj):
+        return json.dumps(obj, cls=NpEncoder).replace('NaN','"nan"')
 
 
 #sm = StatisticsMiddleware(csvString)

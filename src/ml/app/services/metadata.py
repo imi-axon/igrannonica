@@ -14,13 +14,13 @@ class MetadataService :
         for column in numeric_columns:
             num_nulls = dataframe[column].isna().sum()
             if(num_nulls==0):
-                kolonaDict = {"type": "num", "trainReady" : True, "encoding" : "null"}
+                kolonaDict = {"type": "num", "trainReady" : True, "encoding" : None}
             else:
-                kolonaDict = {"type": "num", "trainReady" : False, "encoding" : "null"}
+                kolonaDict = {"type": "num", "trainReady" : False, "encoding" : None}
             metadata["columns"].update({column : kolonaDict})
 
         for column in categorical_columns:
-            kolonaDict = {"type" : "cat", "trainReady" : False, "encoding" : "null"}
+            kolonaDict = {"type" : "cat", "trainReady" : False, "encoding" : None}
             metadata["columns"].update({column : kolonaDict})
 
         return metadata

@@ -30,7 +30,7 @@ def get(filepath: str, decode: bool = True) -> str | bytes:
 
     response = httpx.get(path, verify = sslVerify, headers = headers)
     
-    debug_request(response)
+    # debug_request(response)
 
     return response.read().decode() if decode else response.read()
 
@@ -46,7 +46,7 @@ def put(filepath: str, local_filepath: str) -> bool:
     f = open(local_filepath, 'rb')
     response = httpx.put(path, files = {'file': f}, verify = sslVerify, headers = headers)
     
-    debug_request(response)
+    # debug_request(response)
 
     f.close()
     return response.status_code
