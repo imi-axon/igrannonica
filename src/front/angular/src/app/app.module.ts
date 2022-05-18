@@ -75,6 +75,7 @@ import { ExperimentAllNetworksComponent } from './_components/_elements/experime
 import { ExperimentNetworksListComponent } from './_components/_elements/experiments-networks-list/experiments-networks-list.component';
 import { DatasetEditTableComponent } from './_components/_elements/dataset-edit-table/dataset-edit-table.component';
 import { PublicProjectListComponent } from './_components/_elements/public-project-list/public-project-list.component';
+import { DataSplitSliderComponent } from './_components/_elements/data-split-slider/data-split-slider.component';
 
 
 @NgModule({
@@ -138,7 +139,8 @@ import { PublicProjectListComponent } from './_components/_elements/public-proje
     ExperimentNetworksListComponent,
     DatasetEditTableComponent,
     PublicProjectListComponent,
-    NetworkListComponent
+    NetworkListComponent,
+    DataSplitSliderComponent
   ],
   imports: [
     NgxCsvParserModule,
