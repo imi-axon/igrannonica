@@ -154,7 +154,6 @@ hr{
     margin-bottom: 5%;
 }
 #naslov{
-    font-family: Raleway;
     font-size: xxx-large;
     font-weight: 400;
     letter-spacing: 0em;
@@ -175,17 +174,19 @@ hr{
     margin-right: 0%;
 }
 
-
-
-
-
-
 @media screen and (max-width:1000px) {
+
     #rightSide {
       display: none;
     }
     
     .toggler{
         display: block;
+    }
+}
+
+@media screen and (min-width:1001px) {
+    #navTel{
+        display:none;
     }
 }

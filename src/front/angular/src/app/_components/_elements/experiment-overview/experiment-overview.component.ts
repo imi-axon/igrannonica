@@ -43,7 +43,7 @@ export class ExperimentOverviewComponent implements OnInit{
   @ViewChild("pageControls")
   public controlsComponent: PageControlsComponent; 
   
-  
+  public HasDatasetChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
   
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -68,6 +68,8 @@ export class ExperimentOverviewComponent implements OnInit{
   
   private handleSuccesfulGetProjectCallback(self: ExperimentOverviewComponent, response: any){
     self.project = response;
+    
+    console.log(self.project)
     
     // self.project.hasDataset se ponasa i izgleda kao string a prepoznaje se kao boolean
     // ovo dovodi do toga da ne mozemo da pitamo self.project.hasDataset == true
@@ -122,11 +124,14 @@ export class ExperimentOverviewComponent implements OnInit{
     let formData : FormData = new FormData();
     formData.append("dataset", file);
     
+    console.log(formData)
+    
     this.datasetService.AddDataset(formData, this.getProjectId(), this, this.datasetUploadHandler, this.badDataFormatHandler, this.unauthorizedHandler);
   }
   
   private datasetUploadHandler(self : ExperimentOverviewComponent){
-    self.project.hasDataset = true;
+    self.HasDatasetChanged.emit(true);
+    
     self.showsFileInput = false;
     self.showsDataset = true;
     self.ChangeDatasetPage(1);

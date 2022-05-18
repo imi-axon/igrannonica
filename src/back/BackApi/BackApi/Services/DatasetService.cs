@@ -187,6 +187,12 @@ namespace BackApi.Services
                 kontext.Datasets.Remove(d);
                 kontext.SaveChanges();
             }
+            var proj = kontext.Projects.Find(projid);
+            if (proj != null)
+            {
+                proj.LastEdit = DateTime.Now;
+                kontext.SaveChanges();
+            }
             return true;
         }
 
@@ -255,6 +261,12 @@ namespace BackApi.Services
 
             var path = storageService.GetDataset(edit.Path);
             File.WriteAllText(path, model.dataset);
+            var proj = kontext.Projects.Find(projid);
+            if (proj != null)
+            {
+                proj.LastEdit = DateTime.Now;
+                kontext.SaveChanges();
+            }
             return true;
         }
 
@@ -268,7 +280,15 @@ namespace BackApi.Services
 
             var path=storageService.GetDataset(dest.Path);
             File.WriteAllText(path, temp);
-            return true;    
+
+            var proj = kontext.Projects.Find(projid);
+            if (proj != null)
+            {
+                proj.LastEdit = DateTime.Now;
+                kontext.SaveChanges();
+            }
+
+            return true;
         }
 
         public async Task<DatasetPages> CreatePage(int projid,Boolean main,int p, int r)
@@ -331,6 +351,13 @@ namespace BackApi.Services
                     fs.SetLength(0);
                 }
             }
+
+            var proj = kontext.Projects.Find(projid);
+            if (proj != null)
+            {
+                proj.LastEdit = DateTime.Now;
+                kontext.SaveChanges();
+            }
         }
         public void DiscardChanges(int projid)
         {
@@ -390,6 +417,12 @@ namespace BackApi.Services
                 {
                     fs.SetLength(0);
                 }
+            }
+            var proj = kontext.Projects.Find(projid);
+            if (proj != null)
+            {
+                proj.LastEdit = DateTime.Now;
+                kontext.SaveChanges();
             }
             return true;
         }

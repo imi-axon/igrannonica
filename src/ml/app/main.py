@@ -191,53 +191,6 @@ def update_with_default_nn(body: NNCreate, response: Response):
     fc.create(json_encode(def_conf))
     # print(f'PUT CONF: {httpc.put(body.conf, fc.path())}')
     fc.delete()
-    
-
-# Get Default NN file ( - DEPRECATED - )
-@app.get('/api/nn/new/default', status_code=200)
-def get_default_nn_model():
-    
-    # TEMP --
-    inputs = ['A']
-    outputs = ['B']
-    # TEMP --
-    
-    nnmodel = NNModelMiddleware()
-    nnmodel.new_default_model(inputs, outputs)
-    fm = FileMngr('h5')
-    nnmodel.save_model(fm.directory(), fm.name())
-    fm.delete()
-
-    return FileResponse(fm.path())
-
-# Get Default NN Config
-@app.get('/api/nn/conf/default', status_code=200)
-def get_default_nn_conf():
-    
-    # TEMP --
-    inputs = ['A']
-    outputs = ['B']
-    # TEMP --
-
-    def_conf = {
-        'inputs' :          [],
-        'outputs' :         [],
-        'neuronsPerLayer' : [3, 2],
-        'actPerLayer' :     ['relu', 'relu'],
-        'actOut' :          'linear',
-        'learningRate' :    0.1,
-        'reg' :             'L1',
-        'regRate' :         0.1,
-        'batchSize' :       1,
-        'trainSplit' :      0.8,
-        'valSplit' :        0.2
-    }
-
-    f = FileMngr('json')
-    f.create(json_encode(def_conf))
-    f.delete()
-
-    return FileResponse(f.path())
 
 
 # ==== Training ====
@@ -264,17 +217,17 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
     await ws.accept() # ws <ACCEPT>
 
     data = await ws.receive_json() # ws <<<<
-
+    
     # confirm
     await ws.send_bytes(b'0') # ws >>>>
-    
-    print(data)
+
+    # print(data)
 
     datasetlink = data['dataset']
     nnlink = data['nn']
     conflink = data['conf']
-    # trainrezlink = data['trainrez']
-    conf = json_decode(data['newconf'])
+    trainrezlink = data['trainrez']
+    newconf = json_decode(data['newconf'])
 
     # TEMP
     # conf['actPerLayer'] = ['relu' for _ in range(3)]
@@ -288,58 +241,58 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
     flags = {'stop': False}
     lock: Lock = Lock()
 
+    EP_PACK_SIZE = 100 # broj epoha koje se salju u jednoj poruci
+
     try:
         th: Thread = None
+        training_exists = TTM.nn_exist(uid, nnid)
 
-        if TTM.nn_exist(uid, nnid):
+        if training_exists:
             tt = TTM.get_tt(uid, nnid)
             buff = tt.buffer
             flags = tt.flags
             lock = tt.lock
-            th = tt.thread      
+            th = tt.thread
             print('> Thread allready exists')
         else:
-            print("TEST")
-            th = Thread(target=TrainingInstance(buff, lock, flags).train, args=(datasetlink, nnlink, conf), daemon=True)
+            th = Thread(target=TrainingInstance(buff, lock, flags).train, args=(datasetlink, nnlink, conflink, trainrezlink, newconf), daemon=True)
             tt = TrainingThread(th, buff, flags, lock)
             TTM.add(tt, uid, nnid)
             th.start()
             print('> Thread started')
 
-        TTM.pretty_print()
-
+        # TTM.pretty_print()
         finished = False
-        # await_command = True
 
         while not finished:
-
-            # command = 'play'
-
-            # if await_command:
-            #     command = await ws.receive_text() # ws <<<<
-            #     await_command = False
-            
-            # if command == 'stop':
-            #     flags['stop'] = True
-            #     finished = True
             
             lock.acquire(blocking=True) # [ X ]
 
             if len(buff) > 0:
-                # await_command = True
                 
                 burst_buff = buff.copy()
                 buff.clear()
                 lock.release() # [   ]
 
-                # send EPOCHS in BURST
+                # -- Send EPOCHS in BURST of PACKS --
+                pack = b''
+                pack_i = 0
+
                 for b in burst_buff:
-                    
-                    await ws.send_text(b.decode()) # ws >>>>
-                    print(f'>>>> send bytes: {b}')
-                    
+                    pack_i += 1
                     if b == b'end':
-                        finished = True
+                        finished = True                       # poslednja poruka za kraj (TODO: Mozda dodati neki prekid Burst petlje?)
+                    else:
+                        pack += b + b','
+                        if pack_i == EP_PACK_SIZE:            # 1 pack zavrsen, salje se
+                            pack = b'[' + pack[:-1] + b']'
+                            await ws.send_text(pack.decode()) # ws >>>>
+                            pack = b''
+                            pack_i = 0
+                # -- BURST Finished --
+
+                
+                print(f'>>>> send bytes: {b}')
 
             else:
                 lock.release() # [   ]
@@ -349,107 +302,16 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
 
     except WebSocketDisconnect:
         print('-=| WS Disconnect |=-')
-        raise
+        # raise
+
     except Exception:     
         print('-=| EXCEPTION |=-')
-        raise
+        # raise
 
-    TTM.pretty_print()
-    print('=='*40)
+    finally:
+        print('-=| Finally - Remove Training Thread |=-')
+        TTM.remove(uid, nnid)
 
+    # TTM.pretty_print()
+    # print('=='*40)
 
-
-# BACKUP
-# @app.websocket("/api/nn/train/start1")
-# async def training_stream_1(ws: WebSocket):
-#     start_time = time()
-
-#     await ws.accept()
-#     data = await ws.receive_json()
-#     await ws.send_bytes(b'') # confirm
-#     print('Accepted')
-    
-
-#     # print(data)
-#     print(data)
-#     datasetlink = data['dataset']
-#     nnlink = data['nn']
-#     conflink = data['conf']
-#     conf = json_decode(data['newconf'])
-
-#     # TEMP
-#     # conf['actPerLayer'] = ['relu' for _ in range(3)]
-#     # conf['neuronsPerLayer'] = [3 for _ in range(3)]
-
-#     buff: List[bytes] = []
-#     lock: Lock = Lock()
-#     flags = {'stop': False}
-
-#     try:
-#         th = Thread(target=TrainingInstance(buff, lock, flags).train, args=(datasetlink, nnlink, conf))
-#         th.start()
-
-#         finished = False
-#         await_play = True
-
-#         while not finished:
-            
-#             # print(f'finished: {finished}')
-#             # print(f'flag stop: {flags["stop"]}')
-#             # print(f'locked: {lock}')
-
-#             rcv = 'play'
-
-#             if await_play:
-#                 print('> AWAIT BACK PLAY')
-#                 rcv = await ws.receive_text()
-#                 await_play = False
-#                 print('> RECIEVED: ' + rcv)
-            
-#             if rcv == 'stop':
-#                 print(f'> RCV = stop')
-#                 flags['stop'] = True
-#                 finished = True
-            
-#             lock.acquire(blocking=True) # [ X ]
-            
-
-#             # print(len(buff))
-#             if len(buff) > 0:
-#                 await_play = True
-#                 b = buff.pop(0)
-#                 print(f'> BUFFER POP -> {b.decode()}')
-#                 lock.release() # [   ]
-#                 # print(b)
-                
-#                 if b == b'end': 
-#                     print(f'> END BLOCK')
-#                     await ws.send_text(b.decode()) # >>>>
-#                     print(f'> Poslat Backu END Message')
-#                     while True:
-#                         lock.acquire(blocking=True) # [ X ]
-#                         if len(buff) > 0:
-#                             break
-#                         lock.release() # [   ]
-
-#                     b = buff.pop(0)
-#                     lock.release() # [   ]
-
-#                     # await ws.send_text(b.decode()) # >>>>
-#                     print(f'Training thread daemon is alive: {th.is_alive}')
-#                     finished = True
-                    
-#                 else:
-#                     print('>>> send bytes')
-#                     await ws.send_text(b.decode()) # >>>>
-
-#             else:
-#                 lock.release() # [   ]
-
-#         print(f'time: { time() - start_time }')
-#         await ws.close(code = 1000)
-
-#     except WebSocketDisconnect:
-#         pass
-
-#     print('KKKKRRRRAAAAAJJJJJJJ')

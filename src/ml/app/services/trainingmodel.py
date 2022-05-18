@@ -33,11 +33,12 @@ class TrainingService():
     #type -> string -> "CLASSIFICATION"/"REGRESSION"
     #batchSize -> int
     #percentage_training -> float - [0,1] -> koliki procenat celog skupa je training skup
-
+    #percentage_validation -> float - [0,1] -> koliki procenat celog skupa je validacioni skup
     def __init__(self, datasetAll, inputs, outputs, actPerLayer, nbperlayer, 
                 actOutput = None, metrics = ['mse'], learning_rate = 0.1, regularization_rate = 0.1, regularization = 'L1', 
-                batchSize = 1, percentage_training = 0.2, problem_type = 'REGRESSION', callbacks = [], model = None):
-        self.model = model
+                batchSize = 1, percentage_training = 0.6, percentage_validation = 0.2, problem_type = 'REGRESSION', callbacks = []):
+        
+        self.model = None
 
         self.inputs = inputs
         self.outputs = outputs
@@ -60,6 +61,31 @@ class TrainingService():
         self.NB_PER_LAYER = nbperlayer
 
         self.METRICS = metrics
+        self.METRICS_REGRESSION = [
+           tf.keras.metrics.MeanSquaredError(),  #MSE - Mean Squared Error
+           tf.keras.metrics.MeanAbsoluteError(), #MAE - Mean Absolute Error
+           tf.keras.metrics.RootMeanSquaredError(), #RMSE - Root Mean Squared Error
+           tf.keras.metrics.MeanAbsolutePercentageError(), #MAPE -  Mean Absolute Percentage Error
+           tf.keras.metrics.MeanSquaredLogarithmicError() #MSLE - Mean Squared Logarithmic Error
+        ]
+
+        self.METRICS_CLASSIFICATION =  [ 
+            tf.keras.metrics.AUC(), #AUC 
+            tf.keras.metrics.CategoricalAccuracy(), #Categorical Accuracy
+            tf.keras.metrics.Precision(), #Precision
+            tf.keras.metrics.Recall(), #Recall
+            tf.keras.metrics.TruePositives(), #True Positives
+            tf.keras.metrics.TrueNegatives(), #True Negatives
+            tf.keras.metrics.FalsePositives(), #False Positives
+            tf.keras.metrics.FalseNegatives() #False Negatives
+        ]
+
+        if(type=="CLASSIFICATION"):
+            self.METRICS = self.METRICS_CLASSIFICATION
+        elif (type=="REGRESSION"):
+            self.METRICS = self.METRICS_REGRESSION
+
+
         self.TYPE = problem_type
 
         if(actOutput==None):
@@ -71,7 +97,9 @@ class TrainingService():
             self.ACT_OUTPUT = actOutput
 
         self.BATCH_SIZE = batchSize
-        self.PERCENTAGE_TRAINING = percentage_training
+        #self.PERCENTAGE_TRAINING = percentage_training
+        #ukupni procenat za trening i validaciju
+        self.PERCENTAGE_TRAINING_AND_VALIDATION = percentage_training + percentage_validation
 
         self.REGRESSION_LOSS = 'mse'
         self.CLASSIFICATION_LOSS = 'categorical_crossentropy'
@@ -79,23 +107,14 @@ class TrainingService():
         # Dataframe
         self.datasetAll = datasetAll
         self.dataframe = self.load_dataframe() #dataframe koji se sastoji samo od ulaznih i izlaznih kolona
+
+        #self.PERCENTAGE_VALIDATION -> procenat validacionog skupa u trening skupu     
+        self.PERCENTAGE_VALIDATION = self.train_val_PercentageSplit(percentage_training, percentage_validation)
+
         #podela na trening i testne podatke
         self.train_dataset, self.test_dataset, self.train_labels, self.test_labels = self.train_test()
         #skaliranje podataka
         self.normed_train_dataset, self.normed_test_dataset = self.data_standardization()
-
-        # if datasetAll != None:
-        #     self.setup_dataset(datasetAll)
-
-
-    # def setup_dataset(self, datasetAll):
-    #     # Dataframe
-    #     self.datasetAll = datasetAll
-    #     self.dataframe = self.load_dataframe() #dataframe koji se sastoji samo od ulaznih i izlaznih kolona
-    #     #podela na trening i testne podatke
-    #     self.train_dataset, self.test_dataset, self.train_labels, self.test_labels = self.train_test()
-    #     #skaliranje podataka
-    #     self.normed_train_dataset, self.normed_test_dataset = self.data_standardization()
 
 
     #f-ja load_dataframe od celokupnog dataframe-a pravi dataframe koji se sastoji od kolona koje su potrebne za kreiranje neuronske mreze
@@ -109,11 +128,20 @@ class TrainingService():
             dataframe[column] = self.datasetAll[column]
 
         return dataframe
+    
+    #f-ja train_val_PercentageSplit racuna koliki je procenat validacionog skupa u trening skupu, na osnovu procenta trening skupa i validacionog skupa u celokupnom skupu podataka
+    def train_val_PercentageSplit(self, percentageTrain, percentageVal):
+        brVrsta = self.dataframe.shape[0]
+        percentageTrainVal = percentageTrain + percentageVal
+        brVrstaTrainVal = brVrsta * percentageTrainVal
+        brVrstaVal = brVrsta * percentageVal
+        percentageVal_inTraining = brVrstaVal/brVrstaTrainVal
+        return percentageVal_inTraining
 
     #f-ja train_test - podela podataka za treniranje i testiranje
     #outputs - lista stringova (nazivi kolona koji su output)
     def train_test(self):
-        train_dataset = self.dataframe.sample(frac=self.PERCENTAGE_TRAINING,random_state=0) #podaci za treniranje
+        train_dataset = self.dataframe.sample(frac=self.PERCENTAGE_TRAINING_AND_VALIDATION,random_state=0) #podaci za treniranje
         test_dataset = self.dataframe.drop(train_dataset.index) #ostalak podataka za testiranje
         
         train_labels = train_dataset.loc[:,self.outputs]
@@ -141,43 +169,6 @@ class TrainingService():
                     columns = self.test_dataset.columns)
         return normed_train_df, normed_test_df
 
-
-    #regression
-    #def build_regression_model(self):
-    #    model = Sequential()
-    #    
-    #    model.add(Dense(self.NB_PER_LAYER[0], kernel_regularizer = self.REGULARIZATION, input_shape=[len(self.inputs)]))
-    #    model.add(Activation(self.ACT_PER_LAYER[0])) 
-    #    
-    #    for i in range(1, len(self.NB_PER_LAYER)):
-    #        model.add(Dense(self.NB_PER_LAYER[i], kernel_regularizer = self.REGULARIZATION))
-    #        model.add(Activation(self.ACT_PER_LAYER[i])) 
-    #    
-    #    model.add(Dense(1))
-    #
-    #    model.compile(loss = self.REGRESSION_LOSS,
-    #            optimizer = self.OPTIMIZER,
-    #            metrics = self.METRICS)
-    #    
-    #    return model
-
-    #classification
-    #def build_classification_model(self):
-    #    model = Sequential()
-    #
-    #    model.add(Dense(self.NB_PER_LAYER[0], kernel_regularizer = self.REGULARIZATION, input_shape=[len(self.inputs)], activation = self.ACT_PER_LAYER[0]))
-    #    
-    #    for i in range(1, len(self.NB_PER_LAYER)):
-    #        model.add(Dense(self.NB_PER_LAYER[i], kernel_regularizer = self.REGULARIZATION, activation=self.ACT_PER_LAYER[i]))
-    #        
-    #    #izlazni sloj
-    #    model.add(Dense(len(self.outputs), activation='softmax'))
-    #
-    #    model.compile(loss = self.CLASSIFICATION_LOSS,
-    #            optimizer = self.OPTIMIZER,
-    #            metrics = self.METRICS)
-    #
-    #    return model
 
     def build_model(self):
         model = Sequential()
@@ -212,10 +203,10 @@ class TrainingService():
 
 
     #obucavanje modela
-    def fit_model(self, model, epoch, val_split = 0.2):
+    def fit_model(self, model, epoch):
         history = model.fit(self.normed_train_dataset, self.train_labels, 
                             epochs = epoch, batch_size = self.BATCH_SIZE, 
-                            validation_split = val_split, 
+                            validation_split = self.PERCENTAGE_VALIDATION, 
                             verbose=0, callbacks=self.CALLBACKS)
 
         return history.history
@@ -233,7 +224,7 @@ class TrainingService():
         return predictions
 
 
-    # Metode za eksternu upotrebu
+    # --------
 
     def new_model(self):
         self.model = self.build_model()
@@ -248,23 +239,20 @@ class TrainingService():
         return model_path
 
 
-    def start_training(self, epoch, val_split):
+    def start_training(self, epoch):
 
-        if self.model == None:
+        if self.mode == None:
             self.new_model()
-        #self.new_model()
 
         print('Training Started')
-        print(self.model.get_config())
 
-        self.fit_model(self.model, epoch, val_split)
-        # for i in range(10):
-        #     print(f'TRAIN {i}')
-        #     self.fit_model(self.model, epoch, val_split)
+        self.fit_model(self.model, epoch)
 
         print('TRAINING FINISHED')
 
-        # results = self.evaluate_model(model)
-        # predictions = self.predict_model(model)
+        results = self.evaluate_model(model)
+        #predictions = self.predict_model(model)
 
-        #return model_path
+        return results
+
+        

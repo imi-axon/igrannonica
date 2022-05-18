@@ -13,13 +13,15 @@ namespace BackApi.Services
     public interface INNservice
     {
         public Task<Boolean> MlTraining(WebSocket webSocket, ApiNNTrain packet, WebSocket webSocketMl);
-        public Task<HttpResponseMessage> NNCreateTemp(int id,string name,string datapath);
+        public Task<HttpResponseMessage> NNCreateTemp(int id,string name,string datapath); 
+        public string GetNewName(int projid);
         public int GetNNid(int projid, string name);
         public string NNIdToPath(int nnid);
         public string ListNN(int userid, int projid);
         public string NNIdToCfg(int nnid);
         public string NNIdToTrainrez(int nnid);
         public Boolean DeleteNN(int nnid);
+        public Boolean EditTitle(int nnid, int projid, string title);
         public bool AddNote(int projid, int nnid, string note);
         public string GetNote(int projid, int nnid, out bool ind);
     }
@@ -113,7 +115,24 @@ namespace BackApi.Services
             await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Client closing w handshake", CancellationToken.None);
             return true;
         }
-
+        public string GetNewName(int projid)
+        {
+            string constname = "Untitled-Network";
+            string name = constname;
+            int exp = 2;
+            while (true)
+            {
+                if (kontext.NNs.Any(x => x.ProjectId == projid && x.NNName == name))
+                {
+                    name = constname;
+                    name = name + "-" + exp;
+                    exp = exp + 1;
+                }
+                else
+                    break;
+            }
+            return name;
+        }
         public async Task<HttpResponseMessage> NNCreateTemp(int id,string name,string datapath)
         {
             HttpClient client = new HttpClient();
@@ -156,6 +175,9 @@ namespace BackApi.Services
             byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             response = await client.PutAsync(Urls.ml + "/api/nn/default",byteContent);
 
+            var proj = kontext.Projects.FirstOrDefault(x => x.ProjectId == id);
+            if (proj != null)
+                proj.LastEdit = DateTime.Now;
             return response;
         }
         public string CreateNN(int projid,string name,out int nnid)
@@ -173,6 +195,8 @@ namespace BackApi.Services
             nn.ConfPath = "";
             nn.TrainrezPath = "";
             nn.Notes = "";
+            nn.CreationDate = DateTime.Now;
+            nn.LastEdited = nn.CreationDate;
 
             kontext.Add(nn);
             kontext.SaveChanges();
@@ -185,6 +209,20 @@ namespace BackApi.Services
             kontext.SaveChanges();
 
             return path;
+        }
+        public Boolean EditTitle(int nnid, int projid, string title)
+        {
+            var nn = kontext.NNs.FirstOrDefault(x => x.NNId == nnid && x.ProjectId == projid);
+            if (nn == null)
+                return false;
+            nn.NNName = title;
+            nn.LastEdited = DateTime.Now;
+
+            var proj = kontext.Projects.FirstOrDefault(x => x.ProjectId == projid);
+            if (proj != null)
+                proj.LastEdit = nn.LastEdited;
+            kontext.SaveChanges();
+            return true;
         }
         public int GetNNid(int projid,string name)
         {
@@ -226,6 +264,7 @@ namespace BackApi.Services
             var path = storageService.CreateNNCfg(nn.ProjectId, nnid);
             nn.ConfPath = path;
 
+            nn.LastEdited = DateTime.Now;
             kontext.Entry(nn).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             kontext.SaveChanges();
 
@@ -240,6 +279,7 @@ namespace BackApi.Services
             var path = storageService.CreateNNtrainrez(nn.ProjectId, nnid);
             nn.TrainrezPath = path;
 
+            nn.LastEdited = DateTime.Now;
             kontext.Entry(nn).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             kontext.SaveChanges();
 
@@ -270,6 +310,9 @@ namespace BackApi.Services
             storageService.DeletePath(nn.TrainrezPath);
 
             kontext.NNs.Remove(nn);
+            var proj = kontext.Projects.FirstOrDefault(x => x.ProjectId == nn.ProjectId);
+            if (proj != null)
+                proj.LastEdit = DateTime.Now;
             kontext.SaveChanges();
 
             return true;
@@ -280,6 +323,10 @@ namespace BackApi.Services
             if (nn==null)
                 return false;
             nn.Notes = note;
+            nn.LastEdited = DateTime.Now;
+            var proj = kontext.Projects.FirstOrDefault(x => x.ProjectId == projid);
+            if (proj != null)
+                proj.LastEdit = nn.LastEdited;
             kontext.SaveChanges();
             return true;
         }

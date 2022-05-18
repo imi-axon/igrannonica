@@ -23,7 +23,15 @@
             
             <!-- CELIJA U REDU -->
             <td *ngFor="let cell of row">
-                {{cell | number : '.2-2'}}
+                
+                <span *ngIf="i < (statistics.length - 1)"> 
+                    {{cell | number : '.2-2'}} 
+                </span>
+                
+                <span *ngIf="i == (statistics.length - 1)"> 
+                    {{cell}} 
+                </span>
+                
             </td>
 
         </tr>

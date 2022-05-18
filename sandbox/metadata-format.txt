@@ -1,0 +1,66 @@
+=================================================================================================
+
+Fajl: {
+    collumns: Kolona[]
+    statistics: STATS               // statistika u JSON formatu (definisan na Figmi)
+}
+
+Kolona: {
+    type: "num" | "cat" | "enc"     // tip kolone (numericka, kategorijska, enkodirana-numericka)
+    trainReady: bool                // da li je spreman za treniranje
+    encoding: Encoding | None       // podaci o enkodiranju kolone (nije None ukoliko je type = "enc")
+}
+
+Encoding: {
+    type: "onehot" | "label"        // tip enkodiranja koji je primenjen
+    onehot: OneHot | None           // nije None ukoliko je type = "onehot"
+    label: Label | None             // nije None ukoliko je type = "label"
+}
+
+OneHot: {
+    originalHeader: string          // naziv originalne kolone
+    catValue: string                // kategorijska vrednost koju kolona predstavlja
+}
+
+Label: {
+    valueMappings: Mapiranje[]      // niz mapiranja starih u nove vrednosti
+}
+
+Mapiranje: {
+    original: string                // originalna vrednost (kategorijska)
+    new: number                     // enkodirana vrednost (numericka)
+}
+
+
+=================================================================================================
+
+Prilikom dodavanja dataset-a vrsi se analiza i kreiraju se 2 fajla (metamain.jaon i metaedit.json) sa istim sadrzajem koji ML generise.
+Fajlovi su u foramtu:
+
+Fajl: {
+    collumns: Kolona[]
+    statistics: STATS
+}
+
+Kolona: {
+    type: "num" | "cat"
+    trainReady: bool
+    encoding: None    // Nema podataka o enkodiranju
+}
+
+----------------------------------------------------------------------------------------------------
+
+Nakon izmene Editing Dataset-a, metaedit.json se menja tako da sadrzi i informacije o enkodiranju kao i novu statistiku
+Novi format postaje puni format "Fajl"
+
+----------------------------------------------------------------------------------------------------
+
+Kada se promene izvrsene na Editing Dataset-u sacuvaju metaedit.json se kopira u metamain.json
+
+----------------------------------------------------------------------------------------------------
+
+Kada se promene izvrsene na Editing Dataset-u odbace metamain.json se kopira u metaedit.json
+
+----------------------------------------------------------------------------------------------------
+
+Kada se Dataset vrati na Initial Dataset ML generise podatke koji se prepisuju u metamain.json i metaedit.json

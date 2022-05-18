@@ -4,10 +4,11 @@
 }
 
 .project{
+    min-height: 160px;
     transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-    background-color: #FFFFFF33;
+    background-color: var(--projectListProject);
     backdrop-filter: blur(3px);
-    border: solid 1px #0091ff;
+    border: solid 1px var(--projectListProjectBorder);
     padding: 20px;
     margin-top: 25px;
     display: grid;
@@ -15,33 +16,33 @@
     
     &:hover{
         transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-        background-color: #FFFFFF55;
+        background-color: var(--projectListProjectHover);
     }
     
     .projectLeft{
         .title{
             display: inline;
             font-size: 26px;
-            font-weight: 600;
-            color: #2C5D96;
+            font-weight: 400;
+            color: var(--projectListProjectTitle);
             margin: 0px;
             cursor: pointer;
             transition: 0.2s ease-in;
             
             &:hover{
                 transition: 0.2s ease-out;
-                color: #0091ff;
+                color: var( --projectListProjectTitleHover);
             }
         }
         
         .created{
             font-size: 11px;
-            color: #888888;
+            color: var(--projectListProjectCreated);
         }
         
         .description{
             font-size: 12px;
-            color: #555555;
+            color: var(--projectListProjectDescription);
             width: 100%;
             margin: 0px;
         }
@@ -51,12 +52,12 @@
         img{
             width: 40px;
             height: 40px;
-            border: solid 1px #FFFFFF;
+            border: solid 1px var(--projectListProjectImgBorder);
             border-radius: 4px;
         }
         
         .fullname{
-            color: #333333;
+            color: var(--projectListProjectFullName);
         }
     }
     
@@ -89,6 +90,6 @@
     width: 100%;
     display: block;
     font-size: 32px;
-    color: #555555;
+    color: var(--projectsListEmptyTitle);
     cursor: default;
 }

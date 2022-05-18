@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NewNN } from 'src/app/_utilities/_data-types/models';
 import { NewNnService } from 'src/app/_utilities/_services/new-nn.service';
 import { ExperimentNetworksListComponent } from '../experiments-networks-list/experiments-networks-list.component';
+import { NetworkListComponent } from '../network-list/network-list.component';
 
 @Component({
   selector: 'app-experiment-all-networks',
@@ -17,7 +18,7 @@ export class ExperimentAllNetworksComponent implements OnInit {
   ) { }
   
   @ViewChild("networksList")
-  private networksList: ExperimentNetworksListComponent;
+  private networksList: NetworkListComponent;
   
   public projectId : number;
   
@@ -31,13 +32,13 @@ export class ExperimentAllNetworksComponent implements OnInit {
   private newNN : NewNN = new NewNN();
 
   ngOnInit(): void {
-    this.projectId = this.getProjectId();
+      
   }
   
   
   public NewNetwork(){
     this.newNN.Name= "Unitled-Network";
-    this.newNNService.newNN(this.newNN,this.projectId,this,this.handleSuccess,this.handleError);
+    this.newNNService.newNN(this.newNN, this.getProjectId(), this, this.handleSuccess, this.handleError);
   }
 
   handleSuccess(self: any,response:any) {

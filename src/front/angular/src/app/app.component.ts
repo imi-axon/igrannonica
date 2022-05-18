@@ -2,6 +2,7 @@ import { Component, Inject, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { FullscreenLoaderComponent } from './_components/_elements/fullscreen-loader/fullscreen-loader.component';
+import { LanguageService } from './_utilities/_services/language.service';
 
 @Component({
   selector: 'app-root',
@@ -15,10 +16,13 @@ export class AppComponent implements OnInit {
   @ViewChild("fullscreenLoader")
   fullscreenLoader: FullscreenLoaderComponent;
 
-  constructor(public translate:TranslateService, private router: Router)
+  constructor(public translate:TranslateService, private router: Router, private languageService: LanguageService)
   {
     translate.addLangs(['en','sr']);
-    translate.setDefaultLang('en');
+    if(!localStorage.getItem('lang1')){
+      localStorage.setItem('lang1','en');
+      languageService.language = localStorage.getItem('lang') || 'en';
+      }
     
       router.events.subscribe(
         (event) => {
@@ -36,7 +40,8 @@ export class AppComponent implements OnInit {
   
   
 ngOnInit(){
-  localStorage.setItem('theme',this.theme);
+  if(!localStorage.getItem('theme')) 
+    localStorage.setItem('theme',this.theme);
 }
   
 }

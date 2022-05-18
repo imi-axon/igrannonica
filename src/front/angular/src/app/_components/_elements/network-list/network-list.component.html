@@ -1,0 +1,23 @@
+<div class="networkList" *ngIf="mreze.length > 0">
+    
+    <div *ngFor="let network of filtriraneMreze" class="network" > 
+      
+      <div class="networkLeft">
+        <p class="title" (click)="onClick(network.id)"> {{network.name}} </p>
+        
+        <!-- <p class="created"> {{'lista-projekata.kreiran'|translate}} {{network.Creationdate}} </p> -->
+      </div>
+      
+      <div class="networkRight">
+        
+        <button type="button" class="remove-button d-flex align-items-center justify-content-center" (click)="openDialog($event, network.id)"> 
+          <i class="bi bi-trash"></i> 
+        </button>
+        
+      </div>
+      
+    </div>
+      
+  </div>
+  
+  <p id="emptyTitle" *ngIf="mreze.length == 0"> {{'lista-mreza.nema'|translate}} </p>

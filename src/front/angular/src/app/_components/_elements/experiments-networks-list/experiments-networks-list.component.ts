@@ -31,6 +31,10 @@ export class ExperimentNetworksListComponent implements OnInit {
     else if(this.key=='za') this.sortZA();
     else if(this.key=='sortRev') this.sortRev();
   }
+  
+  public SetSearchTerm(value:string){
+    this.searchTerm = value;
+  }
 
   filtriraj(str:string){
     return this.mreze.filter(mreze=>
@@ -71,7 +75,7 @@ export class ExperimentNetworksListComponent implements OnInit {
     // self.isSignUpFailed = true;
   }
 
-onChange(select:any){
+OrderBy(select:any){
 
   this.key=select.target.value;
   console.log(this.key);

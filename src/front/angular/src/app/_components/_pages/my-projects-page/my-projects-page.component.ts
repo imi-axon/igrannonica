@@ -11,11 +11,8 @@ import { ProjectListComponent } from '../../_elements/project-list/project-list.
 })
 export class MyProjectsPageComponent implements OnInit {
   constructor(
-    public router: Router,
-    private newProjectService: NewProjectService
+    public router: Router
   ) { }
-  
-  private newProject: NewProject = new NewProject();
 
   @ViewChild("ProjectListComponent")
   projectList:ProjectListComponent
@@ -23,22 +20,6 @@ export class MyProjectsPageComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.setNewProject();
-  }
-
-  private setNewProject(){
-    this.newProject.name = "Untitled Project";
-    this.newProject.description = "Project description goes here...";
-    this.newProject.public = false;
-  }
-  
-  public NewExperiment(){
-    
-    this.newProjectService.newProject(this.newProject, this, this.successfulNewProjectCallback)
-  }
-  
-  private successfulNewProjectCallback(self: any, id: number){
-    self.router.navigate(['/project/' + id]);
   }
   
 

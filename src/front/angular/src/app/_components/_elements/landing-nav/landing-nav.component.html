@@ -19,7 +19,6 @@
         <li class="nav-item mx-2" *ngIf="!auth.logovan">
           <a class="nav-link" routerLink="/registration" [routerLinkActive]="['active']" > {{"navbar.registration" | translate}} </a>
         </li>
-        
         <li class="nav-item mx-2" *ngIf="!auth.logovan">
           <a class="nav-link" routerLink="/login" [routerLinkActive]="['active']" > {{"navbar.login" | translate}} </a>
         </li>
@@ -27,6 +26,9 @@
         <li class="nav-item mx-2" *ngIf="auth.logovan">
           <a class="nav-link" routerLink="/my-projects" [routerLinkActive]="['active']"> {{"navbar.myExperiments"| translate}}</a>
         </li>
+        <!-- <li class="nav-item mx-2">
+          <a style="cursor: pointer;" (click)="NewExperiment()" class="nav-link" [routerLinkActive]="['active']"> {{'lista-projekata.novi_eksperiment' |translate}}</a>
+        </li> -->
         <li class="nav-item mx-2" *ngIf="auth.logovan">
           <a id="profil" class="nav-link" routerLink="/profil" [routerLinkActive]="['active']">{{"navbar.myAccount" | translate}} </a>
           <!-- {{auth.korisnickoIme}} -->
@@ -56,7 +58,7 @@
 <!-- OVERLAY NA TELEFONIMA -->
 <div class="navDiv collapse navbar-collapse" id="navTel">
   <div class="lista d-flex justify-content-center">
-      <ul class="navbar-nav" style="width:80%">
+      <ul class="navbar-nav">
         <li>
         <div class="div0">
             <a routerLink="/home" style="text-decoration: none;">
@@ -68,6 +70,9 @@
         </div>
     </li>
         <div class="div1">
+          <li  *ngIf="auth.logovan" class="nav-item" style="cursor: pointer;" (click)="NewExperiment()">
+            <a><i class="bi bi-file-earmark-plus" style="color:white"></i>&nbsp;{{'lista-projekata.novi_eksperiment' |translate}}</a>
+        </li>
             <li routerLink="/profil" *ngIf="auth.logovan" class="nav-item">
                 <a routerLink="/profil"><img _ngcontent-apl-c70="" src="assets/Images/Icons/User_icon.svg">&nbsp;{{'navbar.myAccount'|translate}}</a>
             </li>

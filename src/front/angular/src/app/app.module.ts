@@ -53,7 +53,7 @@ import { KonfiguracijaComponent } from './_components/_elements/konfiguracija/ko
 import { TrainingPageComponent } from './_components/_pages/training-page/training-page.component';
 
 import { LandingPageSelectorComponent } from './_components/_elements/landing-page-selector/landing-page-selector.component';
-import { ListaMrezaComponent } from './_components/_elements/lista-mreza/lista-mreza.component';
+import { NetworkListComponent } from './_components/_elements/network-list/network-list.component';
 import { ChartTrainingComponent } from './_components/_elements/chart-training/chart-training.component';
 import { NgChartsModule } from 'ng2-charts';
 import { PhotoInputComponent } from './_components/_elements/photo-input/photo-input.component';
@@ -73,6 +73,8 @@ import { FallingStarParticleComponent } from './_components/_elements/falling-st
 import { ThemeComponent } from './_components/_elements/theme/theme.component';
 import { ExperimentAllNetworksComponent } from './_components/_elements/experiment-all-networks/experiment-all-networks.component';
 import { ExperimentNetworksListComponent } from './_components/_elements/experiments-networks-list/experiments-networks-list.component';
+import { DatasetEditTableComponent } from './_components/_elements/dataset-edit-table/dataset-edit-table.component';
+import { PublicProjectListComponent } from './_components/_elements/public-project-list/public-project-list.component';
 
 
 @NgModule({
@@ -116,7 +118,7 @@ import { ExperimentNetworksListComponent } from './_components/_elements/experim
 
     KonfiguracijaComponent,
     TrainingPageComponent,
-    ListaMrezaComponent,
+    NetworkListComponent,
     ChartTrainingComponent,
     PhotoInputComponent,
     NnPageComponent,
@@ -133,7 +135,10 @@ import { ExperimentNetworksListComponent } from './_components/_elements/experim
     FallingStarParticleComponent,
     ThemeComponent,
     ExperimentAllNetworksComponent,
-    ExperimentNetworksListComponent
+    ExperimentNetworksListComponent,
+    DatasetEditTableComponent,
+    PublicProjectListComponent,
+    NetworkListComponent
   ],
   imports: [
     NgxCsvParserModule,

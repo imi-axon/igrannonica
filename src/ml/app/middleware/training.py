@@ -18,6 +18,8 @@ from util.json import json_encode
 import util.http as httpc
 from util.csv import get_csv_dialect
 
+from .util import compareConfigurations
+
 from services.trainingmodel import TrainingService
 
 
@@ -83,20 +85,33 @@ class TrainingInstance():
 
     def create_service(self, dataframe, trainConf: Dict):
         self.service = TrainingService(dataframe, trainConf['inputs'], trainConf['outputs'], trainConf['actPerLayer'], trainConf['neuronsPerLayer']
+            , actOutput = trainConf['actOut']
             , learning_rate = trainConf['learningRate']
             , regularization_rate = trainConf['regRate']
             , regularization = trainConf['reg']
             , batchSize = trainConf['batchSize']
-            #, percentage_training = trainConf['trainSplit']
+            , percentage_training = trainConf['trainSplit']
             , callbacks=[self.callback]
-        
+            , problem_type = trainConf['problemType']
         ) if self.service == None else self.service
+
+    def load_model(self, filepath, conf, newconf):
+        # TODO - Pozvati funkciju koja ce uporediti konfiguraciju sa kojom je mreza bila istrenirana i novu konfiguraciju sa kojom sad treba da se trenira
+        # U odnosu na rezultat kreirati novi model (pozvati build_model) ili ucitati postojeci iz fajla
+
+        to_load_model = compareConfigurations(conf, newconf)    #True # TODO - Umesto True ide poziv pomenute funkcije
+
+        if to_load_model:
+            self.service.load_model(filepath)
+        else:
+            self.service.new_model()
+            
 
     # def new_model(self, trainConf: Dict):
     #     self.create_service(None, trainConf)
     #     return self.service.new_model()
 
-    def train(self, datasetUrl: str, nnUrl: str, trainConf: Dict):
+    def train(self, datasetUrl: str, nnUrl: str, confUrl: str, trainrezUrl: str, trainConf: Dict):
 
         print('Train Function : BEGIN')
 
@@ -106,17 +121,16 @@ class TrainingInstance():
         dataframe = self.create_dataset(datasetUrl)     # dataframe
         fm_model = self.create_model(nnUrl)             # h5 FileMngr
         self.create_service(dataframe, trainConf)       # service
-        self.service.load_model(fm_model.path())        # load h5 model
-        # self.service.new_model()                        # poziva se odvojeno od start_training da bi bilo iznad UNLOCK-a, zbog performansi
+        self.load_model(fm_model.path())                               # load h5 model
         self.lock.release()                             # zbog lock-a u konstruktoru # [   ]
 
         # -- Treniranje --
         print('-- Treniranje --')
 
-        #self.service.start_training(100, trainConf['valSplit'])              # na kraju treninga ima lock.acquire() # [ X ]
-        self.service.start_training(1000, 0.2)
-        self.service.save_model(fm_model.directory(), fm_model.name())      # h5 fajl sa putanjom za koju je vezan fm_model FileMngr
-        self.lock.release()                                                 # zbog lock-a na kraju treniranja # [   ]
+        #self.service.start_training(100, trainConf['valSplit'])                                # na kraju treninga ima lock.acquire() # [ X ]
+        self.service.start_training(200)
+        trained_model_fpath = self.service.save_model(fm_model.directory(), fm_model.name())    # h5 fajl sa putanjom za koju je vezan fm_model FileMngr
+        self.lock.release()                                                                     # zbog lock-a na kraju treniranja # [   ]
         
         # -- Poruka za kraj treniranja --
         print('-- Poruka za kraj treniranja --')
@@ -125,9 +139,9 @@ class TrainingInstance():
         self.buff.append(b'end')            # indikator za kraj treniranja 
         self.lock.release()                 # [   ]
 
-        # -- POST Request, cuvanje h5 modela --
+        # -- Cuvanje fajlova u Storate na Backu --
 
-        # httpc.put(nnUrl) # PRIVREMENO ZAKOMENTARISANO DOK BACK NE URADI PODRSKU
+        httpc.put(nnUrl, trained_model_fpath)
 
         # -- Poruka za kraj Thread-a --
         # print('-- Poruka za kraj Thread-a --')

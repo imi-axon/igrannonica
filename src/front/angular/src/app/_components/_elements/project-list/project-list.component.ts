@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Project } from 'src/app/_utilities/_data-types/models';
+import { Project, PublicProject } from 'src/app/_utilities/_data-types/models';
 import { AuthService } from 'src/app/_utilities/_services/auth.service';
 import { ProjectsService } from 'src/app/_utilities/_services/projects.service';
 import { PopupWindowComponent } from '../popup-window/popup-window.component';
@@ -29,7 +29,6 @@ export class ProjectListComponent implements OnInit {
   public key: string = 'sort';
 
   private _searchTerm: string;
-  public myExp: boolean = false;
 
   get searchTerm(): string {
     return this._searchTerm;
@@ -59,21 +58,8 @@ export class ProjectListComponent implements OnInit {
           if (this.key == 'sortRev') this.sortRev();
   }
 
-  @Input() publicExp: boolean; //true-JAVNI eksperimenti, false-Moji eksperimenti //public-exp-page i my-projects-page
   ngOnInit(): void {
-
-    this.myExp = false;
-    console.log("primio " + this.publicExp);
-    if (this.publicExp == false) {
-      console.log("pozivam fj1");
-      this.myExp = true;
-      this.projectsService.userProjects(this.username, this, this.handleSuccess, this.handleSuccess);
-    }
-    else {
-      console.log("pozivam fj2");
-      this.projectsService.getProjects(this, this.handleSuccess, this.handleSuccess);
-    }
-
+    this.projectsService.userProjects(this.username, this, this.handleSuccess, this.handleSuccess);
   }
 
   filter(str: string) {
@@ -81,13 +67,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   loadProjectsCallback(self: any) {
-    if (self.publicExp == false) {
-      self.myExp = true;
-      self.projectsService.userProjects(self.username, self, self.handleSuccess, self.handleSuccess);
-    }
-    else
-      self.projectsService.getProjects(self, self.handleSuccess, self.handleSuccess);
-    
+    self.projectsService.userProjects(self.username, self, self.handleSuccess, self.handleSuccess);
   }
 
   handleSuccess(self: any, projects: Project[]) {
@@ -140,15 +120,9 @@ export class ProjectListComponent implements OnInit {
       if(result=='yes') 
       {
         console.log(result);
-        this.RemoveProject(event,projectId);
+        this.projectsService.removeProject(projectId, this, this.loadProjectsCallback);
       }
     });
-  }
-
-  RemoveProject(event: any, projectId: number) { 
-    this.projectsService.removeProject(projectId, this, this.loadProjectsCallback);
-    event.stopPropagation();
-    
   }
 
 }

@@ -5,7 +5,7 @@ hr{
 
 .imeMreze
 {
-    color:black;
+    color:var(--imeMreze);
     font-size: large;
     font-weight: bold;
     word-wrap: break-word;
@@ -14,8 +14,8 @@ hr{
 
 .mreza
 {
-    background-color: #FFFFFFAA;
-    border: solid 1px #2aa8e7;
+    background-color: var(--mrezaBg);
+    border: solid 1px var(--mrezaBorder);
     height: 15vh;
     margin-bottom: 10%;
     
@@ -33,3 +33,7 @@ hr{
 //         display: none;
 //     }
 //   }
+
+h1,h4,p{
+    color:var(--mrezaTekst);
+}
