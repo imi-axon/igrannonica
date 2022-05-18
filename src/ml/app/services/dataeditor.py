@@ -11,8 +11,8 @@ from .util import read_str_to_df
 class DataEditorService:
 
     #metadataDict -> recnik -> <class 'dict'>
-    def __init__(self, string, sep, quoteChar, metadataDict):
-        self.dataset = read_str_to_df(string,sep,quoteChar)
+    def __init__(self, df, sep, quoteChar, metadataDict):
+        self.dataset = df
         self.metadataDict = metadataDict
         self.sep = sep
         self.quoteChar = quoteChar

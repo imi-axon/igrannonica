@@ -11,6 +11,7 @@ import config as cfg
 # FastAPI
 from fastapi import FastAPI, Request, Response, WebSocketDisconnect, status, WebSocket
 from fastapi.responses import PlainTextResponse, FileResponse
+from services.util import read_str_to_df
 
 # Models
 from models import Dataset, DatasetEditActions, Statistics, NNOnly, NNCreate, MetaGenRequest, TrainingRequest
@@ -119,8 +120,8 @@ def get_statistics(body: Dataset):
     # print(csvstr)
 
     dialect = get_csv_dialect(csvstr)
-
-    stats: str = StatisticsMiddleware(csvstr, dialect.delimiter, dialect.quotechar).statistics_json()
+    df = read_str_to_df(csvstr, dialect.delimiter, dialect.quotechar)
+    stats: str = StatisticsMiddleware(df).statistics_json()
 
     # print(stats)
 

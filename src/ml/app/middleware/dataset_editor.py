@@ -1,4 +1,5 @@
 from services.dataeditor import DataEditorService
+from services.util import read_str_to_df
 
 class DatasetEditor:
 
@@ -30,7 +31,8 @@ class DatasetEditor:
     def execute(actions: list, data: str, sep, qc, metadata):
         actions = DatasetEditor.sort_actions([a for a in actions])
 
-        service = DataEditorService(data, sep, qc, metadata)
+        df = read_str_to_df(data,sep,qc)
+        service = DataEditorService(df, sep, qc, metadata)
 
         for action in actions:
             act = action['action']
