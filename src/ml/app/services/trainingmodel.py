@@ -34,9 +34,11 @@ class TrainingService():
     #batchSize -> int
     #percentage_training -> float - [0,1] -> koliki procenat celog skupa je training skup
     #percentage_validation -> float - [0,1] -> koliki procenat celog skupa je validacioni skup
+    # FULL_MODE - ako je False preskace se deo sa skupom podataka (sluzi samo ako ce se servis koristiti iskljucivo za kreiranje modela)
     def __init__(self, datasetAll, inputs, outputs, actPerLayer, nbperlayer, 
                 actOutput = None, metrics = ['mse'], learning_rate = 0.1, regularization_rate = 0.1, regularization = 'L1', 
-                batchSize = 1, percentage_training = 0.6, percentage_validation = 0.2, problem_type = 'REGRESSION', callbacks = []):
+                batchSize = 1, percentage_training = 0.6, percentage_validation = 0.2, problem_type = 'REGRESSION', callbacks = []
+                , FULL_MODE = True):
         
         self.model = None
 
@@ -104,17 +106,18 @@ class TrainingService():
         self.REGRESSION_LOSS = 'mse'
         self.CLASSIFICATION_LOSS = 'categorical_crossentropy'
 
-        # Dataframe
-        self.datasetAll = datasetAll
-        self.dataframe = self.load_dataframe() #dataframe koji se sastoji samo od ulaznih i izlaznih kolona
+        if FULL_MODE:
+            # Dataframe
+            self.datasetAll = datasetAll
+            self.dataframe = self.load_dataframe() #dataframe koji se sastoji samo od ulaznih i izlaznih kolona
 
-        #self.PERCENTAGE_VALIDATION -> procenat validacionog skupa u trening skupu     
-        self.PERCENTAGE_VALIDATION = self.train_val_PercentageSplit(percentage_training, percentage_validation)
+            #self.PERCENTAGE_VALIDATION -> procenat validacionog skupa u trening skupu     
+            self.PERCENTAGE_VALIDATION = self.train_val_PercentageSplit(percentage_training, percentage_validation)
 
-        #podela na trening i testne podatke
-        self.train_dataset, self.test_dataset, self.train_labels, self.test_labels = self.train_test()
-        #skaliranje podataka
-        self.normed_train_dataset, self.normed_test_dataset = self.data_standardization()
+            #podela na trening i testne podatke
+            self.train_dataset, self.test_dataset, self.train_labels, self.test_labels = self.train_test()
+            #skaliranje podataka
+            self.normed_train_dataset, self.normed_test_dataset = self.data_standardization()
 
 
     #f-ja load_dataframe od celokupnog dataframe-a pravi dataframe koji se sastoji od kolona koje su potrebne za kreiranje neuronske mreze

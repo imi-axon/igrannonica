@@ -175,28 +175,28 @@ def update_with_default_nn(body: NNCreate, response: Response):
     # > 2 kolone =>  in: [c0, c1]  out: [c2]
     inputs = [headers[0]] + ([headers[1]] if len(headers) > 2 else [])
     outputs = [headers[2 if len(headers) > 2 else 1]]
+
+    # def_conf = {
+    #     'inputs' :          inputs,
+    #     'outputs' :         outputs,
+    #     'neuronsPerLayer' : [3, 2],
+    #     'actPerLayer' :     ['relu', 'relu'],
+    #     'actOut' :          'linear',
+    #     'learningRate' :    0.1,
+    #     'reg' :             'L1',
+    #     'regRate' :         0.1,
+    #     'batchSize' :       1,
+    #     'trainSplit' :      0.7,
+    #     'valSplit' :        0.1
+    # }
     
     nnmodel = NNModelMiddleware()
-    nnmodel.new_default_model(inputs, outputs)
+    def_conf = nnmodel.new_default_model_2(inputs, outputs) # vraca konfiguraciju za napravljeni model
+    
     fm = FileMngr('h5')
     nnmodel.save_model(fm.directory(), fm.name())
-    r = httpc.put(body.nn, fm.path())
-    # print(f'PUT NN: {r}')
+    httpc.put(body.nn, fm.path())
     fm.delete(0)
-
-    def_conf = {
-        'inputs' :          inputs,
-        'outputs' :         outputs,
-        'neuronsPerLayer' : [3, 2],
-        'actPerLayer' :     ['relu', 'relu'],
-        'actOut' :          'linear',
-        'learningRate' :    0.1,
-        'reg' :             'L1',
-        'regRate' :         0.1,
-        'batchSize' :       1,
-        'trainSplit' :      0.7,
-        'valSplit' :        0.1
-    }
 
     fc = FileMngr('json')
     fc.create(json_encode(def_conf))

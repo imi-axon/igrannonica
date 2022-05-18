@@ -15,6 +15,8 @@ from keras.layers.core import Dense, Activation
 
 from sklearn.preprocessing import StandardScaler
 
+from services.trainingmodel import TrainingService
+
 
 
 class NNModelMiddleware():
@@ -24,7 +26,7 @@ class NNModelMiddleware():
 
     def new_default_model(self, inputs, outputs, 
         actPerLayer = ['relu']*2,
-        nbperlayer = [3]*2, 
+        nbperlayer = [3,2], 
         learning_rate = 0.1, 
         metrics = ['mse']
     ):
@@ -65,6 +67,44 @@ class NNModelMiddleware():
             'trainSplit': 0.7,
             'valSplit': 0.15
         }
+
+    def new_default_model_2(self, inputs, outputs):
+
+        conf = {
+            'inputs': inputs,
+            'outputs': outputs,
+            'neuronsPerLayer': [3,2],
+            'actPerLayer': ['relu','relu'],
+            'actOut': None, # Ovo treba updateovati nakon kreiranja modela (vrednoscu koja se generise)
+            'learningRate': 0.01,
+            'reg': '',
+            'regRate': 0,
+            'batchSize': 8,
+            'problemType': 'regression' if len(outputs) == 1 else 'classification',
+            'splitType': 'sequential',
+            'trainSplit': 0.7,
+            'valSplit': 0.2
+        }
+
+        # Default konfiguracija
+        ts = TrainingService(None, inputs, outputs
+            , actPerLayer = conf['actPerLayer']
+            , nbperlayer = conf['neuronsPerLayer']
+            , actOutput = conf['actOut']
+            , learning_rate = conf['learningRate']
+            , regularization = conf['reg']
+            , regularization_rate = conf['regRate']
+            , batchSize = conf['batchSize']
+            , problem_type = conf['problemType']
+            , percentage_training = conf['trainSplit']
+            , percentage_validation = conf['valSplit']
+            , FULL_MODE = False
+        )
+
+        self.model = ts.new_model()
+        conf['actOut'] = ts.ACT_OUTPUT # update
+
+        return conf
 
     
     def load_model(self, path = './', name = None):
