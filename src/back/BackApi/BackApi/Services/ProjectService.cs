@@ -80,11 +80,8 @@ namespace BackApi.Services
         {
             var tmp = context.Projects.Where(x => x.UserId == userid && x.ProjectId == projid).FirstOrDefault();
             if (userid == tmp.UserId) {
-                List<Dataset> datasets = context.Datasets.Where(x => x.ProjectId == projid).ToList();
-                foreach (Dataset dataset in datasets)
-                {
-                    datasetService.Delete(projid);
-                }
+
+                datasetService.Delete(projid);
 
                 List<NN> NNs = context.NNs.Where(x => x.ProjectId == projid).ToList();
                 foreach (NN n in NNs)
