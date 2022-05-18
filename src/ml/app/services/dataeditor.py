@@ -10,15 +10,19 @@ from .util import read_str_to_df
 
 class DataEditorService:
 
-    
-    def __init__(self, string, sep, quoteChar):
+    #metadataDict -> recnik -> <class 'dict'>
+    def __init__(self, string, sep, quoteChar, metadataDict):
         self.dataset = read_str_to_df(string,sep,quoteChar)
+        self.metadataDict = metadataDict
+        self.sep = sep
+        self.quoteChar = quoteChar
 
     #delete_columns : brise kolone iz dataset-a
     #columns : lista stringova (naziva kolona) koje treba obrisati
     def delete_columns(self, columns):
         for column in columns:
             self.dataset.drop(column, axis='columns', inplace=True)
+            del self.metadataDict["fajl"]["columns"][column]
     
     #delete_rows : brise redove iz dataset-a koji za prosledjene kolone imaju null vrednosti
     #columns : lista stringova (naziva kolona)
@@ -78,6 +82,19 @@ class DataEditorService:
             if column in cat:
                 self.dataset[column + '_code'] = lb_enc.fit_transform(self.dataset[column])
                 del_columns.append(column)
+
+                le_name_mapping = dict(zip(lb_enc.classes_, lb_enc.transform(lb_enc.classes_)))
+                valueMappings = []
+                original_list = list(le_name_mapping)
+                for i in range(len(original_list)):
+                    pom = {"original" : original_list[i], "new" : le_name_mapping[original_list[i]]}
+                    valueMappings.append(pom)
+                
+                dict_valueMappings = {"valueMappings" : valueMappings}
+                dict_encoding = {"type" : "label", "onehot" : "None", "label" : dict_valueMappings}
+                dict_column = {"type" : "enc", "trainReady" : True, "encoding" : dict_encoding}
+                new_column = column + '_code'
+                self.metadataDict["fajl"]["columns"].update({new_column : dict_column})
         self.delete_columns(del_columns)
 
     #enkodiranje kategorijskih kolona
@@ -87,11 +104,35 @@ class DataEditorService:
         cat = self.find_categorical_columns()
         for column in columns:
             if column in cat:
+                pom = self.dataset[column]
                 self.dataset = pd.get_dummies(self.dataset, columns=[column], prefix = [column])
+        
+                dummy_variables=pd.get_dummies(pom).rename(columns=lambda x: column + "_" +str(x))
+                nove_kolone = dummy_variables.columns.to_list()
+                old_column = column
+                catValues = []
+                split = old_column + "_"
+                for i in range(len(nove_kolone)):
+                    x = nove_kolone[i].split(split)
+                    catValues.append(x[1])
+                
+                for i in range(len(nove_kolone)):    
+                    dict_oneHot = {"originalHeader" : column, "catValue" : catValues[i]}
+                    dict_encoding = {"type" : "onehot", "onehot" : dict_oneHot, "label" : "None"}
+                    dict_column = {"type" : "enc", "trainReady" : True, "encoding" : dict_encoding}
+                    new_column = nove_kolone[i]
+                    self.metadataDict["fajl"]["columns"].update({new_column : dict_column})
+
+                del self.metadataDict["fajl"]["columns"][column]
+
+        
         return self.dataset
 
     def csv_result(self, sep: str = ';'):
-        return self.dataset.to_csv(sep=sep, index=False)
+        return self.dataset.to_csv(sep=self.sep, quotechar= self.quoteChar, index=False)
+
+    def get_metadataDict(self):
+        return self.metadataDict
 
 
 
