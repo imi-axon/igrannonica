@@ -27,4 +27,9 @@
     {
         public string title { get; set; }
     }
+    public class GenerateMetadata
+    {
+        public string dataset { get; set; }
+        public string metadata { get; set; }
+    }
 }
