@@ -144,10 +144,7 @@ hr{
         .nav-item a.active{
             font-weight: bold;
         }
-        
-        #logo{
-            display: none;
-        }
+
     }
 }
 @media (min-width: 576px) { 
@@ -223,6 +220,9 @@ hr{
     .toggler{
         display: block;
     }
+    #logo{
+        display:none;
+    }
 
 }
 
@@ -230,5 +230,4 @@ hr{
     #navTel{
         display:none;
     }
-
 }

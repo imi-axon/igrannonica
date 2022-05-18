@@ -36,6 +36,11 @@ export class JWTUtil
         let g = this.getPayload();
         return (g == null)? '' : g["username"];
     }
+    static getExpDate(): number {
+        let g = this.getPayload();
+        return (g == null)? 0 : g["exp"];
+    }
+
     static getEmail(): string {
         let g = this.getPayload();
         return (g == null)? '' : g["email"];

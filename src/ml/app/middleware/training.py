@@ -143,8 +143,8 @@ class TrainingInstance():
             self.lock.release()                             # [   ]
 
             # -- Brisanje fajlova --
-            fm_model.delete()
-            fm_conf.delete()
+            fm_model.delete(0)
+            fm_conf.delete(0)
 
             # -- Poruka za kraj Thread-a --
             # print('-- Poruka za kraj Thread-a --')

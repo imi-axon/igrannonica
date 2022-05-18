@@ -2,6 +2,8 @@ import { Component, Inject, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { FullscreenLoaderComponent } from './_components/_elements/fullscreen-loader/fullscreen-loader.component';
+import { JWTUtil } from './_utilities/_helpers/jwt-util';
+import { AuthService } from './_utilities/_services/auth.service';
 import { LanguageService } from './_utilities/_services/language.service';
 
 @Component({
@@ -16,12 +18,16 @@ export class AppComponent implements OnInit {
   @ViewChild("fullscreenLoader")
   fullscreenLoader: FullscreenLoaderComponent;
 
-  constructor(public translate:TranslateService, private router: Router, private languageService: LanguageService)
+  constructor(public translate:TranslateService, private router: Router, private languageService: LanguageService, private auth: AuthService)
   {
     translate.addLangs(['en','sr']);
     if(!localStorage.getItem('lang1')){
       localStorage.setItem('lang1','en');
+      translate.defaultLang='en';
       languageService.language = localStorage.getItem('lang') || 'en';
+      }
+      else{
+        translate.defaultLang=localStorage.getItem('lang1') || 'en';
       }
     
       router.events.subscribe(
@@ -42,6 +48,12 @@ export class AppComponent implements OnInit {
 ngOnInit(){
   if(!localStorage.getItem('theme')) 
     localStorage.setItem('theme',this.theme);
+
+  if(JWTUtil.get()!=''){
+    if(this.auth.checkJWTexpired()) this.auth.tokenExpLogout();
+    else this.auth.autoLogout();
+  }
+
 }
   
 }

@@ -78,7 +78,7 @@ class DatasetEditor:
                     
                     elif act[1] == 'onehot':
                         print('onehot')
-                        service.one_hot_encoding([col])
+                        service.dataset = service.one_hot_encoding([col])
                     
                     else:
                         return None
