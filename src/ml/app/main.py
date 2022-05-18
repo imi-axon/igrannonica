@@ -11,9 +11,10 @@ import config as cfg
 # FastAPI
 from fastapi import FastAPI, Request, Response, WebSocketDisconnect, status, WebSocket
 from fastapi.responses import PlainTextResponse, FileResponse
+from services.util import read_str_to_df
 
 # Models
-from models import Dataset, DatasetEditActions, Statistics, TempTrainingInstance, NNOnly, NNCreate, MetaGenRequest, TrainingRequest
+from models import Dataset, DatasetEditActions, Statistics, NNOnly, NNCreate, MetaGenRequest, TrainingRequest
 
 # Utils
 from util.csv import csv_is_valid, csv_decode, csv_decode_2, get_csv_dialect
@@ -88,19 +89,21 @@ def edit_dataset(body: DatasetEditActions, response: FileResponse):
     
     actions = [{'action':str.split(a['action']), 'column':(a['column'] if 'column' in a.keys() else '')} for a in json_decode(body.actions)]
     dataset = httpc.get(body.dataset)
-
-    # print(f'EDIT: dataset {dataset}')
-
+    metadata = json_decode(httpc.get(body.metapath))
+    
     dialect = get_csv_dialect(dataset)
 
-    res = DatasetEditor.execute(actions, dataset, dialect.delimiter, dialect.quotechar)
+    res, df = DatasetEditor.execute(actions, dataset, dialect.delimiter, dialect.quotechar, metadata)   # metadata ce biti promenjen
+    # TODO: Nakon editovanja izracunati statistiku, smestiti je u metadata i azurirati trainReady
+    _ , stats = StatisticsMiddleware(df).get_stat() # _ zanemaruje se json string reprezentacija stats recnika
+    metadata['statistics'] = stats
 
+    # print(f'EDIT: dataset {dataset}')
     # print(f'EDIT: dataset {res}')
 
     if res == None:
         response.status_code = status.HTTP_400_BAD_REQUEST
 
-    # print(res.replace('\n', '#').replace('\r', '@'))
     res = res.replace('\r\n', '\n')
 
     f = FileMngr('csv')
@@ -120,8 +123,8 @@ def get_statistics(body: Dataset):
     # print(csvstr)
 
     dialect = get_csv_dialect(csvstr)
-
-    stats: str = StatisticsMiddleware(csvstr, dialect.delimiter, dialect.quotechar).statistics_json()
+    df = read_str_to_df(csvstr, dialect.delimiter, dialect.quotechar)
+    stats, _ = StatisticsMiddleware(df).get_stat()
 
     # print(stats)
 
@@ -183,13 +186,13 @@ def update_with_default_nn(body: NNCreate, response: Response):
         'reg' :             'L1',
         'regRate' :         0.1,
         'batchSize' :       1,
-        'trainSplit' :      0.8,
-        'valSplit' :        0.2
+        'trainSplit' :      0.7,
+        'valSplit' :        0.1
     }
 
     fc = FileMngr('json')
     fc.create(json_encode(def_conf))
-    # print(f'PUT CONF: {httpc.put(body.conf, fc.path())}')
+    httpc.put(body.conf, fc.path())
     fc.delete()
 
 

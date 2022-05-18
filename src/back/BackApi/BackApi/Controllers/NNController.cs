@@ -62,6 +62,29 @@ namespace BackApi.Controllers
                 if (HttpContext.WebSockets.IsWebSocketRequest)
                 {
                     var webSocketfront = await HttpContext.WebSockets.AcceptWebSocketAsync();
+                    //proveravanje jwt iz poruke
+                    var buffer = new byte[1024 * 4];
+                    var fromFrontconf = await webSocketfront.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                    var jwt = Encoding.UTF8.GetString(buffer, 0, fromFrontconf.Count);
+
+                    int userid = jwtsrv.GetUserIdWs(jwt);
+                    if (userid == -1)
+                    {
+                        await webSocketfront.CloseAsync(WebSocketCloseStatus.NormalClosure, "Client Disconnect", CancellationToken.None);
+                        return Unauthorized();
+                    }
+                    if (!projsrv.projectExists(id))
+                    {
+                        await webSocketfront.CloseAsync(WebSocketCloseStatus.NormalClosure, "Client Disconnect", CancellationToken.None);
+                        return NotFound();
+                    }
+                    if (!projsrv.projectOwnership(userid, id))
+                    {
+                        await webSocketfront.CloseAsync(WebSocketCloseStatus.NormalClosure, "Client Disconnect", CancellationToken.None);
+                        return Forbid();
+                    }
+
+
                     wsq.AddToDict(nnid, webSocketfront);
                     var webSocketMl = new ClientWebSocket();
                     await webSocketMl.ConnectAsync(new Uri(Urls.mlWs + "/api/user" + 6 + "/nn" + nnid + "/train"), CancellationToken.None);

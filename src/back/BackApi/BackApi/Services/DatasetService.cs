@@ -167,7 +167,7 @@ namespace BackApi.Services
         public Boolean Delete(int projid)
         {
             List<Dataset> lista= kontext.Datasets.Where(x=> x.ProjectId == projid).ToList();
-            var ifempty = lista[0];
+            var ifempty = lista.FirstOrDefault();
             if (ifempty == null)
                 return false;
             var initpath = storageService.InitialFilePath(projid);

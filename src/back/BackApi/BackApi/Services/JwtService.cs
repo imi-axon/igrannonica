@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using BackApi.Entities;
 using Microsoft.AspNetCore.Http;
 
@@ -7,6 +8,7 @@ namespace BackApi.Services
     public interface IJwtService
     {
         public int GetUserId();
+        public int GetUserIdWs(string token);
     }
     public class JwtService: IJwtService
     {
@@ -30,6 +32,18 @@ namespace BackApi.Services
                     rez = -1;
             }
             return rez;
+        }
+        public int GetUserIdWs(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jwt = handler.ReadJwtToken(token);
+            var strid = jwt.Claims.First(claim => claim.Type == "id").Value;
+            int id = int.Parse(strid);
+            var dbid = kontext.Users.Find(id);
+            if (dbid == null)
+                id = -1;
+
+            return id;
         }
     }
 }
