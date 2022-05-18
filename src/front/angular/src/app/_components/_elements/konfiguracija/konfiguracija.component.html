@@ -64,8 +64,20 @@
     </div>
     
     <div class="opcijaContainer">
-        <label for="batchSlider" class="form-label">Batch size: <span id="batchSizeNum">{{neuralNetwork.conf.batchSize}}</span></label>
-        <input type="range" class="form-range" id="batchSlider" min="0" max="30" step="1" [value]="neuralNetwork.conf.batchSize" (input)="ChangeBatchSize($event)">
+        <label for="BatchSize" class="form-label">Batch size</label>
+        <div class="select">
+            <select id="BatchSize" (change)="ChangeBatchSize($event)">
+                <option [selected]="neuralNetwork.conf.batchSize == 1">1</option>
+                <option [selected]="neuralNetwork.conf.batchSize == 2">2</option>
+                <option [selected]="neuralNetwork.conf.batchSize == 4">4</option>
+                <option [selected]="neuralNetwork.conf.batchSize == 8">8</option>
+                <option [selected]="neuralNetwork.conf.batchSize == 16">16</option>
+                <option [selected]="neuralNetwork.conf.batchSize == 32">32</option>
+                <option [selected]="neuralNetwork.conf.batchSize == 64">64</option>
+                <option [selected]="neuralNetwork.conf.batchSize == 128">128</option>
+                <option [selected]="neuralNetwork.conf.batchSize == 256">256</option>
+            </select>
+        </div>
     </div>
     
     <div></div>
@@ -84,76 +96,8 @@
     
     <!-- <div class="opcijaContainer" *ngIf="neuralNetwork.conf.splitType != 'random'"> -->
     <div class="opcijaContainer">
-        <label for="TrainSplit" class="form-label">Train / Validation split: <span id="TrainSplit">{{neuralNetwork.conf.trainSplit | number : '.2-2'}}</span></label>
-        <input [disabled]="neuralNetwork.conf.splitType == 'random'" type="range" class="form-range" id="batchSlider" min="0" max="1" step="0.1" [value]="neuralNetwork.conf.trainSplit" (input)="ChangeTrainValidationSplit($event)">
+        <!-- <label for="TrainSplit" class="form-label">Train / Validation split: <span id="TrainSplit">{{neuralNetwork.conf.trainSplit | number : '.2-2'}}</span></label> -->
+        <data-split-slider #dataSplitSlider (OnChange)="ChangeTrainValidationSplit($event)"></data-split-slider>
     </div>
         
 </div>
-    
-<!--
-<div class="row mt-5 ml-0">
-    <div id="input/output" class="col-11 mt-3">
-        <div class="btn-group">
-            <button class="btn btn-primary" (click)="prikaziInput()" [disabled]="gotovoInputi">Izaberi
-                input-e</button>
-            <button class="btn btn-primary" (click)="prikaziOutput()"
-                [disabled]="!gotovoInputi || gotovoOutputi">Izaberi output-e</button>
-        </div>
-        
-        
-        
-        <div class="boxovi">
-
-            <div class="row checkBoxovi mt-3 border rounded mx-auto" *ngIf="prikaziInpute">
-                <div class="col-9">
-                    <div class="my-3" *ngFor="let c of columns ; index as i">
-
-                        <input class="box" type="checkbox" id="input{{i}}" (click)="inputClick($event)" [value]="c">
-                        {{c}}
-
-                    </div>
-                </div>
-                <br>
-                <div class="col-2">
-                    <button class="potvrdi btn btn-sm btn-primary mt-2 sticky-top ml-0 " (click)="potvrdiInp()"
-                        [disabled]="inputs.length==0">Potvrdi</button>
-                </div>
-            </div>
-
-
-            <div class="row checkBoxovi mt-3 border rounded mx-auto" *ngIf="prikaziOutpute">
-                <div class="col-9">
-                    <div class="my-3" *ngFor="let c of slobodneKolone ; index as i">
-
-                        <input class="box" type="checkbox" id="output{{i}}" (click)="outputClick($event)"
-                            [value]="c">
-                        {{c}}
-
-                    </div>
-                </div>
-                <br>
-                <div class="col-2">
-                    <button class=" potvrdi btn btn-sm btn-primary sticky-top " (click)="potvrdiOut()"
-                        [disabled]="outputs.length==0">Potvrdi</button>
-                </div>
-            </div>
-            <div class="">
-                
-            <div *ngIf="gotovoInputi">
-                Izabrani inputi:
-                <div class="inout d-inline" *ngFor="let i of inputs">
-                    {{i}}
-                </div>
-            </div>
-
-            <div *ngIf="gotovoOutputi">
-                Izabrani outputi:
-                <div *ngFor="let o of outputs" class="inout d-inline">
-                    {{o}}
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
--->

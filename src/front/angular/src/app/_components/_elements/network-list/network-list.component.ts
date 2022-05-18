@@ -107,8 +107,8 @@ export class NetworkListComponent implements OnInit {
     this.filtriraneMreze.sort((a,b)=>b.id-a.id);
   }
 
-  onClick(id:any){
-    this.router.navigate(['train/'+this.projectID+'/nn/'+id]);
+  OpenNetwork(id:any){
+    this.router.navigate([id],{relativeTo:this.activatedRoute});
   }
 
 
