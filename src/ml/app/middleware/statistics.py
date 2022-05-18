@@ -113,9 +113,9 @@ from .util import NpEncoder
 
 class StatisticsMiddleware:
 
-    def __init__(self,csvString, sep, quoteChar):
+    def __init__(self,df):
 
-        self.dataframe = read_str_to_df(csvString, sep, quoteChar)
+        self.dataframe = df
         self.stat = StatisticsService(self.dataframe)        
         self.dictionary = dictionary()
 
@@ -201,7 +201,7 @@ class StatisticsMiddleware:
         return lista
         
 
-    def statistics_json(self):
+    def get_stat(self):
         self.dictionary.add("cormat",self.add_cormat())
         self.dictionary.add("colstats", self.add_colstats())
         self.dictionary.add("rownulls", self.add_rownulls())
@@ -212,7 +212,7 @@ class StatisticsMiddleware:
 
         json_object = json_object.replace('NaN','"nan"')
 
-        return json_object
+        return json_object, self.dictionary
 
 
 #sm = StatisticsMiddleware(csvString)

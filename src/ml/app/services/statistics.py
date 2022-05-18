@@ -69,6 +69,8 @@ class StatisticsService:
         stat_categorical = df_categorical_columns.describe()
         return stat_categorical
 
+    def get_dataframe(self):
+        return self.dataset
 
 
 

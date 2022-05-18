@@ -11,8 +11,8 @@ from .util import read_str_to_df
 class DataEditorService:
 
     #metadataDict -> recnik -> <class 'dict'>
-    def __init__(self, string, sep, quoteChar, metadataDict):
-        self.dataset = read_str_to_df(string,sep,quoteChar)
+    def __init__(self, df, sep, quoteChar, metadataDict):
+        self.dataset = df
         self.metadataDict = metadataDict
         self.sep = sep
         self.quoteChar = quoteChar
@@ -22,7 +22,7 @@ class DataEditorService:
     def delete_columns(self, columns):
         for column in columns:
             self.dataset.drop(column, axis='columns', inplace=True)
-            del self.metadataDict["fajl"]["columns"][column]
+            del self.metadataDict["columns"][column]
     
     #delete_rows : brise redove iz dataset-a koji za prosledjene kolone imaju null vrednosti
     #columns : lista stringova (naziva kolona)
@@ -94,7 +94,7 @@ class DataEditorService:
                 dict_encoding = {"type" : "label", "onehot" : "None", "label" : dict_valueMappings}
                 dict_column = {"type" : "enc", "trainReady" : True, "encoding" : dict_encoding}
                 new_column = column + '_code'
-                self.metadataDict["fajl"]["columns"].update({new_column : dict_column})
+                self.metadataDict["columns"].update({new_column : dict_column})
         self.delete_columns(del_columns)
 
     #enkodiranje kategorijskih kolona
@@ -121,9 +121,9 @@ class DataEditorService:
                     dict_encoding = {"type" : "onehot", "onehot" : dict_oneHot, "label" : "None"}
                     dict_column = {"type" : "enc", "trainReady" : True, "encoding" : dict_encoding}
                     new_column = nove_kolone[i]
-                    self.metadataDict["fajl"]["columns"].update({new_column : dict_column})
+                    self.metadataDict["columns"].update({new_column : dict_column})
 
-                del self.metadataDict["fajl"]["columns"][column]
+                del self.metadataDict["columns"][column]
 
         
         return self.dataset
@@ -133,6 +133,9 @@ class DataEditorService:
 
     def get_metadataDict(self):
         return self.metadataDict
+
+    def get_dataframe(self):
+        return self.dataset
 
 
 
