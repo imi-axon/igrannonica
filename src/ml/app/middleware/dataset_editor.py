@@ -27,10 +27,10 @@ class DatasetEditor:
         return sel
 
     
-    def execute(actions: list, data: str, sep, qc):
+    def execute(actions: list, data: str, sep, qc, metadata):
         actions = DatasetEditor.sort_actions([a for a in actions])
 
-        service = DataEditorService(data, sep, qc)
+        service = DataEditorService(data, sep, qc, metadata)
 
         for action in actions:
             act = action['action']
