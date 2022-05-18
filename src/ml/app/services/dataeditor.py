@@ -134,6 +134,9 @@ class DataEditorService:
     def get_metadataDict(self):
         return self.metadataDict
 
+    def get_dataframe(self):
+        return self.dataset
+
 
 
 
