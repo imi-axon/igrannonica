@@ -125,7 +125,7 @@ namespace BackApi.Controllers
             Boolean rez = service.EditProject(projid,req,userid);
             if (rez)
                 return Ok();
-            else return NotFound("user");
+            else return BadRequest("name");
         }
 
         [HttpPost("{projid}/comment/{parentcommentid}")]
