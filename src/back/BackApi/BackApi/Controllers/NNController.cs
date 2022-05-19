@@ -66,7 +66,7 @@ namespace BackApi.Controllers
                     var buffer = new byte[1024 * 4];
                     var fromFrontconf = await webSocketfront.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                     var jwt = Encoding.UTF8.GetString(buffer, 0, fromFrontconf.Count);
-
+                    jwt = jwt.Replace("\"", "");
                     int userid = jwtsrv.GetUserIdWs(jwt);
                     if (userid == -1)
                     {
@@ -87,7 +87,7 @@ namespace BackApi.Controllers
 
                     wsq.AddToDict(nnid, webSocketfront);
                     var webSocketMl = new ClientWebSocket();
-                    await webSocketMl.ConnectAsync(new Uri(Urls.mlWs + "/api/user" + 6 + "/nn" + nnid + "/train"), CancellationToken.None);
+                    await webSocketMl.ConnectAsync(new Uri(Urls.mlWs + "/api/user" + userid + "/nn" + nnid + "/train"), CancellationToken.None);
                     try
                     {
                         var finished = await nnsrv.MlTraining(webSocketfront, packet, webSocketMl);

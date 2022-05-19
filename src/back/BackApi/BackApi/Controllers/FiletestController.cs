@@ -148,15 +148,17 @@ namespace BackApi.Controllers
             return File(bytes, "text/csv", Path.GetFileName(pagepath));
         }
 
-        [HttpGet("xd")]//file response - save from stream testing 
-        public async Task<ActionResult> FileRespTest()
+        [HttpPost("xd")]//file response - save from stream testing - live testing controller
+        public async Task<ActionResult> FileRespTest([FromBody] string token)
         {
-            HttpClient client = new HttpClient();
+            var uid = jwtsrv.GetUserIdWs(token);
+            
+            /*HttpClient client = new HttpClient();
             var resp = await client.GetAsync("http://localhost:10016/api/files/Storage/proj2/data/data17.csv");
             var str= await resp.Content.ReadAsStreamAsync();
             var path = @"Storage/xddd.csv";
-            storsrv.SaveStream(path,str);
-            return Ok();
+            storsrv.SaveStream(path,str);*/
+            return Ok(uid);
         }
 
     }
