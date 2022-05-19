@@ -265,9 +265,16 @@ class TrainingService():
         nms = self.model.metrics_names
         rez = self.evaluate_model(self.model)
 
+        # Spajanje liste naziva metrika (loss) i liste sa performansama modela u recnik
         results = {}
         for i in range(len(rez)):
             results[nms[i]] = rez[i]
+
+        # Izvlacenje informacije o loss-u modela
+        loss_metric = self.REGRESSION_LOSS
+        if(self.TYPE=="CLASSIFICATION"):
+            loss_metric = self.CLASSIFICATION_LOSS
+            
 
         return results
 

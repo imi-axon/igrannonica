@@ -372,10 +372,12 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
                     pack = b'[' + pack[:-1] + b']'
                     await ws.send_text(pack.decode())   # ws >>>>
 
-                trainrez_buff.extend(burst_buff)    # cuvanje rezultata treniranja
-                if finished:                        # ako je kraj sacuvati i rezultate testiranja (cuva se na pocetku bafera)
+                if finished:                            # ako je kraj sacuvati i rezultate testiranja (cuva se na pocetku bafera)
+                    trainrez_buff.extend(burst_buff[:-2])    # cuvanje rezultata treniranja (bez "end" i testrez)
                     b = burst_buff[-1]
                     trainrez_buff = [b] + trainrez_buff
+                else:
+                    trainrez_buff.extend(burst_buff)    # cuvanje rezultata treniranja (ceo buffer ukoliko su u njemu samo epohe)
                 # -- BURST Finished --
 
                 # print(f'>>>> send bytes: {b}')
