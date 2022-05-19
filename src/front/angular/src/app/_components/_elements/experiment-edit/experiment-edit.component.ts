@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { LocalChange } from 'src/app/_utilities/_data-types/models';
 import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
 import { StatisticsService } from 'src/app/_utilities/_services/statistics.service';
 import { CorrelationTableComponent } from '../correlation-table/correlation-table.component';
@@ -42,6 +43,16 @@ export class ExperimentEditComponent implements OnInit {
   
   // KRAJ KOMPONENTI ==========================================
   
+  private columns: any;
+  
+  public globalChanges: LocalChange[] = [];
+  public localChanges: LocalChange[] = [];
+  
+  
+  public noColumnsSelected = true;
+  public numericalSelected = false;
+  public categoricalSelected = false;
+  public encodedSelected = false;
   
   private GetProjectId(): number{
     let p = this.activatedRoute.parent?.snapshot.paramMap.get("ProjectId");
@@ -51,8 +62,23 @@ export class ExperimentEditComponent implements OnInit {
   }
   
   ngOnInit(): void {
-    this.datasetService.GetDatasetPage(this.GetProjectId(), false, 1, 20, this, this.handleDatasetGetSuccess)
-    this.statisticsService.GetStatistics(this.GetProjectId(), false, this, this.handleStatisticsGetSuccess);
+    this.UpdateAllMain(this);
+  }
+  
+  private UpdateChanges(self: ExperimentEditComponent){
+    self.datasetService.GetChanges(self.GetProjectId(), true, self, self.handleGetGlobalChangesSuccess, () => {}, () => {}, self.handleGetGlobalChangesEmpty);
+    self.datasetService.GetChanges(self.GetProjectId(), false, self, self.handleGetLocalChangesSuccess, () => {}, () => {}, self.handleGetLocalChangesEmpty);
+  }
+  
+  private UpdateAllMain(self: ExperimentEditComponent){
+    self.datasetService.GetDatasetPage(self.GetProjectId(), true, 1, 20, self, self.handleDatasetGetSuccess);
+    self.UpdateChanges(self);
+    self.statisticsService.GetStatistics(self.GetProjectId(), true, self, self.handleStatisticsGetSuccess);
+  }
+  private UpdateAllNotMain(self: ExperimentEditComponent){
+    self.datasetService.GetDatasetPage(self.GetProjectId(), false, 1, 20, self, self.handleDatasetGetSuccess);
+    self.UpdateChanges(self);
+    self.statisticsService.GetStatistics(self.GetProjectId(), false, self, self.handleStatisticsGetSuccess);
   }
   
   
@@ -61,9 +87,45 @@ export class ExperimentEditComponent implements OnInit {
   
   
   
-  
-  
   // EDIT OPCIJE ============================================================================================
+  
+  public CheckNoColumns(){
+    if(this.datasetEditTable.selectedColumns.length == 0)
+      this.noColumnsSelected = true;
+    else
+      this.noColumnsSelected = false;
+  }
+  
+  public CheckNumericalSelected(){
+    let selected = this.datasetEditTable.selectedColumns;
+    for(let i = 0; i < selected.length; i++)
+      if(this.columns[selected[i]].type == 'num'){
+        this.numericalSelected = true;
+        return;
+      }
+      this.numericalSelected = false;
+  }
+  
+  public CheckCategoricalSelected(){
+    let selected = this.datasetEditTable.selectedColumns;
+    for(let i = 0; i < selected.length; i++)
+      if(this.columns[selected[i]].type == 'cat'){
+        this.categoricalSelected = true;
+        return;
+      }
+    this.categoricalSelected = false;
+  }
+  
+  public CheckEncodedSelected(){
+    let selected = this.datasetEditTable.selectedColumns;
+    for(let i = 0; i < selected.length; i++)
+      if(this.columns[selected[i]].encoding != null){
+        this.encodedSelected = true;
+        return;
+      }
+    this.encodedSelected = false;
+  }
+  
   
   // LISTA IZABRANIH AKCIJA U JSON
   private getActionsJSON(selectedColumns: string[], selectedAction: string) : any{
@@ -171,18 +233,60 @@ export class ExperimentEditComponent implements OnInit {
   
   
   // DOWNLOAD
-  public DownloadCurrentChanges(){
+  public Download(){
     
   }
   
   // AFTER EDIT
   private successfulEditCallback(self: ExperimentEditComponent, response: any){
-    self.statisticsService.GetStatistics(self.GetProjectId(), false, self, self.handleStatisticsGetSuccess);
+    /*self.statisticsService.GetStatistics(self.GetProjectId(), false, self, self.handleStatisticsGetSuccess);
+    self.datasetService.GetChanges(self.GetProjectId(), false, self, self.handleGetLocalChangesSuccess, () => {}, () => {}, self.handleGetLocalChangesEmpty);*/
+    self.UpdateAllNotMain(self);
     self.datasetEditTable.DeselectAllSelectedColumns();
     self.ChangeDatasetPage(self.pageControls.currentPage);
   }
   
   
+  
+  // CHANGES ================================================================================================
+  
+  // LOCAL
+  private handleGetLocalChangesSuccess(self: ExperimentEditComponent, response: any){
+    self.localChanges = response;
+  }
+   private handleGetLocalChangesEmpty(self: ExperimentEditComponent){
+    self.localChanges = [];
+  }
+  
+  // GLOBAL
+  private handleGetGlobalChangesSuccess(self: ExperimentEditComponent, response: any){
+    self.globalChanges = response;
+  }
+   private handleGetGlobalChangesEmpty(self: ExperimentEditComponent){
+    self.globalChanges = [];
+  }
+  
+  
+  // REVERT LINE
+  public RevertLine(lineNumber: number){
+    if(lineNumber == 0)
+      this.datasetService.RevertInit(this.GetProjectId(), this, this.UpdateAllMain);
+    else
+      this.datasetService.RevertLine(this.GetProjectId(), lineNumber, this, this.UpdateAllMain);
+  }
+  
+  // SAVE
+  public SaveChanges(){
+    this.datasetService.SaveChanges(this.GetProjectId(), this, this.UpdateChanges);
+  }
+  
+  // Discard
+  public DiscardChanges(){
+    this.datasetService.DiscardChanges(this.GetProjectId(), this, this.UpdateAllMain);
+  }
+  
+  
+  // KRAJ CHANGES ===========================================================================================
   
   
   // DATASET ================================================================================================
@@ -205,13 +309,15 @@ export class ExperimentEditComponent implements OnInit {
   // STATISTIKA =============================================================================================
   
   private handleStatisticsGetSuccess(self: any, metadata: any){
+    console.log(metadata);
     let correlationMatrix = self.parseCorrelationData(metadata.statistics.cormat.cols, metadata.statistics.cormat.cors);
     self.correlationComponent.LoadCorrelationData(metadata.statistics.cormat.cols, correlationMatrix);
     
     self.numericalColumns.LoadStatisticsData(metadata.statistics.colstats);
     self.categoricalColumns.LoadStatisticsData(metadata.statistics.categorical_colstats);
     
-    console.log(metadata);
+    self.columns = metadata.columns;
+    
   }
   
   

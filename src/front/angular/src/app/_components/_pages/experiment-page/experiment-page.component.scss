@@ -12,7 +12,7 @@
     
     
     .titleInput{
-        width: 50%;
+        width: fit-content;
         margin: 0px;
         font-size: 28px;
         background: transparent;
@@ -46,7 +46,7 @@
     .selected-card{
         border-bottom: solid 3px var(--ExpPageSelectedCardBorder);
         padding-bottom: 0px;
-        font-weight: 600;
+        font-weight: 500;
         cursor: default;
         
         &:hover{

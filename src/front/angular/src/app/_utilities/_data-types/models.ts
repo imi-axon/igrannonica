@@ -234,6 +234,30 @@ export class OwnerInfo{
 /* PROJEKAT */
 
 
+
+
+
+
+/* DATASET */
+
+export class LocalChange{
+    public action: string = "";
+    public column: string = "";
+    
+    constructor(){
+        this.action = "";
+        this.column = "";
+    }
+}
+
+
+/* DATASET */
+
+
+
+
+
+
 /* MREZA */
 
 export class NewNN{
@@ -252,12 +276,6 @@ export class NN{
     }
 }
 
-
-
-
-
-
-/* MREZA */
 
 export class NeuralNetwork{
     nn: Network = new Network();

@@ -8,7 +8,6 @@ import { HeaderUtil } from '../_helpers/http-util';
   providedIn: 'root'
 })
 export class DatasetApiService {
-  
   constructor(private http:HttpClient) { }
   
   // POST DATASET api/projects/{id}/dataset
@@ -75,7 +74,8 @@ export class DatasetApiService {
   // api/projects/{id}/dataset/save
   public SaveDataset(project_id: number): Observable<HttpResponse<any>>{
     return this.http.put<any>(
-      apiProperties.url + "/api/projects/" + project_id + "/dataset/save", {},
+      apiProperties.url + "/api/projects/" + project_id + "/dataset/save", 
+      {},
       {
         observe: 'response',
         headers: HeaderUtil.jwtOnlyHeaders()
@@ -96,5 +96,58 @@ export class DatasetApiService {
     );
   }
   
+  GetChanges(project_id: number, main: boolean) {
+    return this.http.get(
+      apiProperties.url + '/api/projects/' + project_id + '/dataset/' + main + '/changes',
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    )
+  }
+  
+  RevertLine(project_id: number, lineNumber: number) {
+    return this.http.put<any>(
+      apiProperties.url + '/api/projects/' + project_id + '/dataset/revert/line/' + lineNumber, 
+      {},
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    )
+  }
+  
+  SaveChanges(project_id: number) {
+    return this.http.put<any>(
+      apiProperties.url + '/api/projects/' + project_id + '/dataset/save', 
+      {},
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    )
+  }
+  
+  DiscardChanges(project_id: number) {
+    return this.http.put<any>(
+      apiProperties.url + '/api/projects/' + project_id + '/dataset/discard', 
+      {},
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    )
+  }
+  
+  RevertInit(project_id: number) {
+    return this.http.put<any>(
+      apiProperties.url + '/api/projects/' + project_id + '/dataset/revert', 
+      {},
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    )
+  }
   
 }

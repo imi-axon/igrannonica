@@ -135,6 +135,17 @@
                                 }
                                 
                             }
+                            
+                            .disabled{
+                                color: #FFFFFF55;
+                                background-color: #6c7c93;
+                                cursor: default;
+                                
+                                &:hover{
+                                    color: #FFFFFF55;
+                                    background-color: #6c7c93;
+                                }
+                            }
                         }
                         
                         @keyframes submenuSlide {
@@ -183,9 +194,9 @@
             
             display: grid;
             row-gap: 2%;
-            grid-template-rows: 30% 68%;
+            grid-template-rows: 46% 52%;
             
-            #savesContainer{
+            #globalChangesContainer{
                 background-color: var(--ExpOverviewDatasetContainer);
                 backdrop-filter: blur(5px); 
                 border: solid 1px #0091ff;
@@ -198,102 +209,13 @@
                     font-weight: 400;
                 }
                 
-                #saveDisplay{
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    width: 100%;
-                    height: 36px;
-                    border: solid 1px #275fb4;
-                    line-height: 36px;
-                    padding: 0px 18px 0px 15px;
-                    font-size: 16px;
-                    color: #000000;
-                    font-weight: 300;
-                    cursor: pointer;
-                    
-                    svg{
-                        .dot1, .dot2{
-                            transition: 0.15s ease;
-                        }
-                    }
-                    
-                    &:hover{
-                        svg{
-                            .dot1{
-                                transition: 0.15s ease;
-                                transform: translateY(-2px);
-                            }
-                            .dot2{
-                                transition: 0.15s ease;
-                                transform: translateY(2px);
-                            }
-                        }
-                    }
-                    
-                }
-                
-                p{
-                    color: var(--tableDescription);
-                    margin: 6px 0px 16px 0px !important;
-                    font-size: 12px;
-                }
-                
-                .buttonPair{
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    width: 100%;
-                    
-                    button{
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-                        width: 150px;
-                        height: 38px;
-                        text-align: left;
-                        padding: 0px 12px 0px 10px;
-                        border: none;
-                        background-color: #2866A0;
-                        color: #FFFFFFDD;
-                        
-                        svg path{
-                            fill: #FFFFFFDD;
-                        }
-                        
-                        &:hover{
-                            background-color: #15518a;
-                            color: #FFFFFF;
-                            
-                            svg path{
-                                fill: #FFFFFF;
-                            }
-                        }
-                    }
-                }
-                
-            }
-            
-            
-            #localChangesContainer{
-                background-color: var(--ExpOverviewDatasetContainer);
-                backdrop-filter: blur(5px); 
-                border: solid 1px #0091ff;
-                padding: 25px;
-                
-                h3{
-                    font-size: 20px;
-                    color: var(--tableDescription);
-                    margin-bottom: 15px;
-                    font-weight: 400;
-                }
-                
-                #localChangesDisplay{
+                .changesDisplay{
                     width: 100%;
                     height: calc(100% - 40px);
                     overflow-y: auto;
                     
-                    .localChange{
+                    .change{
+                        background-color: var(--ExpOverviewDatasetContainer);
                         width: 100%;
                         height: 34px;
                         display: flex;
@@ -340,6 +262,154 @@
                             }
                         }
                         
+                    }
+                }
+                
+                /*
+                #saveDisplay{
+                    background-color: var(--ExpOverviewDatasetContainer);
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    width: 100%;
+                    height: 36px;
+                    border: solid 1px #275fb4;
+                    line-height: 36px;
+                    padding: 0px 18px 0px 15px;
+                    font-size: 16px;
+                    color: #000000;
+                    font-weight: 300;
+                    cursor: pointer;
+                    
+                    svg{
+                        .dot1, .dot2{
+                            transition: 0.15s ease;
+                        }
+                    }
+                    
+                    &:hover{
+                        svg{
+                            .dot1{
+                                transition: 0.15s ease;
+                                transform: translateY(-2px);
+                            }
+                            .dot2{
+                                transition: 0.15s ease;
+                                transform: translateY(2px);
+                            }
+                        }
+                    }
+                    
+                }
+                */
+                
+                p{
+                    color: var(--tableDescription);
+                    margin: 6px 0px 16px 0px !important;
+                    font-size: 12px;
+                }
+                
+            }
+            
+            
+            #localChangesContainer{
+                background-color: var(--ExpOverviewDatasetContainer);
+                backdrop-filter: blur(5px); 
+                border: solid 1px #0091ff;
+                padding: 25px;
+                
+                h3{
+                    font-size: 20px;
+                    color: var(--tableDescription);
+                    margin-bottom: 15px;
+                    font-weight: 400;
+                }
+                
+                .changesDisplay{
+                    width: 100%;
+                    height: calc(100% - 75px);
+                    overflow-y: auto;
+                    
+                    .change{
+                        background-color: var(--ExpOverviewDatasetContainer);
+                        border: solid 1px #2C5D96;
+                        width: 100%;
+                        height: 34px;
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        justify-content: space-evenly;
+                        margin-bottom: 6px;
+                        
+                        .action{
+                            border-right: solid 1px #2C5D96;
+                            width: 42%;
+                            height: 100%;
+                            font-size: 12px;
+                            line-height: 34px;
+                            padding-left: 8px;
+                        }
+                        
+                        .affectedColumns{
+                            width: 43%;
+                            height: 100%;
+                            font-size: 12px;
+                            line-height: 34px;
+                            padding-left: 8px;
+                        }
+                        
+                        button{
+                            background-color: #2866A0;
+                            border: none;
+                            width: 15%;
+                            height: 100%;
+                            
+                            svg path{
+                                fill: #FFFFFFDD;
+                            }
+                            
+                            &:hover{
+                                background-color: #15518a;
+                                
+                                svg path{
+                                    fill: #FFFFFF;
+                                }
+                            }
+                        }
+                        
+                    }
+                }
+                
+                .buttonPair{
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    width: 100%;
+                    
+                    button{
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        width: 150px;
+                        height: 38px;
+                        text-align: left;
+                        padding: 0px 12px 0px 10px;
+                        border: none;
+                        background-color: #2866A0;
+                        color: #FFFFFFDD;
+                        
+                        svg path{
+                            fill: #FFFFFFDD;
+                        }
+                        
+                        &:hover{
+                            background-color: #15518a;
+                            color: #FFFFFF;
+                            
+                            svg path{
+                                fill: #FFFFFF;
+                            }
+                        }
                     }
                 }
                 

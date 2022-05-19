@@ -11,6 +11,8 @@ export class DatasetEditTableComponent implements OnInit {
   
   @Output() LoadedEvent = new EventEmitter<null>();
   
+  @Output() ColumnSelected = new EventEmitter<null>();
+  
   dataset: any;
   columns: string[];
   
@@ -28,6 +30,7 @@ export class DatasetEditTableComponent implements OnInit {
   // SELECTING
   public DeselectAllSelectedColumns(){
     this.selectedColumns = [];
+    this.ColumnSelected.emit();
   }
   
   public SelectDeselectAllColumns(){
@@ -37,6 +40,7 @@ export class DatasetEditTableComponent implements OnInit {
       this.DeselectAllSelectedColumns();
       
     this.selectAll = !this.selectAll;
+    this.ColumnSelected.emit();
   }
   
   public SelectDeselectColumn(column: string){
@@ -46,6 +50,7 @@ export class DatasetEditTableComponent implements OnInit {
       this.selectedColumns.push(column);
     
     console.log(this.selectedColumns)
+    this.ColumnSelected.emit();
   }
   
   
