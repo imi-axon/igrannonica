@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NeuralNetwork, Project } from 'src/app/_utilities/_data-types/models';
 import { TrainingApiService } from 'src/app/_utilities/_middleware/training-api.service';
@@ -36,6 +36,8 @@ export class ExperimentNetworkComponent implements OnInit {
   
   @Input() public project: Project;
   
+  @Output() NetworkUpdated: EventEmitter<any> = new EventEmitter<any>();
+  
   @ViewChild("networkDisplay")
   public display: ElementRef;
   
@@ -49,6 +51,7 @@ export class ExperimentNetworkComponent implements OnInit {
   private grafik: ChartTrainingComponent;
   
   // NEURAL NETWORK
+  public networkName: string = "";
   public neuralNetwork : NeuralNetwork = new NeuralNetwork();
   public runningTraining: Boolean = false;
   
@@ -58,22 +61,19 @@ export class ExperimentNetworkComponent implements OnInit {
   
 
   ngOnInit(): void {
-    this.networkService.GetNetwork(this.getProjectId(), this.getNetworkId(), this, this.successGetNetworkCallback)
+    this.networkService.GetNetwork(this.getProjectId(), this.getNetworkId(), this, this.successGetNetworkCallback);
   }
   
   private successGetNetworkCallback(self: any, response : any){
     //self.unusedColumns = Object.keys(JSON.parse(JSON.parse(response.dataset).dataset)[0])
+    self.networkName = response.name;
     self.neuralNetwork = new NeuralNetwork();
     self.neuralNetwork.conf = JSON.parse(response.conf);
     self.neuralNetwork.nn = JSON.parse(JSON.parse(response.nn).nn);
     self.networkComponent.Refresh();
     console.log(self.neuralNetwork)
-  }
-  
-  
-  // TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP
-  public log(){
-    console.log(this.neuralNetwork);
+    
+    self.NetworkUpdated.emit(self.networkName);
   }
   
   

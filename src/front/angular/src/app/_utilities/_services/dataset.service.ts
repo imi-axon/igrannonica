@@ -152,8 +152,148 @@ export class DatasetService {
     )
   }
 
+  GetChanges(project_id: number, main: boolean, self?: any, successCallback?: Function, unauthorizedCallback?: Function, forbiddenCallback?: Function, notFoundCallback?: Function){
+    this.datasetAPI.GetChanges(project_id, main).subscribe({
+      
+        next: function(response: HttpResponse<any>) {
+          if(self && successCallback)
+            successCallback(self, response.body);
+        },
+        error: function(response: HttpResponse<any>) {
+          
+          if (response.status == HttpStatusCode.Unauthorized)
+            if (self && unauthorizedCallback)
+              unauthorizedCallback(self, response.body.message);
 
-   
+          if (response.status == HttpStatusCode.Forbidden)
+            if (self && forbiddenCallback)
+              forbiddenCallback(self, response.body.message);
+
+          if (response.status == HttpStatusCode.NotFound)
+            if (self && notFoundCallback)
+              notFoundCallback(self, response.statusText);
+              
+        }
+      }
+    )
+  }
+  
+  RevertLine(project_id: number, lineNumber: number, self?: any, successCallback?: Function, unauthorizedCallback?: Function, badRequestCallback?: Function, forbiddenCallback?: Function, notFoundCallback?: Function){
+    this.datasetAPI.RevertLine(project_id, lineNumber).subscribe(
+      {
+        next: function(response: HttpResponse<any>) {
+          if(self && successCallback)
+            successCallback(self);
+        },
+        error: function(response: HttpResponse<any>) {
+          
+          if (response.status == HttpStatusCode.Unauthorized)
+            if (self && unauthorizedCallback)
+              unauthorizedCallback(self, response.body.message);
+
+          if (response.status == HttpStatusCode.BadRequest)
+            if (self && badRequestCallback)
+              badRequestCallback(self, response.body.message);
+              
+          if (response.status == HttpStatusCode.Forbidden)
+            if (self && forbiddenCallback)
+              forbiddenCallback(self, response.body.message);
+
+          if (response.status == HttpStatusCode.NotFound)
+            if (self && notFoundCallback)
+              notFoundCallback(self, response.statusText);
+              
+        }
+      }
+    );
+  }
+  
+  SaveChanges(project_id: number, self?: any, successCallback?: Function, unauthorizedCallback?: Function, badRequestCallback?: Function, forbiddenCallback?: Function, notFoundCallback?: Function){
+    this.datasetAPI.SaveChanges(project_id).subscribe(
+      {
+        next: function(response: HttpResponse<any>) {
+          if(self && successCallback)
+            successCallback(self);
+        },
+        error: function(response: HttpResponse<any>) {
+          
+          if (response.status == HttpStatusCode.Unauthorized)
+            if (self && unauthorizedCallback)
+              unauthorizedCallback(self, response.body.message);
+
+          if (response.status == HttpStatusCode.BadRequest)
+            if (self && badRequestCallback)
+              badRequestCallback(self, response.body.message);
+              
+          if (response.status == HttpStatusCode.Forbidden)
+            if (self && forbiddenCallback)
+              forbiddenCallback(self, response.body.message);
+
+          if (response.status == HttpStatusCode.NotFound)
+            if (self && notFoundCallback)
+              notFoundCallback(self, response.statusText);
+        }
+      }
+    );
+  }
+  
+  DiscardChanges(project_id: number, self?: any, successCallback?: Function, unauthorizedCallback?: Function, badRequestCallback?: Function, forbiddenCallback?: Function, notFoundCallback?: Function){
+    this.datasetAPI.DiscardChanges(project_id).subscribe(
+      {
+        next: function(response: HttpResponse<any>) {
+          if(self && successCallback)
+            successCallback(self);
+        },
+        error: function(response: HttpResponse<any>) {
+          
+          if (response.status == HttpStatusCode.Unauthorized)
+            if (self && unauthorizedCallback)
+              unauthorizedCallback(self, response.body.message);
+
+          if (response.status == HttpStatusCode.BadRequest)
+            if (self && badRequestCallback)
+              badRequestCallback(self, response.body.message);
+              
+          if (response.status == HttpStatusCode.Forbidden)
+            if (self && forbiddenCallback)
+              forbiddenCallback(self, response.body.message);
+
+          if (response.status == HttpStatusCode.NotFound)
+            if (self && notFoundCallback)
+              notFoundCallback(self, response.statusText);
+        }
+      }
+    );
+  }
+  
+  RevertInit(project_id: number, self?: any, successCallback?: Function, unauthorizedCallback?: Function, badRequestCallback?: Function, forbiddenCallback?: Function, notFoundCallback?: Function){
+    this.datasetAPI.RevertInit(project_id).subscribe(
+      {
+        next: function(response: HttpResponse<any>) {
+          if(self && successCallback)
+            successCallback(self);
+        },
+        error: function(response: HttpResponse<any>) {
+          
+          if (response.status == HttpStatusCode.Unauthorized)
+            if (self && unauthorizedCallback)
+              unauthorizedCallback(self, response.body.message);
+
+          if (response.status == HttpStatusCode.BadRequest)
+            if (self && badRequestCallback)
+              badRequestCallback(self, response.body.message);
+              
+          if (response.status == HttpStatusCode.Forbidden)
+            if (self && forbiddenCallback)
+              forbiddenCallback(self, response.body.message);
+
+          if (response.status == HttpStatusCode.NotFound)
+            if (self && notFoundCallback)
+              notFoundCallback(self, response.statusText);
+        }
+      }
+    );
+  }
  
 
 }

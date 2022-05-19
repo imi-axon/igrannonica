@@ -67,6 +67,12 @@ export class DataSplitSliderComponent implements OnInit {
     this.subscription = fromEvent(document, 'mouseup').subscribe( e => { this.EndDraggingSliders(e as MouseEvent) });
   }
   
+  public Rounder(floatingPoint: number): number{
+    return Math.round(floatingPoint);
+  }
+  
+  
+  
   public UpdateSlider(){
     // SECTIONS
     this.trainSection.nativeElement.setAttribute('style', 'width: ' + (this.slider1Position * 100) + '%');
@@ -134,5 +140,6 @@ export class DataSplitSliderComponent implements OnInit {
     
     this.UpdateSlider();
   }
+
 
 }

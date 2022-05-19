@@ -5,7 +5,15 @@
 <div class="content">
     
     <div id="header">
-        <input #titleInput type="text" class="titleInput" [value]="project.Name" (blur)="ChangeExperimentTitleRequest()" (keydown)="ChangeExperimentTitleRequest($event)">
+        <div class="titlesContainer">
+            <span #titleInput class="titleInput" role="textbox" contenteditable="true" (blur)="ChangeExperimentTitleRequest()" (keydown)="ChangeExperimentTitleRequest($event)">
+                    {{project.Name}}
+            </span>
+            <span *ngIf="showsNetwork"> / </span>
+            <span #networkInput class="titleInput" role="textbox" contenteditable="true" style="font-size: 22px;" *ngIf="showsNetwork">
+                {{networkName}}
+            </span>
+        </div>
         
         <div id="cards">
             <div class="experiment-card" (click)="SwitchCard('.')" [class.selected-card]="currentCard=='.'">
@@ -15,7 +23,7 @@
                 <a>{{"experiment.edit" | translate}}</a>
             </div>
             <div class="experiment-card" [class.disabled-card]="this.project.hasDataset.toString() == 'False'" (click)="SwitchCard('networks')" [class.selected-card]="currentCard=='networks'">
-                <a>{{"experiment.mreza" | translate}}</a>
+                <a>{{"experiment.mreze" | translate}}</a>
             </div>
         </div>
         
@@ -23,11 +31,11 @@
             <option value="." [selected]="currentCard=='.'">
                 <a>{{"experiment.pregled" | translate}}</a>
             </option>
-            <option *ngIf="this.project.hasDataset.toString() == 'True'" value="edit" [selected]="currentCard=='edit'" >
+            <option [disabled]="this.project.hasDataset.toString() == 'False'" value="edit" [selected]="currentCard=='edit'" >
                 <a>{{"experiment.edit" | translate}}</a>
             </option>
-            <option *ngIf="this.project.hasDataset.toString() == 'True'" value="networks" [selected]="currentCard=='networks'">
-                <a>{{"experiment.mreza" | translate}}</a>
+            <option [disabled]="this.project.hasDataset.toString() == 'False'" value="networks" [selected]="currentCard=='networks'">
+                <a>{{"experiment.mreze" | translate}}</a>
             </option>
         </select>
         

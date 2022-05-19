@@ -2,17 +2,17 @@
     
     <p #trainText class="sectionTitle">Train</p>
     <div #trainSection class="section">
-        {{slider1Position * 100}}%
+        {{ Rounder(slider1Position * 100) }}%
     </div>
     
     <p #validationText class="sectionTitle middleText">Validation</p>
     <div #validationSection class="section middleSection">
-        {{slider2Position * 100 - slider1Position * 100}}%
+        {{ Rounder((slider2Position - slider1Position)  * 100) }}%
     </div>
     
     <p #testText class="sectionTitle">Test</p>
     <div #testSection class="section end">
-        {{100 - slider2Position* 100}}%
+        {{ Rounder(100 - slider2Position * 100) }}%
     </div>
     
     

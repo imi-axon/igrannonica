@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Project } from 'src/app/_utilities/_data-types/models';
 import { ProjectsService } from 'src/app/_utilities/_services/projects.service';
+import { ExperimentNetworkComponent } from '../../_elements/experiment-network/experiment-network.component';
 import { ExperimentOverviewComponent } from '../../_elements/experiment-overview/experiment-overview.component';
 
 @Component({
@@ -18,14 +19,20 @@ export class ExperimentPageComponent implements OnInit {
   ) {
     this.router.routeReuseStrategy.shouldReuseRoute = function() {
       return false;
-  };
+    };
    }
   
   @ViewChild("titleInput")
   inputTitle: ElementRef;
   
+  @ViewChild("networkInput")
+  networkTitle: ElementRef;
+  showsNetwork = false;
+  public networkName: string = "";
+  
   // ROUTER-OUTLET
   public overviewComponent: ExperimentOverviewComponent;
+  public singleNetworkComponent: ExperimentNetworkComponent;
   
   // Project
   public project: Project = new Project();
@@ -33,13 +40,14 @@ export class ExperimentPageComponent implements OnInit {
   
   private checkProjectId(){
     let p = this.activatedRoute.snapshot.paramMap.get("ProjectId");
-    if (p != null)  {
+    if (p != null)
       this.projectId = Number.parseInt(p);
-    }
   }
   
   // Cards
   public currentCard: string = ".";
+  
+  
   
   ngOnInit(): void {
     this.checkProjectId();
@@ -55,17 +63,42 @@ export class ExperimentPageComponent implements OnInit {
   }
   
   
+  public ResizeTitleField(field: any){
+    field.nativeElement.style.width = field.value.length + "ch";
+  }
+  
+  
+  
+  
   public OnActivate(component: any){
     
     // TRENUTNA KARTICA JE OVERVIEW
     if(component instanceof ExperimentOverviewComponent){
-      
+      setTimeout(() => { this.inputTitle.nativeElement.setAttribute('contenteditable', '') }, 0);
       this.overviewComponent = component;
-      
       this.overviewComponent.EditExperimentEvent.subscribe( (edits: any) => this.ChangeExperiment(edits) );
       this.overviewComponent.HasDatasetChanged.subscribe( (hasDataset: boolean) => this.project.hasDataset = hasDataset );
     }
+    else
+      setTimeout(() => { this.inputTitle.nativeElement.removeAttribute('contenteditable', '') }, 0);
+    
+    
+    if(component instanceof ExperimentNetworkComponent){
+      setTimeout(() => {
+        this.singleNetworkComponent = component;
+        this.singleNetworkComponent.NetworkUpdated.subscribe( (name: any) => { this.networkName = name } );
+        this.showsNetwork = true;
+      }, 0);
+    }
+    else
+      this.showsNetwork = false;
   }
+  
+  
+  
+  
+  
+  
   
   public ChangeExperimentTitleRequest(event?: KeyboardEvent){
     if(event && event.key != "Enter")
@@ -85,19 +118,21 @@ export class ExperimentPageComponent implements OnInit {
   
   public ChangeExperiment(edits: any){
     if(this.inputTitle.nativeElement.value==""){
-    this.fullEdits={
-      "name": "Untitled-Experiment-" + this.projectId,
-      "ispublic": edits.isPublic,
-      "description": edits.description
+      this.fullEdits={
+        "name": "Untitled-Experiment-" + this.projectId,
+        "ispublic": edits.isPublic,
+        "description": edits.description
+      }
     }
-  }
     else {
-    this.fullEdits= {
-      "name": this.inputTitle.nativeElement.value,
-      "ispublic": edits.isPublic,
-      "description": edits.description
+      this.fullEdits= {
+        "name": this.inputTitle.nativeElement.innerHTML,
+        "ispublic": edits.isPublic,
+        "description": edits.description
+      }
     }
-  }
+    
+    console.log(this.fullEdits)
     
     this.projectsService.editProject(this.projectId, this.fullEdits);
     
