@@ -15,23 +15,15 @@
     
     <tbody>
         <!-- RED PODATAKA -->
-        <tr *ngFor="let i = index; let row of statistics">
+        <tr *ngFor="let i = index; let stat of statTypes">
             
             <td class="firstCol">
-                {{"statistics-table." + statisticsCols[i] | translate}}
+                {{"statistics-table." + stat | translate}}
             </td>
             
             <!-- CELIJA U REDU -->
-            <td *ngFor="let cell of row">
-                
-                <span *ngIf="i < (statistics.length - 1)"> 
-                    {{cell | number : '.2-2'}} 
-                </span>
-                
-                <span *ngIf="i == (statistics.length - 1)"> 
-                    {{cell}} 
-                </span>
-                
+            <td *ngFor="let i = index; let column of columns">
+                {{statistics[i][stat]}} 
             </td>
 
         </tr>

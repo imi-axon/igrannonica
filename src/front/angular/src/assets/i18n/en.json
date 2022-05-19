@@ -106,7 +106,8 @@
         
         "preuzmi": "Download",
         
-        "statistika": "Statistics",
+        "numerickeKolone": "Numerical Columns",
+        "kategorijskeKolone": "Categorical Columns",
         
         "sacuvaneIzmene": "Saved edits",
         "poslednjeIzmenjen": "Last edited",
@@ -141,11 +142,17 @@
     },
     
     "statistics-table":{
-        "minimum": "Minimum",
-        "maksimum": "Maximum",
-        "prosek": "Average",
-        "medijana": "Median",
-        "prazna": "Null fields"
+        "min": "Minimum",
+        "max": "Maximum",
+        "avg": "Average",
+        "med": "Median",
+        
+        "count": "Count",
+        "unique": "Unique",
+        "top": "Top",
+        "freq": "Frequency",
+        
+        "null": "Null fields"
     },
 
 

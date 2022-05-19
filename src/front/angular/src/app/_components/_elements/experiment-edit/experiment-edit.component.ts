@@ -6,6 +6,7 @@ import { CorrelationTableComponent } from '../correlation-table/correlation-tabl
 import { DataSetTableComponent } from '../data-set-table/data-set-table.component';
 import { DatasetEditTableComponent } from '../dataset-edit-table/dataset-edit-table.component';
 import { PageControlsComponent } from '../page-controls/page-controls.component';
+import { StatisticsTableComponent } from '../statistics-table/statistics-table.component';
 
 const ROW_COUNT = 20
 
@@ -33,8 +34,11 @@ export class ExperimentEditComponent implements OnInit {
   @ViewChild("correlationComponent")
   private correlationComponent: CorrelationTableComponent;
   
-  @ViewChild("statisticsComponent")
-  private statisticsComponent: DataSetTableComponent;
+  @ViewChild("numericalColumns")
+  private numericalColumns: StatisticsTableComponent;
+  
+  @ViewChild("categoricalColumns")
+  private categoricalColumns: StatisticsTableComponent;
   
   // KRAJ KOMPONENTI ==========================================
   
@@ -110,15 +114,16 @@ export class ExperimentEditComponent implements OnInit {
   
   // REMOVE
   public RemoveSelectedCols(){
-    let selectedColumns: string[] = this.datasetEditTable.selectedColumns;
-    
-    if(selectedColumns.length <= 0)
+    if(this.datasetEditTable.selectedColumns.length <= 0)
       return;
+    
+    let selectedColumns: string[] = this.datasetEditTable.selectedColumns;
       
     let editJSON = this.getActionsJSON(selectedColumns, 'del col');
     
     this.datasetService.EditDataset(editJSON, this.GetProjectId(), false, this, this.successfulEditCallback);
   }
+  
   public RemoveRowsWithNulls(){
     let selectedColumns: string[] = this.datasetEditTable.selectedColumns;
     
@@ -171,7 +176,7 @@ export class ExperimentEditComponent implements OnInit {
   }
   
   // AFTER EDIT
-  private successfulEditCallback(self: ExperimentEditComponent){
+  private successfulEditCallback(self: ExperimentEditComponent, response: any){
     self.statisticsService.GetStatistics(self.GetProjectId(), false, self, self.handleStatisticsGetSuccess);
     self.datasetEditTable.DeselectAllSelectedColumns();
     self.ChangeDatasetPage(self.pageControls.currentPage);
@@ -199,17 +204,14 @@ export class ExperimentEditComponent implements OnInit {
   
   // STATISTIKA =============================================================================================
   
-  private handleStatisticsGetSuccess(self: any, response: any){
-    let statistics = JSON.parse(response.statistics);
+  private handleStatisticsGetSuccess(self: any, metadata: any){
+    let correlationMatrix = self.parseCorrelationData(metadata.statistics.cormat.cols, metadata.statistics.cormat.cors);
+    self.correlationComponent.LoadCorrelationData(metadata.statistics.cormat.cols, correlationMatrix);
     
-    let correlationMatrix = self.parseCorrelationData(statistics.cormat.cols, statistics.cormat.cors);
+    self.numericalColumns.LoadStatisticsData(metadata.statistics.colstats);
+    self.categoricalColumns.LoadStatisticsData(metadata.statistics.categorical_colstats);
     
-    self.correlationComponent.LoadCorrelationData(statistics.cormat.cols, correlationMatrix);
-    
-    let columnStats = statistics.colstats;
-    let colnulls = statistics.colnulls;
-    
-    self.statisticsComponent.LoadStatisticsData(columnStats, colnulls);
+    console.log(metadata);
   }
   
   
