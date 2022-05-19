@@ -378,7 +378,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
                     trainrez_buff = [b] + trainrez_buff
                 # -- BURST Finished --
 
-                print(f'>>>> send bytes: {b}')
+                # print(f'>>>> send bytes: {b}')
 
             else:
                 lock.release() # [   ]
