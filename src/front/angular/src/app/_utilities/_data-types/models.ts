@@ -171,7 +171,7 @@ export class NewProject
     constructor()
     {
         this.name="Untitled Project";
-        this.description="Project description goes here...";
+        this.description="";  // ovo se prevodi "Project description goes here...";
         this.public=false;
     }
 }

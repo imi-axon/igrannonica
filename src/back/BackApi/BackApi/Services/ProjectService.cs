@@ -61,7 +61,7 @@ namespace BackApi.Services
             }
             Project project = new Project();
             project.Name = name;
-            string opis = "Project description goes here...";
+            string opis = "";
             project.Description = opis;
             project.UserId = userid;
             project.Public = false;
