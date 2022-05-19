@@ -52,10 +52,10 @@ namespace BackApi.Controllers
             packet.nn = packet.nn.Replace('\\', '/');
             packet.conf = nnsrv.NNIdToCfg(nnid);
             if (packet.conf == null) return BadRequest("network");
-            packet.conf = packet.nn.Replace('\\', '/');
+            packet.conf = packet.conf.Replace('\\', '/');
             packet.trainrez = nnsrv.NNIdToTrainrez(nnid);
             if (packet.trainrez == null) return BadRequest("network");
-            packet.trainrez = packet.nn.Replace('\\', '/');
+            packet.trainrez = packet.trainrez.Replace('\\', '/');
 
             if (!wsq.CheckInDict(nnid))
             {
@@ -129,10 +129,10 @@ namespace BackApi.Controllers
             packet.nn = packet.nn.Replace('\\', '/');
             packet.conf = nnsrv.NNIdToCfg(nnid);
             if (packet.conf == null) return BadRequest("network");
-            packet.conf = packet.nn.Replace('\\', '/');
+            packet.conf = packet.conf.Replace('\\', '/');
             packet.trainrez = nnsrv.NNIdToTrainrez(nnid);
             if (packet.trainrez == null) return BadRequest("network");
-            packet.trainrez = packet.nn.Replace('\\', '/');
+            packet.trainrez = packet.trainrez.Replace('\\', '/');
             packet.newconf = conf.conf;
 
             if (!wsq.CheckInDict(nnid))
@@ -289,7 +289,21 @@ namespace BackApi.Controllers
         [HttpGet("/wstest/{nnid}"),AllowAnonymous]
         public async Task<ActionResult> WsTesting(int nnid)
         {
-            return Ok();
+            var packet = new ApiNNTrain();
+            packet.dataset = datasrv.ProjIdToPath(4, true);
+            if (packet.dataset == null) return BadRequest("dataset");
+            packet.dataset = packet.dataset.Replace('\\', '/');
+            packet.nn = nnsrv.NNIdToPath(nnid);
+            if (packet.nn == null) return BadRequest("network");
+            packet.nn = packet.nn.Replace('\\', '/');
+            packet.conf = nnsrv.NNIdToCfg(nnid);
+            if (packet.conf == null) return BadRequest("network");
+            packet.conf = packet.conf.Replace('\\', '/');
+            packet.trainrez = nnsrv.NNIdToTrainrez(nnid);
+            if (packet.trainrez == null) return BadRequest("network");
+            packet.trainrez = packet.trainrez.Replace('\\', '/');
+            var xd = JsonConvert.SerializeObject(packet);
+            return Ok(xd);
         }
     }
 }
