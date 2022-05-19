@@ -34,7 +34,8 @@ class TrainingCallback(Callback):
         print(f'>>>> {epoch}. epoch begin [ LOCK ]')
         
     def on_epoch_end(self, epoch, logs=None):
-        data = { 'epoch' : epoch, 't_loss' : logs['loss'], 'v_loss' : logs['val_loss'] }
+        # data = { 'epoch' : epoch, 't_loss' : logs['loss'], 'v_loss' : logs['val_loss'] }
+        data = logs
         self.buff.append(bytes(json_encode(data), encoding='utf-8'))
 
         print(f'>>>> {epoch}. epoch end [ UNLOCK ]')
@@ -47,6 +48,8 @@ class TrainingCallback(Callback):
 
 
     def on_train_end(self, logs=None):
+        print('------------------ ON TRAIN END')
+        print(logs)
         self.lock.acquire(blocking=True) # [ LOCK ]
         self.flags['stop'] = True
 
@@ -94,6 +97,7 @@ class TrainingInstance():
             , regularization = trainConf['reg']
             , batchSize = trainConf['batchSize']
             , percentage_training = trainConf['trainSplit']
+            , percentage_validation = trainConf['valSplit']
             , callbacks=[self.callback]
             , problem_type = trainConf['problemType']
         ) if self.service == None else self.service

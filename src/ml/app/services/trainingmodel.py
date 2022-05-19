@@ -41,6 +41,8 @@ class TrainingService():
                 batchSize = 1, percentage_training = 0.6, percentage_validation = 0.2, problem_type = 'REGRESSION', callbacks = []
                 , FULL_MODE = True):
         
+        problem_type = problem_type.upper()
+
         self.model = None
 
         self.inputs = inputs
@@ -83,9 +85,9 @@ class TrainingService():
             tf.keras.metrics.FalseNegatives() #False Negatives
         ]
 
-        if(type=="CLASSIFICATION"):
+        if(problem_type=="CLASSIFICATION"):
             self.METRICS = self.METRICS_CLASSIFICATION
-        elif (type=="REGRESSION"):
+        elif (problem_type=="REGRESSION"):
             self.METRICS = self.METRICS_REGRESSION
 
 
@@ -259,8 +261,7 @@ class TrainingService():
 
         print('TRAINING FINISHED')
 
-        results = {}#self.evaluate_model(model)
-        #predictions = self.predict_model(model)
+        results = self.evaluate_model(self.model)
 
         return results
 
