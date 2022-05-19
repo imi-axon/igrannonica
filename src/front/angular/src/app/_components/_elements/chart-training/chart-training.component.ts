@@ -21,10 +21,35 @@ export class ChartTrainingComponent implements OnInit {
   public chart: any;
 
   ngOnInit(): void {
-
     this.chart = new Chart('lineChart', {
       type: 'line',
       options: {
+        animation:{
+          duration:0
+        },
+        scales:{
+          xAxes:{
+            title:{
+              display:true,
+              text: "Epoch",
+              font:{
+                size:15
+              },
+              color:"#2C5D96"
+            },
+            ticks: {
+              autoSkip: true,
+              maxTicksLimit:5,
+              color:"#2C5D96"
+            }
+          },
+          yAxes:{
+            ticks:{
+              maxTicksLimit:4,
+              color:"#2C5D96"
+            }
+          }
+        },
         responsive: true,
         plugins: {
           title: {
@@ -46,9 +71,9 @@ export class ChartTrainingComponent implements OnInit {
             data: [],
             // data: [1],
             tension: 0.5,
-            borderWidth:2,
-            borderColor:"#000000",
-            backgroundColor:"	#000000"
+            borderWidth:2.5,
+            borderColor:"#2C5D96",
+            backgroundColor:"	#2C5D96"
            
           },
           {
@@ -56,7 +81,7 @@ export class ChartTrainingComponent implements OnInit {
             data: [],
             //data: [1],
             tension: 0.5,
-            borderWidth:2,
+            borderWidth:2.5,
             borderColor:"#dd6060",
             backgroundColor:"#dd6060"
         
@@ -73,8 +98,8 @@ export class ChartTrainingComponent implements OnInit {
 
   //TESTNA F-JA
   public dataUpdate(epoch: number, tLoss: number, vLoss: number) {
- 
-    this.chart.data.labels.push('epoch ' + epoch);
+
+      this.chart.data.labels.push(epoch);
     this.chart.data.datasets[0].data.push(vLoss);
     this.chart.data.datasets[1].data.push(tLoss);
     this.chart.update();
