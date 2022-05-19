@@ -67,22 +67,22 @@ class TrainingService():
 
         self.METRICS = metrics
         self.METRICS_REGRESSION = [
-           tf.keras.metrics.MeanSquaredError(),  #MSE - Mean Squared Error
-           tf.keras.metrics.MeanAbsoluteError(), #MAE - Mean Absolute Error
-           tf.keras.metrics.RootMeanSquaredError(), #RMSE - Root Mean Squared Error
-           tf.keras.metrics.MeanAbsolutePercentageError(), #MAPE -  Mean Absolute Percentage Error
-           tf.keras.metrics.MeanSquaredLogarithmicError() #MSLE - Mean Squared Logarithmic Error
+            tf.keras.metrics.MeanSquaredError(),  #MSE - Mean Squared Error
+            tf.keras.metrics.MeanAbsoluteError() #MAE - Mean Absolute Error
+            # tf.keras.metrics.RootMeanSquaredError(), #RMSE - Root Mean Squared Error
+            # tf.keras.metrics.MeanAbsolutePercentageError(), #MAPE -  Mean Absolute Percentage Error
+            # tf.keras.metrics.MeanSquaredLogarithmicError() #MSLE - Mean Squared Logarithmic Error
         ]
 
         self.METRICS_CLASSIFICATION =  [ 
-            tf.keras.metrics.AUC(), #AUC 
+            # tf.keras.metrics.AUC(), #AUC 
             tf.keras.metrics.CategoricalAccuracy(), #Categorical Accuracy
             tf.keras.metrics.Precision(), #Precision
-            tf.keras.metrics.Recall(), #Recall
-            tf.keras.metrics.TruePositives(), #True Positives
-            tf.keras.metrics.TrueNegatives(), #True Negatives
-            tf.keras.metrics.FalsePositives(), #False Positives
-            tf.keras.metrics.FalseNegatives() #False Negatives
+            tf.keras.metrics.Recall() #Recall
+            # tf.keras.metrics.TruePositives(), #True Positives
+            # tf.keras.metrics.TrueNegatives(), #True Negatives
+            # tf.keras.metrics.FalsePositives(), #False Positives
+            # tf.keras.metrics.FalseNegatives() #False Negatives
         ]
 
         if(problem_type=="CLASSIFICATION"):
@@ -261,7 +261,13 @@ class TrainingService():
 
         print('TRAINING FINISHED')
 
-        results = self.evaluate_model(self.model)
+        #print(self.model.metrics_names)
+        nms = self.model.metrics_names
+        rez = self.evaluate_model(self.model)
+
+        results = {}
+        for i in range(len(rez)):
+            results[nms[i]] = rez[i]
 
         return results
 

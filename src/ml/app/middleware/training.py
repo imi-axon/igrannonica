@@ -35,6 +35,7 @@ class TrainingCallback(Callback):
         
     def on_epoch_end(self, epoch, logs=None):
         # data = { 'epoch' : epoch, 't_loss' : logs['loss'], 'v_loss' : logs['val_loss'] }
+        logs['epoch'] = epoch
         data = logs
         self.buff.append(bytes(json_encode(data), encoding='utf-8'))
 
@@ -129,7 +130,7 @@ class TrainingInstance():
             # -- Treniranje --
             print('-- Treniranje --')
 
-            testrez = self.service.start_training(200)                                              # na kraju treninga ima lock.acquire(blocking=True) # [ X ]
+            testrez = self.service.start_training(20)                                              # na kraju treninga ima lock.acquire(blocking=True) # [ X ]
             trained_model_fpath = self.service.save_model(fm_model.directory(), fm_model.name())    # h5 fajl sa putanjom za koju je vezan fm_model FileMngr
             self.lock.release()                                                                     # zbog lock-a na kraju treniranja # [   ]
             
@@ -144,10 +145,11 @@ class TrainingInstance():
             # -- Poruka za kraj treniranja --
             print('-- Poruka za kraj treniranja --')
 
-            self.lock.acquire(blocking=True)                # [ X ]
-            self.buff.append(b'end')                        # indikator za kraj treniranja 
-            self.buff.append(bytes(testrez, 'utf-8'))       # rezultati testiranja ('end' i 'testrez' ce se uvek naci zajedno u baferu jer je ovaj blok atomican)
-            self.lock.release()                             # [   ]
+            print(testrez)
+            self.lock.acquire(blocking=True)                            # [ X ]
+            self.buff.append(b'end')                                    # indikator za kraj treniranja 
+            self.buff.append(bytes(json_encode(testrez), 'utf-8'))      # rezultati testiranja ('end' i 'testrez' ce se uvek naci zajedno u baferu jer je ovaj blok atomican)
+            self.lock.release()                                         # [   ]
 
             # -- Brisanje fajlova --
             fm_model.delete(0)
