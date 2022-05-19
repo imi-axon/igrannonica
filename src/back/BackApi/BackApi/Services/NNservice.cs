@@ -24,6 +24,7 @@ namespace BackApi.Services
         public Boolean EditTitle(int nnid, int projid, string title);
         public bool AddNote(int projid, int nnid, string note);
         public string GetNote(int projid, int nnid, out bool ind);
+        public string GetNamebyId(int nnid);
     }
 
     public class NNservice: INNservice
@@ -340,6 +341,14 @@ namespace BackApi.Services
             }
             ind = true;
             return nn.Notes;
+        }
+
+        public string GetNamebyId(int nnid)
+        {
+            var nn = kontext.NNs.Find(nnid);
+            if (nn != null)
+                return nn.NNName;
+            else return "";
         }
     }
 }
