@@ -15,7 +15,6 @@ from keras.callbacks import Callback
 import util.http as httpc
 from util.filemngr import FileMngr
 from util.json import json_encode, json_decode
-import util.http as httpc
 from util.csv import get_csv_dialect
 
 from .util import compareConfigurations
@@ -79,7 +78,8 @@ class TrainingInstance():
 
 
     def create_model(self, nnUrl) -> FileMngr: #  return file mngr
-        loaded_model: bytes = httpc.get(nnUrl, decode=False)
+        loaded_model: bytes = httpc.get(nnUrl, False)
+        print('httpc returned')
         fmngr = FileMngr('h5')
         fmngr.create(loaded_model)
         return fmngr
@@ -113,16 +113,21 @@ class TrainingInstance():
             print('-- Inicijalni setup --')
 
             oldconf = json_decode(httpc.get(confUrl))               # stara konfiguracija
+            print('conf created')
             dataframe = self.create_dataset(datasetUrl)             # dataframe
+            print('dataset created')
             fm_model = self.create_model(nnUrl)                     # h5 FileMngr
+            print('model created')
             self.create_service(dataframe, trainConf)               # service
+            print('service created')
             self.load_model(fm_model.path(), oldconf, trainConf)    # load h5 model
+            print('model loaded')
             self.lock.release()                                     # zbog lock-a u konstruktoru # [   ]
 
             # -- Treniranje --
             print('-- Treniranje --')
 
-            testrez = self.service.start_training(200)                                                        # na kraju treninga ima lock.acquire() # [ X ]
+            testrez = self.service.start_training(200)                                              # na kraju treninga ima lock.acquire() # [ X ]
             trained_model_fpath = self.service.save_model(fm_model.directory(), fm_model.name())    # h5 fajl sa putanjom za koju je vezan fm_model FileMngr
             self.lock.release()                                                                     # zbog lock-a na kraju treniranja # [   ]
             

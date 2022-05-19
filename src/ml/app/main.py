@@ -259,12 +259,15 @@ def nn_train_start(uid: int, nnid: int, body: TrainingRequest):
 # Training STOP
 @app.get('/api/user{uid}/nn{nnid}/stop')
 def nn_train_stop(uid: int, nnid: int):
-    
+    TTM.table_lock()
     if TTM.nn_exist(uid, nnid):
         tt = TTM.get_tt(uid, nnid)
+        TTM.table_unlock()
         tt.lock.acquire(blocking=True)
         tt.flags['stop'] = True
         tt.lock.release()
+    else:
+        TTM.table_unlock()
 
 
 # Training WATCH
@@ -287,6 +290,12 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
     trainrezlink = data['trainrez']
     newconf = json_decode(data['newconf'])
 
+    print(datasetlink)
+    print(nnlink)
+    print(conflink)
+    print(trainrezlink)
+    # print(newconf)
+
     # TEMP
     # conf['actPerLayer'] = ['relu' for _ in range(3)]
     # conf['neuronsPerLayer'] = [3 for _ in range(3)]
@@ -304,10 +313,16 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
 
     try:
         th: Thread = None
+        print('1 ------')
+        TTM.table_lock()
         training_exists = TTM.nn_exist(uid, nnid)
+        TTM.table_unlock()
+        print('2 ------')
 
         if training_exists:
+            TTM.table_lock()
             tt = TTM.get_tt(uid, nnid)
+            TTM.table_unlock()
             buff = tt.buffer
             flags = tt.flags
             lock = tt.lock
@@ -316,7 +331,9 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
         else:
             th = Thread(target=TrainingInstance(buff, lock, flags).train, args=(datasetlink, nnlink, conflink, trainrezlink, newconf), daemon=True)
             tt = TrainingThread(th, buff, flags, lock)
+            TTM.table_lock()
             TTM.add(tt, uid, nnid)
+            TTM.table_unlock()
             th.start()
             print('> Thread started')
 
@@ -383,7 +400,9 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
 
     finally:
         print('-=| Finally - Remove Training Thread |=-')
+        TTM.table_lock()
         TTM.remove(uid, nnid)
+        TTM.table_unlock()
 
     # TTM.pretty_print()
     # print('=='*40)

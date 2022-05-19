@@ -28,80 +28,54 @@ class TrainingThreadsManager():
 
     # Dodaje nit za UID i NNID
     def add(self, tt: TrainingThread, uid, nnid) -> bool: # return True/False <=> Added/NotAdded <=> DidNotExist/Existed
-        
-        try:
-            self.table_lock() # [ X ]
+    
+        if not self.user_exist(uid):
+            self.table[uid] = {}
 
-            if not self.user_exist(uid):
-                self.table[uid] = {}
+        if not self.nn_exist(uid, nnid):
+            self.table[uid][nnid] = tt
+            return True
 
-            if not self.nn_exist(uid, nnid):
-                self.table[uid][nnid] = tt
-                self.table_unlock() # [   ]
-                return True
-
-            return False
-
-        finally:
-            self.table_unlock() # [   ]
+        return False
 
 
     
     # Uklanja iz tabele nit za UID i NNID
     def remove(self, uid, nnid):
-        
-        try:
-            self.table_lock() # [ X ]
-
-            if self.nn_exist(uid, nnid):
-                self.table[uid].pop(nnid, "NEMA") # brise NN
-                if len(list(self.table[uid].keys())) == 0:
-                    self.table.pop(uid, "NEMA") # brise User-a
-        finally:
-            self.table_unlock() # [   ]
+    
+        if self.nn_exist(uid, nnid):
+            self.table[uid].pop(nnid, "NEMA") # brise NN
+            if len(list(self.table[uid].keys())) == 0:
+                self.table.pop(uid, "NEMA") # brise User-a
 
 
     def get_tt(self, uid, nid) -> TrainingThread:
         try:
-            self.table_lock() # [ X ]
             return self.table[uid][nid]
         except:
             return None
-        finally:
-            self.table_unlock() # [   ]
 
 
     def get_user_nns(self, uid):
         try:
-            self.table_lock() # [ X ]
             return self.table[uid]
         except:
             return None
-        finally:
-            self.table_unlock() # [   ]
 
 
     def user_exist(self, uid) -> bool:
-        try:
-            self.table_lock() # [ X ]
-            rez = list(self.table.keys()).count(uid) == 1
-            return rez
-        finally:
-            self.table_unlock() # [   ]
+
+        rez = list(self.table.keys()).count(uid) == 1
+        return rez
 
 
     def nn_exist(self, uid, nnid):
-        try:
-            self.table_lock() # [ X ]
-            if self.user_exist(uid):
-                rez = list(self.table[uid].keys()).count(nnid) == 1
-                self.table_unlock() # [   ]
-                return rez
-
-            return False
         
-        finally:
-            self.table_unlock() # [   ]
+        if self.user_exist(uid):
+            rez = list(self.table[uid].keys()).count(nnid) == 1
+            return rez
+
+        return False
 
 
     def pretty_print(self):
