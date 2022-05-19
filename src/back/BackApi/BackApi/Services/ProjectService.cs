@@ -288,6 +288,9 @@ namespace BackApi.Services
             var edited = context.Projects.Find(projid);
             if (edited == null)
                 return false;
+            var project = context.Projects.Where(x => x.Name == proj.name && x.UserId == userid).FirstOrDefault();
+            if (project != null)
+                return false;
             edited.Name = proj.name;
             edited.Description = proj.description;
             edited.Public = proj.ispublic;
