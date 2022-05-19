@@ -223,7 +223,7 @@ namespace BackApi.Controllers
                 packet.nn = await resp.Content.ReadAsStringAsync();
                 var tmp = storsrv.CreateNNCfg(id, nnid);
                 packet.conf = storsrv.ReadCfg(tmp);
-
+                packet.name = nnsrv.GetNamebyId(nnid);
                 var result = JsonConvert.SerializeObject(packet);
                 return Ok(result);
 
