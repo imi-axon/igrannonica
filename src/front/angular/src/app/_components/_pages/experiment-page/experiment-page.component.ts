@@ -80,15 +80,26 @@ export class ExperimentPageComponent implements OnInit {
       }
     );
   }
+
+  public fullEdits:any;
   
   public ChangeExperiment(edits: any){
-    let fullEdits: any = {
+    if(this.inputTitle.nativeElement.value==""){
+    this.fullEdits={
+      "name": "Untitled-Experiment-" + this.projectId,
+      "ispublic": edits.isPublic,
+      "description": edits.description
+    }
+  }
+    else {
+    this.fullEdits= {
       "name": this.inputTitle.nativeElement.value,
       "ispublic": edits.isPublic,
       "description": edits.description
     }
+  }
     
-    this.projectsService.editProject(this.projectId, fullEdits);
+    this.projectsService.editProject(this.projectId, this.fullEdits);
     
     this.inputTitle.nativeElement.blur();
   }
