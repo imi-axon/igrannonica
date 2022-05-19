@@ -44,7 +44,7 @@ namespace BackApi.Controllers
             if (!projsrv.projectOwnership(userid, id)) return Forbid();
             */
             var packet = new ApiNNTrain();
-            packet.dataset = datasrv.ProjIdToPath(4, true);
+            packet.dataset = datasrv.ProjIdToPath(id, true);
             if (packet.dataset == null) return BadRequest("dataset");
             packet.dataset = packet.dataset.Replace('\\', '/');
             packet.nn = nnsrv.NNIdToPath(nnid);
@@ -121,7 +121,7 @@ namespace BackApi.Controllers
             if (!projsrv.projectOwnership(userid, id)) return Forbid();
 
             var packet = new ApiNNTrain();
-            packet.dataset = datasrv.ProjIdToPath(4, true);
+            packet.dataset = datasrv.ProjIdToPath(id, true);
             if (packet.dataset == null) return BadRequest("dataset");
             packet.dataset = packet.dataset.Replace('\\', '/');
             packet.nn = nnsrv.NNIdToPath(nnid);
