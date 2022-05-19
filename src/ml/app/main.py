@@ -340,6 +340,9 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
             
             lock.acquire(blocking=True) # [ X ]
 
+            if (not th.is_alive()) and flags['stop'] == False:
+                raise Exception()
+
             if len(buff) > 0:
                 
                 burst_buff = buff.copy()
