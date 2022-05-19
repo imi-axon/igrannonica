@@ -110,6 +110,7 @@ import json
 import numpy as np
 from .util import dictionary
 from .util import NpEncoder
+import pandas as pd
 
 class StatisticsMiddleware:
 
@@ -132,6 +133,8 @@ class StatisticsMiddleware:
                 r = corr_matrix.columns[i] 
                 c = corr_matrix.columns[j] 
                 data=corr_matrix[r][c]
+                if(pd.isna(data)):
+                    data="None"
                 cors.append(data)
 
         cormat_dict.add('cols',columns)
@@ -161,11 +164,24 @@ class StatisticsMiddleware:
         numeric_columns = self.dataframe.select_dtypes(exclude=['object']).columns.tolist()
         for column in numeric_columns:
             dict_col = dictionary()
+
+            min = self.stat.stat_min(column)
+            max = self.stat.stat_max(column)
+            mean = self.stat.stat_mean(column)
+            med = self.stat.stat_median(column)
+            if(pd.isna(min)):
+                min = "None"
+            if(pd.isna(max)):
+                max = "None"
+            if(pd.isna(mean)):
+                mean = "None"
+            if(pd.isna(med)):
+                med = "None"
             dict_col.add("col", column)
-            dict_col.add("min", self.stat.stat_min(column))
-            dict_col.add("max", self.stat.stat_max(column))
-            dict_col.add("avg", self.stat.stat_mean(column))
-            dict_col.add("med", self.stat.stat_median(column))
+            dict_col.add("min", min)
+            dict_col.add("max", max)
+            dict_col.add("avg", mean)
+            dict_col.add("med", med)
             lista.append(dict_col)    
         
         return lista
@@ -217,8 +233,8 @@ class StatisticsMiddleware:
         return self.to_json(self.dictionary)
 
     def to_json(self, obj):
-        return json.dumps(obj, cls=NpEncoder).replace('NaN','"nan"')
-
+        #return json.dumps(obj, cls=NpEncoder).replace('NaN','"nan"')
+        return json.dumps(obj, cls=NpEncoder)
 
 #sm = StatisticsMiddleware(csvString)
 #json_obj = sm.statistics_json()
