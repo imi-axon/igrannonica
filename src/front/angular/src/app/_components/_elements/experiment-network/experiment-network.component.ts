@@ -85,12 +85,13 @@ export class ExperimentNetworkComponent implements OnInit {
   }
   
   
-  updateTrainData(self: ExperimentNetworkComponent, data: any) {
-    let tLoss = data['t_loss'];
-    let vLoss = data['v_loss'];
-    let ep = data['epoch'];
+  updateTrainData(self: ExperimentNetworkComponent, epochs: any) {
     
-    self.grafik.dataUpdate(ep, tLoss, vLoss);
+    for (const epoch of epochs) {
+      // console.log(epoch)
+      self.grafik.dataUpdate(epoch['epoch'], epoch['t_loss'], epoch['v_loss']);
+    }
+
   }
   
   
