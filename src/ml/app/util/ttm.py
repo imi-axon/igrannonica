@@ -17,14 +17,14 @@ class TrainingThread():
 class TrainingThreadsManager():
 
     def __init__(self):
-        self.lock: Lock = Lock()
+        self.tlock: Lock = Lock()
         self.table = {}
 
     def table_lock(self):
-        self.lock.acquire(blocking=True)
+        self.tlock.acquire(blocking=True)
     
     def table_unlock(self):
-        self.lock.release()
+        self.tlock.release()
 
     # Dodaje nit za UID i NNID
     def add(self, tt: TrainingThread, uid, nnid) -> bool: # return True/False <=> Added/NotAdded <=> DidNotExist/Existed
@@ -80,7 +80,7 @@ class TrainingThreadsManager():
 
     def pretty_print(self):
         print('======== TTM Status ========')
-        print('- ' + 'locked [ X ]' if self.lock.locked else 'unlocked [   ]')
+        print('- ' + 'locked [ X ]' if self.tlock.locked() else 'unlocked [   ]')
         print('---- table ----')
         users = list(self.table.keys())
         for u in users:

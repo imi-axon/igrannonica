@@ -31,7 +31,7 @@ class TrainingCallback(Callback):
 
     def on_epoch_begin(self, epoch, logs=None):
         self.lock.acquire(blocking=True) # [ LOCK ]
-        print(f'>>>> {epoch}. epoch end [ LOCK ]')
+        print(f'>>>> {epoch}. epoch begin [ LOCK ]')
         
     def on_epoch_end(self, epoch, logs=None):
         data = { 'epoch' : epoch, 't_loss' : logs['loss'], 'v_loss' : logs['val_loss'] }
@@ -42,6 +42,7 @@ class TrainingCallback(Callback):
         if self.flags['stop']:
             self.model.stop_training = True
         
+        # print('on epoch end UNLOCK')
         self.lock.release() # [ UNLOCK ]
 
 
@@ -113,21 +114,18 @@ class TrainingInstance():
             print('-- Inicijalni setup --')
 
             oldconf = json_decode(httpc.get(confUrl))               # stara konfiguracija
-            print('conf created')
             dataframe = self.create_dataset(datasetUrl)             # dataframe
-            print('dataset created')
             fm_model = self.create_model(nnUrl)                     # h5 FileMngr
-            print('model created')
             self.create_service(dataframe, trainConf)               # service
-            print('service created')
             self.load_model(fm_model.path(), oldconf, trainConf)    # load h5 model
-            print('model loaded')
             self.lock.release()                                     # zbog lock-a u konstruktoru # [   ]
+            print('thread lock unlocked')
+            print(self.lock.locked())
 
             # -- Treniranje --
             print('-- Treniranje --')
 
-            testrez = self.service.start_training(200)                                              # na kraju treninga ima lock.acquire() # [ X ]
+            testrez = self.service.start_training(200)                                              # na kraju treninga ima lock.acquire(blocking=True) # [ X ]
             trained_model_fpath = self.service.save_model(fm_model.directory(), fm_model.name())    # h5 fajl sa putanjom za koju je vezan fm_model FileMngr
             self.lock.release()                                                                     # zbog lock-a na kraju treniranja # [   ]
             
@@ -162,8 +160,6 @@ class TrainingInstance():
             print('-'*20)
 
         except:
-            pass
-
-        finally:
-            if self.lock.locked:        # ako je try deo pukao i lock je ostao zakljucan otkljucati ga
+            if self.lock.locked():        # ako je try deo pukao i lock je ostao zakljucan otkljucati ga
                 self.lock.release()
+            raise
