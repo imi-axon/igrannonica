@@ -40,7 +40,7 @@
             <h2>{{"experiment.opis"|translate}}</h2>
             
             <!-- [value]="project.Description" -->
-            <textarea #descriptionTextArea class="descriptionInput" maxlength="250" (blur)="SendEditProject()">{{project.Description}}</textarea>
+            <textarea #descriptionTextArea class="descriptionInput" maxlength="250" (blur)="SendEditProject()" placeholder="{{'experiment-overview.description'|translate}}">{{project.Description}}</textarea>
         </div>
         
         <label for="publicCheckbox"> {{"experiment.javni" |translate}} </label>
