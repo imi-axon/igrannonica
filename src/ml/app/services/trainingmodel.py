@@ -259,8 +259,7 @@ class TrainingService():
 
         print('TRAINING FINISHED')
 
-        results = {}#self.evaluate_model(model)
-        #predictions = self.predict_model(model)
+        results = self.evaluate_model(self.model)
 
         return results
 
