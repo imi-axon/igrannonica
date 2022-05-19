@@ -55,7 +55,7 @@
     "lista-projekata":{
         "moji_eksperimenti":"Moji Eksperimenti",
         "kreiran":"Kreiran: ",
-        "nema":"List eksperimenata je prazna!",
+        "nema":"Lista eksperimenata je prazna!",
         "search":"Pretražite...",
         "novi_eksperiment": "Novi Eksperiment"
     },
@@ -177,7 +177,7 @@
         "drzava": "Drzava",
         "grad": "Grad",
         "e-mail": "E-mail",
-        "rodjen": "Rodjen",
+        "rodjen": "Rođen",
         "pol": "Pol",
         "muski": "Muški",
         "zenski": "Ženski",
@@ -239,6 +239,9 @@
         "opomena":"Ova akcija je nepovratna!",
         "da":"Da",
         "ne":"Ne"
+    },
+    "experiment-overview":{
+        "description" : "Unesite opis eksperimenta..."
     }
 
 }

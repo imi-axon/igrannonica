@@ -238,5 +238,9 @@
     "da":"Yes",
     "ne":"No"
 }
+,
+"experiment-overview":{
+    "description" : "Experiment description goes here..."
+}
 
 }
