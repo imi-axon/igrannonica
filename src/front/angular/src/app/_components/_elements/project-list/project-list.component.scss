@@ -4,7 +4,7 @@
 }
 
 .project{
-    min-height: 160px;
+    min-height: 150px;
     transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
     background-color: var(--projectListProject);
     backdrop-filter: blur(3px);
@@ -22,12 +22,13 @@
     .projectLeft{
         .title{
             display: inline;
-            font-size: 26px;
+            font-size: x-large;
             font-weight: 400;
             color: var(--projectListProjectTitle);
             margin: 0px;
             cursor: pointer;
             transition: 0.2s ease-in;
+            size:30%;
             
             &:hover{
                 transition: 0.2s ease-out;
@@ -38,13 +39,17 @@
         .created{
             font-size: 11px;
             color: var(--projectListProjectCreated);
+            size:10%;
         }
-        
+
         .description{
             font-size: 12px;
             color: var(--projectListProjectDescription);
-            width: 100%;
-            margin: 0px;
+            width:100%;
+            size:60%;
+            word-wrap: break-word;
+            overflow-x: auto;
+
         }
     }
     
@@ -92,4 +97,11 @@
     font-size: 32px;
     color: var(--projectsListEmptyTitle);
     cursor: default;
+}
+
+@media screen and (max-width: 705px) {
+    .project .projectLeft .title{
+        font-size: large;
+    }
+    
 }

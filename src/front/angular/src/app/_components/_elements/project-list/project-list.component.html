@@ -4,10 +4,13 @@
     
     <div class="projectLeft">
       <p class="title" (click)="onClick(project.ProjectId)"> {{project.Name}} </p>
-      
-      <p class="created"> {{'lista-projekata.kreiran'|translate}} {{project.Creationdate}} </p>
+
+      <p class="description mt-2">{{project.Description}}</p>
+
+
+      <p class="created mt-2"> {{'lista-projekata.kreiran'|translate}} {{project.Creationdate}} </p>
     
-      <p class="description">{{project.Description}}</p>
+   
     </div>
     
     <div class="projectRight">
