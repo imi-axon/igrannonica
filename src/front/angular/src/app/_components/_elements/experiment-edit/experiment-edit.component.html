@@ -164,16 +164,19 @@
     <div id="secondRow">
         
         <!-- STATISTIKA -->
-        <div id="statisticsWrapper">
-            <p>{{"edit-dataset.statistika"|translate}}</p>
-            <div id="statisticsContainer">
-                <app-statistics-table #statisticsComponent> </app-statistics-table>
+        <div class="statisticsWrapper">
+            <p>{{"edit-dataset.numerickeKolone"|translate}}</p>
+            <div class="statisticsContainer">
+                <app-statistics-table #numericalColumns> </app-statistics-table>
             </div>
         </div>
         
         <!-- OSTALE MANJE INFORMACIJE -->
-        <div id="TEMP_OTHER">
-            
+        <div class="statisticsWrapper">
+            <p>{{"edit-dataset.kategorijskeKolone"|translate}}</p>
+            <div class="statisticsContainer">
+                <app-statistics-table #categoricalColumns> </app-statistics-table>
+            </div>
         </div>
         
     </div>

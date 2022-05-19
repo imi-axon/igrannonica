@@ -11,21 +11,33 @@ export class StatisticsTableComponent implements OnInit {
   
   @Output() LoadedEvent = new EventEmitter<null>();
   
-  statisticsCols: string[] = ["minimum", "maksimum", "prosek", "medijana", "prazna"];
-  
   statistics: any;
-  columns: string[];
+  columns: string[] = [];
+  statTypes: string[] = [];
 
   ngOnInit(): void {
+    
   }
   
-  public LoadStatisticsData(statistics: any, colnulls: any){
-    this.columns = this.getColumnsFromStatistics(statistics);
-    this.statistics = this.parseStatisticsData(statistics, colnulls);
+  public LoadStatisticsData(statistics: any){
+    // this.columns = this.getColumnsFromStatistics(statistics);
+    // this.statistics = this.parseStatisticsData(statistics, colnulls);
+    
+    this.statistics =  statistics;
+    
+    this.columns = [];
+    for(let i = 0; i < statistics.length; i++)
+      this.columns.push(statistics[i].col);
+      
+    this.statTypes = Object.keys(statistics[0]);
+    this.statTypes.splice(0, 1);
     
     this.LoadedEvent.emit();
   }
   
+  
+  
+  /*
   private getColumnsFromStatistics(statistics: any){
     let columnsCount = statistics.length;
     let columns = [];
@@ -65,5 +77,6 @@ export class StatisticsTableComponent implements OnInit {
     
     return statisticsData;
   }
-  
+  */
+ 
 }

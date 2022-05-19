@@ -106,7 +106,8 @@
         
         "preuzmi": "Preuzmi",
         
-        "statistika": "Statistika",
+        "numerickeKolone": "Numeričke Kolone",
+        "kategorijskeKolone": "Kategorijske Kolone",
         
         "sacuvaneIzmene": "Sačuvane promene",
         "poslednjeIzmenjen": "Poslednje izmenjen",
@@ -140,11 +141,17 @@
     },
 
     "statistics-table":{
-        "minimum": "Minimum",
-        "maksimum": "Maksimum",
-        "prosek": "Prosek",
-        "medijana": "Medijana",
-        "prazna": "Prazna polja"
+        "min": "Minimum",
+        "max": "Maksimum",
+        "avg": "Prosek",
+        "med": "Medijana",
+        
+        "count": "Ukupno",
+        "unique": "Jedinstveni",
+        "top": "Najčešća vrednost",
+        "freq": "Učestanost",
+        
+        "null": "Prazna polja"
     },
     
     
