@@ -388,6 +388,10 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
         print(fm_trainrez.read_b())
         fm_trainrez.delete(0)
 
+        TTM.table_lock() # TTM [ X ]
+        TTM.remove(uid, nnid)
+        TTM.table_unlock() # TTM [   ]
+
         print(f'time: { time() - start_time }')
         await ws.close(code = 1000) # ws <CLOSE>
 
@@ -405,5 +409,4 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
         print('-=| Finally |=-')
         TTM.pretty_print()
         print('=='*25)
-
 
