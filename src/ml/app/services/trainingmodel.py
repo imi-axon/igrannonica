@@ -1,6 +1,7 @@
 import pathlib
 from pyexpat import model
 import random
+from time import sleep
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -207,6 +208,7 @@ class TrainingService():
 
     #obucavanje modela
     def fit_model(self, model, epoch):
+        print('fit method begin')
         history = model.fit(self.normed_train_dataset, self.train_labels, 
                             epochs = epoch, batch_size = self.BATCH_SIZE, 
                             validation_split = self.PERCENTAGE_VALIDATION, 
@@ -244,16 +246,20 @@ class TrainingService():
 
     def start_training(self, epoch):
 
-        if self.mode == None:
+        print('Training method begin')
+
+        if self.model == None:
+            print('Model is None - If')
             self.new_model()
 
         print('Training Started')
+        # sleep(3)
 
         self.fit_model(self.model, epoch)
 
         print('TRAINING FINISHED')
 
-        results = self.evaluate_model(model)
+        results = {}#self.evaluate_model(model)
         #predictions = self.predict_model(model)
 
         return results

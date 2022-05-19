@@ -259,15 +259,15 @@ def nn_train_start(uid: int, nnid: int, body: TrainingRequest):
 # Training STOP
 @app.get('/api/user{uid}/nn{nnid}/stop')
 def nn_train_stop(uid: int, nnid: int):
-    TTM.table_lock()
+    TTM.table_lock() # TTM [ X ]
     if TTM.nn_exist(uid, nnid):
         tt = TTM.get_tt(uid, nnid)
-        TTM.table_unlock()
+        TTM.table_unlock() # TTM [   ]
         tt.lock.acquire(blocking=True)
         tt.flags['stop'] = True
         tt.lock.release()
     else:
-        TTM.table_unlock()
+        TTM.table_unlock() # TTM [  ]
 
 
 # Training WATCH
@@ -314,15 +314,12 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
     try:
         th: Thread = None
         print('1 ------')
-        TTM.table_lock()
+        TTM.table_lock() # TTM [ X ]
         training_exists = TTM.nn_exist(uid, nnid)
-        TTM.table_unlock()
-        print('2 ------')
 
         if training_exists:
-            TTM.table_lock()
             tt = TTM.get_tt(uid, nnid)
-            TTM.table_unlock()
+            TTM.table_unlock() # TTM [   ]
             buff = tt.buffer
             flags = tt.flags
             lock = tt.lock
@@ -331,9 +328,8 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
         else:
             th = Thread(target=TrainingInstance(buff, lock, flags).train, args=(datasetlink, nnlink, conflink, trainrezlink, newconf), daemon=True)
             tt = TrainingThread(th, buff, flags, lock)
-            TTM.table_lock()
             TTM.add(tt, uid, nnid)
-            TTM.table_unlock()
+            TTM.table_unlock() # TTM [   ]
             th.start()
             print('> Thread started')
 
@@ -353,6 +349,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
                 # -- Send EPOCHS in BURST of PACKS --
                 pack = b''
                 pack_i = 0
+                bb_len = len(burst_buff)
 
                 for b in burst_buff:
                     pack_i += 1
@@ -367,13 +364,17 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
                             pack = b''
                             pack_i = 0
                 
+                # Ukoliko je preostalo nesto epoha kojih nema dovoljno za jedan PACK
+                if pack != b'':
+                    pack = b'[' + pack[:-1] + b']'
+                    await ws.send_text(pack.decode())   # ws >>>>
+
                 trainrez_buff.extend(burst_buff)    # cuvanje rezultata treniranja
                 if finished:                        # ako je kraj sacuvati i rezultate testiranja (cuva se na pocetku bafera)
                     b = burst_buff[-1]
                     trainrez_buff = [b] + trainrez_buff
                 # -- BURST Finished --
 
-                
                 print(f'>>>> send bytes: {b}')
 
             else:
@@ -392,18 +393,17 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
 
     except WebSocketDisconnect:
         print('-=| WS Disconnect |=-')
-        # raise
 
     except Exception:     
-        print('-=| EXCEPTION |=-')
-        # raise
+        print('-=| EXCEPTION => Remove Training Thread |=-')
+        TTM.table_lock() # TTM [ X ]
+        TTM.remove(uid, nnid)
+        TTM.table_unlock() # TTM [   ]
+        raise
 
     finally:
-        print('-=| Finally - Remove Training Thread |=-')
-        TTM.table_lock()
-        TTM.remove(uid, nnid)
-        TTM.table_unlock()
+        print('-=| Finally |=-')
+        TTM.pretty_print()
+        print('=='*25)
 
-    # TTM.pretty_print()
-    # print('=='*40)
 
