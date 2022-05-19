@@ -134,7 +134,7 @@ class StatisticsMiddleware:
                 c = corr_matrix.columns[j] 
                 data=corr_matrix[r][c]
                 if(pd.isna(data)):
-                    data="None"
+                    data=None
                 cors.append(data)
 
         cormat_dict.add('cols',columns)
@@ -170,13 +170,13 @@ class StatisticsMiddleware:
             mean = self.stat.stat_mean(column)
             med = self.stat.stat_median(column)
             if(pd.isna(min)):
-                min = "None"
+                min = None
             if(pd.isna(max)):
-                max = "None"
+                max = None
             if(pd.isna(mean)):
-                mean = "None"
+                mean = None
             if(pd.isna(med)):
-                med = "None"
+                med = None
             dict_col.add("col", column)
             dict_col.add("min", min)
             dict_col.add("max", max)
