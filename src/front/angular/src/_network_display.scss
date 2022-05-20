@@ -48,7 +48,13 @@ svg{
     width: 90px;
     height: 25px;
     
+    text-transform: capitalize;
+    
     transition: 0.5s ease-in;
+    
+    option{
+        text-transform: capitalize;
+    }
     
     &:hover{
         transition: 0.5s ease-out;

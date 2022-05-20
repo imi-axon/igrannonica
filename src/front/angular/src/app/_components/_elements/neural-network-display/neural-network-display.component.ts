@@ -26,8 +26,8 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   
   @Input() parent: ExperimentNetworkComponent;
   
-  private possibleActivations: string[] = ["Linear", "Sigmoid", "ReLU", "Tahn"];
-  private defaultActivation: string = "Linear";
+  private possibleActivations: string[] = ["linear", "sigmoid", "relu", "tahn"];
+  private defaultActivation: string = "linear";
   
   private weightInputShown: boolean = false;
   private weightInputId: string = "weightInput";
