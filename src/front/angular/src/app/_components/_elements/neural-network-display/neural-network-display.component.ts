@@ -192,6 +192,49 @@ export class NeuralNetworkDisplayComponent implements OnInit {
     this.Refresh();
   }
   
+  public BanishInputClick(inputName: string){
+    
+    let inputIndex = -1;
+    this.parent.neuralNetwork.conf.inputs.forEach(
+      (element: string,index: number)=>{
+        if(element == inputName) {
+          this.parent.neuralNetwork.conf.inputs.splice(index, 1);
+          inputIndex = index;
+        }
+      }
+    );
+    
+    for(let i = 0; i < this.parent.neuralNetwork.nn.layers[0].neurons.length; i++)
+      this.parent.neuralNetwork.nn.layers[0].neurons[i].weights.splice(inputIndex, 1);
+    
+   
+    this.Refresh();
+  }
+  public BanishOutputClick(outputName: string){
+    
+    let outputIndex = -1;
+    // Remove input name from conf
+    this.parent.neuralNetwork.conf.outputs.forEach(
+      (element: string,index: number)=>{
+        if(element == outputName) {
+          outputIndex = index;
+          this.parent.neuralNetwork.conf.outputs.splice(index, 1);
+        }
+      }
+    );
+    
+    // Remove input neuron from last layer in nn
+    this.parent.neuralNetwork.nn.layers[this.parent.neuralNetwork.nn.layers.length - 1].neurons.forEach(
+      (element: any,index: number)=>{
+        if(index == outputIndex) {
+          this.parent.neuralNetwork.nn.layers[this.parent.neuralNetwork.nn.layers.length - 1].neurons.splice(index, 1);
+        }
+      }
+    );
+   
+    this.Refresh();
+  }
+  
   public AddColumnToInput(columnName: string){
     this.parent.neuralNetwork.conf.inputs.push(columnName);
     

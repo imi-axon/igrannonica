@@ -1,6 +1,11 @@
 #lineChartDiv
 {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    border: solid 1px #0091ff;
+    background-color: var(--sideBg);
     display: block;
     height: 100%;
-    width: 41%;
+    width: 100%
 }
