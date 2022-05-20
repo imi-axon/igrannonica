@@ -20,15 +20,20 @@ export class TrainingApiService {
       
     )
 
-    ws.subscribe((val:any)=>{
-      console.log("WS MESSAGE")
-      console.log(val)
+    ws.subscribe({
+      next: (val:any) => {
+        console.log("WS MESSAGE")
+        console.log(val)
 
-      if (self && callback)
-        callback(self, val)
-      
-
-      //ws.next('play');
+        if (self && callback)
+          callback(self, val)
+      },
+      error: (err: any) => {
+        console.log('> >>> >> > > ERROR WS')
+      },
+      complete: () => {
+        console.log('> >>> >> > > KRAJ WS')
+      }
     })
 
     console.log(JWTUtil.get())

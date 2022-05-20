@@ -132,7 +132,7 @@ class TrainingInstance():
             # -- Treniranje --
             print('-- Treniranje --')
 
-            testrez = self.service.start_training(20)                                              # na kraju treninga ima lock.acquire(blocking=True) # [ X ]
+            testrez = self.service.start_training(int(trainConf['epochsDuration']))                      # na kraju treninga ima lock.acquire(blocking=True) # [ X ]
             trained_model_fpath = self.service.save_model(fm_model.directory(), fm_model.name())    # h5 fajl sa putanjom za koju je vezan fm_model FileMngr
             self.lock.release()                                                                     # zbog lock-a na kraju treniranja # [   ]
             
