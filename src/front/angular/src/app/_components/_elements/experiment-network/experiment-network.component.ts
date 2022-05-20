@@ -6,6 +6,7 @@ import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
 import { NetworkService } from 'src/app/_utilities/_services/network.service';
 import { StatisticsService } from 'src/app/_utilities/_services/statistics.service';
 import { ChartTrainingComponent } from '../chart-training/chart-training.component';
+import { MetricsBarplotComponent } from '../metrics-barplot/metrics-barplot.component';
 import { NeuralNetworkDisplayComponent } from '../neural-network-display/neural-network-display.component';
 
 @Component({
@@ -52,6 +53,11 @@ export class ExperimentNetworkComponent implements OnInit {
   
   @ViewChild("grafik") 
   private grafik: ChartTrainingComponent;
+  
+  @ViewChild("MSEbarplot")
+  private MSEbarplot: MetricsBarplotComponent;
+  @ViewChild("MAEbarplot")
+  private MAEbarplot: MetricsBarplotComponent;
   
   // NEURAL NETWORK
   public networkName: string = "";
@@ -105,15 +111,6 @@ export class ExperimentNetworkComponent implements OnInit {
         self.networkComponent.BanishOutputClick(output)
       });
       
-      /*
-      for(let i = 0; i < self.neuralNetwork.conf.inputs.length; i++)
-        if(self.metadata.columns[self.neuralNetwork.conf.inputs[i]].trainReady == false)
-          self.networkComponent.BanishInputClick(self.neuralNetwork.conf.inputs[i]);
-      
-      for(let i = 0; i < self.neuralNetwork.conf.outputs.length; i++)
-        if(self.metadata.columns[self.neuralNetwork.conf.outputs[i]].trainReady == false)
-          self.networkComponent.BanishOutputClick(self.neuralNetwork.conf.outputs[i]);
-          */
       self.once = false;
     }
     
@@ -138,6 +135,8 @@ export class ExperimentNetworkComponent implements OnInit {
     for (const epoch of epochs) {
       // console.log(epoch)
       self.grafik.dataUpdate(epoch['epoch'], epoch['val_loss'], epoch['loss']);
+      self.MSEbarplot.RefreshBarplot(epoch['mean_squared_error'], epoch['val_mean_squared_error'])
+      self.MAEbarplot.RefreshBarplot(epoch['mean_absolute_error'], epoch['val_mean_absolute_error'])
     }
 
   }

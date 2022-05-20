@@ -30,7 +30,7 @@
                     </div>
                 </div>
                 
-                <div id="columnControls" [class.hidden]="runningTraining == true">
+                <div id="columnControls">
                     <div class="title"> Move to </div>
                     
                     <div class="controls">
@@ -38,6 +38,20 @@
                         <button (click)="MoveToOutput()"> Output </button>
                     </div>
                 </div>
+            </div>
+            
+            <div id="metricsContainer" [class.hidden]="runningTraining == false">
+                <span style="color: #0091ff; font-size: 18px;">MSE:</span>
+                
+                <hr>
+                <app-metrics-barplot #MSEbarplot> </app-metrics-barplot>
+                
+                <br>
+                
+                <span style="color: #0091ff; font-size: 18px;">MAE:</span>
+                
+                <hr>
+                <app-metrics-barplot #MAEbarplot> </app-metrics-barplot>
             </div>
             
             

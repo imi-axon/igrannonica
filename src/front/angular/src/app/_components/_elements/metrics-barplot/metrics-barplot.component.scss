@@ -1,0 +1,21 @@
+.plot{
+    height: 20px;
+    width: 100%;
+}
+
+.plot{
+    background-color: #0d3772;
+    border: solid 1px #FFFFFF;
+}
+
+#plot1{
+    transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+#plot2{
+    transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+#plot3{
+    transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
