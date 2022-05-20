@@ -71,6 +71,7 @@ class NNModelMiddleware():
     def new_default_model_2(self, inputs, outputs):
 
         conf = {
+            'epochsDuration': 100,
             'inputs': inputs,
             'outputs': outputs,
             'neuronsPerLayer': [3,2],
