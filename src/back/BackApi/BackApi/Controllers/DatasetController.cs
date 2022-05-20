@@ -252,7 +252,17 @@ namespace BackApi.Controllers
             if (!projsrv.projectOwnership(userid, id)) return Forbid();
 
             if (datasrv.RevertToInit(id))
+            {
+                GenerateMetadata data = new GenerateMetadata();
+                data.dataset = datasrv.ProjIdToPath(id, true);
+                data.metamain = storsrv.MetaFilePath(id, true);
+                data.metaedit = storsrv.MetaFilePath(id, false);
+                var response = await MLconnection.generateMetaData(data);
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return BadRequest("metadata");
                 return Ok();
+            }
+
             return BadRequest();
         }
         [HttpGet("{projid}/dataset/{main}/changes")]
