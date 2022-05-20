@@ -272,7 +272,8 @@ export class ExperimentEditComponent implements OnInit {
     if(lineNumber == 0)
       this.datasetService.RevertInit(this.GetProjectId(), this, this.UpdateAllMain);
     else
-      this.datasetService.RevertLine(this.GetProjectId(), lineNumber, this, this.UpdateAllMain);
+      return;
+      //this.datasetService.RevertLine(this.GetProjectId(), lineNumber, this, this.UpdateAllMain);
   }
   
   // SAVE

@@ -6,13 +6,9 @@
     
     <div id="header">
         <div class="titlesContainer">
-            <span #titleInput class="titleInput" role="textbox" contenteditable="true" (blur)="ChangeExperimentTitleRequest()" (keydown)="ChangeExperimentTitleRequest($event)">
-                    {{project.Name}}
-            </span>
+            <span #titleInput class="titleInput" role="textbox" contenteditable="true" (blur)="ChangeExperimentTitleRequest()" (keydown)="ChangeExperimentTitleRequest($event)">{{project.Name}}</span>
             <span *ngIf="showsNetwork"> / </span>
-            <span #networkInput class="titleInput" role="textbox" contenteditable="true" style="font-size: 22px;" *ngIf="showsNetwork">
-                {{networkName}}
-            </span>
+            <span #networkInput class="titleInput" role="textbox" contenteditable="true" style="font-size: 22px;" *ngIf="showsNetwork" (blur)="ChangeNetworkTitleRequest()" (keydown)="ChangeNetworkTitleRequest($event)">{{networkName}}</span>
         </div>
         
         <div id="cards">

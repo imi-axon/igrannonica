@@ -94,11 +94,17 @@ export class ExperimentPageComponent implements OnInit {
       this.showsNetwork = false;
   }
   
+
   
   
   
   
-  
+  public ChangeNetworkTitleRequest(event?: KeyboardEvent){
+    if(event && event.key != "Enter")
+      return;
+      
+    this.singleNetworkComponent.ChangeNetworkTitle(this.networkTitle.nativeElement.innerHTML);
+  }
   
   public ChangeExperimentTitleRequest(event?: KeyboardEvent){
     if(event && event.key != "Enter")

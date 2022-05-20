@@ -4,8 +4,8 @@
         <label for="ProblemType">Problem type</label>
         <div class="select">
             <select id="ProblemType" (change)="ChangeProblemType($event)">
-                <option selected value="regression">Regression</option>
-                <option value="classification">Classification</option>
+                <option [selected]="neuralNetwork.conf.problemType == 'regression'" value="regression">Regression</option>
+                <option [selected]="neuralNetwork.conf.problemType == 'classification'" value="classification">Classification</option>
             </select>
         </div>
     </div>

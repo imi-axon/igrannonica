@@ -67,4 +67,22 @@ export class NnService {
     )
   }
   
+  
+  changeNNTitle(projectId: number, networkId: number, newTitle: string){
+    this.nnApiService.changeNNTitle(projectId, networkId, newTitle).subscribe(
+      (response: any) => {
+        console.log(response);
+      }
+    )
+  }
+  
+  getTrainRez(projectId: number, networkId: number, self: any, successCallback: Function){
+    this.nnApiService.getTrainRez(projectId, networkId).subscribe({
+      next: function(response: HttpResponse<any>) {
+        if (self && successCallback)
+          successCallback(self, response.body);
+      }   
+    })
+  }
+  
 }

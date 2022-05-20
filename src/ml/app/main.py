@@ -387,7 +387,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
 
         # Cuvanje trainrez rezultata u fajl
         fm_trainrez = FileMngr('txt')
-        fm_trainrez.create(b'\n'.join(trainrez_buff))
+        fm_trainrez.create(b'[' + b','.join(trainrez_buff) + b']')
         httpc.put(trainrezlink, fm_trainrez.path())
         print('---- Saving to File ----')
         print(fm_trainrez.read_b())

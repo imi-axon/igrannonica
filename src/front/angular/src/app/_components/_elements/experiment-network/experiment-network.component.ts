@@ -4,6 +4,7 @@ import { NeuralNetwork, Project } from 'src/app/_utilities/_data-types/models';
 import { TrainingApiService } from 'src/app/_utilities/_middleware/training-api.service';
 import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
 import { NetworkService } from 'src/app/_utilities/_services/network.service';
+import { NnService } from 'src/app/_utilities/_services/nn.service';
 import { StatisticsService } from 'src/app/_utilities/_services/statistics.service';
 import { ChartTrainingComponent } from '../chart-training/chart-training.component';
 import { MetricsBarplotComponent } from '../metrics-barplot/metrics-barplot.component';
@@ -17,6 +18,7 @@ import { NeuralNetworkDisplayComponent } from '../neural-network-display/neural-
 export class ExperimentNetworkComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
+    private nnService: NnService,
     private statisticsService: StatisticsService,
     private networkService: NetworkService,
     private wsService: TrainingApiService
@@ -54,15 +56,34 @@ export class ExperimentNetworkComponent implements OnInit {
   @ViewChild("grafik") 
   private grafik: ChartTrainingComponent;
   
+  
+  
   @ViewChild("MSEbarplot")
   private MSEbarplot: MetricsBarplotComponent;
   @ViewChild("MAEbarplot")
   private MAEbarplot: MetricsBarplotComponent;
   
+  @ViewChild("testBarplot")
+  private testBarplot: MetricsBarplotComponent;
+  
+  
+  
+  @ViewChild("categoricalbarplot")
+  private categoricalbarplot: MetricsBarplotComponent;
+  @ViewChild("precisionbarplot")
+  private precisionbarplot: MetricsBarplotComponent;
+  
+  @ViewChild("recallbarplot")
+  private recallbarplot: MetricsBarplotComponent;
+  
+  @ViewChild("testBarplot2")
+  private testBarplot2: MetricsBarplotComponent;
+  
   // NEURAL NETWORK
   public networkName: string = "";
   public neuralNetwork : NeuralNetwork = new NeuralNetwork();
   public runningTraining: boolean = false;
+  public trainingFinished: boolean = false;
   
   public unusedColumns: string[] = [];
   public selectedColumns: string[] = [];
@@ -73,6 +94,9 @@ export class ExperimentNetworkComponent implements OnInit {
   ngOnInit(): void {
     this.networkService.GetNetwork(this.getProjectId(), this.getNetworkId(), this, this.successGetNetworkCallback);
     this.statisticsService.GetStatistics(this.getProjectId(), true, this, this.successGetStatisticsCallback);
+    
+    setTimeout(() => {
+    }, 0);
   }
   
   private successGetNetworkCallback(self: any, response: any){
@@ -125,21 +149,62 @@ export class ExperimentNetworkComponent implements OnInit {
   
   
   public StartTraining() {
+    if(this.neuralNetwork.conf.problemType == 'regression'){
+      this.testBarplot.text1 = "MSE";
+      this.testBarplot.text2 = "MAE";
+    }
+    else{
+      this.testBarplot2.text1 = "Precision";
+      this.testBarplot2.text2 = "Recall";
+    }
+    
     this.runningTraining = true;
-    this.wsService.train(this.getProjectId(), this.getNetworkId(), this.neuralNetwork.conf, this, this.updateTrainData);
+    this.wsService.train(this.getProjectId(), this.getNetworkId(), this.neuralNetwork.conf, this, this.updateTrainData, this.finishedCallback);
   }
   
   
   updateTrainData(self: ExperimentNetworkComponent, epochs: any) {
     
     for (const epoch of epochs) {
-      // console.log(epoch)
       self.grafik.dataUpdate(epoch['epoch'], epoch['val_loss'], epoch['loss']);
-      self.MSEbarplot.RefreshBarplot(epoch['mean_squared_error'], epoch['val_mean_squared_error'])
-      self.MAEbarplot.RefreshBarplot(epoch['mean_absolute_error'], epoch['val_mean_absolute_error'])
+      
+      if(self.neuralNetwork.conf.problemType == 'regression'){
+        self.testBarplot.text1 = "MSE";
+        self.testBarplot.text2 = "MAE";
+        self.MSEbarplot.RefreshBarplot(epoch['mean_squared_error'], epoch['val_mean_squared_error'])
+        self.MAEbarplot.RefreshBarplot(epoch['mean_absolute_error'], epoch['val_mean_absolute_error'])
+      }
+      else{
+        self.testBarplot2.text1 = "Precision";
+        self.testBarplot2.text2 = "Recall";
+        //self.categoricalbarplot.RefreshBarplot(epoch['categorical_accuracy'], epoch['val_categorical_accuracy'])
+        self.precisionbarplot.RefreshBarplot(epoch['precision'], epoch['val_precision'])
+        self.recallbarplot.RefreshBarplot(epoch['recall'], epoch['val_recall'])
+      }
     }
 
   }
+  
+  public finishedCallback(self: ExperimentNetworkComponent){
+    self.nnService.getTrainRez(self.getProjectId(), self.getNetworkId(), self, self.gotTrainRez);
+  }
+  
+  
+  public gotTrainRez(self: ExperimentNetworkComponent, response: any){
+    if(self.neuralNetwork.conf.problemType == 'regression'){
+      self.testBarplot.RefreshBarplot(response[0]['mean_squared_error'], response[0]['mean_absolute_error'])
+    }
+    else{
+      self.testBarplot2.RefreshBarplot(response[0]['precision'], response[0]['recall'])
+    }
+  }
+  
+  
+  public ChangeNetworkTitle(title: string){
+    console.log(title)
+    this.nnService.changeNNTitle(this.getProjectId(), this.getNetworkId(), title);
+  }
+  
   
   
   // COLUMN SELECTION
@@ -246,5 +311,5 @@ export class ExperimentNetworkComponent implements OnInit {
     // Change cursor
     this.display.nativeElement.setAttribute("style", "cursor: grab;");
   }
-
+  
 }

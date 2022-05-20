@@ -37,4 +37,27 @@ export class NnApiService {
     return response;
   }
   
+  changeNNTitle(projectId: number, networkId: number, newTitle: string){
+    return this.http.put(
+      this.url + projectId + "/edittitle/" + networkId,
+      {
+        title: newTitle
+      },
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    )
+  }
+  
+  getTrainRez(projectId: number, networkId: number){
+    return this.http.get(
+      apiProperties.url + "/api/files/Storage/proj" + projectId + "/mreze/trainrez" + networkId + '.txt',
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    )
+  }
+  
 }

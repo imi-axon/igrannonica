@@ -20,6 +20,7 @@
         <div id="side">
             <div class="header">
                 <button id="playButton" (click)="StartTraining()"> <img src="/assets/Images/Icons/StartTraining_icon.svg"> </button>
+                <span> Epochs:&nbsp;</span>
                 <input type="number" min="1" max="1000" [value]="neuralNetwork.conf.epochsDuration" (input)="ChangeEpochsDuration($event)">
             </div>
             
@@ -40,20 +41,39 @@
                 </div>
             </div>
             
-            <div id="metricsContainer" [class.hidden]="runningTraining == false">
-                <span style="color: #0091ff; font-size: 18px;">MSE:</span>
-                
-                <hr>
+            <div *ngIf="neuralNetwork.conf.problemType == 'regression'" id="metricsContainer" [class.hidden]="runningTraining == false">
+                <span style="color: #375aa0; font-size: 14px;">MSE</span><br>
                 <app-metrics-barplot #MSEbarplot> </app-metrics-barplot>
                 
-                <br>
-                
-                <span style="color: #0091ff; font-size: 18px;">MAE:</span>
+                <hr>
+                <span style="color: #375aa0; font-size: 14px;">MAE</span><br>
+                <app-metrics-barplot #MAEbarplot> </app-metrics-barplot>
                 
                 <hr>
-                <app-metrics-barplot #MAEbarplot> </app-metrics-barplot>
+                <span style="color: #375aa0; font-size: 14px;">Test</span><br>
+                <app-metrics-barplot #testBarplot> </app-metrics-barplot>
+                
             </div>
             
+            <div *ngIf="neuralNetwork.conf.problemType == 'classification'" id="metricsContainer" [class.hidden]="runningTraining == false">
+                <!--<span style="color: #375aa0; font-size: 14px;">Categorical accuracy</span><br>
+                <app-metrics-barplot #categoricalbarplot> </app-metrics-barplot>
+                
+                <hr>-->
+                
+                <span style="color: #375aa0; font-size: 14px;">Precision</span><br>
+                <app-metrics-barplot #precisionbarplot> </app-metrics-barplot>
+                
+                <hr>
+                
+                <span style="color: #375aa0; font-size: 14px;">Recall</span><br>
+                <app-metrics-barplot #recallbarplot> </app-metrics-barplot>
+                
+                <hr>
+                <span style="color: #375aa0; font-size: 14px;">Test</span><br>
+                <app-metrics-barplot #testBarplot2> </app-metrics-barplot>
+                
+            </div>
             
         </div>
         

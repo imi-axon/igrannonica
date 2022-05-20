@@ -17,6 +17,9 @@ export class MetricsBarplotComponent implements OnInit {
   
   public max: number = 0;
   
+  public text1: string = "Training";
+  public text2: string = "Validation";
+  
   public value1: number = 0;
   public value2: number = 0;
   
@@ -34,6 +37,7 @@ export class MetricsBarplotComponent implements OnInit {
       this.max = this.value1;
     if(this.value2 > this.max)
       this.max = this.value2;
+    
     
     this.plot1.nativeElement.setAttribute('style', 'width: ' + (this.value1 / this.max * 100) + '%');
     this.plot2.nativeElement.setAttribute('style', 'width: ' + (this.value2 / this.max * 100) + '%');

@@ -10,7 +10,7 @@ export class TrainingApiService {
 
   url = apiProperties.wsurl;
 
-  public train(projectId:number, nnId: number ,conf:any, self: any, callback: Function){
+  public train(projectId:number, nnId: number ,conf:any, self: any, callback: Function, completeCallback: Function){
     
     
     let url=this.url+'/api/projects/'+projectId+'/nn/'+nnId+'/train/start'
@@ -20,26 +20,28 @@ export class TrainingApiService {
       
     )
 
-    ws.subscribe({
-      next: (val:any) => {
-        console.log("WS MESSAGE")
-        console.log(val)
+    ws.subscribe(
+      {
+        next: (val:any) => {
+          console.log("WS MESSAGE")
+          console.log(val)
 
-        if (self && callback)
-          callback(self, val)
-      },
-      error: (err: any) => {
-        console.log('> >>> >> > > ERROR WS')
-      },
-      complete: () => {
-        console.log('> >>> >> > > KRAJ WS')
+          if (self && callback)
+            callback(self, val)
+        },
+        error: (err: any) => {
+          console.log('> >>> >> > > ERROR WS')
+          completeCallback(self);
+        },
+        complete: () => {
+          console.log('> >>> >> > > KRAJ WS')
+        }
       }
-    })
-
+    )
+    
     console.log(JWTUtil.get())
     ws.next(JWTUtil.get());
     ws.next(conf);
-    //ws.next('play');
 
   }
 
