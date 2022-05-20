@@ -76,8 +76,8 @@ export class ExperimentNetworkComponent implements OnInit {
   @ViewChild("recallbarplot")
   private recallbarplot: MetricsBarplotComponent;
   
-  @ViewChild("testBarplot2")
-  private testBarplot2: MetricsBarplotComponent;
+  @ViewChild("testbarplotdva")
+  private testbarplotdva: MetricsBarplotComponent;
   
   // NEURAL NETWORK
   public networkName: string = "";
@@ -150,12 +150,12 @@ export class ExperimentNetworkComponent implements OnInit {
   
   public StartTraining() {
     if(this.neuralNetwork.conf.problemType == 'regression'){
-      this.testBarplot.text1 = "MSE";
-      this.testBarplot.text2 = "MAE";
+      //this.testBarplot.text1 = "MSE";
+      //this.testBarplot.text2 = "MAE";
     }
     else{
-      this.testBarplot2.text1 = "Precision";
-      this.testBarplot2.text2 = "Recall";
+      //this.testbarplotdva.text1 = "Precision";
+      //this.testbarplotdva.text2 = "Recall";
     }
     
     this.runningTraining = true;
@@ -169,17 +169,23 @@ export class ExperimentNetworkComponent implements OnInit {
       self.grafik.dataUpdate(epoch['epoch'], epoch['val_loss'], epoch['loss']);
       
       if(self.neuralNetwork.conf.problemType == 'regression'){
-        self.testBarplot.text1 = "MSE";
-        self.testBarplot.text2 = "MAE";
+        if(self.testBarplot != undefined){
+          self.testBarplot.text1 = "MSE";
+          self.testBarplot.text2 = "MAE";
+        
         self.MSEbarplot.RefreshBarplot(epoch['mean_squared_error'], epoch['val_mean_squared_error'])
         self.MAEbarplot.RefreshBarplot(epoch['mean_absolute_error'], epoch['val_mean_absolute_error'])
       }
+      }
       else{
-        self.testBarplot2.text1 = "Precision";
-        self.testBarplot2.text2 = "Recall";
+        if(self.testbarplotdva != undefined){
+          self.testbarplotdva.text1 = "Precision";
+          self.testbarplotdva.text2 = "Recall";
+        
         //self.categoricalbarplot.RefreshBarplot(epoch['categorical_accuracy'], epoch['val_categorical_accuracy'])
         self.precisionbarplot.RefreshBarplot(epoch['precision'], epoch['val_precision'])
         self.recallbarplot.RefreshBarplot(epoch['recall'], epoch['val_recall'])
+      }
       }
     }
 
@@ -192,10 +198,12 @@ export class ExperimentNetworkComponent implements OnInit {
   
   public gotTrainRez(self: ExperimentNetworkComponent, response: any){
     if(self.neuralNetwork.conf.problemType == 'regression'){
-      self.testBarplot.RefreshBarplot(response[0]['mean_squared_error'], response[0]['mean_absolute_error'])
+      if(self.testBarplot != undefined)
+        self.testBarplot.RefreshBarplot(response[0]['mean_squared_error'], response[0]['mean_absolute_error'])
     }
     else{
-      self.testBarplot2.RefreshBarplot(response[0]['precision'], response[0]['recall'])
+      if(self.testbarplotdva != undefined)
+        self.testbarplotdva.RefreshBarplot(response[0]['precision'], response[0]['recall'])
     }
   }
   
