@@ -91,8 +91,10 @@ class TrainingInstance():
 
 
     def create_service(self, dataframe, trainConf: Dict):
-        self.service = TrainingService(dataframe, trainConf['inputs'], trainConf['outputs'], trainConf['actPerLayer'], trainConf['neuronsPerLayer']
-            , actOutput = trainConf['actOut']
+        actpl = trainConf['actPerLayer']
+        actpl = [a.lower() for a in actpl]
+        self.service = TrainingService(dataframe, trainConf['inputs'], trainConf['outputs'], actpl, trainConf['neuronsPerLayer']
+            , actOutput = trainConf['actOut'].lower()
             , learning_rate = trainConf['learningRate']
             , regularization_rate = trainConf['regRate']
             , regularization = trainConf['reg']
