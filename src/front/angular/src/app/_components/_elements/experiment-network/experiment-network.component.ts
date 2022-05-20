@@ -2,7 +2,9 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 import { ActivatedRoute } from '@angular/router';
 import { NeuralNetwork, Project } from 'src/app/_utilities/_data-types/models';
 import { TrainingApiService } from 'src/app/_utilities/_middleware/training-api.service';
+import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
 import { NetworkService } from 'src/app/_utilities/_services/network.service';
+import { StatisticsService } from 'src/app/_utilities/_services/statistics.service';
 import { ChartTrainingComponent } from '../chart-training/chart-training.component';
 import { NeuralNetworkDisplayComponent } from '../neural-network-display/neural-network-display.component';
 
@@ -14,6 +16,7 @@ import { NeuralNetworkDisplayComponent } from '../neural-network-display/neural-
 export class ExperimentNetworkComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
+    private statisticsService: StatisticsService,
     private networkService: NetworkService,
     private wsService: TrainingApiService
   ) { }
@@ -53,18 +56,20 @@ export class ExperimentNetworkComponent implements OnInit {
   // NEURAL NETWORK
   public networkName: string = "";
   public neuralNetwork : NeuralNetwork = new NeuralNetwork();
-  public runningTraining: Boolean = false;
+  public runningTraining: boolean = false;
   
   public unusedColumns: string[] = [];
   public selectedColumns: string[] = [];
   
-  
+  private metadata: any;
+  private once: boolean = true;
 
   ngOnInit(): void {
     this.networkService.GetNetwork(this.getProjectId(), this.getNetworkId(), this, this.successGetNetworkCallback);
+    this.statisticsService.GetStatistics(this.getProjectId(), true, this, this.successGetStatisticsCallback);
   }
   
-  private successGetNetworkCallback(self: any, response : any){
+  private successGetNetworkCallback(self: any, response: any){
     //self.unusedColumns = Object.keys(JSON.parse(JSON.parse(response.dataset).dataset)[0])
     self.networkName = response.name;
     self.neuralNetwork = new NeuralNetwork();
@@ -73,9 +78,52 @@ export class ExperimentNetworkComponent implements OnInit {
     self.networkComponent.Refresh();
     console.log(self.neuralNetwork)
     
+    let columns = Object.keys(self.metadata.columns);
+    self.unusedColumns = [];
+    for(let i = 0; i < columns.length; i++)
+      if(self.metadata.columns[columns[i]].trainReady == true)
+        if( self.neuralNetwork.conf.inputs.find((column: string) => {return columns[i] == column}) == undefined && self.neuralNetwork.conf.outputs.find((column: string) => {return columns[i] == column}) == undefined )
+          self.unusedColumns.push(columns[i]);
+    
+    if(self.once){
+      
+      let removeList: string[] = [];
+      self.neuralNetwork.conf.inputs.forEach((input: string) => {
+        if(self.metadata.columns[input].trainReady == false)
+          removeList.push(input)
+      });
+      removeList.forEach((input: string) => {
+        self.networkComponent.BanishInputClick(input)
+      });
+      
+      removeList = [];
+      self.neuralNetwork.conf.outputs.forEach((output: string) => {
+        if(self.metadata.columns[output].trainReady == false)
+          removeList.push(output)
+      });
+      removeList.forEach((output: string) => {
+        self.networkComponent.BanishOutputClick(output)
+      });
+      
+      /*
+      for(let i = 0; i < self.neuralNetwork.conf.inputs.length; i++)
+        if(self.metadata.columns[self.neuralNetwork.conf.inputs[i]].trainReady == false)
+          self.networkComponent.BanishInputClick(self.neuralNetwork.conf.inputs[i]);
+      
+      for(let i = 0; i < self.neuralNetwork.conf.outputs.length; i++)
+        if(self.metadata.columns[self.neuralNetwork.conf.outputs[i]].trainReady == false)
+          self.networkComponent.BanishOutputClick(self.neuralNetwork.conf.outputs[i]);
+          */
+      self.once = false;
+    }
+    
     self.NetworkUpdated.emit(self.networkName);
   }
   
+  private successGetStatisticsCallback(self: any, metadata: any){
+    self.metadata = metadata;
+    console.log(metadata)
+  }
   
   
   
@@ -89,7 +137,7 @@ export class ExperimentNetworkComponent implements OnInit {
     
     for (const epoch of epochs) {
       // console.log(epoch)
-      self.grafik.dataUpdate(epoch['epoch'], epoch['t_loss'], epoch['v_loss']);
+      self.grafik.dataUpdate(epoch['epoch'], epoch['val_loss'], epoch['loss']);
     }
 
   }
@@ -137,6 +185,19 @@ export class ExperimentNetworkComponent implements OnInit {
     }
     this.selectedColumns = [];
   }
+  
+  
+  
+  public ChangeEpochsDuration(event: any){
+    this.neuralNetwork.conf.epochsDuration = event.currentTarget.value;
+  }
+  
+  
+  
+  
+  
+  
+  
   
   
   // Dragging controls =====================================================================

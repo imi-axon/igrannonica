@@ -63,7 +63,7 @@
                         </svg>
                         
                         <ul class="submenu">
-                            <li><button [class.disabled]="noColumnsSelected || numericalSelected || encodedSelected" [disabled]="noColumnsSelected || categoricalSelected || encodedSelected" (click)="OneHotEncoding()"> {{"edit-dataset.oneHot"|translate}} </button></li>
+                            <li><button [class.disabled]="noColumnsSelected || numericalSelected || encodedSelected" [disabled]="noColumnsSelected || numericalSelected || encodedSelected" (click)="OneHotEncoding()"> {{"edit-dataset.oneHot"|translate}} </button></li>
                             <li><button [class.disabled]="noColumnsSelected || numericalSelected || encodedSelected" [disabled]="noColumnsSelected || numericalSelected || encodedSelected" (click)="LabelEncoding()"> {{"edit-dataset.label"|translate}} </button></li>
                         </ul>
                     </div>

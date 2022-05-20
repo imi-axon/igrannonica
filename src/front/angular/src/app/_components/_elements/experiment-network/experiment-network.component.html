@@ -6,24 +6,31 @@
     
     <div id="secondRow">
         
-        <div #networkDisplay id="networkDisplay" (mousedown)="MouseDownHandler($event)" (mouseup)="MouseUpHandler($event)" (mousemove)="MouseMoveHandler($event)" (mouseleave)="MouseUpHandler($event)">
+        <div [class.hidden]="runningTraining == true" #networkDisplay id="networkDisplay" (mousedown)="MouseDownHandler($event)" (mouseup)="MouseUpHandler($event)" (mousemove)="MouseMoveHandler($event)" (mouseleave)="MouseUpHandler($event)">
             
             <neural-network-display [parent]="this" #networkComponent></neural-network-display>
+            
+            
         </div>
+        <div [class.hidden]="runningTraining == false" class="trainContainer">
+            <app-chart-training #grafik></app-chart-training>
+        </div>
+        
         
         <div id="side">
             <div class="header">
                 <button id="playButton" (click)="StartTraining()"> <img src="/assets/Images/Icons/StartTraining_icon.svg"> </button>
+                <input type="number" min="1" max="1000" [value]="neuralNetwork.conf.epochsDuration" (input)="ChangeEpochsDuration($event)">
             </div>
             
-            <div class="inputContainer">
+            <div class="inputContainer" [class.hidden]="runningTraining == true">
                 <div id="columns">
                     <div class="column" *ngFor="let column of unusedColumns" (click)="SelectColumn(column)" [class.selectedColumn]="IsSelected(column)">
                         {{column}}
                     </div>
                 </div>
                 
-                <div id="columnControls">
+                <div id="columnControls" [class.hidden]="runningTraining == true">
                     <div class="title"> Move to </div>
                     
                     <div class="controls">
@@ -34,10 +41,6 @@
             </div>
             
             
-        </div>
-        
-        <div class="trainContainer">
-            <app-chart-training #grafik></app-chart-training>
         </div>
         
     </div>
