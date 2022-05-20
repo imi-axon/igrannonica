@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { fromEvent, Subscription } from 'rxjs';
 import { UserInfo } from 'src/app/_utilities/_data-types/models';
 import { AuthService } from 'src/app/_utilities/_services/auth.service';
@@ -21,7 +22,8 @@ export class ProfilPageComponent implements OnInit {
   
   constructor(
     public auth:AuthService, 
-    public service:UserService
+    public service:UserService,
+    public router: Router
   ) { }
 
   ngOnInit(): void {
@@ -48,6 +50,10 @@ export class ProfilPageComponent implements OnInit {
   private onResize(event: Event){
     console.log("TEST")
     this.profilePictureRef.nativeElement.height = this.profilePictureRef.nativeElement.width;
+  }
+  
+  public EditProfile(){
+    
   }
   
 }
