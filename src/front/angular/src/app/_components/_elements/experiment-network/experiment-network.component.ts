@@ -138,6 +138,7 @@ export class ExperimentNetworkComponent implements OnInit {
       self.once = false;
     }
     
+    self.neuralNetwork.conf.problemType = self.neuralNetwork.conf.problemType.toLowerCase();
     self.NetworkUpdated.emit(self.networkName);
   }
   
