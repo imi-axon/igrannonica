@@ -123,11 +123,19 @@ export class ExperimentPageComponent implements OnInit {
   public fullEdits:any;
   
   public ChangeExperiment(edits: any){
+    console.log(edits)
     if(this.inputTitle.nativeElement.value==""){
       this.fullEdits={
         "name": "Untitled-Experiment-" + this.projectId,
         "ispublic": edits.isPublic,
         "description": edits.description
+      }
+    }
+    if(edits.description==""){
+      this.fullEdits={
+        "name": this.inputTitle.nativeElement.innerHTML,
+        "ispublic": edits.isPublic,
+        "description": " "
       }
     }
     else {

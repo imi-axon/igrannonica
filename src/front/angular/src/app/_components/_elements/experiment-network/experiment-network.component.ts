@@ -110,6 +110,8 @@ export class ExperimentNetworkComponent implements OnInit {
     
     let columns = Object.keys(self.metadata.columns);
     self.unusedColumns = [];
+    
+    // DODAVANJE NEKORISCENIH KOLONA U unusedColumns
     for(let i = 0; i < columns.length; i++)
       if(self.metadata.columns[columns[i]].trainReady == true)
         if( self.neuralNetwork.conf.inputs.find((column: string) => {return columns[i] == column}) == undefined && self.neuralNetwork.conf.outputs.find((column: string) => {return columns[i] == column}) == undefined )
@@ -119,7 +121,7 @@ export class ExperimentNetworkComponent implements OnInit {
       
       let removeList: string[] = [];
       self.neuralNetwork.conf.inputs.forEach((input: string) => {
-        if(self.metadata.columns[input].trainReady == false)
+        if(self.metadata.columns[input] == undefined || self.metadata.columns[input].trainReady == false)
           removeList.push(input)
       });
       removeList.forEach((input: string) => {
