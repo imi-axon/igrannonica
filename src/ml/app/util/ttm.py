@@ -1,5 +1,6 @@
 from threading import Lock, Thread
 from typing import List, Tuple
+from .runb import runb, alock, aunlock
 
 class TrainingThread():
 
@@ -20,11 +21,17 @@ class TrainingThreadsManager():
         self.tlock: Lock = Lock()
         self.table = {}
 
-    def table_lock(self):
-        self.tlock.acquire(blocking=True)
+    async def table_lock(self):
+        return await alock(self.tlock)
     
-    def table_unlock(self):
-        self.tlock.release()
+    async def table_unlock(self):
+        return await aunlock(self.tlock)
+
+    def b_table_lock(self):
+        return self.tlock.acquire()
+    
+    def b_table_unlock(self):
+        return self.tlock.release()
 
     # Dodaje nit za UID i NNID
     def add(self, tt: TrainingThread, uid, nnid) -> bool: # return True/False <=> Added/NotAdded <=> DidNotExist/Existed

@@ -18,7 +18,7 @@ from util.csv import csv_is_valid, csv_decode, csv_decode_2, get_csv_dialect
 from util.json import json_encode, json_decode
 import util.http as httpc
 from util.filemngr import FileMngr
-from util.runb import runb
+from util.runb import runb, alock, aunlock
 
 # ML
 from middleware.statistics import StatisticsMiddleware
@@ -256,15 +256,15 @@ def nn_train_start(uid: int, nnid: int, body: TrainingRequest):
 # Training STOP
 @app.get('/api/user{uid}/nn{nnid}/stop')
 def nn_train_stop(uid: int, nnid: int):
-    TTM.table_lock() # TTM [ X ]
+    TTM.b_table_lock() # TTM [ X ]
     if TTM.nn_exist(uid, nnid):
         tt = TTM.get_tt(uid, nnid)
-        TTM.table_unlock() # TTM [   ]
+        TTM.b_table_unlock() # TTM [   ]
         tt.lock.acquire(blocking=True)
         tt.flags['stop'] = True
         tt.lock.release()
     else:
-        TTM.table_unlock() # TTM [  ]
+        TTM.b_table_unlock() # TTM [  ]
 
 
 # Training WATCH
@@ -311,12 +311,12 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
     try:
         th: Thread = None
         print('1 ------')
-        TTM.table_lock() # TTM [ X ]
+        await TTM.table_lock() # TTM [ X ]
         training_exists = TTM.nn_exist(uid, nnid)
 
         if training_exists:
             tt = TTM.get_tt(uid, nnid)
-            TTM.table_unlock() # TTM [   ]
+            await TTM.table_unlock() # TTM [   ]
             buff = tt.buffer
             flags = tt.flags
             lock = tt.lock
@@ -326,7 +326,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
             th = Thread(target=TrainingInstance(buff, lock, flags).train, args=(datasetlink, nnlink, conflink, trainrezlink, newconf), daemon=True)
             tt = TrainingThread(th, buff, flags, lock)
             TTM.add(tt, uid, nnid)
-            TTM.table_unlock() # TTM [   ]
+            await TTM.table_unlock() # TTM [   ]
             th.start()
             print('> Thread started')
 
@@ -335,7 +335,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
 
         while not finished:
             
-            lock.acquire(blocking=True) # [ X ]
+            await alock(lock) # [ X ]
 
             if (not th.is_alive()) and flags['stop'] == False:
                 raise Exception()
@@ -344,7 +344,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
                 
                 burst_buff = buff.copy()
                 buff.clear()
-                lock.release() # [   ]
+                await aunlock(lock) # [   ]
 
                 # -- Send EPOCHS in BURST of PACKS --
                 pack = b''
@@ -380,19 +380,21 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
                 # print(f'>>>> send bytes: {b}')
 
             else:
-                lock.release() # [   ]
+                await aunlock(lock) # [   ]
 
         # Cuvanje trainrez rezultata u fajl
-        fm_trainrez = FileMngr('txt')
-        fm_trainrez.create(b'[' + b','.join(trainrez_buff) + b']')
-        httpc.put(trainrezlink, fm_trainrez.path())
-        print('---- Saving to File ----')
-        print(fm_trainrez.read_b())
-        fm_trainrez.delete(0)
+        def save_trainrez_to_file():
+            fm_trainrez = FileMngr('txt')
+            fm_trainrez.create(b'[' + b','.join(trainrez_buff) + b']')
+            httpc.put(trainrezlink, fm_trainrez.path())
+            print('---- Saving to File ----')
+            print(fm_trainrez.read_b())
+            fm_trainrez.delete(0)
+        await runb(save_trainrez_to_file)
 
-        TTM.table_lock() # TTM [ X ]
+        await TTM.table_lock() # TTM [ X ]
         TTM.remove(uid, nnid)
-        TTM.table_unlock() # TTM [   ]
+        await TTM.table_unlock() # TTM [   ]
 
         print(f'time: { time() - start_time }')
         await ws.close(code = 1000) # ws <CLOSE>
@@ -402,9 +404,9 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
 
     except Exception:     
         print('-=| EXCEPTION => Remove Training Thread |=-')
-        TTM.table_lock() # TTM [ X ]
+        await TTM.table_lock() # TTM [ X ]
         TTM.remove(uid, nnid)
-        TTM.table_unlock() # TTM [   ]
+        await TTM.table_unlock() # TTM [   ]
         raise
 
     finally:
