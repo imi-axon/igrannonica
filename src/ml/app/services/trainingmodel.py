@@ -63,30 +63,60 @@ class TrainingService():
         self.ACT_PER_LAYER = actPerLayer
         self.NB_PER_LAYER = nbperlayer
 
-        self.METRICS = metrics
-        self.METRICS_REGRESSION = [
-           tf.keras.metrics.MeanSquaredError(),  #MSE - Mean Squared Error
-           tf.keras.metrics.MeanAbsoluteError(), #MAE - Mean Absolute Error
-           tf.keras.metrics.RootMeanSquaredError(), #RMSE - Root Mean Squared Error
-           tf.keras.metrics.MeanAbsolutePercentageError(), #MAPE -  Mean Absolute Percentage Error
-           tf.keras.metrics.MeanSquaredLogarithmicError() #MSLE - Mean Squared Logarithmic Error
-        ]
+        #self.METRICS = metrics
+        #self.METRICS_REGRESSION = [
+        #   tf.keras.metrics.MeanSquaredError(),  #MSE - Mean Squared Error
+        #   tf.keras.metrics.MeanAbsoluteError(), #MAE - Mean Absolute Error
+        #   tf.keras.metrics.RootMeanSquaredError(), #RMSE - Root Mean Squared Error
+        #   tf.keras.metrics.MeanAbsolutePercentageError(), #MAPE -  Mean Absolute Percentage Error
+        #   tf.keras.metrics.MeanSquaredLogarithmicError() #MSLE - Mean Squared Logarithmic Error
+        #]
+#
+        #self.METRICS_CLASSIFICATION =  [ 
+        #    tf.keras.metrics.AUC(), #AUC 
+        #    tf.keras.metrics.CategoricalAccuracy(), #Categorical Accuracy
+        #    tf.keras.metrics.Precision(), #Precision
+        #    tf.keras.metrics.Recall(), #Recall
+        #    tf.keras.metrics.TruePositives(), #True Positives
+        #    tf.keras.metrics.TrueNegatives(), #True Negatives
+        #    tf.keras.metrics.FalsePositives(), #False Positives
+        #    tf.keras.metrics.FalseNegatives() #False Negatives
+        #]
+#
+        #if(type=="CLASSIFICATION"):
+        #    self.METRICS = self.METRICS_CLASSIFICATION
+        #elif (type=="REGRESSION"):
+        #    self.METRICS = self.METRICS_REGRESSION
 
-        self.METRICS_CLASSIFICATION =  [ 
-            tf.keras.metrics.AUC(), #AUC 
-            tf.keras.metrics.CategoricalAccuracy(), #Categorical Accuracy
-            tf.keras.metrics.Precision(), #Precision
-            tf.keras.metrics.Recall(), #Recall
-            tf.keras.metrics.TruePositives(), #True Positives
-            tf.keras.metrics.TrueNegatives(), #True Negatives
-            tf.keras.metrics.FalsePositives(), #False Positives
-            tf.keras.metrics.FalseNegatives() #False Negatives
-        ]
 
-        if(type=="CLASSIFICATION"):
-            self.METRICS = self.METRICS_CLASSIFICATION
-        elif (type=="REGRESSION"):
-            self.METRICS = self.METRICS_REGRESSION
+        
+        self.METRICS = []
+        for metric in metrics:
+            if(metric == 'mse'):
+                self.METRICS.append(tf.keras.metrics.MeanSquaredError())
+            if(metric == 'mae'):
+                self.METRICS.append(tf.keras.metrics.MeanAbsoluteError())
+            if(metric == 'rmse'):
+                self.METRICS.append(tf.keras.metrics.RootMeanSquaredError())
+            if(metric == 'mape'):
+                self.METRICS.append(tf.keras.metrics.MeanAbsolutePercentageError())
+            if(metric == 'msle'):
+                self.METRICS.append(tf.keras.metrics.MeanSquaredLogarithmicError())
+            if(metric == 'tp'):
+                self.METRICS.append(tf.keras.metrics.TruePositives())
+            if(metric == 'tn'):
+                self.METRICS.append(tf.keras.metrics.TrueNegatives())
+            if(metric == 'fp'):
+                self.METRICS.append(tf.keras.metrics.FalsePositives())
+            if(metric == 'fn'):
+                self.METRICS.append(tf.keras.metrics.FalseNegatives())
+            if(metric == 'acc'):
+                self.METRICS.append(tf.keras.metrics.CategoricalAccuracy())
+            if(metric == 'rec'):
+                self.METRICS.append(tf.keras.metrics.Recall())
+            if(metric == 'prec'):
+                self.METRICS.append(tf.keras.metrics.Precision())
+
 
 
         self.TYPE = problem_type
