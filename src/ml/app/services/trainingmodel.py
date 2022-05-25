@@ -15,6 +15,7 @@ from keras.models import Sequential
 from keras.layers.core import Dense, Activation
 
 from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import MinMaxScaler
 
 
 
@@ -148,7 +149,7 @@ class TrainingService():
             #podela na trening i testne podatke
             self.train_dataset, self.test_dataset, self.train_labels, self.test_labels = self.train_test()
             #skaliranje podataka
-            self.normed_train_dataset, self.normed_test_dataset = self.data_standardization()
+            self.normed_train_dataset, self.normed_test_dataset, self.normed_train_labels, self.normed_test_labels = self.data_standardization()
 
 
     #f-ja load_dataframe od celokupnog dataframe-a pravi dataframe koji se sastoji od kolona koje su potrebne za kreiranje neuronske mreze
@@ -190,18 +191,28 @@ class TrainingService():
     #standardizacija podataka -> skaliranje distribucija vrednosti tako da srednja vrednost bude 0, a standardna devijacija 1
     # f-ja vraca standardizovane podatke (dataframe) koji se kasnije koriste za pravljenje neuronske mreze
     def data_standardization(self):
-        scaler = StandardScaler()
+        #scaler = StandardScaler()
+        scaler = MinMaxScaler()
         normed_train_data = scaler.fit_transform(self.train_dataset)
         #normed_train_data -> povratna vrednost je niz (array)
         normed_test_data = scaler.fit_transform(self.test_dataset)
-        #normed_test_data1
+        normed_train_labels = scaler.fit_transform(self.train_labels)
+        normed_test_labels = scaler.fit_transform(self.test_labels)
+
         normed_train_df = pd.DataFrame(data = normed_train_data, 
                     index = self.train_dataset.index, 
                     columns = self.train_dataset.columns) # od niza pravi dataframe
         normed_test_df = pd.DataFrame(data = normed_test_data, 
                     index = self.test_dataset.index, 
                     columns = self.test_dataset.columns)
-        return normed_train_df, normed_test_df
+        normed_train_labels_df = pd.DataFrame(data = normed_train_labels, 
+                    index = self.train_labels.index, 
+                    columns = self.train_labels.columns)
+        normed_test_labels_df = pd.DataFrame(data = normed_test_labels, 
+                    index = self.test_labels.index, 
+                    columns = self.test_labels.columns)
+
+        return normed_train_df, normed_test_df, normed_train_labels_df, normed_test_labels_df
 
 
     def build_model(self):
@@ -239,7 +250,8 @@ class TrainingService():
     #obucavanje modela
     def fit_model(self, model, epoch):
         print('fit method begin')
-        history = model.fit(self.normed_train_dataset, self.train_labels, 
+        #self.train_labels
+        history = model.fit(self.normed_train_dataset, self.normed_train_labels, 
                             epochs = epoch, batch_size = self.BATCH_SIZE, 
                             validation_split = self.PERCENTAGE_VALIDATION, 
                             verbose=0, callbacks=self.CALLBACKS)
@@ -248,7 +260,8 @@ class TrainingService():
 
 
     def evaluate_model(self, model):
-        results = model.evaluate(self.normed_test_dataset, self.test_labels, verbose = 0)
+        #self.test_labels
+        results = model.evaluate(self.normed_test_dataset, self.normed_test_labels, verbose = 0)
 
         return results
 
