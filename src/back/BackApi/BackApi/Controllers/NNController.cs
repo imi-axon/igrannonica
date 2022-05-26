@@ -279,7 +279,7 @@ namespace BackApi.Controllers
             int userid = jwtsrv.GetUserId();
             if (userid == -1) return Unauthorized();
             if (!projsrv.projectExists(id)) return NotFound();
-            if (!projsrv.projectOwnership(1, id)) return BadRequest("user");
+            if (!projsrv.projectOwnership(userid, id)) return BadRequest("user");
             if (title.title == "" || title.title == null) return BadRequest("name");
 
             bool rez = nnsrv.EditTitle(nnid, id, title.title);
