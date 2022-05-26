@@ -103,6 +103,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   
   // DISPLAY REFRESHER - call after every nn change
   public Refresh(){
+    console.log("Pozvao refresh fju");
     this.displayWidth = (this.parent.neuralNetwork.nn.layers.length + 1) * this.layerWidth;
     this.displayHeigth = (this.caluculateMaxVerticalNeurons() + 1) * this.neuronOffsetY + this.displayTopPadding;
     
@@ -116,7 +117,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
     
     this.d3Init();
     this.d3Setup();
-    
+    console.log( this.d3Container);
   }
   
   // MAIN SVG FUNCTIONS
@@ -591,11 +592,16 @@ export class NeuralNetworkDisplayComponent implements OnInit {
     this.actPerLayerCombos = select("#activationCombos")
     
     this.outputActivationComboDiv = select("#outputActivationCombo");
+
+    console.log("ZAVRSIO INIT");
+    console.log(this.d3Container);
     
   }
   
   private d3Setup(){
+    console.log("krece setup");
     this.AddInputLayer();
+    console.log("dodao je input layer");
     this.AddOutputLayer();
     this.AddHiddenLayers();
     

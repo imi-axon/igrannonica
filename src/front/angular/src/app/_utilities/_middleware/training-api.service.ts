@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { webSocket } from 'rxjs/webSocket'
 import { apiProperties } from '../_constants/api-properties';
 import { JWTUtil } from '../_helpers/jwt-util';
+import { LoaderService } from '../_services/loader.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TrainingApiService {
+  constructor(private loaderService:LoaderService){}
 
   url = apiProperties.wsurl;
 
@@ -14,6 +16,7 @@ export class TrainingApiService {
     
     
     let url=this.url+'/api/projects/'+projectId+'/nn/'+nnId+'/train/start'
+    this.loaderService.isLoading.next(true);
     
     let ws = webSocket<any>(
       {url: url},
@@ -23,6 +26,7 @@ export class TrainingApiService {
     ws.subscribe(
       {
         next: (val:any) => {
+          this.loaderService.isLoading.next(false);
           console.log("WS MESSAGE")
           console.log(val)
 

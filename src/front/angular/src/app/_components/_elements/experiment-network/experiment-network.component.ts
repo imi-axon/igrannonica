@@ -94,19 +94,21 @@ export class ExperimentNetworkComponent implements OnInit {
   ngOnInit(): void {
     this.networkService.GetNetwork(this.getProjectId(), this.getNetworkId(), this, this.successGetNetworkCallback);
     this.statisticsService.GetStatistics(this.getProjectId(), true, this, this.successGetStatisticsCallback);
-    
+
     setTimeout(() => {
     }, 0);
   }
   
   private successGetNetworkCallback(self: any, response: any){
+    console.log("uspesno network");
     //self.unusedColumns = Object.keys(JSON.parse(JSON.parse(response.dataset).dataset)[0])
     self.networkName = response.name;
     self.neuralNetwork = new NeuralNetwork();
     self.neuralNetwork.conf = JSON.parse(response.conf);
     self.neuralNetwork.nn = JSON.parse(JSON.parse(response.nn).nn);
+    console.log(self.neuralNetwork);
     self.networkComponent.Refresh();
-    console.log(self.neuralNetwork)
+ 
     
     let columns = Object.keys(self.metadata.columns);
     self.unusedColumns = [];
@@ -142,6 +144,7 @@ export class ExperimentNetworkComponent implements OnInit {
     
     self.neuralNetwork.conf.problemType = self.neuralNetwork.conf.problemType.toLowerCase();
     self.NetworkUpdated.emit(self.networkName);
+    console.log("zavrsio");
   }
   
   private successGetStatisticsCallback(self: any, metadata: any){

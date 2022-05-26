@@ -5,6 +5,7 @@ import { FullscreenLoaderComponent } from './_components/_elements/fullscreen-lo
 import { JWTUtil } from './_utilities/_helpers/jwt-util';
 import { AuthService } from './_utilities/_services/auth.service';
 import { LanguageService } from './_utilities/_services/language.service';
+import { LoaderService } from './_utilities/_services/loader.service';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +19,7 @@ export class AppComponent implements OnInit {
   @ViewChild("fullscreenLoader")
   fullscreenLoader: FullscreenLoaderComponent;
 
-  constructor(public translate:TranslateService, private router: Router, private languageService: LanguageService, private auth: AuthService)
+  constructor(public translate:TranslateService, private router: Router, private languageService: LanguageService, private auth: AuthService, public loaderService:LoaderService)
   {
     translate.addLangs(['en','sr']);
     if(!localStorage.getItem('lang1')){
@@ -30,18 +31,18 @@ export class AppComponent implements OnInit {
         translate.defaultLang=localStorage.getItem('lang1') || 'en';
       }
     
-      router.events.subscribe(
-        (event) => {
-          if(event instanceof RouteConfigLoadStart){
-            this.fullscreenLoader.isLoading = true;
-            console.log("LOAD START")
-          }
-          if(event instanceof RouteConfigLoadEnd){
-            this.fullscreenLoader.isLoading = false;
-            console.log("LOAD END")
-          }
-        }
-      )
+      // router.events.subscribe(
+      //   (event) => {
+      //     if(event instanceof RouteConfigLoadStart){
+      //       this.fullscreenLoader.isLoading = true;
+      //       console.log("LOAD START")
+      //     }
+      //     if(event instanceof RouteConfigLoadEnd){
+      //       this.fullscreenLoader.isLoading = false;
+      //       console.log("LOAD END")
+      //     }
+      //   }
+      // )
   }
   
   

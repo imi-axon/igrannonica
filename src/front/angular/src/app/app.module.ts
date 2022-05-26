@@ -6,7 +6,7 @@ import { BrowserModule } from '@angular/platform-browser';
 //Svaki put kada se doda nova putanja, spakovati je u routingComponents niz i ona ce se naci i u @NgModule unutar routingComponents
 import { AppRoutingModule , routingComponents} from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NavbarComponent } from './_components/_elements/navbar/navbar.component';
 import { SidebarComponent } from './_components/_elements/sidebar/sidebar.component';
 import { RegistrationFormComponent } from './_components/_elements/registration-form/registration-form.component';
@@ -25,7 +25,7 @@ import { ProfilComponent } from './_components/_elements/profil/profil.component
 import { OpcijeDatasetComponent } from './_components/_elements/opcije-dataset/opcije-dataset.component';
 import { OpcijeEditDatasetComponent } from './_components/_elements/opcije-edit-dataset/opcije-edit-dataset.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations'
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {MatSelectModule} from '@angular/material/select';
 import { NavbarNoviComponent } from './_components/_elements/navbar-novi/navbar-novi.component';
 import { VerificationComponent } from './_components/_pages/verification-page/verification.component';
@@ -77,7 +77,11 @@ import { DatasetEditTableComponent } from './_components/_elements/dataset-edit-
 import { PublicProjectListComponent } from './_components/_elements/public-project-list/public-project-list.component';
 import { DataSplitSliderComponent } from './_components/_elements/data-split-slider/data-split-slider.component';
 import { MetricsBarplotComponent } from './_components/_elements/metrics-barplot/metrics-barplot.component';
-
+import {MatProgressBarModule} from  '@angular/material/progress-bar';
+import { InterceptorService } from './_utilities/_services/interceptor.service';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LoaderNewComponent } from './_components/_elements/loader-new/loader-new.component';
 
 @NgModule({
   declarations: [
@@ -142,7 +146,8 @@ import { MetricsBarplotComponent } from './_components/_elements/metrics-barplot
     PublicProjectListComponent,
     NetworkListComponent,
     DataSplitSliderComponent,
-    MetricsBarplotComponent
+    MetricsBarplotComponent,
+    LoaderNewComponent,  
   ],
   imports: [
     NgxCsvParserModule,
@@ -155,6 +160,9 @@ import { MetricsBarplotComponent } from './_components/_elements/metrics-barplot
     MatSelectModule,
     NgChartsModule,
     MatDialogModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
+    BrowserAnimationsModule,
     TranslateModule.forRoot({
       loader:{
         provide:TranslateLoader,
@@ -164,7 +172,11 @@ import { MetricsBarplotComponent } from './_components/_elements/metrics-barplot
     
     })
   ],
-  providers: [DatasetService],
+
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass:InterceptorService, multi:true},
+    DatasetService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
