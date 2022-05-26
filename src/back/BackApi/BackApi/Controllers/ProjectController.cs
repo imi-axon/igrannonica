@@ -121,6 +121,7 @@ namespace BackApi.Controllers
             if (userid == -1) return Unauthorized();
             if (!service.projectExists(projid)) return NotFound("project");
             if (!service.projectOwnership(userid, projid)) return BadRequest("user");
+            if (req.name == "" || req.name == null) return BadRequest("name");
 
             Boolean rez = service.EditProject(projid,req,userid);
             if (rez)
