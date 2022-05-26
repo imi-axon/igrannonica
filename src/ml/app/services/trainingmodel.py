@@ -15,6 +15,7 @@ from keras.models import Sequential
 from keras.layers.core import Dense, Activation
 
 from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import MinMaxScaler
 
 
 
@@ -65,30 +66,58 @@ class TrainingService():
         self.ACT_PER_LAYER = actPerLayer
         self.NB_PER_LAYER = nbperlayer
 
-        self.METRICS = metrics
-        self.METRICS_REGRESSION = [
-            tf.keras.metrics.MeanSquaredError(),  #MSE - Mean Squared Error
-            tf.keras.metrics.MeanAbsoluteError() #MAE - Mean Absolute Error
-            # tf.keras.metrics.RootMeanSquaredError(), #RMSE - Root Mean Squared Error
-            # tf.keras.metrics.MeanAbsolutePercentageError(), #MAPE -  Mean Absolute Percentage Error
-            # tf.keras.metrics.MeanSquaredLogarithmicError() #MSLE - Mean Squared Logarithmic Error
-        ]
+        # Setovanje izabranih metrika
+        self.METRICS = []
+        for metric in metrics:
+            if(metric == 'mse'):
+                self.METRICS.append(tf.keras.metrics.MeanSquaredError())
+            if(metric == 'mae'):
+                self.METRICS.append(tf.keras.metrics.MeanAbsoluteError())
+            if(metric == 'rmse'):
+                self.METRICS.append(tf.keras.metrics.RootMeanSquaredError())
+            if(metric == 'mape'):
+                self.METRICS.append(tf.keras.metrics.MeanAbsolutePercentageError())
+            if(metric == 'msle'):
+                self.METRICS.append(tf.keras.metrics.MeanSquaredLogarithmicError())
+            if(metric == 'tp'):
+                self.METRICS.append(tf.keras.metrics.TruePositives())
+            if(metric == 'tn'):
+                self.METRICS.append(tf.keras.metrics.TrueNegatives())
+            if(metric == 'fp'):
+                self.METRICS.append(tf.keras.metrics.FalsePositives())
+            if(metric == 'fn'):
+                self.METRICS.append(tf.keras.metrics.FalseNegatives())
+            if(metric == 'acc'):
+                self.METRICS.append(tf.keras.metrics.CategoricalAccuracy())
+            if(metric == 'rec'):
+                self.METRICS.append(tf.keras.metrics.Recall())
+            if(metric == 'prec'):
+                self.METRICS.append(tf.keras.metrics.Precision())
 
-        self.METRICS_CLASSIFICATION =  [ 
-            # tf.keras.metrics.AUC(), #AUC 
-            tf.keras.metrics.CategoricalAccuracy(), #Categorical Accuracy
-            tf.keras.metrics.Precision(), #Precision
-            tf.keras.metrics.Recall() #Recall
-            # tf.keras.metrics.TruePositives(), #True Positives
-            # tf.keras.metrics.TrueNegatives(), #True Negatives
-            # tf.keras.metrics.FalsePositives(), #False Positives
-            # tf.keras.metrics.FalseNegatives() #False Negatives
-        ]
+        # self.METRICS_REGRESSION = [
+        #     tf.keras.metrics.MeanSquaredError(),  #MSE - Mean Squared Error
+        #     tf.keras.metrics.MeanAbsoluteError() #MAE - Mean Absolute Error
+        #     # tf.keras.metrics.RootMeanSquaredError(), #RMSE - Root Mean Squared Error
+        #     # tf.keras.metrics.MeanAbsolutePercentageError(), #MAPE -  Mean Absolute Percentage Error
+        #     # tf.keras.metrics.MeanSquaredLogarithmicError() #MSLE - Mean Squared Logarithmic Error
+        # ]
 
-        if(problem_type=="CLASSIFICATION"):
-            self.METRICS = self.METRICS_CLASSIFICATION
-        elif (problem_type=="REGRESSION"):
-            self.METRICS = self.METRICS_REGRESSION
+        # self.METRICS_CLASSIFICATION =  [ 
+        #     # tf.keras.metrics.AUC(), #AUC 
+        #     tf.keras.metrics.CategoricalAccuracy(), #Categorical Accuracy
+        #     tf.keras.metrics.Precision(), #Precision
+        #     tf.keras.metrics.Recall() #Recall
+        #     # tf.keras.metrics.TruePositives(), #True Positives
+        #     # tf.keras.metrics.TrueNegatives(), #True Negatives
+        #     # tf.keras.metrics.FalsePositives(), #False Positives
+        #     # tf.keras.metrics.FalseNegatives() #False Negatives
+        # ]
+
+        # if(problem_type=="CLASSIFICATION"):
+        #     self.METRICS = self.METRICS_CLASSIFICATION
+        # elif (problem_type=="REGRESSION"):
+        #     self.METRICS = self.METRICS_REGRESSION
+
 
 
         self.TYPE = problem_type
@@ -120,7 +149,7 @@ class TrainingService():
             #podela na trening i testne podatke
             self.train_dataset, self.test_dataset, self.train_labels, self.test_labels = self.train_test()
             #skaliranje podataka
-            self.normed_train_dataset, self.normed_test_dataset = self.data_standardization()
+            self.normed_train_dataset, self.normed_test_dataset, self.normed_train_labels, self.normed_test_labels = self.data_standardization()
 
 
     #f-ja load_dataframe od celokupnog dataframe-a pravi dataframe koji se sastoji od kolona koje su potrebne za kreiranje neuronske mreze
@@ -162,18 +191,28 @@ class TrainingService():
     #standardizacija podataka -> skaliranje distribucija vrednosti tako da srednja vrednost bude 0, a standardna devijacija 1
     # f-ja vraca standardizovane podatke (dataframe) koji se kasnije koriste za pravljenje neuronske mreze
     def data_standardization(self):
-        scaler = StandardScaler()
+        #scaler = StandardScaler()
+        scaler = MinMaxScaler()
         normed_train_data = scaler.fit_transform(self.train_dataset)
         #normed_train_data -> povratna vrednost je niz (array)
         normed_test_data = scaler.fit_transform(self.test_dataset)
-        #normed_test_data1
+        normed_train_labels = scaler.fit_transform(self.train_labels)
+        normed_test_labels = scaler.fit_transform(self.test_labels)
+
         normed_train_df = pd.DataFrame(data = normed_train_data, 
                     index = self.train_dataset.index, 
                     columns = self.train_dataset.columns) # od niza pravi dataframe
         normed_test_df = pd.DataFrame(data = normed_test_data, 
                     index = self.test_dataset.index, 
                     columns = self.test_dataset.columns)
-        return normed_train_df, normed_test_df
+        normed_train_labels_df = pd.DataFrame(data = normed_train_labels, 
+                    index = self.train_labels.index, 
+                    columns = self.train_labels.columns)
+        normed_test_labels_df = pd.DataFrame(data = normed_test_labels, 
+                    index = self.test_labels.index, 
+                    columns = self.test_labels.columns)
+
+        return normed_train_df, normed_test_df, normed_train_labels_df, normed_test_labels_df
 
 
     def build_model(self):
@@ -211,7 +250,8 @@ class TrainingService():
     #obucavanje modela
     def fit_model(self, model, epoch):
         print('fit method begin')
-        history = model.fit(self.normed_train_dataset, self.train_labels, 
+        #self.train_labels
+        history = model.fit(self.normed_train_dataset, self.normed_train_labels, 
                             epochs = epoch, batch_size = self.BATCH_SIZE, 
                             validation_split = self.PERCENTAGE_VALIDATION, 
                             verbose=0, callbacks=self.CALLBACKS)
@@ -220,7 +260,8 @@ class TrainingService():
 
 
     def evaluate_model(self, model):
-        results = model.evaluate(self.normed_test_dataset, self.test_labels, verbose = 0)
+        #self.test_labels
+        results = model.evaluate(self.normed_test_dataset, self.normed_test_labels, verbose = 0)
 
         return results
 
