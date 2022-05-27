@@ -86,10 +86,6 @@ export class ExperimentOverviewComponent implements OnInit{
     }
   }
   
-  
-  
-  
-  
   private datasetPageRecieved(self: ExperimentOverviewComponent, response: any){
     // VRLO GLUPO ALI NE ZNAM ZASTO OVO RADI
     self.datasetComponent.LoadDataset(JSON.parse(JSON.parse(response.dataset).dataset));

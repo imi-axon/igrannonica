@@ -104,12 +104,14 @@ export class ExperimentPageComponent implements OnInit {
       return;
       
     this.singleNetworkComponent.ChangeNetworkTitle(this.networkTitle.nativeElement.innerHTML);
+    
+    this.networkTitle.nativeElement.blur();
   }
   
   public ChangeExperimentTitleRequest(event?: KeyboardEvent){
     if(event && event.key != "Enter")
       return;
-    
+      
     let description = this.overviewComponent.description.nativeElement.value;
     let isPublic = this.overviewComponent.publicCheckbox.nativeElement.checked;
     this.ChangeExperiment(
@@ -128,7 +130,7 @@ export class ExperimentPageComponent implements OnInit {
       this.fullEdits={
         "name": "Untitled-Experiment-" + this.projectId,
         "ispublic": edits.isPublic,
-        "description": edits.description
+        "description": JSON.stringify(edits.description).slice(1, JSON.stringify(edits.description).length - 1)
       }
     }
     if(edits.description==""){
@@ -142,11 +144,9 @@ export class ExperimentPageComponent implements OnInit {
       this.fullEdits= {
         "name": this.inputTitle.nativeElement.innerHTML,
         "ispublic": edits.isPublic,
-        "description": edits.description
+        "description": JSON.stringify(edits.description).slice(1, JSON.stringify(edits.description).length - 1)
       }
     }
-    
-    console.log(this.fullEdits)
     
     this.projectsService.editProject(this.projectId, this.fullEdits);
     
