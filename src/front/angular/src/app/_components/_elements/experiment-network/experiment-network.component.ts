@@ -215,8 +215,8 @@ export class ExperimentNetworkComponent implements OnInit {
   
   
   public ChangeNetworkTitle(title: string){
-    console.log(title)
-    this.nnService.changeNNTitle(this.getProjectId(), this.getNetworkId(), title);
+    console.log(JSON.stringify(title).slice(1, JSON.stringify(title).length - 1))
+    this.nnService.changeNNTitle(this.getProjectId(), this.getNetworkId(), JSON.stringify(title).slice(1, JSON.stringify(title).length - 1));
   }
   
   
