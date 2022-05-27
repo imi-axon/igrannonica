@@ -292,6 +292,7 @@ namespace BackApi.Services
             if (project != null)
                 return false;
             edited.Name = proj.name;
+            proj.description = proj.description.Replace("\n", " ");
             edited.Description = proj.description;
             edited.Public = proj.ispublic;
             edited.LastEdit = DateTime.Now;

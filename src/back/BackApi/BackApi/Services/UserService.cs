@@ -184,7 +184,7 @@ namespace BackApi.Services
             //rez = "Korisnik uspesno registrovan";
 
             emailService.SendEmail(Urls.front + "/verification?token=" + jwtoken, "Potvrda registracije", model.email, 1);
-            return "Proverite vas email i verifikujte se";
+            return "";
         }
 
         public bool addPhoto(int id, IFormFile photo)
