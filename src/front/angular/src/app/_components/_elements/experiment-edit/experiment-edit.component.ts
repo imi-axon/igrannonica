@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LocalChange } from 'src/app/_utilities/_data-types/models';
+import { DataConverter } from 'src/app/_utilities/_helpers/data-converter';
 import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
 import { StatisticsService } from 'src/app/_utilities/_services/statistics.service';
 import { CorrelationTableComponent } from '../correlation-table/correlation-table.component';
@@ -318,7 +319,9 @@ export class ExperimentEditComponent implements OnInit {
     self.categoricalColumns.LoadStatisticsData(metadata.statistics.categorical_colstats);
     
     self.columns = metadata.columns;
-    
+
+    console.log("------------- META HEADERS ----------------")
+    console.log(DataConverter.metaToHeaders(metadata))
   }
   
   
