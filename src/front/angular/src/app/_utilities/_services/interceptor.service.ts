@@ -33,15 +33,15 @@ export class InterceptorService implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     this.totalRequests++;
-    console.log("req" + this.totalRequests);
+   // console.log("req" + this.totalRequests);
     setTimeout(() => { this.loaderService.isLoading.next(true); }, 0)
     return next.handle(req).pipe(
       finalize(() => {
-        console.log("obradioreq" + this.totalRequests);
+     //   console.log("obradioreq" + this.totalRequests);
         this.totalRequests--;
         if (this.totalRequests == 0){
           setTimeout(() => { this.loaderService.isLoading.next(false); }, 0)
-          console.log("Obradio poslednji req");
+       //   console.log("Obradio poslednji req");
         }
       }
       )
