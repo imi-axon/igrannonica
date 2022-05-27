@@ -100,8 +100,8 @@ export class UserService {
     {
       this.userAPI.sendemail(username).subscribe(
         res=>{
-          console.log("Uspesno Verifikovan");
-          this.router.navigate(['login'])
+          console.log("Poslat mail");
+          this.router.navigate(['succes-pass'])
         },
         err=>{
           console.log(err)

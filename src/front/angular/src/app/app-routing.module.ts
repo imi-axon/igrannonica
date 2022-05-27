@@ -25,6 +25,7 @@ import { ExperimentNetworkComponent } from './_components/_elements/experiment-n
 import { ExperimentPageComponent } from './_components/_pages/experiment-page/experiment-page.component';
 import { ExperimentEditComponent } from './_components/_elements/experiment-edit/experiment-edit.component';
 import { ExperimentAllNetworksComponent } from './_components/_elements/experiment-all-networks/experiment-all-networks.component';
+import { PassChangedSuccessfulComponent } from './_components/_pages/pass-changed-successful/pass-changed-successful.component';
 
 const routes: Routes = [
  // {path:'train/:ProjectId/:Inputs/:Outputs',component:ProjectPageComponent},
@@ -42,6 +43,7 @@ const routes: Routes = [
   {path:'verification', component:VerificationComponent},
   {path: 'changepass', component:ChangepassPageComponent},
   {path:'public_exp',component:PublicExpPageComponent},
+  {path: 'succes-pass', component:PassChangedSuccessfulComponent},
 
   //{path:'edit-dataset/:ProjectId', component:EditDatasetPageComponent},
   {path:'input-username', component:InputusernamePageComponent},

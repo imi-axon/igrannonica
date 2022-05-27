@@ -92,7 +92,7 @@ namespace BackApi.Controllers
         public async Task<ActionResult<string>> SendEmailForChangePass(string username)
         {
             string res = korsrv.ChangePassword(username);
-            return res;
+            return Ok();
         }
 
         [HttpPut("{token}/editpassword")]

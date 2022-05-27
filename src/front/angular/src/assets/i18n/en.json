@@ -248,6 +248,9 @@
 ,
 "experiment-overview":{
     "description" : "Experiment description goes here..."
+},
+"succes-pass":{
+    "mail": "Check your email"
 }
 
 }
