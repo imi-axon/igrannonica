@@ -249,6 +249,9 @@
     },
     "experiment-overview":{
         "description" : "Unesite opis eksperimenta..."
+    },
+    "succes-pass":{
+        "mail": "Proverite vas email"
     }
 
 }

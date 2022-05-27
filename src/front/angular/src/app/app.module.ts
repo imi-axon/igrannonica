@@ -82,6 +82,7 @@ import { InterceptorService } from './_utilities/_services/interceptor.service';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoaderNewComponent } from './_components/_elements/loader-new/loader-new.component';
+import { PassChangedSuccessfulComponent } from './_components/_pages/pass-changed-successful/pass-changed-successful.component';
 
 @NgModule({
   declarations: [
@@ -147,7 +148,8 @@ import { LoaderNewComponent } from './_components/_elements/loader-new/loader-ne
     NetworkListComponent,
     DataSplitSliderComponent,
     MetricsBarplotComponent,
-    LoaderNewComponent,  
+    LoaderNewComponent,
+    PassChangedSuccessfulComponent,  
   ],
   imports: [
     NgxCsvParserModule,

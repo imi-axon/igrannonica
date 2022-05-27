@@ -106,12 +106,14 @@ namespace BackApi.Services
         public string Register(UserRegister model)
         {
             //string rez = "";
-            if (kontext.Users.Any(x => (x.Username == model.username && x.Verified == true) || (x.Email == model.email && x.Verified == true)))
+            if (kontext.Users.Any(x => (x.Username == model.username && x.Verified == true)))
             {
-                //rez = "Korisnik sa tim Username-om vec postoji!";
-                return "Korisnik sa ovim email-om ili username-om vec postoji!";
+                return "Username";
             }
-
+            else if(kontext.Users.Any(x => (x.Email == model.email && x.Verified == true)))
+            {
+                return "Email";
+            }
             else if (kontext.Users.Any(x => (x.Email == model.email && x.Verified == false) || (x.Username == model.username && x.Verified == false)))
             {
                 int id1 = UsernameToId(model.username);
@@ -124,7 +126,7 @@ namespace BackApi.Services
                     {
                         string pom = emailService.ValidateToken(user.EmailToken);
                         if (pom != "")
-                            return "Korisnik sa ovim username-om treba da se verifikuje, pokusajte za 5min sa ovim ili promenite username";
+                            return "UserVerify";
                         else
                         {
                             ind1 = 1;
@@ -147,7 +149,7 @@ namespace BackApi.Services
                     {
                         string pom = emailService.ValidateToken(user.EmailToken);
                         if (pom != "")
-                            return "Korisnik sa ovim email-om treba da se verifikuje, pokusajte za 5min sa ovim ili promenite email";
+                            return "EmailVerify";
                         else
                         {
                             ind2 = 1;
@@ -184,7 +186,7 @@ namespace BackApi.Services
             //rez = "Korisnik uspesno registrovan";
 
             emailService.SendEmail(Urls.front + "/verification?token=" + jwtoken, "Potvrda registracije", model.email, 1);
-            return "Proverite vas email i verifikujte se";
+            return "";
         }
 
         public bool addPhoto(int id, IFormFile photo)

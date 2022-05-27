@@ -47,18 +47,8 @@ namespace BackApi.Controllers
             int id = korsrv.UsernameToId(req.username);
             if(req.photo!=null)
                 korsrv.addPhoto(id, req.photo);
-            string rez = "";
             if (tmp != "")
-            {
-                return tmp;
-                //rez = "Korisnik uspesno registrovan(nije verifikovan)";
-                //return Ok(rez);
-            }
-            else
-            {
-                rez = "Korisnik sa tim Username-om vec postoji!";
-                return BadRequest();
-            }
+                return BadRequest(tmp);
             return Ok();
         }
         [HttpPost("login")]
@@ -102,7 +92,7 @@ namespace BackApi.Controllers
         public async Task<ActionResult<string>> SendEmailForChangePass(string username)
         {
             string res = korsrv.ChangePassword(username);
-            return res;
+            return Ok();
         }
 
         [HttpPut("{token}/editpassword")]
