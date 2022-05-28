@@ -17,6 +17,7 @@ export class DatasetEditTableComponent implements OnInit {
   dataset: any;
   columns: string[];
 
+  columnsTop: { span: number, text: string }[] | null = null;
   columnsMeta: DatasetColumnsMeta | null = null;
   topLevelHeaders: TopLevelHeaders | null = null;
   
@@ -67,6 +68,40 @@ export class DatasetEditTableComponent implements OnInit {
   public LoadDataset(dataset: any){
     this.dataset = dataset;
     this.columns = Object.keys(dataset[0]);
+
+    // Kreiranje reda koji stoji iznad Headers reda u tabeli
+    this.columnsTop = []
+    let span: number = 0
+    for (const col of this.columns) 
+    {
+      console.log('>>> ' + col)
+      if (!this.IsColEncOneHot(col)) {
+        if (span == 0) {
+          this.columnsTop.push({span: 1, text: ''})
+        }
+        else {
+          this.columnsTop[this.columnsTop.length-1].span = span
+          span = 0
+        }
+      }
+      else if (this.columnsMeta) {
+        if (span == 0) {
+          let h = this.columnsMeta[col].encoding?.onehot?.originalHeader
+          this.columnsTop.push({span: 1, text: h?h:''})
+        }
+        span += 1
+      }
+    }
+    console.log('>>>>>>>>>><<<<<<<<<')
+    if (span > 1) {
+      this.columnsTop[this.columnsTop.length-1].span = span
+      span = 0
+    }
+    //-----
+
+    console.log("[[[[[ ----- ]]]]]]")
+    console.log(this.columnsTop)
+
     this.LoadedEvent.emit();
   }
   
@@ -87,19 +122,38 @@ export class DatasetEditTableComponent implements OnInit {
 
   // ---- Provera tipa kolone ---- //
 
-  public IsColNum(hdr: DatasetHeader) {
+  public IsColNum(col: string) {
+    if (this.columnsMeta == null)
+      return false
+    let hdr: DatasetHeader = this.columnsMeta[col]
     return hdr.type == "num"
   }
   
-  public IsColCat(hdr: DatasetHeader) {
+  public IsColCat(col: string) {
+    if (this.columnsMeta == null)
+      return false
+    let hdr: DatasetHeader = this.columnsMeta[col]
     return hdr.type == "cat"
   }
 
-  public IsColEncOneHot(hdr: DatasetHeader) {
+  public IsColEnc(col: string) {
+    if (this.columnsMeta == null)
+      return false
+    let hdr: DatasetHeader = this.columnsMeta[col]
+    return hdr.type == "enc"
+  }
+
+  public IsColEncOneHot(col: string) {
+    if (this.columnsMeta == null)
+      return false
+    let hdr: DatasetHeader = this.columnsMeta[col]
     return hdr.type == "enc" && hdr.encoding?.type == "onehot"
   }
 
-  public IsColEncLabel(hdr: DatasetHeader) {
+  public IsColEncLabel(col: string) {
+    if (this.columnsMeta == null)
+      return false
+    let hdr: DatasetHeader = this.columnsMeta[col]
     return hdr.type == "enc" && hdr.encoding?.type == "label"
   }
 

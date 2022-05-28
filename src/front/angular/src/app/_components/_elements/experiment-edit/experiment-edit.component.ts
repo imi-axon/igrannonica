@@ -69,17 +69,13 @@ export class ExperimentEditComponent implements OnInit {
   
   private UpdateChanges(self: ExperimentEditComponent){
     self.datasetService.GetChanges(self.GetProjectId(), true, self, self.handleGetGlobalChangesSuccess, () => {}, () => {}, self.handleGetGlobalChangesEmpty);
-    self.datasetService.GetChanges(self.GetProjectId(), true, self, self.handleGetLocalChangesSuccess, () => {}, () => {}, self.handleGetLocalChangesEmpty);
+    self.datasetService.GetChanges(self.GetProjectId(), false, self, self.handleGetLocalChangesSuccess, () => {}, () => {}, self.handleGetLocalChangesEmpty);
   }
   
   private UpdateAllMain(self: ExperimentEditComponent){
-    self.datasetService.GetDatasetPage(self.GetProjectId(), true, 1, 20, self, self.handleDatasetGetSuccess);
-    self.UpdateChanges(self);
     self.statisticsService.GetStatistics(self.GetProjectId(), true, self, self.handleStatisticsGetSuccess);
   }
   private UpdateAllNotMain(self: ExperimentEditComponent){
-    self.datasetService.GetDatasetPage(self.GetProjectId(), false, 1, 20, self, self.handleDatasetGetSuccess);
-    self.UpdateChanges(self);
     self.statisticsService.GetStatistics(self.GetProjectId(), false, self, self.handleStatisticsGetSuccess);
   }
   
@@ -272,7 +268,7 @@ export class ExperimentEditComponent implements OnInit {
   // REVERT LINE
   public RevertLine(lineNumber: number){
     if(lineNumber == 0)
-      this.datasetService.RevertInit(this.GetProjectId(), this, this.UpdateAllMain);
+      this.datasetService.RevertInit(this.GetProjectId(), this, this.UpdateAllNotMain);
     else
       return;
       //this.datasetService.RevertLine(this.GetProjectId(), lineNumber, this, this.UpdateAllMain);
@@ -285,7 +281,7 @@ export class ExperimentEditComponent implements OnInit {
   
   // Discard
   public DiscardChanges(){
-    this.datasetService.DiscardChanges(this.GetProjectId(), this, this.UpdateAllMain);
+    this.datasetService.DiscardChanges(this.GetProjectId(), this, this.UpdateAllNotMain);
   }
   
   
@@ -322,8 +318,12 @@ export class ExperimentEditComponent implements OnInit {
     self.columns = metadata.columns;
 
     self.datasetEditTable.LoadMetadata(metadata)
-    // console.log("------------- META HEADERS (DEBUG !!!!!) ----------------")
-    // console.log(DataConverter.metaToHeaders(metadata))
+    console.log("------------- META HEADERS (DEBUG !!!!!) ----------------")
+    console.log(DataConverter.metaToHeaders(metadata))
+
+    // Get: DatasetPage + Changes
+    self.datasetService.GetDatasetPage(self.GetProjectId(), false, 1, 20, self, self.handleDatasetGetSuccess);
+    self.UpdateChanges(self);
   }
   
   
