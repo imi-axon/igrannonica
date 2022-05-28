@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { DataConverter, DatasetColumnsMeta, DatasetHeader, DatasetMetadata, TopLevelHeaders } from 'src/app/_utilities/_helpers/data-converter';
 
 @Component({
   selector: 'dataset-edit-table',
@@ -15,6 +16,9 @@ export class DatasetEditTableComponent implements OnInit {
   
   dataset: any;
   columns: string[];
+
+  columnsMeta: DatasetColumnsMeta | null = null;
+  topLevelHeaders: TopLevelHeaders | null = null;
   
   
   // SELECTING PROMS
@@ -73,5 +77,30 @@ export class DatasetEditTableComponent implements OnInit {
   public GetRowKeys(row: any){
     return Object.keys(row)
   }
+
+   // ========================== METADATA =========================== //
+  public LoadMetadata(meta: DatasetMetadata){
+    this.columnsMeta = meta.columns;
+    this.topLevelHeaders = DataConverter.metaToHeaders(meta);
+    this.LoadedEvent.emit();
+  }
+
+  // ---- Provera tipa kolone ---- //
+
+  public IsColNum(hdr: DatasetHeader) {
+    return hdr.type == "num"
+  }
   
+  public IsColCat(hdr: DatasetHeader) {
+    return hdr.type == "cat"
+  }
+
+  public IsColEncOneHot(hdr: DatasetHeader) {
+    return hdr.type == "enc" && hdr.encoding?.type == "onehot"
+  }
+
+  public IsColEncLabel(hdr: DatasetHeader) {
+    return hdr.type == "enc" && hdr.encoding?.type == "label"
+  }
+
 }

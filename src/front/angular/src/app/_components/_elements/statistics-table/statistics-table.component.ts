@@ -22,7 +22,11 @@ export class StatisticsTableComponent implements OnInit {
   public LoadStatisticsData(statistics: any){
     // this.columns = this.getColumnsFromStatistics(statistics);
     // this.statistics = this.parseStatisticsData(statistics, colnulls);
-    
+
+    // Ukoliko ne postoje statisticki podaci za ovu tabelu prekinuti izvrsavanje funkcije
+    if (statistics.length == 0)
+      return;
+
     this.statistics =  statistics;
     
     this.columns = [];

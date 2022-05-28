@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LocalChange } from 'src/app/_utilities/_data-types/models';
-import { DataConverter } from 'src/app/_utilities/_helpers/data-converter';
+import { DataConverter, DatasetMetadata } from 'src/app/_utilities/_helpers/data-converter';
 import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
 import { StatisticsService } from 'src/app/_utilities/_services/statistics.service';
 import { CorrelationTableComponent } from '../correlation-table/correlation-table.component';
@@ -63,12 +63,13 @@ export class ExperimentEditComponent implements OnInit {
   }
   
   ngOnInit(): void {
-    this.UpdateAllMain(this);
+    // this.UpdateAllMain(this);
+    this.UpdateAllNotMain(this);
   }
   
   private UpdateChanges(self: ExperimentEditComponent){
     self.datasetService.GetChanges(self.GetProjectId(), true, self, self.handleGetGlobalChangesSuccess, () => {}, () => {}, self.handleGetGlobalChangesEmpty);
-    self.datasetService.GetChanges(self.GetProjectId(), false, self, self.handleGetLocalChangesSuccess, () => {}, () => {}, self.handleGetLocalChangesEmpty);
+    self.datasetService.GetChanges(self.GetProjectId(), true, self, self.handleGetLocalChangesSuccess, () => {}, () => {}, self.handleGetLocalChangesEmpty);
   }
   
   private UpdateAllMain(self: ExperimentEditComponent){
@@ -310,7 +311,7 @@ export class ExperimentEditComponent implements OnInit {
   
   // STATISTIKA =============================================================================================
   
-  private handleStatisticsGetSuccess(self: any, metadata: any){
+  private handleStatisticsGetSuccess(self: any, metadata: DatasetMetadata){
     console.log(metadata);
     let correlationMatrix = self.parseCorrelationData(metadata.statistics.cormat.cols, metadata.statistics.cormat.cors);
     self.correlationComponent.LoadCorrelationData(metadata.statistics.cormat.cols, correlationMatrix);
@@ -320,8 +321,9 @@ export class ExperimentEditComponent implements OnInit {
     
     self.columns = metadata.columns;
 
-    console.log("------------- META HEADERS ----------------")
-    console.log(DataConverter.metaToHeaders(metadata))
+    self.datasetEditTable.LoadMetadata(metadata)
+    // console.log("------------- META HEADERS (DEBUG !!!!!) ----------------")
+    // console.log(DataConverter.metaToHeaders(metadata))
   }
   
   

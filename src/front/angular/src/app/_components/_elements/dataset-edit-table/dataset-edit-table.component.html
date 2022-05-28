@@ -1,4 +1,4 @@
-<table>
+<table *ngIf="columnsMeta && topLevelHeaders">
     
     <thead>
         <!-- RED ZA KOLONE -->
@@ -7,7 +7,7 @@
             <!-- <th scope="col" (click)="SelectDeselectAllColumns()"> </th> -->
             
             <th scope="col" *ngFor="let column of columns" [class.selectedColumnTH]="selectedColumns.includes(column)" (click)="SelectDeselectColumn(column)">
-                {{column}}
+                {{column + ' : ' + columnsMeta[column].type}}
             </th>
         </tr>
     </thead>
