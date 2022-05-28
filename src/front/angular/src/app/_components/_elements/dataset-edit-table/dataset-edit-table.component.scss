@@ -50,11 +50,16 @@ tbody{
     .selectedColumnTR{
         background-color: #c9e3ff;
     }
+
+    .nullCellTR {
+        background-color: var(--datasetTableTrTdBGNullCell);
+    }
     
     td{
         &:hover{
             background-color: var(--datasetTableTrTdHoverBGCell);
             color: var(--datasetTableTrTdHover);
         }
+        
     }
 }

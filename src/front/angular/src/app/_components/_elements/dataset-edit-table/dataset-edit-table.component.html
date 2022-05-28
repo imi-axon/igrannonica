@@ -19,7 +19,7 @@
             <!-- <td> </td> -->
             
             <!-- CELIJA U REDU -->
-            <td *ngFor="let j = index; let cell of GetRowData(row)" [class.selectedColumnTR]="selectedColumns.includes(GetRowKeys(row)[j])">
+            <td *ngFor="let j = index; let cell of GetRowData(row)" [class.selectedColumnTR]="selectedColumns.includes(GetRowKeys(row)[j])"  [class.nullCellTR]="cell == 'NA' || cell == ''">
                 {{cell}}
             </td>
 

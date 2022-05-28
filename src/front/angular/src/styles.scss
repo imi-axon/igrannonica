@@ -114,6 +114,7 @@ $angular-theme: mat.define-light-theme((color: (primary: $angular-primary,
     --datasetTableTrTdHover:#212529; //TEKST
     --datasetTableTrTdHoverBG:#daecff;
     --datasetTableTrTdHoverBGCell:#bfdfff;
+    --datasetTableTrTdBGNullCell:#ffbfc8;
 
     //statistics table , dataset-edit-table
     //KORISTIM OVE 4 VARIJABLE IZ DATASET TABLE
@@ -209,6 +210,7 @@ $angular-theme: mat.define-light-theme((color: (primary: $angular-primary,
     --datasetTableTrTdHover:#212529; //TEKST
     --datasetTableTrTdHoverBG:#daecff;
     --datasetTableTrTdHoverBGCell:#bfdfff;
+    --datasetTableTrTdBGNullCell:#422c35;
 
     //statistics table , dataset-edit-table
     //KORISTIM OVE 4 VARIJABLE IZ DATASET TABLE
