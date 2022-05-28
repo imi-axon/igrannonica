@@ -40,7 +40,7 @@ export class InterceptorService implements HttpInterceptor {
      //   console.log("obradioreq" + this.totalRequests);
         this.totalRequests--;
         if (this.totalRequests == 0){
-          setTimeout(() => { this.loaderService.isLoading.next(false); },680)
+          setTimeout(() => { this.loaderService.isLoading.next(false); },0)
        //   console.log("Obradio poslednji req");
         }
       }
