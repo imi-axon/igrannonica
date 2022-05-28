@@ -1,15 +1,23 @@
-<table>
+<table *ngIf="columnsMeta && topLevelHeaders && columnsTop">
     
     <thead>
-        <!-- RED ZA KOLONE -->
+        
+        <!-- RED ZA METAPODATKE -->
         <tr>
-            
-            <!-- <th scope="col" (click)="SelectDeselectAllColumns()"> </th> -->
-            
-            <th scope="col" *ngFor="let column of columns" [class.selectedColumnTH]="selectedColumns.includes(column)" (click)="SelectDeselectColumn(column)">
-                {{column}}
+            <th scope="col" *ngFor="let column of columnsTop" [attr.colspan]="column.span" [class.selectedColumnTH]="selectedColumns.includes(column.text)"
+            [class.oneHotCellTH]="column.text != '' && !topLevelHeaders.num.includes(column.text) && !topLevelHeaders.cat.includes(column.text)">
+                {{column.text}}
             </th>
         </tr>
+        
+        <!-- RED ZA HEDERE -->
+        <tr>
+            <!-- <th scope="col" (click)="SelectDeselectAllColumns()"> </th> -->
+            <th scope="col" *ngFor="let column of columns" [class.selectedColumnTH]="selectedColumns.includes(column)" (click)="SelectDeselectColumn(column)">
+                {{column + ' : ' + columnsMeta[column].type}}
+            </th>
+        </tr>
+
     </thead>
     
     <tbody>
@@ -19,7 +27,8 @@
             <!-- <td> </td> -->
             
             <!-- CELIJA U REDU -->
-            <td *ngFor="let j = index; let cell of GetRowData(row)" [class.selectedColumnTR]="selectedColumns.includes(GetRowKeys(row)[j])"  [class.nullCellTR]="cell == 'NA' || cell == ''">
+            <td *ngFor="let j = index; let cell of GetRowData(row)" [class.selectedColumnTR]="selectedColumns.includes(GetRowKeys(row)[j])"  
+            [class.nullCellTR]="cell == 'NA' || cell == ''">
                 {{cell}}
             </td>
 

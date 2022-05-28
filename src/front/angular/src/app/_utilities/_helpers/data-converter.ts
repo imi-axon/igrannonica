@@ -58,19 +58,23 @@ export interface TopLevelHeaders
 
 export interface DatasetMetadata
 {
-    columns: Header[]
-    statistics: string              // statistika u JSON formatu (definisan na Figmi)
+    columns: DatasetColumnsMeta
+    statistics: any                 // statistika u JSON formatu (definisan na Figmi)
 }
 
-export interface Header 
+export interface DatasetColumnsMeta 
+{ 
+    [name:string] : DatasetHeader 
+}
+
+export interface DatasetHeader 
 {
-    name: string                    // naziv kolone
     type: "num" | "cat" | "enc"     // tip kolone (numericka, kategorijska, enkodirana-numericka)
     trainReady: boolean             // da li je spreman za treniranje
-    encoding: Encoding | null       // podaci o enkodiranju kolone (nije None ukoliko je type = "enc")
+    encoding: ColumnEncoding | null       // podaci o enkodiranju kolone (nije None ukoliko je type = "enc")
 }
 
-export interface Encoding
+export interface ColumnEncoding
 {
     type: "onehot" | "label"        // tip enkodiranja koji je primenjen
     onehot: OneHotEncData | null           // nije None ukoliko je type = "onehot"
