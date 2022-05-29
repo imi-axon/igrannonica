@@ -84,7 +84,7 @@ export class ExperimentNetworkComponent implements OnInit {
   public neuralNetwork : NeuralNetwork = new NeuralNetwork();
   public runningTraining: boolean = false;
   public trainingFinished: boolean = false;
-  
+  public resetButton: boolean = false;
   public unusedColumns: string[] = [];
   public selectedColumns: string[] = [];
   
@@ -199,6 +199,7 @@ export class ExperimentNetworkComponent implements OnInit {
   
   public finishedCallback(self: ExperimentNetworkComponent){
     self.nnService.getTrainRez(self.getProjectId(), self.getNetworkId(), self, self.gotTrainRez);
+    self.resetButton=true;
   }
   
   
@@ -326,4 +327,9 @@ export class ExperimentNetworkComponent implements OnInit {
     this.display.nativeElement.setAttribute("style", "cursor: grab;");
   }
   
+  public Reset(){
+    console.log("reset");
+    this.resetButton=false;
+    this.runningTraining=false;
+  }
 }
