@@ -1,14 +1,15 @@
 
     <div id="wrapper">
         <h1> {{'lista-mreza.mojeMreze' |translate}} </h1>
+
+        <div class="newNetwork mb-5" (click)="NewNetwork();">
+            <h3>{{'lista-mreza.nova' |translate}}</h3>
+        </div>
         
         <list-controls (OnSearch)="networksList.SetSearchTerm($event)" (OnOrderBy)="networksList.OrderBy($event)"></list-controls>
         
         <app-network-list #networksList></app-network-list>
         
-        <div class="newNetwork" (click)="NewNetwork();">
-            <h3>{{'lista-mreza.nova' |translate}}</h3>
-        </div>
     </div>
     
 

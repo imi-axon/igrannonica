@@ -130,6 +130,9 @@ $angular-theme: mat.define-light-theme((color: (primary: $angular-primary,
     --configurationBg: #FFFFFF77;
     --mrezaBg: #FFFFFF77;
     --sideBg: #FFFFFF77;
+
+    //EXPERIMENT-EDIT
+    --action: #212529;
     
 }
 
@@ -165,7 +168,7 @@ $angular-theme: mat.define-light-theme((color: (primary: $angular-primary,
 
 
     //Lista projekata
-    --projectsListEmptyTitle: #555555;
+    --projectsListEmptyTitle: white;
     --projectListProject:var(--tamnaTemaContainerBg);
     --projectListProjectHover: var(--tamnaTemaContainerBgHover);
     --projectListProjectBorder:var(--tamnaTemaPrimarnaPlava);
@@ -226,6 +229,9 @@ $angular-theme: mat.define-light-theme((color: (primary: $angular-primary,
     --configurationBg: var(--tamnaTemaContainerBg);
     --mrezaBg: var(--tamnaTemaContainerBg);
     --sideBg: var(--tamnaTemaContainerBg);
+
+    //EXPERIMENT-EDIT
+    --action: white;
     
 }
 //////////////////////////////KRAJ TEME////////////////////////////////////////

@@ -60,7 +60,7 @@
         "novi_eksperiment": "Novi Eksperiment"
     },
     "lista-mreza":{
-        "nema":"Nemate nijednu neuronsku mrežu",
+        "nema":"Lista mreža je prazna!",
         "search":"Pretražite...",
         "nova":"Nova mreža",
         "mojeMreze": "Moje neuronske mreže"
