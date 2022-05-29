@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LocalChange } from 'src/app/_utilities/_data-types/models';
-import { DataConverter } from 'src/app/_utilities/_helpers/data-converter';
+import { DataConverter, DatasetMetadata } from 'src/app/_utilities/_helpers/data-converter';
 import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
 import { StatisticsService } from 'src/app/_utilities/_services/statistics.service';
 import { CorrelationTableComponent } from '../correlation-table/correlation-table.component';
@@ -63,7 +63,8 @@ export class ExperimentEditComponent implements OnInit {
   }
   
   ngOnInit(): void {
-    this.UpdateAllMain(this);
+    // this.UpdateAllMain(this);
+    this.UpdateAllNotMain(this);
   }
   
   private UpdateChanges(self: ExperimentEditComponent){
@@ -72,13 +73,9 @@ export class ExperimentEditComponent implements OnInit {
   }
   
   private UpdateAllMain(self: ExperimentEditComponent){
-    self.datasetService.GetDatasetPage(self.GetProjectId(), true, 1, 20, self, self.handleDatasetGetSuccess);
-    self.UpdateChanges(self);
     self.statisticsService.GetStatistics(self.GetProjectId(), true, self, self.handleStatisticsGetSuccess);
   }
   private UpdateAllNotMain(self: ExperimentEditComponent){
-    self.datasetService.GetDatasetPage(self.GetProjectId(), false, 1, 20, self, self.handleDatasetGetSuccess);
-    self.UpdateChanges(self);
     self.statisticsService.GetStatistics(self.GetProjectId(), false, self, self.handleStatisticsGetSuccess);
   }
   
@@ -271,7 +268,7 @@ export class ExperimentEditComponent implements OnInit {
   // REVERT LINE
   public RevertLine(lineNumber: number){
     if(lineNumber == 0)
-      this.datasetService.RevertInit(this.GetProjectId(), this, this.UpdateAllMain);
+      this.datasetService.RevertInit(this.GetProjectId(), this, this.UpdateAllNotMain);
     else
       return;
       //this.datasetService.RevertLine(this.GetProjectId(), lineNumber, this, this.UpdateAllMain);
@@ -284,7 +281,7 @@ export class ExperimentEditComponent implements OnInit {
   
   // Discard
   public DiscardChanges(){
-    this.datasetService.DiscardChanges(this.GetProjectId(), this, this.UpdateAllMain);
+    this.datasetService.DiscardChanges(this.GetProjectId(), this, this.UpdateAllNotMain);
   }
   
   
@@ -310,7 +307,7 @@ export class ExperimentEditComponent implements OnInit {
   
   // STATISTIKA =============================================================================================
   
-  private handleStatisticsGetSuccess(self: any, metadata: any){
+  private handleStatisticsGetSuccess(self: any, metadata: DatasetMetadata){
     console.log(metadata);
     let correlationMatrix = self.parseCorrelationData(metadata.statistics.cormat.cols, metadata.statistics.cormat.cors);
     self.correlationComponent.LoadCorrelationData(metadata.statistics.cormat.cols, correlationMatrix);
@@ -320,8 +317,13 @@ export class ExperimentEditComponent implements OnInit {
     
     self.columns = metadata.columns;
 
-    console.log("------------- META HEADERS ----------------")
+    self.datasetEditTable.LoadMetadata(metadata)
+    console.log("------------- META HEADERS (DEBUG !!!!!) ----------------")
     console.log(DataConverter.metaToHeaders(metadata))
+
+    // Get: DatasetPage + Changes
+    self.datasetService.GetDatasetPage(self.GetProjectId(), false, 1, 20, self, self.handleDatasetGetSuccess);
+    self.UpdateChanges(self);
   }
   
   
