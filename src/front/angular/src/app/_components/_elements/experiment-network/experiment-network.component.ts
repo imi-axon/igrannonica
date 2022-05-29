@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NeuralNetwork, Project } from 'src/app/_utilities/_data-types/models';
 import { TrainingApiService } from 'src/app/_utilities/_middleware/training-api.service';
 import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
+import { LoaderService } from 'src/app/_utilities/_services/loader.service';
 import { NetworkService } from 'src/app/_utilities/_services/network.service';
 import { NnService } from 'src/app/_utilities/_services/nn.service';
 import { StatisticsService } from 'src/app/_utilities/_services/statistics.service';
@@ -21,7 +22,8 @@ export class ExperimentNetworkComponent implements OnInit {
     private nnService: NnService,
     private statisticsService: StatisticsService,
     private networkService: NetworkService,
-    private wsService: TrainingApiService
+    private wsService: TrainingApiService,
+    public loaderService:LoaderService
   ) { }
   
   private getProjectId(): number{
@@ -78,6 +80,7 @@ export class ExperimentNetworkComponent implements OnInit {
   
   @ViewChild("testbarplotdva")
   private testbarplotdva: MetricsBarplotComponent;
+
   
   // NEURAL NETWORK
   public networkName: string = "";
@@ -90,6 +93,8 @@ export class ExperimentNetworkComponent implements OnInit {
   
   private metadata: any;
   private once: boolean = true;
+
+  public dugmePlayDissabled:boolean=false;
 
   ngOnInit(): void {
     this.networkService.GetNetwork(this.getProjectId(), this.getNetworkId(), this, this.successGetNetworkCallback);
@@ -165,6 +170,7 @@ export class ExperimentNetworkComponent implements OnInit {
     }
     
     this.runningTraining = true;
+    this.dugmePlayDissabled=true;
     this.wsService.train(this.getProjectId(), this.getNetworkId(), this.neuralNetwork.conf, this, this.updateTrainData, this.finishedCallback);
   }
   
@@ -329,6 +335,7 @@ export class ExperimentNetworkComponent implements OnInit {
   
   public Reset(){
     console.log("reset");
+    this.dugmePlayDissabled=false;
     this.resetButton=false;
     this.runningTraining=false;
   }

@@ -9,27 +9,9 @@ import { LoaderService } from './loader.service';
 
 // export class InterceptorService {}
 export class InterceptorService implements HttpInterceptor {
-  private totalRequests = 0;
+  public totalRequests = 0;
   constructor(public loaderService: LoaderService) { }
-
-  // intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
-  //   this.totalRequests++;
-  //   console.log("req" + this.totalRequests);
-  //   setTimeout(() => { this.loaderService.isLoading.next(true); }, 0)
-  //   return next.handle(req).pipe(
-  //     finalize(() => {
-  //       console.log("obradioreq" + this.totalRequests);
-  //       this.totalRequests--;
- 
-  //         this.loaderService.isLoading.next(false);
-  //         console.log("Obradio poslednji req");
-        
-  //     }
-  //     )
-  //   );
-  // }
-
+  
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     this.totalRequests++;

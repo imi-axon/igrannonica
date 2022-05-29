@@ -69,6 +69,10 @@
                             filter: brightness(65%) saturate(200%);
                         }
                     }
+
+                    &:disabled{
+                        background-color: gray;
+                    }
                 }
                 input{
                     border: solid 1px #0091ff;

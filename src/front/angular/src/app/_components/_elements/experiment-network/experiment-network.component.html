@@ -19,7 +19,7 @@
         
         <div id="side">
             <div class="header">
-                <button *ngIf="!resetButton"  class="PlayResetButton" (click)="StartTraining()"> <i class="bi bi-play-fill fa-lg" style="color:white;"></i>  </button>
+                <button *ngIf="!resetButton" [disabled]="dugmePlayDissabled || (loaderService.isLoading | async) "  class="PlayResetButton" (click)="StartTraining()"> <i class="bi bi-play-fill fa-lg" style="color:white;"></i>  </button>
                 <button *ngIf="resetButton"  class="PlayResetButton" (click)="Reset()"> <i class="bi bi-arrow-left fa-lg" style="color:white;"></i>  </button>
                 <span id="epoch">&nbsp; Epochs:&nbsp;</span>
                 <input type="number" min="1" max="1000" [value]="neuralNetwork.conf.epochsDuration" (input)="ChangeEpochsDuration($event)">
