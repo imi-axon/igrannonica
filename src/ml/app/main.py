@@ -232,6 +232,21 @@ def generate_metadata(body: MetaGenRequest):
 
 # ==== Training ====
 
+@app.get('/api/user{uid}/nns')
+def get_nn_list(uid: int):
+    try:
+        TTM.b_table_lock() # TTM [ X ]
+        tts = TTM.get_user_nns(uid)
+        nns = []
+        if tts != None:
+            for (key,val) in tts.items():
+                nns.append( { str(key) : json_decode(val.buffer[-1].decode('utf-8')) } )
+        return json_encode(nns)
+        
+    finally:
+        TTM.b_table_unlock() # TTM [  ]
+
+
 # Training START
 @app.post('/api/user{uid}/nn{nnid}/pasive')     # << Kasnije treba promeniti u "/start"
 def nn_train_start(uid: int, nnid: int, body: TrainingRequest):
@@ -305,7 +320,8 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
     flags = {'stop': False}
     lock: Lock = Lock()
 
-    EP_PACK_SIZE = 100 # broj epoha koje se salju u jednoj poruci
+    EP_PACK_SIZE_MAX = 100      # maximalan broj epoha koje se salju u jednoj poruci
+    EP_PACK_SIZE_MIN = 1        # minimalan broj epoha koje se salju u jednoj poruci
     trainrez_buff: List[bytes] = []
 
     try:
@@ -343,7 +359,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
             if (not th.is_alive()) and flags['stop'] == False:
                 raise Exception()
 
-            if len(buff) > ibuf:
+            if len(buff) >= ibuf + EP_PACK_SIZE_MIN:
                 
                 burst_buff = buff[ibuf:].copy()                 # kopira se sadrzaj bafera od ibuf-a do kraja
                 await aunlock(lock) # [   ]
@@ -361,8 +377,9 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
                         break
                     else:
                         pack += b + b','
-                        if pack_i == EP_PACK_SIZE:              # 1 pack zavrsen, salje se
+                        if pack_i == EP_PACK_SIZE_MAX:          # 1 pack zavrsen, salje se
                             pack = b'[' + pack[:-1] + b']'
+                            print('>>>> send one pack >>>>')
                             await ws.send_text(pack.decode())   # ws >>>>
                             pack = b''
                             pack_i = 0
@@ -370,6 +387,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
                 # Ukoliko je preostalo nesto epoha kojih nema dovoljno za jedan PACK
                 if pack != b'':
                     pack = b'[' + pack[:-1] + b']'
+                    print('>>>> send remaining >>>>')
                     await ws.send_text(pack.decode())   # ws >>>>
 
                 if finished:                            # ako je kraj sacuvati i rezultate testiranja (cuva se na pocetku bafera)
