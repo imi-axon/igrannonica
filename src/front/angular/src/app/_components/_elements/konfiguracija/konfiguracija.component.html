@@ -53,6 +53,25 @@
                 <option [selected]="neuralNetwork.conf.loss == 'hng'">Hinge Loss</option>
                 <option [selected]="neuralNetwork.conf.loss == 'shng'">Squared Hinge Loss</option>
             </select>
+            <!-- DODATI ZA MULTIKLASIFIKACIJU -->
+        </div>
+        
+    </div>
+
+    <div class="opcijaContainer">
+        <label>Optimizer Function</label> 
+        <div class="select">
+            <select id="OptFun" (change)="ChangeOptFun($event)">
+                <option [selected]="neuralNetwork.conf.trainAlg == 'adam'">Adam</option>
+                <option [selected]="neuralNetwork.conf.trainAlg == 'adamax'">Adamax</option>
+                <option [selected]="neuralNetwork.conf.trainAlg == 'adagrad'">Adagrad</option>
+                <option [selected]="neuralNetwork.conf.trainAlg == 'adadelta'">Adadelta</option>
+                <option [selected]="neuralNetwork.conf.trainAlg == 'nadam'">NAdam</option>
+                <option [selected]="neuralNetwork.conf.trainAlg == 'rmsprop'">RMSprop</option>
+                <option [selected]="neuralNetwork.conf.trainAlg == 'ftrl'">FTRL</option>
+                <option [selected]="neuralNetwork.conf.trainAlg == 'sgd'">Gradient descent</option>
+            </select>
+            <!-- DODATI ZA MULTIKLASIFIKACIJU -->
         </div>
         
     </div>

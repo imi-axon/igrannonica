@@ -155,6 +155,10 @@ export class KonfiguracijaComponent implements OnInit, OnChanges {
     this.neuralNetwork.conf.loss = event.srcElement.value;
   }
   
+  public ChangeOptFun(event: any){
+    this.neuralNetwork.conf.trainAlg = event.srcElement.value;
+  }
+  
   public ChangeReg(event: any){
     this.neuralNetwork.conf.reg = event.srcElement.value;
   }

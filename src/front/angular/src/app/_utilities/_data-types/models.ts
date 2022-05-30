@@ -314,6 +314,7 @@ export class NetworkConfiguration{
     
     problemType: string = "";
     loss: string="";
+    trainAlg:string="";
     
     splitType: string = "";
     trainSplit: number = 0;
