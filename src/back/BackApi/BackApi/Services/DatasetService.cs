@@ -477,7 +477,9 @@ namespace BackApi.Services
             string[] lines = File.ReadAllLines(ch);
             foreach (var line in lines)
             {
+                actions.Append('[');
                 actions.Append(line);
+                actions.Append(']');
                 actions.Append(",");
             }
             if (actions.Length > 2)
