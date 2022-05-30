@@ -91,9 +91,9 @@
         "korelacionaMatrica(pearson)": "Korelaciona matrica (Pearson-ova)",
         
         "popuni": "Popuni",
-        "koloneSaProsekom": "Kolone sa njihovim prosekom",
-        "koloneSaMedijanom": "Kolone sa njihovim medijanama",
-        "koloneSaNajcescim": "Kolone sa najčešćim vrednostima",
+        "koloneSaProsekom": "Prazna polja kolona sa njihovim prosekom",
+        "koloneSaMedijanom": "Prazna polja kolona sa njihovim medijanama",
+        "koloneSaNajcescim": "Prazna polja kolona sa najčešćim vrednostima",
         
         "obrisi": "Obrisi",
         "izabraneKolona": "Izabrane kolone",
@@ -113,7 +113,9 @@
         "poslednjeIzmenjen": "Poslednje izmenjen",
         "odbaci": "Odbaci",
         "sacuvaj": "Sačuvaj",
-        "lokalneIzmene": "Lokalne promene"
+        "lokalneIzmene": "Lokalne promene",
+        
+        "revertLineTooltip": "Odbaci sve izmene do izabrane linije."
     },
     "profil":{
         "izmeni":"Izmenite podatke"
