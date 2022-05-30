@@ -40,18 +40,23 @@
         <label>Loss function</label> 
         <div class="select">
             <select *ngIf="neuralNetwork.conf.problemType == 'regression'" id="LossReg" (change)="ChangeLossFun($event)">
-                <option [selected]="neuralNetwork.conf.loss == 'mse'">Mean Squared Error</option>
-                <option [selected]="neuralNetwork.conf.loss == 'mae'">Mean Absolut Error</option>
-                <option [selected]="neuralNetwork.conf.loss == 'mape'">Mean Absolut Percentage Error</option>
-                <option [selected]="neuralNetwork.conf.loss == 'msle'">Mean Squared Logarithmic Error</option>
-                <option [selected]="neuralNetwork.conf.loss == 'csl'">Cosine Slmilarity Loss</option>
-                <option [selected]="neuralNetwork.conf.loss == 'hub'">Huber Loss</option>
-                <option [selected]="neuralNetwork.conf.loss == 'psn'">Poisson Loss</option>
+                <option value="mse" [selected]="neuralNetwork.conf.loss == 'mse'">Mean Squared Error</option>
+                <option value="mae" [selected]="neuralNetwork.conf.loss == 'mae'">Mean Absolut Error</option>
+                <option value="mape" [selected]="neuralNetwork.conf.loss == 'mape'">Mean Absolut Percentage Error</option>
+                <option value="msle" [selected]="neuralNetwork.conf.loss == 'msle'">Mean Squared Logarithmic Error</option>
+                <option value="csl" [selected]="neuralNetwork.conf.loss == 'csl'">Cosine Slmilarity Loss</option>
+                <option value="hub" [selected]="neuralNetwork.conf.loss == 'hub'">Huber Loss</option>
+                <option value="psn" [selected]="neuralNetwork.conf.loss == 'psn'">Poisson Loss</option>
             </select>
-            <select *ngIf="neuralNetwork.conf.problemType == 'classification'" id="LossClass">
-                <option [selected]="neuralNetwork.conf.loss == 'bce'">Binary Cross-Entrophy</option>
-                <option [selected]="neuralNetwork.conf.loss == 'hng'">Hinge Loss</option>
-                <option [selected]="neuralNetwork.conf.loss == 'shng'">Squared Hinge Loss</option>
+            <select *ngIf="neuralNetwork.conf.problemType == 'classification' && this.neuralNetwork.conf.outputs.length <= 2" id="LossClass" (change)="ChangeLossFun($event)">
+                <option value="bce" [selected]="neuralNetwork.conf.loss == 'bce'">Binary Cross-Entrophy</option>
+                <option value="hng" [selected]="neuralNetwork.conf.loss == 'hng'">Hinge Loss</option>
+                <option value="shng" [selected]="neuralNetwork.conf.loss == 'shng'">Squared Hinge Loss</option>
+            </select>
+            <select *ngIf="neuralNetwork.conf.problemType == 'classification' && this.neuralNetwork.conf.outputs.length > 2" id="LossClass" (change)="ChangeLossFun($event)">
+                <option value="cce" [selected]="neuralNetwork.conf.loss == 'cce'">Categorical Cross-Entrophy</option>
+                <option value="scce" [selected]="neuralNetwork.conf.loss == 'scce'">Sparse Categorical Cross-Entrophy</option>
+                <option value="klb" [selected]="neuralNetwork.conf.loss == 'klb'">Kullback Leibler Divergence</option>
             </select>
             <!-- DODATI ZA MULTIKLASIFIKACIJU -->
         </div>
@@ -62,14 +67,14 @@
         <label>Optimizer Function</label> 
         <div class="select">
             <select id="OptFun" (change)="ChangeOptFun($event)">
-                <option [selected]="neuralNetwork.conf.trainAlg == 'adam'">Adam</option>
-                <option [selected]="neuralNetwork.conf.trainAlg == 'adamax'">Adamax</option>
-                <option [selected]="neuralNetwork.conf.trainAlg == 'adagrad'">Adagrad</option>
-                <option [selected]="neuralNetwork.conf.trainAlg == 'adadelta'">Adadelta</option>
-                <option [selected]="neuralNetwork.conf.trainAlg == 'nadam'">NAdam</option>
-                <option [selected]="neuralNetwork.conf.trainAlg == 'rmsprop'">RMSprop</option>
-                <option [selected]="neuralNetwork.conf.trainAlg == 'ftrl'">FTRL</option>
-                <option [selected]="neuralNetwork.conf.trainAlg == 'sgd'">Gradient descent</option>
+                <option value="adam" [selected]="neuralNetwork.conf.trainAlg == 'adam'">Adam</option>
+                <option value="adamx" [selected]="neuralNetwork.conf.trainAlg == 'adamax'">Adamax</option>
+                <option value="adagrad" [selected]="neuralNetwork.conf.trainAlg == 'adagrad'">Adagrad</option>
+                <option value="adadelta" [selected]="neuralNetwork.conf.trainAlg == 'adadelta'">Adadelta</option>
+                <option value="nadam" [selected]="neuralNetwork.conf.trainAlg == 'nadam'">NAdam</option>
+                <option value="rmsprop" [selected]="neuralNetwork.conf.trainAlg == 'rmsprop'">RMSprop</option>
+                <option value="ftrl" [selected]="neuralNetwork.conf.trainAlg == 'ftrl'">FTRL</option>
+                <option value="sgd" [selected]="neuralNetwork.conf.trainAlg == 'sgd'">Gradient descent</option>
             </select>
             <!-- DODATI ZA MULTIKLASIFIKACIJU -->
         </div>

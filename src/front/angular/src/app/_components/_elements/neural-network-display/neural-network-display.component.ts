@@ -26,8 +26,9 @@ export class NeuralNetworkDisplayComponent implements OnInit {
   
   @Input() parent: ExperimentNetworkComponent;
   
-  private possibleActivations: string[] = ["linear", "sigmoid", "relu", "tahn"];
-  private defaultActivation: string = "linear";
+  private possibleActivations: string[] = ["Linear", "Exponential Linear Unit", "Rectified Linear Unit", "Guassian Error Linear Unit", "Scaled Exponential Linear Unit", "Exponential", "Sigmoid", "Hard Sigmoid", "Softmax", "Softplus", "Softsign", "Swish", "Hyperbolic Tangent"];
+  private possibleActivationValues: string[] = ["lin", "elu", "relu", "gelu", "selu", "exp", "sig", "hsig", "smax", "splus", "ssign", "swish", "tahn"];
+  private defaultActivationValue: string = "lin";
   
   private weightInputShown: boolean = false;
   private weightInputId: string = "weightInput";
@@ -400,7 +401,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
     for(let i = actCount - 3; i >= layerIndex; i--)
       this.parent.neuralNetwork.conf.actPerLayer[i + 1] = this.parent.neuralNetwork.conf.actPerLayer[i];
     
-    this.parent.neuralNetwork.conf.actPerLayer[layerIndex] = this.defaultActivation;
+    this.parent.neuralNetwork.conf.actPerLayer[layerIndex] = this.defaultActivationValue;
     
     // FIX NEURONS PER LAYER
     
@@ -1209,8 +1210,8 @@ export class NeuralNetworkDisplayComponent implements OnInit {
       this.actPerLayerCombos.selectAll("select")
         .append("option")
         .text(this.possibleActivations[i])
-        .attr("value", this.possibleActivations[i])
-        .attr('selected', (d: any, j: number) => { if(this.parent.neuralNetwork.conf.actPerLayer[j].toLowerCase() == this.possibleActivations[i].toLowerCase()) { return ""; } else { return null; } })
+        .attr("value", this.possibleActivationValues[i])
+        .attr('selected', (d: any, j: number) => { if(this.parent.neuralNetwork.conf.actPerLayer[j].toLowerCase() == this.possibleActivationValues[i].toLowerCase()) { return ""; } else { return null; } })
       
   }
   
@@ -1226,8 +1227,8 @@ export class NeuralNetworkDisplayComponent implements OnInit {
       this.outputActivationComboDiv.select("select")
         .append("option")
         .text(this.possibleActivations[i])
-        .attr("value", this.possibleActivations[i])
-        .attr('selected', () => { if(this.parent.neuralNetwork.conf.actOut == this.possibleActivations[i]) { return ""; } else { return null; } })
+        .attr("value", this.possibleActivationValues[i])
+        .attr('selected', () => { if(this.parent.neuralNetwork.conf.actOut == this.possibleActivationValues[i]) { return ""; } else { return null; } })
  }
   
  

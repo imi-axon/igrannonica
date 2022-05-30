@@ -146,6 +146,13 @@ export class KonfiguracijaComponent implements OnInit, OnChanges {
   public ChangeProblemType(event: any){
     this.neuralNetwork.conf.problemType = event.srcElement.value;
     this.neuralNetwork.conf.metrics = this.selectedMetricsToArray();
+    
+    if(event.srcElement.value == 'regression'){
+      if(this.neuralNetwork.conf.outputs.length <= 2)
+        this.neuralNetwork.conf.loss = 'bce';
+      else
+        this.neuralNetwork.conf.loss = 'cce';
+    }
   }
   
   public ChangeLearningRate(event: any){
