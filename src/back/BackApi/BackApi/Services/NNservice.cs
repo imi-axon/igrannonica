@@ -25,6 +25,7 @@ namespace BackApi.Services
         public bool AddNote(int projid, int nnid, string note);
         public string GetNote(int projid, int nnid, out bool ind);
         public string GetNamebyId(int nnid);
+        public string ListOfNNsInTraining(int userid, int[] keys);
     }
 
     public class NNservice: INNservice
@@ -349,6 +350,35 @@ namespace BackApi.Services
             if (nn != null)
                 return nn.NNName;
             else return "";
+        }
+
+        public string ListOfNNsInTraining(int userid ,int[] keys)
+        {
+            var str = new StringBuilder();
+            str.Append('[');
+            foreach(int nnid in keys)
+            {
+                var nn = kontext.NNs.FirstOrDefault(x => x.NNId == nnid);
+                if (nn != null)
+                {
+                    var proj = kontext.Projects.Find(nn.ProjectId);
+                    if(proj != null)
+                    {
+                        if(userid == proj.UserId)
+                        {
+                            str.Append("{ \"Eksperiment\":\"");
+                            str.Append(proj.Name);
+                            str.Append("\",");
+                            str.Append("{ \"Mreza\":\"");
+                            str.Append(nn.NNName);
+                            str.Append("\"},");
+                        }
+                    }
+                }
+            }
+            if(str.Length > 1) str.Remove(str.Length - 1, 1);
+            str.Append(']');
+            return str.ToString();
         }
     }
 }

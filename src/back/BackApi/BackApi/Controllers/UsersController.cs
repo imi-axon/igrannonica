@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Net;
 
 namespace BackApi.Controllers
 {
@@ -193,6 +194,20 @@ namespace BackApi.Controllers
 
 
             return Ok();
+        }
+
+        [HttpGet("/nns")]
+        public async Task<ActionResult> NNsInTraining()
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+
+            var resp = await MLconnection.NNsInTrainList(userid);
+            if (resp.StatusCode == HttpStatusCode.OK)
+            {
+                return Ok(resp.Content);
+            }
+            else return BadRequest();
         }
     }
 }

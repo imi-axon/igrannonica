@@ -116,6 +116,13 @@ namespace BackApi
             var result = await client.PostAsync(Urls.ml + "/api/nn/meta/generate", byteContent);
             return result;
         }
+
+        public static async Task<HttpResponseMessage> NNsInTrainList(int userid)
+        {
+            HttpClient client = new HttpClient();
+            var result = await client.GetAsync(Urls.ml + "/api/user"+userid+"/nns");
+            return result;
+        }
         /*public static async Task<dynamic> getRequest(string tekst)
         {
             Debug.WriteLine(tekst);

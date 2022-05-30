@@ -96,7 +96,7 @@ namespace BackApi.Controllers
                     }
                     catch (Exception ex)
                     {
-                        wsq.DeleteFromDict(nnid);
+                        //wsq.DeleteFromDict(nnid);
                         await webSocketMl.CloseAsync(WebSocketCloseStatus.NormalClosure, "Client Disconnect", CancellationToken.None);
                     }
                 }
@@ -287,6 +287,19 @@ namespace BackApi.Controllers
                 return Ok();
             return BadRequest("nn");
         }
+        [HttpGet("{id}/nn/{nnid}/istraining")]
+        public async Task<ActionResult> IsTraining(int id,int nnid)
+        {
+            int userid = jwtsrv.GetUserId();
+            if (userid == -1) return Unauthorized();
+            if (!projsrv.projectExists(id)) return NotFound();
+            if (!projsrv.projectOwnership(userid, id)) return BadRequest("user");
+
+            bool rez = wsq.CheckInDict(nnid);
+            return Ok(new {isTraining=rez});
+        }
+
+
         [HttpGet("/wstest/{nnid}"),AllowAnonymous]
         public async Task<ActionResult> WsTesting(int nnid)
         {
