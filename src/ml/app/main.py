@@ -315,6 +315,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
         training_exists = TTM.nn_exist(uid, nnid)
 
         if training_exists:
+            # Treniranje ove mreze je u toku, zapoceti pracenje
             tt = TTM.get_tt(uid, nnid)
             await TTM.table_unlock() # TTM [   ]
             buff = tt.buffer
@@ -323,6 +324,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
             th = tt.thread
             print('> Thread allready exists')
         else:
+            # Treniranje ove mreze nije u toku, zapoceti novo treniranje
             th = Thread(target=TrainingInstance(buff, lock, flags).train, args=(datasetlink, nnlink, conflink, trainrezlink, newconf), daemon=True)
             tt = TrainingThread(th, buff, flags, lock)
             TTM.add(tt, uid, nnid)
@@ -332,6 +334,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
 
         # TTM.pretty_print()
         finished = False
+        ibuf = 0 # redni broj poruke u baferu koja sledeca treba da se procita
 
         while not finished:
             
@@ -340,11 +343,11 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
             if (not th.is_alive()) and flags['stop'] == False:
                 raise Exception()
 
-            if len(buff) > 0:
+            if len(buff) > ibuf:
                 
-                burst_buff = buff.copy()
-                buff.clear()
+                burst_buff = buff[ibuf:].copy()                 # kopira se sadrzaj bafera od ibuf-a do kraja
                 await aunlock(lock) # [   ]
+                ibuf += len(burst_buff)                         # ibuf postaje redni broj elementa u nizu od koga ce se sledeci put pokupiti sadrzaj bafera
 
                 # -- Send EPOCHS in BURST of PACKS --
                 pack = b''
