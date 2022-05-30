@@ -39,17 +39,17 @@
         <label for="LearningRate">Learning rate</label>
         <div class="select">
             <select id="LearningRate" (change)="ChangeLearningRate($event)">
-                <option>0.00001</option>
-                <option>0.0001</option>
-                <option>0.001</option>
-                <option selected>0.003</option>
-                <option>0.01</option>
-                <option>0.03</option>
-                <option>0.1</option>
-                <option>0.3</option>
-                <option>1</option>
-                <option>3</option>
-                <option>10</option>
+                <option [selected]="neuralNetwork.conf.learningRate == 0.00001">0.00001</option>
+                <option [selected]="neuralNetwork.conf.learningRate == 0.0001">0.0001</option>
+                <option [selected]="neuralNetwork.conf.learningRate == 0.001">0.001</option>
+                <option [selected]="neuralNetwork.conf.learningRate == 0.003">0.003</option>
+                <option [selected]="neuralNetwork.conf.learningRate == 0.01">0.01</option>
+                <option [selected]="neuralNetwork.conf.learningRate == 0.03">0.03</option>
+                <option [selected]="neuralNetwork.conf.learningRate == 0.1">0.1</option>
+                <option [selected]="neuralNetwork.conf.learningRate == 0.3">0.3</option>
+                <option [selected]="neuralNetwork.conf.learningRate == 1">1</option>
+                <option [selected]="neuralNetwork.conf.learningRate == 3">3</option>
+                <option [selected]="neuralNetwork.conf.learningRate == 10">10</option>
             </select>
         </div>
     </div>
