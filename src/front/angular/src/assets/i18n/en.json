@@ -251,6 +251,24 @@
 },
 "succes-pass":{
     "mail": "Check your email"
+},
+
+
+"metrics":{
+    "mse": "Mean Square Error",
+    "mae": "Mean Absolute Error",
+    "rmse": "Root Mean Square Error",
+    "mape": "Mean Absolute Percentage Error",
+    "msle": "Mean Squared Logarithmic Error",
+    
+    "tp": "True positives",
+    "tn": "True negatives",
+    "fp": "False positives",
+    "fn": "False negatives",
+    "auc": "Area under curve",
+    "acc": "Accuracy",
+    "rec": "Recall",
+    "prec": "Precision"
 }
 
 }

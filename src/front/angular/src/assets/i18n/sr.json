@@ -252,6 +252,24 @@
     },
     "succes-pass":{
         "mail": "Proverite vas email"
-    }
+    },
 
+
+    "metrics":{
+        "mse": "Mean Square error",
+        "mae": "Mean Absolute error",
+        "rmse": "Root Mean Square error",
+        "mape": "Mean Absolute Percentage error",
+        "msle": "Mean Squared Logarithmic error",
+        
+        "tp": "True positives",
+        "tn": "True negatives",
+        "fp": "False positives",
+        "fn": "False negatives",
+        "auc": "Area under curve",
+        "acc": "Accuracy",
+        "rec": "Recall",
+        "prec": "Precision"
+    }
+    
 }

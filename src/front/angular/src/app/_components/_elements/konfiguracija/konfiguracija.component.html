@@ -11,6 +11,31 @@
     </div>
     
     <div class="opcijaContainer">
+        <label>Metrics</label>
+        
+        <div class="optionsDropdown" (click)="ChangeMetricsSubmenu()" (blur)="CloseMetricsSubmenu($event)" tabindex="0" #metricsDropdown>
+            
+            <span *ngIf="neuralNetwork.conf.problemType == 'regression'"> {{selectedRegressionCount}}/5 </span>
+            <ul class="submenu" #metricsSubmenu (click)="OpenMetricsSubmenu()" *ngIf="neuralNetwork.conf.problemType == 'regression'">
+                <li *ngFor="let i = index; let metric of possibleRegressionMetrics" (click)="CheckUncheckRegression(i)">
+                    <input type="checkbox" class="chck" [checked]="selectedRegressionMetrics[i]" (click)="CheckUncheckRegression(i); $event.preventDefault();" pointerevent>
+                    {{('metrics.' + possibleRegressionMetrics[i])|translate}}
+                </li>
+            </ul>
+            
+            <span *ngIf="neuralNetwork.conf.problemType == 'classification'"> {{selectedClassificationCount}}/7 </span>
+            <ul class="submenu" #metricsSubmenu (click)="OpenMetricsSubmenu()" *ngIf="neuralNetwork.conf.problemType == 'classification'">
+                <li *ngFor="let i = index; let metric of possibleClassificationMetrics" (click)="CheckUncheckClassification(i)">
+                    <input type="checkbox" class="chck" [checked]="selectedClassificationMetrics[i]" (click)="CheckUncheckClassification(i); $event.preventDefault();">
+                    {{('metrics.' + possibleClassificationMetrics[i])|translate}}
+                </li>
+            </ul>
+            
+        </div>
+        
+    </div>
+    
+    <div class="opcijaContainer">
         <label for="LearningRate">Learning rate</label>
         <div class="select">
             <select id="LearningRate" (change)="ChangeLearningRate($event)">
