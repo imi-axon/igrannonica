@@ -4,28 +4,34 @@
         <app-konfiguracija [neuralNetwork]="this.neuralNetwork"></app-konfiguracija>
     </div>
     
+    <div id="changeView" class="d-flex justify-content-end">
+        <button *ngIf="prikazGrafa" [disabled]="runningTraining || resetButton" class="backButton" (click)="prikaziMrezu()"> <i class="bi bi-arrow-left fa-lg" style="color:white;"></i> Go to network  </button>
+        <button *ngIf="trenirana && !prikazGrafa"  class="backButton" (click)="prikaziGrafik()"> <i class="bi bi-arrow-right fa-lg" style="color:white;"></i> Go to graph  </button>
+    </div>
+
     <div id="secondRow">
-        
-        <div [class.hidden]="runningTraining == true" #networkDisplay id="networkDisplay" (mousedown)="MouseDownHandler($event)" (mouseup)="MouseUpHandler($event)" (mousemove)="MouseMoveHandler($event)" (mouseleave)="MouseUpHandler($event)">
+    
+        <div [class.hidden]="prikazGrafa == true" #networkDisplay id="networkDisplay" (mousedown)="MouseDownHandler($event)" (mouseup)="MouseUpHandler($event)" (mousemove)="MouseMoveHandler($event)" (mouseleave)="MouseUpHandler($event)">
             
             <neural-network-display [parent]="this" #networkComponent></neural-network-display>
-            
-            
+             
         </div>
-        <div [class.hidden]="runningTraining == false" class="trainContainer">
+        <div [class.hidden]="prikazGrafa == false" class="trainContainer">
             <app-chart-training #grafik></app-chart-training>
         </div>
         
         
         <div id="side">
             <div class="header">
-                <button *ngIf="!resetButton" [disabled]="dugmePlayDissabled || (loaderService.isLoading | async) "  class="PlayResetButton" (click)="StartTraining()"> <i class="bi bi-play-fill fa-lg" style="color:white;"></i>  </button>
-                <button *ngIf="resetButton"  class="PlayResetButton" (click)="Reset()"> <i class="bi bi-arrow-left fa-lg" style="color:white;"></i>  </button>
-                <span id="epoch">&nbsp; Epochs:&nbsp;</span>
+
+                <button *ngIf="!resetButton" [disabled]="loaderService.isLoading | async" class="PlayStopButton" (click)="StartTraining()"> <i class="bi bi-play-fill fa-lg" style="color:white;"></i> </button>
+                <button *ngIf="resetButton" [disabled]="loaderService.isLoading | async"  class="PlayStopButton" (click)="StopTraining()"> <i class="bi bi-pause-fill fa-lg" style="color:white;"></i>  </button>
+                <span id="epoch"> &nbsp; Epochs:&nbsp;</span>
+
                 <input type="number" min="1" max="1000" [value]="neuralNetwork.conf.epochsDuration" (input)="ChangeEpochsDuration($event)">
             </div>
             
-            <div class="inputContainer" [class.hidden]="runningTraining == true">
+            <div class="inputContainer" [class.hidden]="prikazGrafa == true">
                 <div id="columns">
                     <div class="column" *ngFor="let column of unusedColumns" (click)="SelectColumn(column)" [class.selectedColumn]="IsSelected(column)">
                         {{column}}
@@ -42,7 +48,7 @@
                 </div>
             </div>
             
-            <div *ngIf="neuralNetwork.conf.problemType == 'regression'" id="metricsContainer" [class.hidden]="runningTraining == false">
+            <div *ngIf="neuralNetwork.conf.problemType == 'regression'" id="metricsContainer" [class.hidden]="prikazGrafa == false">
                 <span style="color: #375aa0; font-size: 14px;">MSE</span><br>
                 <app-metrics-barplot #MSEbarplot> </app-metrics-barplot>
                 
@@ -56,7 +62,7 @@
                 
             </div>
             
-            <div *ngIf="neuralNetwork.conf.problemType == 'classification'" id="metricsContainer" [class.hidden]="runningTraining == false">
+            <div *ngIf="neuralNetwork.conf.problemType == 'classification'" id="metricsContainer" [class.hidden]="prikazGrafa == false">
                 <!--<span style="color: #375aa0; font-size: 14px;">Categorical accuracy</span><br>
                 <app-metrics-barplot #categoricalbarplot> </app-metrics-barplot>
                 
