@@ -297,6 +297,7 @@ class Neuron{
 
 export class NetworkConfiguration{
     epochsDuration: number = 0;
+    metrics: string[] = [];
     
     inputs: string[] = [];
     outputs: string[] = [];

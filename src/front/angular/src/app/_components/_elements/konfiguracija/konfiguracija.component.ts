@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { DataSplitSliderComponent } from '../data-split-slider/data-split-slider.component';
 
 
@@ -16,6 +16,22 @@ export class KonfiguracijaComponent implements OnInit, OnChanges {
   @ViewChild("dataSplitSlider")
   dataSplitSlider: DataSplitSliderComponent;
   
+  
+  
+  @ViewChild("metricsDropdown")
+  metricsDropdown: ElementRef;
+  @ViewChild("metricsSubmenu")
+  metricsSubmenu: ElementRef;
+  
+  selectedRegressionMetrics: boolean[] = [false, false, false, false, false];
+  selectedClassificationMetrics: boolean[] = [false, false, false, false, false, false, false];
+  
+  selectedRegressionCount: number = 0;
+  selectedClassificationCount: number = 0;
+  
+  possibleRegressionMetrics: string[] = ['mse', 'mae', 'rmse', 'mape', 'msle'];
+  possibleClassificationMetrics: string[] = ['tp', 'tn', 'fp', 'fn', 'acc', 'rec', 'prec'];
+  
   ngOnInit(): void {
   }
   
@@ -24,11 +40,109 @@ export class KonfiguracijaComponent implements OnInit, OnChanges {
       this.dataSplitSlider.slider1Position = this.neuralNetwork.conf.trainSplit;
       this.dataSplitSlider.slider2Position = this.neuralNetwork.conf.trainSplit + this.neuralNetwork.conf.valSplit;
       this.dataSplitSlider.UpdateSlider();
+      
+      this.setupMetricSelectMenu();
     }, 0);
   }
   
+  // Klik na polje
+  public CheckUncheckRegression(index: number){
+    if(this.selectedRegressionMetrics[index]){
+      this.selectedRegressionMetrics[index] = false;
+      this.selectedRegressionCount--;
+    }
+    else{
+      this.selectedRegressionMetrics[index] = true;
+      this.selectedRegressionCount++;
+    }
+    this.neuralNetwork.conf.metrics = this.selectedMetricsToArray();
+  }
+  public CheckUncheckClassification(index: number){
+    if(this.selectedClassificationMetrics[index]){
+      this.selectedClassificationMetrics[index] = false;
+      this.selectedClassificationCount--;
+    }
+    else{
+      this.selectedClassificationMetrics[index] = true;
+      this.selectedClassificationCount++;
+    }
+    this.neuralNetwork.conf.metrics = this.selectedMetricsToArray();
+  }
+  
+  // Postavljane pocetnih vrednosti ulaza za izbor metrike
+  private setupMetricSelectMenu(){
+    this.selectedRegressionCount = 0;
+    this.selectedClassificationCount = 0;
+    this.selectedRegressionMetrics = [false, false, false, false, false];
+    this.selectedClassificationMetrics = [false, false, false, false, false, false, false];
+    
+    let existingMetrics: string[] = this.neuralNetwork.conf.metrics;
+    
+    // TEST, SLOBODNO OBRISATI
+    if(this.neuralNetwork.conf.problemType.toLowerCase == 'regression')
+      existingMetrics = ['mse', 'rmse', 'msle'];
+    else
+      existingMetrics = ['tp', 'fp', 'acc', 'prec'];
+    // TEST, SLOBODNO OBRISATI
+    
+    if(this.neuralNetwork.conf.problemType.toLowerCase == 'regression'){
+      this.selectedRegressionCount = 0;
+      for(let i = 0; i < this.possibleRegressionMetrics.length; i++)
+        if(existingMetrics.includes(this.possibleRegressionMetrics[i])){
+          this.selectedRegressionMetrics[i] = true;
+          this.selectedRegressionCount++;
+        }
+    }
+      
+    if(this.neuralNetwork.conf.problemType.toLowerCase == 'classification'){
+      this.selectedClassificationCount = 0;
+      for(let i = 0; i < this.possibleClassificationMetrics.length; i++)
+        if(existingMetrics.includes(this.possibleClassificationMetrics[i])){
+          this.selectedClassificationMetrics[i] = true;
+          this.selectedClassificationCount++;
+        }
+    }
+  }
+  
+  private selectedMetricsToArray(){
+    let selectedMetrics = [];
+    if(this.neuralNetwork.conf.problemType == 'regression'){
+      for(let i = 0; i < this.selectedRegressionMetrics.length; i++)
+        if(this.selectedRegressionMetrics[i])
+          selectedMetrics.push(this.possibleRegressionMetrics[i]);
+    }
+    else if(this.neuralNetwork.conf.problemType == 'classification'){
+      for(let i = 0; i < this.selectedClassificationMetrics.length; i++)
+        if(this.selectedClassificationMetrics[i])
+          selectedMetrics.push(this.possibleClassificationMetrics[i]);
+    }
+    return selectedMetrics;
+  }
+  
+  // Prikaz sakrivanje izbora metrike
+  ChangeMetricsSubmenu(){
+    if(this.metricsSubmenu.nativeElement.style.display == 'none' || this.metricsSubmenu.nativeElement.style.display.trim() =='')
+      this.OpenMetricsSubmenu();
+    else
+      this.CloseMetricsSubmenu();
+  }
+  OpenMetricsSubmenu(){
+    setTimeout(() => {
+      this.metricsSubmenu.nativeElement.setAttribute("style", "display: block;");
+      this.metricsDropdown.nativeElement.focus();
+    }, 0);
+  }
+  CloseMetricsSubmenu(event?: Event){
+    this.metricsSubmenu.nativeElement.setAttribute("style", "display: none;");
+  }
+  
+  
+  
+  
+  
   public ChangeProblemType(event: any){
     this.neuralNetwork.conf.problemType = event.srcElement.value;
+    this.neuralNetwork.conf.metrics = this.selectedMetricsToArray();
   }
   
   public ChangeLearningRate(event: any){

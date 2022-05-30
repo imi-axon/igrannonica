@@ -37,6 +37,94 @@
         input[type="range"]{
             padding: none;
         }
+        
+        
+        
+        .optionsDropdown{
+            transition: background-color 0.2s ease, color 0.2 ease;
+            position: relative;
+            width: 200px;
+            height: 28px;
+            color: #FFFFFF;
+            background-color: #006ab1;
+            text-align: left;
+            padding: 0px 10px 0px 10px;
+            line-height: 28px;
+            cursor: pointer;
+            user-select: none;
+            margin-right: 10px;
+            font-size: 14px;
+            
+            .submenu{
+                display: none;
+                list-style: none;
+                left: 0px;
+                position: absolute;
+                padding: 0px;
+                background-color: #006ab1;
+                
+                animation: submenuSlide 0.2s ease;
+                
+                li{
+                    transition: background-color 0.2s ease, color 0.2 ease;
+                    width: 200px;
+                    height: 28px;
+                    padding: 0px 10px 0px 10px;
+                    margin: 0px;
+                    font-size: 11px;
+                    border: none;
+                    text-align: left;
+                    color: #FFFFFF;
+                    background-color: #235395;
+                    
+                    .submenuCheckbox{
+                        border: none;
+                        border-radius: 0px;
+                    }
+                    
+                    .chck{
+                        pointer-events: none;
+                    }
+                    
+                    &:hover{
+                        transition: background-color 0.2s ease, color 0.2 ease;
+                        color: #FFFFFF;
+                        background-color: #2e6bad;
+                    }
+                    
+                }
+                
+                .disabled{
+                    color: #FFFFFF55;
+                    background-color: #6c7c93;
+                    cursor: default;
+                    
+                    &:hover{
+                        color: #FFFFFF55;
+                        background-color: #6c7c93;
+                    }
+                }
+            }
+            
+            @keyframes submenuSlide {
+                0% {
+                    opacity: 0;
+                    transform-origin: left;
+                    transform: translateX(15px);
+                }
+                100% {
+                    opacity: 1;
+                    transform: none;
+                }
+            }
+        }
+        
+        .optionDropdownOpen{
+            .submenu{
+                display: block;
+            }
+        }
+        
     }
     
     

@@ -8,6 +8,7 @@
     
     
     #confingContainer{
+        z-index: 3;
         background-color: var(--configurationBg);
         backdrop-filter: blur(7px);
         border: solid 1px #0091ff;
