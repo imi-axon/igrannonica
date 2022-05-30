@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { DataSplitSliderComponent } from '../data-split-slider/data-split-slider.component';
 
 
@@ -6,7 +6,8 @@ import { DataSplitSliderComponent } from '../data-split-slider/data-split-slider
 @Component({
   selector: 'app-konfiguracija',
   templateUrl: './konfiguracija.component.html',
-  styleUrls: ['./konfiguracija.component.scss']
+  styleUrls: ['./konfiguracija.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class KonfiguracijaComponent implements OnInit, OnChanges {
   constructor() { }
@@ -31,6 +32,8 @@ export class KonfiguracijaComponent implements OnInit, OnChanges {
   
   possibleRegressionMetrics: string[] = ['mse', 'mae', 'rmse', 'mape', 'msle'];
   possibleClassificationMetrics: string[] = ['tp', 'tn', 'fp', 'fn', 'acc', 'rec', 'prec'];
+
+  neuronOutputNum: number=0;
   
   ngOnInit(): void {
   }
@@ -147,6 +150,9 @@ export class KonfiguracijaComponent implements OnInit, OnChanges {
   
   public ChangeLearningRate(event: any){
     this.neuralNetwork.conf.learningRate = Number.parseFloat(event.srcElement.value);
+  }
+  public ChangeLossFun(event: any){
+    this.neuralNetwork.conf.loss = event.srcElement.value;
   }
   
   public ChangeReg(event: any){

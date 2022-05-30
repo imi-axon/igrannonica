@@ -11,7 +11,8 @@
     </div>
     
     <div class="opcijaContainer">
-        <label>Metrics</label>
+        <label>Metrics &nbsp; <i matTooltipClass="custom-tooltip"  matTooltip="Info about the action"  [matTooltipPosition]="'right'" *ngIf="selectedRegressionCount==0 && selectedClassificationCount==0" style="color:red" class="bi bi-exclamation-octagon"></i></label> 
+        
         
         <div class="optionsDropdown" (click)="ChangeMetricsSubmenu()" (blur)="CloseMetricsSubmenu($event)" tabindex="0" #metricsDropdown>
             
@@ -34,6 +35,28 @@
         </div>
         
     </div>
+
+    <div class="opcijaContainer">
+        <label>Loss function</label> 
+        <div class="select">
+            <select *ngIf="neuralNetwork.conf.problemType == 'regression'" id="LossReg" (change)="ChangeLossFun($event)">
+                <option [selected]="neuralNetwork.conf.loss == 'mse'">Mean Squared Error</option>
+                <option [selected]="neuralNetwork.conf.loss == 'mae'">Mean Absolut Error</option>
+                <option [selected]="neuralNetwork.conf.loss == 'mape'">Mean Absolut Percentage Error</option>
+                <option [selected]="neuralNetwork.conf.loss == 'msle'">Mean Squared Logarithmic Error</option>
+                <option [selected]="neuralNetwork.conf.loss == 'csl'">Cosine Slmilarity Loss</option>
+                <option [selected]="neuralNetwork.conf.loss == 'hub'">Huber Loss</option>
+                <option [selected]="neuralNetwork.conf.loss == 'psn'">Poisson Loss</option>
+            </select>
+            <select *ngIf="neuralNetwork.conf.problemType == 'classification'" id="LossClass">
+                <option [selected]="neuralNetwork.conf.loss == 'bce'">Binary Cross-Entrophy</option>
+                <option [selected]="neuralNetwork.conf.loss == 'hng'">Hinge Loss</option>
+                <option [selected]="neuralNetwork.conf.loss == 'shng'">Squared Hinge Loss</option>
+            </select>
+        </div>
+        
+    </div>
+
     
     <div class="opcijaContainer">
         <label for="LearningRate">Learning rate</label>

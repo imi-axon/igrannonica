@@ -1,3 +1,9 @@
+.custom-tooltip {
+background-color: red;
+position: relative;
+top:-10%;
+}
+   
 .konfiguracija{
     height: 100%;
     display: flex;
@@ -54,7 +60,7 @@
             user-select: none;
             margin-right: 10px;
             font-size: 14px;
-            
+
             .submenu{
                 display: none;
                 list-style: none;

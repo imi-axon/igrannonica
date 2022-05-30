@@ -313,6 +313,7 @@ export class NetworkConfiguration{
     batchSize: number = 0;
     
     problemType: string = "";
+    loss: string="";
     
     splitType: string = "";
     trainSplit: number = 0;
