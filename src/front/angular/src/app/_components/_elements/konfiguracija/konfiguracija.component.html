@@ -11,7 +11,7 @@
     </div>
     
     <div class="opcijaContainer">
-        <label>Metrics &nbsp; <i matTooltipClass="custom-tooltip"  matTooltip="Info about the action"  [matTooltipPosition]="'right'" *ngIf="selectedRegressionCount==0 && selectedClassificationCount==0" style="color:red" class="bi bi-exclamation-octagon"></i></label> 
+        <label>Metrics &nbsp; <i matTooltipClass="custom-tooltip"  matTooltip="Info about the action"  [matTooltipPosition]="'right'" *ngIf="selectedRegressionCount==0 && selectedClassificationCount==0" style="color: rgb(255, 128, 0)" class="bi bi-exclamation-octagon"></i></label> 
         
         
         <div class="optionsDropdown" (click)="ChangeMetricsSubmenu()" (blur)="CloseMetricsSubmenu($event)" tabindex="0" #metricsDropdown>

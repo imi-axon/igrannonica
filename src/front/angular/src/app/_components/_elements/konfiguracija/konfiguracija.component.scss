@@ -1,26 +1,28 @@
 .custom-tooltip {
-background-color: red;
-position: relative;
-top:-10%;
+    font-size: small;
+    background-color: rgb(255, 128, 0);
+    position: relative;
+    top: -10%;
+    color:black !important;
 }
-   
-.konfiguracija{
+
+.konfiguracija {
     height: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-around;
     padding-bottom: 15px;
-    
-    .opcijaContainer{
-        label{
+
+    .opcijaContainer {
+        label {
             font-size: 14px;
             color: #2C5D96;
             margin: 0px !important;
             user-select: none;
         }
-        
-        select{
+
+        select {
             min-width: 80px;
             font-size: 14px;
             background-color: #286dbc;
@@ -29,24 +31,24 @@ top:-10%;
             height: 28px;
             padding: 0px 0px 0px 5px;
             cursor: pointer;
-            
-            &:focus{
+
+            &:focus {
                 outline: none;
             }
-            
-            &:disabled{
+
+            &:disabled {
                 background-color: #7d98b7;
                 cursor: default;
             }
         }
-        
-        input[type="range"]{
+
+        input[type="range"] {
             padding: none;
         }
-        
-        
-        
-        .optionsDropdown{
+
+
+
+        .optionsDropdown {
             transition: background-color 0.2s ease, color 0.2 ease;
             position: relative;
             width: 200px;
@@ -61,17 +63,17 @@ top:-10%;
             margin-right: 10px;
             font-size: 14px;
 
-            .submenu{
+            .submenu {
                 display: none;
                 list-style: none;
                 left: 0px;
                 position: absolute;
                 padding: 0px;
                 background-color: #006ab1;
-                
+
                 animation: submenuSlide 0.2s ease;
-                
-                li{
+
+                li {
                     transition: background-color 0.2s ease, color 0.2 ease;
                     width: 200px;
                     height: 28px;
@@ -82,56 +84,57 @@ top:-10%;
                     text-align: left;
                     color: #FFFFFF;
                     background-color: #235395;
-                    
-                    .submenuCheckbox{
+
+                    .submenuCheckbox {
                         border: none;
                         border-radius: 0px;
                     }
-                    
-                    .chck{
+
+                    .chck {
                         pointer-events: none;
                     }
-                    
-                    &:hover{
+
+                    &:hover {
                         transition: background-color 0.2s ease, color 0.2 ease;
                         color: #FFFFFF;
                         background-color: #2e6bad;
                     }
-                    
+
                 }
-                
-                .disabled{
+
+                .disabled {
                     color: #FFFFFF55;
                     background-color: #6c7c93;
                     cursor: default;
-                    
-                    &:hover{
+
+                    &:hover {
                         color: #FFFFFF55;
                         background-color: #6c7c93;
                     }
                 }
             }
-            
+
             @keyframes submenuSlide {
                 0% {
                     opacity: 0;
                     transform-origin: left;
                     transform: translateX(15px);
                 }
+
                 100% {
                     opacity: 1;
                     transform: none;
                 }
             }
         }
-        
-        .optionDropdownOpen{
-            .submenu{
+
+        .optionDropdownOpen {
+            .submenu {
                 display: block;
             }
         }
-        
+
     }
-    
-    
+
+
 }
