@@ -7,6 +7,7 @@ import { LoaderService } from 'src/app/_utilities/_services/loader.service';
 import { NetworkService } from 'src/app/_utilities/_services/network.service';
 import { NnService } from 'src/app/_utilities/_services/nn.service';
 import { StatisticsService } from 'src/app/_utilities/_services/statistics.service';
+import { TrainingService } from 'src/app/_utilities/_services/training.service';
 import { ChartTrainingComponent } from '../chart-training/chart-training.component';
 import { MetricsBarplotComponent } from '../metrics-barplot/metrics-barplot.component';
 import { NeuralNetworkDisplayComponent } from '../neural-network-display/neural-network-display.component';
@@ -23,7 +24,8 @@ export class ExperimentNetworkComponent implements OnInit {
     private statisticsService: StatisticsService,
     private networkService: NetworkService,
     private wsService: TrainingApiService,
-    public loaderService:LoaderService
+    public loaderService:LoaderService,
+    private trainingService:TrainingService
   ) { }
   
   private getProjectId(): number{
@@ -86,15 +88,16 @@ export class ExperimentNetworkComponent implements OnInit {
   public networkName: string = "";
   public neuralNetwork : NeuralNetwork = new NeuralNetwork();
   public runningTraining: boolean = false;
-  public trainingFinished: boolean = false;
+  public trenirana : boolean = false;
   public resetButton: boolean = false;
+  public prikazGrafa: boolean = false;
+  
   public unusedColumns: string[] = [];
   public selectedColumns: string[] = [];
   
   private metadata: any;
   private once: boolean = true;
 
-  public dugmePlayDissabled:boolean=false;
 
   ngOnInit(): void {
     this.networkService.GetNetwork(this.getProjectId(), this.getNetworkId(), this, this.successGetNetworkCallback);
@@ -170,7 +173,9 @@ export class ExperimentNetworkComponent implements OnInit {
     }
     
     this.runningTraining = true;
-    this.dugmePlayDissabled=true;
+    this.prikazGrafa=true;
+    this.resetButton=true;
+    this.trenirana=true;
     this.wsService.train(this.getProjectId(), this.getNetworkId(), this.neuralNetwork.conf, this, this.updateTrainData, this.finishedCallback);
   }
   
@@ -204,8 +209,10 @@ export class ExperimentNetworkComponent implements OnInit {
   }
   
   public finishedCallback(self: ExperimentNetworkComponent){
+    self.resetButton=false;
+    self.runningTraining = false;
     self.nnService.getTrainRez(self.getProjectId(), self.getNetworkId(), self, self.gotTrainRez);
-    self.resetButton=true;
+    //console.log("zavrseno");
   }
   
   
@@ -332,11 +339,26 @@ export class ExperimentNetworkComponent implements OnInit {
     // Change cursor
     this.display.nativeElement.setAttribute("style", "cursor: grab;");
   }
-  
-  public Reset(){
+
+  public prikaziMrezu(){
     console.log("reset");
-    this.dugmePlayDissabled=false;
+    this.prikazGrafa=false;
+  }
+
+  public prikaziGrafik(){
+    console.log("reset");
+    this.prikazGrafa=true;
+  }
+
+  public StopTraining(){
+    console.log("stop");
     this.resetButton=false;
     this.runningTraining=false;
+    this.trainingService.stopTrain(this.getProjectId(), this.getNetworkId(), this, this.stopCallback);
   }
+
+  public stopCallback(self: any){
+    console.log("stop callback");
+  }
+
 }
