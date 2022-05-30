@@ -140,6 +140,7 @@ export class ExperimentEditComponent implements OnInit {
   
   
   // FILL
+  
   public FillColsWithAverage(){
     let selectedColumns: string[] = this.datasetEditTable.selectedColumns;
     
@@ -173,6 +174,7 @@ export class ExperimentEditComponent implements OnInit {
   
   
   // REMOVE
+  
   public RemoveSelectedCols(){
     if(this.datasetEditTable.selectedColumns.length <= 0)
       return;
@@ -252,15 +254,19 @@ export class ExperimentEditComponent implements OnInit {
   private handleGetLocalChangesSuccess(self: ExperimentEditComponent, response: any){
     self.localChanges = response;
   }
-   private handleGetLocalChangesEmpty(self: ExperimentEditComponent){
+  
+  private handleGetLocalChangesEmpty(self: ExperimentEditComponent){
     self.localChanges = [];
   }
   
   // GLOBAL
   private handleGetGlobalChangesSuccess(self: ExperimentEditComponent, response: any){
     self.globalChanges = response;
+    console.log("GLOBAL")
+    console.log(response)
   }
-   private handleGetGlobalChangesEmpty(self: ExperimentEditComponent){
+  
+  private handleGetGlobalChangesEmpty(self: ExperimentEditComponent){
     self.globalChanges = [];
   }
   
@@ -270,8 +276,7 @@ export class ExperimentEditComponent implements OnInit {
     if(lineNumber == 0)
       this.datasetService.RevertInit(this.GetProjectId(), this, this.UpdateAllNotMain);
     else
-      return;
-      //this.datasetService.RevertLine(this.GetProjectId(), lineNumber, this, this.UpdateAllMain);
+      this.datasetService.RevertLine(this.GetProjectId(), lineNumber, this, this.UpdateAllMain);
   }
   
   // SAVE
@@ -308,7 +313,6 @@ export class ExperimentEditComponent implements OnInit {
   // STATISTIKA =============================================================================================
   
   private handleStatisticsGetSuccess(self: any, metadata: DatasetMetadata){
-    console.log(metadata);
     let correlationMatrix = self.parseCorrelationData(metadata.statistics.cormat.cols, metadata.statistics.cormat.cors);
     self.correlationComponent.LoadCorrelationData(metadata.statistics.cormat.cols, correlationMatrix);
     

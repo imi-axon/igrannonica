@@ -91,9 +91,9 @@
         "korelacionaMatrica(pearson)": "Correlation matrix (Pearsons)",
         
         "popuni": "Fill",
-        "koloneSaProsekom": "Columns with average",
-        "koloneSaMedijanom": "Columns with median",
-        "koloneSaNajcescim": "Columns with most common value",
+        "koloneSaProsekom": "Column empty fields with average",
+        "koloneSaMedijanom": "Column empty fields with median",
+        "koloneSaNajcescim": "Column empty fields most common value",
         
         "obrisi": "Remove",
         "izabraneKolona": "Selected columns",
@@ -113,7 +113,9 @@
         "poslednjeIzmenjen": "Last edited",
         "odbaci": "Revert",
         "sacuvaj": "Save",
-        "lokalneIzmene": "Local changes"
+        "lokalneIzmene": "Local changes",
+        
+        "revertLineTooltip": "Revert all changes to current selection."
     },
     "profil":{
         "izmeni":"Edit data"
