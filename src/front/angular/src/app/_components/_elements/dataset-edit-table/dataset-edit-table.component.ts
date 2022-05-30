@@ -48,17 +48,22 @@ export class DatasetEditTableComponent implements OnInit {
     this.ColumnSelected.emit();
   }
   
-  public SelectDeselectColumn(column: string){
+  public SelectDeselectColumn(column: string, type: string){
+    if(type == 'enc')
+      return;
+    
     if(this.selectedColumns.includes(column))
       this.selectedColumns.splice(this.selectedColumns.indexOf(column), 1);
     else
       this.selectedColumns.push(column);
     
-    console.log(this.selectedColumns)
     this.ColumnSelected.emit();
   }
   
-  
+  public SelectDeselectMeta(index: number, column: any){
+    for(let i = index; i < index + column.span; i++)
+      this.SelectDeselectColumn(this.columns[i], '');
+  }
   
   
   
@@ -101,6 +106,8 @@ export class DatasetEditTableComponent implements OnInit {
 
     console.log("[[[[[ ----- ]]]]]]")
     console.log(this.columnsTop)
+    
+    console.log(this.columnsMeta);
 
     this.LoadedEvent.emit();
   }

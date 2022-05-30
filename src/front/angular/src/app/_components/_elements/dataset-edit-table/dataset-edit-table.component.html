@@ -4,8 +4,9 @@
         
         <!-- RED ZA METAPODATKE -->
         <tr>
-            <th scope="col" *ngFor="let column of columnsTop" [attr.colspan]="column.span" [class.selectedColumnTH]="selectedColumns.includes(column.text)"
-            [class.oneHotCellTH]="column.text != '' && !topLevelHeaders.num.includes(column.text) && !topLevelHeaders.cat.includes(column.text)">
+            <th scope="col" *ngFor="let i = index; let column of columnsTop" [attr.colspan]="column.span" [class.selectedColumnTH]="selectedColumns.includes(column.text)"
+            [class.oneHotCellTH]="column.text != '' && !topLevelHeaders.num.includes(column.text) && !topLevelHeaders.cat.includes(column.text)"
+            (click)="SelectDeselectMeta(i, column);">
                 {{column.text}}
             </th>
         </tr>
@@ -13,9 +14,11 @@
         <!-- RED ZA HEDERE -->
         <tr>
             <!-- <th scope="col" (click)="SelectDeselectAllColumns()"> </th> -->
-            <th scope="col" *ngFor="let column of columns" [class.selectedColumnTH]="selectedColumns.includes(column)" (click)="SelectDeselectColumn(column)">
+            <th scope="col" *ngFor="let column of columns" [class.selectedColumnTH]="selectedColumns.includes(column)" (click)="SelectDeselectColumn(column, columnsMeta[column].type)">
                 {{column + ' : ' + columnsMeta[column].type}}
             </th>
+            
+            
         </tr>
 
     </thead>
