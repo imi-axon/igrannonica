@@ -232,6 +232,21 @@ def generate_metadata(body: MetaGenRequest):
 
 # ==== Training ====
 
+@app.get('/api/user{uid}/nns')
+def get_nn_list(uid: int):
+    try:
+        TTM.b_table_lock() # TTM [ X ]
+        tts = TTM.get_user_nns(uid)
+        nns = []
+        if tts != None:
+            for (key,val) in tts.items():
+                nns.append( { str(key) : json_decode(val.buffer[-1].decode('utf-8')) } )
+        return json_encode(nns)
+        
+    finally:
+        TTM.b_table_unlock() # TTM [  ]
+
+
 # Training START
 @app.post('/api/user{uid}/nn{nnid}/pasive')     # << Kasnije treba promeniti u "/start"
 def nn_train_start(uid: int, nnid: int, body: TrainingRequest):
@@ -305,7 +320,8 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
     flags = {'stop': False}
     lock: Lock = Lock()
 
-    EP_PACK_SIZE = 100 # broj epoha koje se salju u jednoj poruci
+    EP_PACK_SIZE_MAX = 100      # maximalan broj epoha koje se salju u jednoj poruci
+    EP_PACK_SIZE_MIN = 1        # minimalan broj epoha koje se salju u jednoj poruci
     trainrez_buff: List[bytes] = []
 
     try:
@@ -315,6 +331,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
         training_exists = TTM.nn_exist(uid, nnid)
 
         if training_exists:
+            # Treniranje ove mreze je u toku, zapoceti pracenje
             tt = TTM.get_tt(uid, nnid)
             await TTM.table_unlock() # TTM [   ]
             buff = tt.buffer
@@ -323,6 +340,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
             th = tt.thread
             print('> Thread allready exists')
         else:
+            # Treniranje ove mreze nije u toku, zapoceti novo treniranje
             th = Thread(target=TrainingInstance(buff, lock, flags).train, args=(datasetlink, nnlink, conflink, trainrezlink, newconf), daemon=True)
             tt = TrainingThread(th, buff, flags, lock)
             TTM.add(tt, uid, nnid)
@@ -332,6 +350,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
 
         # TTM.pretty_print()
         finished = False
+        ibuf = 0 # redni broj poruke u baferu koja sledeca treba da se procita
 
         while not finished:
             
@@ -340,11 +359,11 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
             if (not th.is_alive()) and flags['stop'] == False:
                 raise Exception()
 
-            if len(buff) > 0:
+            if len(buff) >= ibuf + EP_PACK_SIZE_MIN:
                 
-                burst_buff = buff.copy()
-                buff.clear()
+                burst_buff = buff[ibuf:].copy()                 # kopira se sadrzaj bafera od ibuf-a do kraja
                 await aunlock(lock) # [   ]
+                ibuf += len(burst_buff)                         # ibuf postaje redni broj elementa u nizu od koga ce se sledeci put pokupiti sadrzaj bafera
 
                 # -- Send EPOCHS in BURST of PACKS --
                 pack = b''
@@ -358,8 +377,9 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
                         break
                     else:
                         pack += b + b','
-                        if pack_i == EP_PACK_SIZE:              # 1 pack zavrsen, salje se
+                        if pack_i == EP_PACK_SIZE_MAX:          # 1 pack zavrsen, salje se
                             pack = b'[' + pack[:-1] + b']'
+                            print('>>>> send one pack >>>>')
                             await ws.send_text(pack.decode())   # ws >>>>
                             pack = b''
                             pack_i = 0
@@ -367,6 +387,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
                 # Ukoliko je preostalo nesto epoha kojih nema dovoljno za jedan PACK
                 if pack != b'':
                     pack = b'[' + pack[:-1] + b']'
+                    print('>>>> send remaining >>>>')
                     await ws.send_text(pack.decode())   # ws >>>>
 
                 if finished:                            # ako je kraj sacuvati i rezultate testiranja (cuva se na pocetku bafera)
