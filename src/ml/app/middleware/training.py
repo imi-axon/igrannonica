@@ -112,7 +112,7 @@ class TrainingInstance():
             self.service.load_model(filepath)
 
 
-    def train(self, datasetUrl: str, nnUrl: str, confUrl: str, trainrezUrl: str, trainConf: Dict):
+    def train(self, datasetUrl: str, nnUrl: str, confUrl: str, trainrezUrl: str, trainConf: Dict, nnid: int):
 
         try:
             print('Train Function : BEGIN')
@@ -168,6 +168,10 @@ class TrainingInstance():
             print('-'*20)
 
         except:
-            if self.lock.locked():        # ako je try deo pukao i lock je ostao zakljucan otkljucati ga
+            if self.lock.locked():      # ako je try deo pukao i lock je ostao zakljucan otkljucati ga
                 self.lock.release()
             raise
+
+        finally:
+            pass
+            # httpc.train_stop(nnid)      # poruka backu za train stop

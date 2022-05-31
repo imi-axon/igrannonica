@@ -1,11 +1,12 @@
 import httpx
 import config
 
-baseURL = config.Urls.BACK + '/api/files/'
+baseURL = config.Urls.BACK
+filesBaseURL = baseURL + '/api/files/'
 baseHeaders = {'Host': f'{config.Urls.BACK_HOST}:{config.Urls.BACK_PORT}'}
 sslVerify = False
 
-print(f'baseURL: {baseURL}')
+print(f'filesBaseURL: {filesBaseURL}')
 print(f'baseHeaders: {baseHeaders}')
 
 
@@ -24,7 +25,7 @@ def get(filepath: str, decode: bool = True) -> str | bytes:
     
     headers = baseHeaders.copy()
 
-    path = baseURL + filepath
+    path = filesBaseURL + filepath
     path = path.replace('\\', '/')
     print(f'GET {path}')
 
@@ -39,7 +40,7 @@ def put(filepath: str, local_filepath: str) -> bool:
 
     headers = baseHeaders.copy()
 
-    path = baseURL + filepath
+    path = filesBaseURL + filepath
     path = path.replace('\\', '/')
     print(f'PUT {path}')
 
@@ -50,3 +51,17 @@ def put(filepath: str, local_filepath: str) -> bool:
 
     f.close()
     return response.status_code
+
+
+def train_stop(nnid: int):
+
+    headers = baseHeaders.copy()
+
+    path = baseURL + '/api/projects/nn/' + str(nnid) + '/train/stop'
+    print(f'GET {path}')
+
+    response = httpx.get(path, verify = sslVerify, headers = headers)
+    
+    # debug_request(response)
+
+    return response.read().decode()

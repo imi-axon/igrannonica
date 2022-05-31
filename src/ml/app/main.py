@@ -261,7 +261,7 @@ def nn_train_start(uid: int, nnid: int, body: TrainingRequest):
     # training_exists = TTM.nn_exist(uid, nnid)
 
     # if not training_exists:
-    #     th = Thread(target=TrainingInstance(buff, lock, flags).train, args=(datasetlink, nnlink, conflink, trainrezlink, newconf), daemon=True)
+    #     th = Thread(target=TrainingInstance(buff, lock, flags).train, args=(datasetlink, nnlink, conflink, trainrezlink, newconf, nnid), daemon=True)
     #     tt = TrainingThread(th, buff, flags, lock)
     #     TTM.add(tt, uid, nnid)
     #     th.start()
@@ -341,7 +341,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
             print('> Thread allready exists')
         else:
             # Treniranje ove mreze nije u toku, zapoceti novo treniranje
-            th = Thread(target=TrainingInstance(buff, lock, flags).train, args=(datasetlink, nnlink, conflink, trainrezlink, newconf), daemon=True)
+            th = Thread(target=TrainingInstance(buff, lock, flags).train, args=(datasetlink, nnlink, conflink, trainrezlink, newconf, nnid), daemon=True)
             tt = TrainingThread(th, buff, flags, lock)
             TTM.add(tt, uid, nnid)
             await TTM.table_unlock() # TTM [   ]
@@ -431,6 +431,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
         raise
 
     finally:
+        httpc.train_stop(nnid)      # poruka backu za train stop
         print('-=| Finally |=-')
         TTM.pretty_print()
         print('=='*25)
