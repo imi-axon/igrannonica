@@ -57,8 +57,7 @@ namespace BackApi.Controllers
             if (packet.trainrez == null) return BadRequest("network");
             packet.trainrez = packet.trainrez.Replace('\\', '/');
 
-            if (!wsq.CheckInDict(nnid))
-            {
+            
                 if (HttpContext.WebSockets.IsWebSocketRequest)
                 {
                     var webSocketfront = await HttpContext.WebSockets.AcceptWebSocketAsync();
@@ -84,8 +83,9 @@ namespace BackApi.Controllers
                         return Forbid();
                     }
 
+                    if (!wsq.CheckInDict(nnid))
+                        wsq.AddToDict(nnid, webSocketfront);
 
-                    wsq.AddToDict(nnid, webSocketfront);
                     var webSocketMl = new ClientWebSocket();
                     await webSocketMl.ConnectAsync(new Uri(Urls.mlWs + "/api/user" + userid + "/nn" + nnid + "/train"), CancellationToken.None);
                     try
@@ -100,11 +100,6 @@ namespace BackApi.Controllers
                         await webSocketMl.CloseAsync(WebSocketCloseStatus.NormalClosure, "Client Disconnect", CancellationToken.None);
                     }
                 }
-                else
-                {
-                    HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-                }
-            }
             else
             {
                 return BadRequest("error");
@@ -166,6 +161,13 @@ namespace BackApi.Controllers
                 return Ok();
             }
             return BadRequest();
+        }
+
+        [HttpGet("nn/{nnid}/train/stop")]
+        public async Task<ActionResult> TrainStopML(int nnid)
+        {
+                wsq.DeleteFromDict(nnid);
+                return Ok();
         }
 
         [HttpPost("{id}/nn")]
