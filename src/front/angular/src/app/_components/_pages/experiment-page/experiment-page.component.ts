@@ -30,6 +30,9 @@ export class ExperimentPageComponent implements OnInit {
   showsNetwork = false;
   public networkName: string = "";
   
+  private oldProjectName: string = "";
+  private oldNetworkName: string = "";
+  
   // ROUTER-OUTLET
   public overviewComponent: ExperimentOverviewComponent;
   public singleNetworkComponent: ExperimentNetworkComponent;
@@ -86,7 +89,7 @@ export class ExperimentPageComponent implements OnInit {
     if(component instanceof ExperimentNetworkComponent){
       setTimeout(() => {
         this.singleNetworkComponent = component;
-        this.singleNetworkComponent.NetworkUpdated.subscribe( (name: any) => { this.networkName = name } );
+        this.singleNetworkComponent.NetworkUpdated.subscribe( (name: any) => { this.networkName = name; this.oldNetworkName = name; } );
         this.showsNetwork = true;
       }, 0);
     }
@@ -102,7 +105,18 @@ export class ExperimentPageComponent implements OnInit {
   public ChangeNetworkTitleRequest(event?: KeyboardEvent){
     if(event && event.key != "Enter")
       return;
-      
+    
+    console.log("TEST")
+    console.log(this.oldNetworkName)
+    
+    if(this.networkTitle.nativeElement.innerHTML.trim() == ""){
+      this.networkTitle.nativeElement.innerHTML = this.oldNetworkName;
+      this.networkTitle.nativeElement.blur();
+      return;
+    }
+    
+    this.oldNetworkName = this.networkTitle.nativeElement.innerHTML;
+    
     this.singleNetworkComponent.ChangeNetworkTitle(this.networkTitle.nativeElement.innerHTML);
     
     this.networkTitle.nativeElement.blur();
@@ -111,7 +125,13 @@ export class ExperimentPageComponent implements OnInit {
   public ChangeExperimentTitleRequest(event?: KeyboardEvent){
     if(event && event.key != "Enter")
       return;
-      
+    
+    if(this.inputTitle.nativeElement.innerHTML.trim() == ""){
+      this.inputTitle.nativeElement.innerHTML = this.oldProjectName;
+      this.inputTitle.nativeElement.blur();
+      return;
+    }
+    
     let description = this.overviewComponent.description.nativeElement.value;
     let isPublic = this.overviewComponent.publicCheckbox.nativeElement.checked;
     this.ChangeExperiment(
@@ -161,6 +181,7 @@ export class ExperimentPageComponent implements OnInit {
   
   private handleSuccesfulGetProjectCallback(self: ExperimentPageComponent, response: any){
     self.project = response;
+    self.oldProjectName = response.Name;
   }
   
   
