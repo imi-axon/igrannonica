@@ -4,9 +4,8 @@ import time
 
 from fastapi import FastAPI, WebSocket
 
+from keras.metrics import *
 
-# Training Thread Manager
-from util.ttm import TTM, TrainingThread
 
 
 test = FastAPI()
@@ -40,3 +39,67 @@ def custom_sleep(s=10):
     time.sleep(s)
     return 'Gotovo'
 
+
+
+
+# MAIN
+
+mt = [
+    # Regression
+    'MeanSquaredError',
+    'MeanAbsoluteError',
+    'RootMeanSquaredError',
+    'MeanAbsolutePercentageError',
+    'MeanSquaredLogarithmicError',
+
+    # Classification
+    'TruePositives',
+    'TrueNegatives',
+    'FalsePositives',
+    'FalseNegatives',
+    'AUC',
+    'Recall',
+    'Precision',
+]
+
+ls = [
+    # Regression
+    'MeanSquaredError',
+    'MeanAbsoluteError',
+    'MeanAbsolutePercentageError',
+    'MeanSquaredLogarithmicError',
+    'CosineSimilarity',
+    'Poisson',
+
+    # Classification (Binary)
+    'BinaryCrossentropy',
+    'Hinge',
+    'SquaredHinge',
+
+    # Classification (Multiclass)
+    'CategoricalCrossentropy',
+    'SparseCategoricalCrossentropy',
+    'kullback_leibler_divergence',
+]
+
+def fn():
+    pass
+
+# for x in mt:
+#     if (type(fn))
+#     print(type())
+
+# for x in ls:
+#     print(type(get(x)))
+
+
+# print(serialize(TruePositives()))
+# print(serialize(MeanSquaredError()))
+
+# x = get(mt[0])
+# print(serialize(x()))
+
+print(serialize(mse))
+print(serialize(mean_squared_error))
+print(serialize(TruePositives()))
+# print(serialize(MeanAbsoluteError()))
