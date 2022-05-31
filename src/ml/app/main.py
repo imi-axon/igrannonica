@@ -365,7 +365,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
                 await aunlock(lock) # [   ]
                 ibuf += len(burst_buff)                         # ibuf postaje redni broj elementa u nizu od koga ce se sledeci put pokupiti sadrzaj bafera
 
-                # -- Send EPOCHS in BURST of PACKS --
+                # --==| Send EPOCHS in BURST of PACKS |==--
                 pack = b''
                 pack_i = 0
                 bb_len = len(burst_buff)
@@ -390,28 +390,29 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
                     print('>>>> send remaining >>>>')
                     await ws.send_text(pack.decode())   # ws >>>>
 
-                if finished:                            # ako je kraj sacuvati i rezultate testiranja (cuva se na pocetku bafera)
-                    trainrez_buff.extend(burst_buff[:-2])    # cuvanje rezultata treniranja (bez "end" i testrez)
-                    b = burst_buff[-1]
-                    trainrez_buff = [b] + trainrez_buff
-                else:
-                    trainrez_buff.extend(burst_buff)    # cuvanje rezultata treniranja (ceo buffer ukoliko su u njemu samo epohe)
-                # -- BURST Finished --
+                # if finished:                                # ako je kraj sacuvati i rezultate testiranja (cuva se na pocetku bafera)
+                #     trainrez_buff.extend(burst_buff[:-2])   # cuvanje rezultata treniranja (bez "end" i testrez)
+                #     b = burst_buff[-1]
+                #     trainrez_buff = [b] + trainrez_buff
+                # else:
+                #     trainrez_buff.extend(burst_buff)        # cuvanje rezultata treniranja (ceo buffer ukoliko su u njemu samo epohe)
+
+                # --==| BURST Finished |==--
 
                 # print(f'>>>> send bytes: {b}')
 
             else:
                 await aunlock(lock) # [   ]
 
-        # Cuvanje trainrez rezultata u fajl
-        def save_trainrez_to_file():
-            fm_trainrez = FileMngr('txt')
-            fm_trainrez.create(b'[' + b','.join(trainrez_buff) + b']')
-            httpc.put(trainrezlink, fm_trainrez.path())
-            print('---- Saving to File ----')
-            print(fm_trainrez.read_b())
-            fm_trainrez.delete(0)
-        await runb(save_trainrez_to_file)
+        # # Cuvanje trainrez rezultata u fajl
+        # def save_trainrez_to_file():
+        #     fm_trainrez = FileMngr('txt')
+        #     fm_trainrez.create(b'[' + b','.join(trainrez_buff) + b']')
+        #     httpc.put(trainrezlink, fm_trainrez.path())
+        #     print('---- Saving to File ----')
+        #     print(fm_trainrez.read_b())
+        #     fm_trainrez.delete(0)
+        # await runb(save_trainrez_to_file)
 
         await TTM.table_lock() # TTM [ X ]
         TTM.remove(uid, nnid)
@@ -431,7 +432,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
         raise
 
     finally:
-        httpc.train_stop(nnid)      # poruka backu za train stop
+        # httpc.train_stop(nnid)      # poruka backu za train stop
         print('-=| Finally |=-')
         TTM.pretty_print()
         print('=='*25)

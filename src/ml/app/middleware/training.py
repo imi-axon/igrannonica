@@ -1,4 +1,5 @@
 from csv import Dialect
+from time import time
 from typing import Dict, List
 from threading import Lock, Thread, current_thread
 from venv import create
@@ -132,7 +133,9 @@ class TrainingInstance():
             # -- Treniranje --
             print('-- Treniranje --')
 
-            testrez = self.service.start_training(int(trainConf['epochsDuration']))                      # na kraju treninga ima lock.acquire(blocking=True) # [ X ]
+            tbegin = time()                                                                         # vreme pre pocetka treniranja
+            testrez = self.service.start_training(int(trainConf['epochsDuration']))                 # na kraju treninga ima lock.acquire(blocking=True) # [ X ]
+            tend = time()                                                                           # vreme po zavrsetku treniranja
             trained_model_fpath = self.service.save_model(fm_model.directory(), fm_model.name())    # h5 fajl sa putanjom za koju je vezan fm_model FileMngr
             self.lock.release()                                                                     # zbog lock-a na kraju treniranja # [   ]
             
@@ -150,12 +153,22 @@ class TrainingInstance():
             print(testrez)
             self.lock.acquire(blocking=True)                            # [ X ]
             self.buff.append(b'end')                                    # indikator za kraj treniranja 
+            self.buff.append(bytes(str(tend-tbegin), 'utf-8'))          # vreme koliko je trajalo treniranje (u sekundama)
             self.buff.append(bytes(json_encode(testrez), 'utf-8'))      # rezultati testiranja ('end' i 'testrez' ce se uvek naci zajedno u baferu jer je ovaj blok atomican)
             self.lock.release()                                         # [   ]
 
             # -- Brisanje fajlova --
             fm_model.delete(0)
             fm_conf.delete(0)
+
+            # Cuvanje trainrez rezultata u fajl
+            buff = self.buff[-3:][1:] + self.buff[:-3]                  # na pocetak se prebacuju 'time' i 'test_rez', bez 'end'-a
+            fm_trainrez = FileMngr('txt')
+            fm_trainrez.create(b'[' + b','.join(buff) + b']')
+            httpc.put(trainrezUrl, fm_trainrez.path())
+            print('---- Saving to File ----')
+            print(fm_trainrez.read_b())
+            fm_trainrez.delete(0)
 
             # -- Poruka za kraj Thread-a --
             # print('-- Poruka za kraj Thread-a --')
@@ -165,6 +178,7 @@ class TrainingInstance():
             # print(self.buff)
             # self.lock.release()                 # [   ]
 
+
             print('-'*20)
 
         except:
@@ -173,5 +187,5 @@ class TrainingInstance():
             raise
 
         finally:
-            pass
-            # httpc.train_stop(nnid)      # poruka backu za train stop
+            print('training thread FINALLY')
+            httpc.train_stop(nnid)      # poruka backu za train stop
