@@ -113,11 +113,11 @@
                     
                     <div class="change" *ngFor="let i = index; let change of globalChanges">
                         <div class="action">
-                            {{change.action|slice:0:18}}
+                            {{change[0].action}}
                         </div>
                         
                         <div class="affectedColumns">
-                            {{change.column|slice:0:18}}
+                            <p>{{GetChangesColumnString(change)}}</p>
                         </div>
                         
                         <button (click)="RevertLine(i);" data-toggle="tooltip" class="button" data-placement="top" title="{{'edit-dataset.revertLineTooltip'|translate}}">
@@ -140,15 +140,15 @@
             <div id="localChangesContainer">
                 <h3>{{"edit-dataset.lokalneIzmene"|translate}}&nbsp;</h3>
                 
-                <div class="changesDisplay">
+                <div class="changesDisplay" >
                     
                     <div class="change" *ngFor="let i = index; let change of localChanges">
                         <div class="action">
-                            {{change.action|slice:0:18}}
+                            {{change[0].action}}
                         </div>
                         
                         <div class="affectedColumns">
-                            {{change.column|slice:0:18}}
+                            <p>{{GetChangesColumnString(change)}}</p>
                         </div>
                     </div>
                     

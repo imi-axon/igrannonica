@@ -46,8 +46,8 @@ export class ExperimentEditComponent implements OnInit {
   
   private columns: any;
   
-  public globalChanges: LocalChange[] = [];
-  public localChanges: LocalChange[] = [];
+  public globalChanges: LocalChange[][] = [];
+  public localChanges: LocalChange[][] = [];
   
   
   public noColumnsSelected = true;
@@ -80,7 +80,14 @@ export class ExperimentEditComponent implements OnInit {
   }
   
   
-  
+  public GetChangesColumnString(changes: any[]){
+    let columnNames = (changes[0].column);
+    for(let i = 1; i < changes.length - 1; i++){
+      columnNames += " | ";
+      columnNames += (changes[i].column)
+    }
+    return columnNames;
+  }
   
   
   
@@ -253,6 +260,7 @@ export class ExperimentEditComponent implements OnInit {
   // LOCAL
   private handleGetLocalChangesSuccess(self: ExperimentEditComponent, response: any){
     self.localChanges = response;
+    console.log(response)
   }
   
   private handleGetLocalChangesEmpty(self: ExperimentEditComponent){

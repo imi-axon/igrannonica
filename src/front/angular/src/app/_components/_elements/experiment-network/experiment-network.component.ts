@@ -91,8 +91,15 @@ export class ExperimentNetworkComponent implements OnInit, AfterViewInit {
     this.nnService.getTrainRez(this.getProjectId(), this.getNetworkId(), this, this.gotPreviousRez);
   }
   
-  private gotPreviousRez(self: any, response: any){
-    console.log(response)
+  private gotPreviousRez(self: any, epochs: any){
+    
+    self.metricComponents.forEach((component: MetricsBarplotComponent) => {
+      component.UpdateBarplot(epochs[1][component.title], epochs[1]['val_' + component.title]);
+      component.FinishBarplot(epochs[0][component.title]);
+    });
+    
+    for(let i = epochs.length - 1; i > 0; i--)
+      self.grafik.dataUpdate(epochs[0]['epoch'], epochs[0]['val_loss'], epochs[0]['loss']);
   }
   
   

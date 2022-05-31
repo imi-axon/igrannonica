@@ -39,7 +39,7 @@ class TrainingService():
     #percentage_validation -> float - [0,1] -> koliki procenat celog skupa je validacioni skup
     # FULL_MODE - ako je False preskace se deo sa skupom podataka (sluzi samo ako ce se servis koristiti iskljucivo za kreiranje modela)
     def __init__(self, datasetAll, inputs, outputs, actPerLayer, nbperlayer, 
-                actOutput = None, metrics = ['mse'], learning_rate = 0.1, regularization_rate = 0.1, regularization = 'L1', 
+                actOutput = None, metrics = ['mean_squared_error'], learning_rate = 0.1, regularization_rate = 0.1, regularization = 'L1', 
                 batchSize = 1, percentage_training = 0.6, percentage_validation = 0.2, problem_type = 'REGRESSION', callbacks = []
                 , FULL_MODE = True):
         
@@ -158,7 +158,7 @@ class TrainingService():
         #ukupni procenat za trening i validaciju
         self.PERCENTAGE_TRAINING_AND_VALIDATION = percentage_training + percentage_validation
 
-        self.REGRESSION_LOSS = 'mse'
+        self.REGRESSION_LOSS = 'mean_squared_error'
         self.CLASSIFICATION_LOSS = 'CategoricalCrossentropy'
 
         if FULL_MODE:

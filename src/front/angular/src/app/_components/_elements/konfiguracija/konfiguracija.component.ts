@@ -48,6 +48,8 @@ export class KonfiguracijaComponent implements OnInit, OnChanges {
     }, 0);
   }
   
+  
+  
   // Klik na polje
   public CheckUncheckRegression(index: number){
     if(this.selectedRegressionMetrics[index]){
