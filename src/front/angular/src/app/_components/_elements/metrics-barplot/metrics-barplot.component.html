@@ -1,8 +1,31 @@
-<span> {{text1}}: </span>
-<div #plot1 id="plot1" class="plot"> </div>
-
-<span> {{text2}}: </span>
-<div #plot2 id="plot2" class="plot"> </div>
-
-<!-- <span> {{title3}} </span>
-<div #plot3 id="plot3" class="plot"> </div> -->
+<div class="wrapper">
+    
+    <p class="title"> {{'metrics.'+title|translate}} </p>
+    
+    <table>
+        <tr>
+            <td>Training</td>
+            <td>{{trainingValue | number : '.4'}}</td>
+            <td>
+                <div #trainingBarplot class="barplot"> </div>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>Validation</td>
+            <td>{{validationValue | number : '.4'}}</td>
+            <td>
+                <div #validationBarplot class="barplot"> </div>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>Test</td>
+            <td>{{testValue | number : '.4'}}</td>
+            <td>
+                <div #testBarplot class="barplot"> </div>
+            </td>
+        </tr>
+    </table>
+    
+</div>

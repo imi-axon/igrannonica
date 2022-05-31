@@ -258,20 +258,19 @@
 
 
     "metrics":{
-        "mse": "Mean Square error",
-        "mae": "Mean Absolute error",
-        "rmse": "Root Mean Square error",
-        "mape": "Mean Absolute Percentage error",
-        "msle": "Mean Squared Logarithmic error",
+        "mean_squared_error": "Mean Squared Error",
+        "mean_absolute_error": "Mean Absolute Error",
+        "root_mean_squared_error": "Root Mean Squared Error",
+        "mean_absolute_percentage_error": "Mean Absolute Percentage Error",
+        "mean_squared_logarithmic_error": "Mean Squared Logarithmic Error",
         
-        "tp": "True positives",
-        "tn": "True negatives",
-        "fp": "False positives",
-        "fn": "False negatives",
-        "auc": "Area under curve",
-        "acc": "Accuracy",
-        "rec": "Recall",
-        "prec": "Precision"
+        "true_positives": "True positives",
+        "false_positives": "False positives",
+        "true_negatives": "True negatives",
+        "false_negatives": "False negatives",
+        "auc": "Accuracy",
+        "recall": "Recall",
+        "precision": "Precision"
     }
     
 }

@@ -40,23 +40,22 @@
         <label>Loss function</label> 
         <div class="select">
             <select *ngIf="neuralNetwork.conf.problemType == 'regression'" id="LossReg" (change)="ChangeLossFun($event)">
-                <option value="mse" [selected]="neuralNetwork.conf.loss == 'mse'">Mean Squared Error</option>
-                <option value="mae" [selected]="neuralNetwork.conf.loss == 'mae'">Mean Absolut Error</option>
-                <option value="mape" [selected]="neuralNetwork.conf.loss == 'mape'">Mean Absolut Percentage Error</option>
-                <option value="msle" [selected]="neuralNetwork.conf.loss == 'msle'">Mean Squared Logarithmic Error</option>
-                <option value="csl" [selected]="neuralNetwork.conf.loss == 'csl'">Cosine Slmilarity Loss</option>
-                <option value="hub" [selected]="neuralNetwork.conf.loss == 'hub'">Huber Loss</option>
-                <option value="psn" [selected]="neuralNetwork.conf.loss == 'psn'">Poisson Loss</option>
+                <option value="mean_squared_error" [selected]="neuralNetwork.conf.loss == 'mean_squared_error'">Mean Squared Error</option>
+                <option value="mean_absolute_error" [selected]="neuralNetwork.conf.loss == 'mean_absolute_error'">Mean Absolut Error</option>
+                <option value="mean_absolute_percentage_error" [selected]="neuralNetwork.conf.loss == 'mean_absolute_percentage_error'">Mean Absolut Percentage Error</option>
+                <option value="mean_squared_logarithmic_error" [selected]="neuralNetwork.conf.loss == 'mean_squared_logarithmic_error'">Mean Squared Logarithmic Error</option>
+                <option value="cosine_similarity" [selected]="neuralNetwork.conf.loss == 'cosine_similarity'">Cosine Similarity Loss</option>
+                <option value="poisson" [selected]="neuralNetwork.conf.loss == 'poisson'">Poisson Loss</option>
             </select>
             <select *ngIf="neuralNetwork.conf.problemType == 'classification' && this.neuralNetwork.conf.outputs.length <= 2" id="LossClass" (change)="ChangeLossFun($event)">
-                <option value="bce" [selected]="neuralNetwork.conf.loss == 'bce'">Binary Cross-Entrophy</option>
-                <option value="hng" [selected]="neuralNetwork.conf.loss == 'hng'">Hinge Loss</option>
-                <option value="shng" [selected]="neuralNetwork.conf.loss == 'shng'">Squared Hinge Loss</option>
+                <option value="binary_crossentropy" [selected]="neuralNetwork.conf.loss == 'binary_crossentropy'">Binary Cross-Entrophy</option>
+                <option value="hinge" [selected]="neuralNetwork.conf.loss == 'hinge'">Hinge Loss</option>
+                <option value="squared_hinge" [selected]="neuralNetwork.conf.loss == 'squared_hinge'">Squared Hinge Loss</option>
             </select>
             <select *ngIf="neuralNetwork.conf.problemType == 'classification' && this.neuralNetwork.conf.outputs.length > 2" id="LossClass" (change)="ChangeLossFun($event)">
-                <option value="cce" [selected]="neuralNetwork.conf.loss == 'cce'">Categorical Cross-Entrophy</option>
-                <option value="scce" [selected]="neuralNetwork.conf.loss == 'scce'">Sparse Categorical Cross-Entrophy</option>
-                <option value="klb" [selected]="neuralNetwork.conf.loss == 'klb'">Kullback Leibler Divergence</option>
+                <option value="categorical_crossentropy" [selected]="neuralNetwork.conf.loss == 'categorical_crossentropy'">Categorical Cross-Entrophy</option>
+                <option value="sparse_categorical_crossentropy" [selected]="neuralNetwork.conf.loss == 'sparse_categorical_crossentropy'">Sparse Categorical Cross-Entrophy</option>
+                <option value="kl_divergence" [selected]="neuralNetwork.conf.loss == 'kl_divergence'">Kullback Leibler Divergence</option>
             </select>
             <!-- DODATI ZA MULTIKLASIFIKACIJU -->
         </div>
