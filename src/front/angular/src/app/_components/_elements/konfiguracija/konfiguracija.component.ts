@@ -30,8 +30,8 @@ export class KonfiguracijaComponent implements OnInit, OnChanges {
   selectedRegressionCount: number = 0;
   selectedClassificationCount: number = 0;
   
-  possibleRegressionMetrics: string[] = ['mse', 'mae', 'rmse', 'mape', 'msle'];
-  possibleClassificationMetrics: string[] = ['tp', 'tn', 'fp', 'fn', 'acc', 'rec', 'prec'];
+  possibleRegressionMetrics: string[] = ['mean_squared_error', 'mean_absolute_error', 'root_mean_squared_error', 'mean_absolute_percentage_error', 'mean_squared_logarithmic_error'];
+  possibleClassificationMetrics: string[] = ['true_positives', 'false_positives', 'true_negatives', 'false_negatives', 'auc', 'recall', 'precision'];
 
   neuronOutputNum: number=0;
   
@@ -79,28 +79,21 @@ export class KonfiguracijaComponent implements OnInit, OnChanges {
     this.selectedRegressionMetrics = [false, false, false, false, false];
     this.selectedClassificationMetrics = [false, false, false, false, false, false, false];
     
-    let existingMetrics: string[] = this.neuralNetwork.conf.metrics;
-    
-    // TEST, SLOBODNO OBRISATI
-    if(this.neuralNetwork.conf.problemType.toLowerCase == 'regression')
-      existingMetrics = ['mse', 'rmse', 'msle'];
-    else
-      existingMetrics = ['tp', 'fp', 'acc', 'prec'];
-    // TEST, SLOBODNO OBRISATI
-    
-    if(this.neuralNetwork.conf.problemType.toLowerCase == 'regression'){
+    if(this.neuralNetwork.conf.problemType == 'regression'){
       this.selectedRegressionCount = 0;
-      for(let i = 0; i < this.possibleRegressionMetrics.length; i++)
-        if(existingMetrics.includes(this.possibleRegressionMetrics[i])){
+      for(let i = 0; i < this.possibleRegressionMetrics.length; i++){
+        if(this.neuralNetwork.conf.metrics.includes(this.possibleRegressionMetrics[i])){
           this.selectedRegressionMetrics[i] = true;
           this.selectedRegressionCount++;
         }
+      }
+      
     }
       
-    if(this.neuralNetwork.conf.problemType.toLowerCase == 'classification'){
+    if(this.neuralNetwork.conf.problemType == 'classification'){
       this.selectedClassificationCount = 0;
       for(let i = 0; i < this.possibleClassificationMetrics.length; i++)
-        if(existingMetrics.includes(this.possibleClassificationMetrics[i])){
+        if(this.neuralNetwork.conf.metrics.includes(this.possibleClassificationMetrics[i])){
           this.selectedClassificationMetrics[i] = true;
           this.selectedClassificationCount++;
         }
@@ -154,6 +147,15 @@ export class KonfiguracijaComponent implements OnInit, OnChanges {
         this.neuralNetwork.conf.loss = 'cce';
     }
   }
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   public ChangeLearningRate(event: any){
     this.neuralNetwork.conf.learningRate = Number.parseFloat(event.srcElement.value);

@@ -1,46 +1,63 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'app-metrics-barplot',
+  selector: 'metrics-barplot',
   templateUrl: './metrics-barplot.component.html',
   styleUrls: ['./metrics-barplot.component.scss']
 })
 export class MetricsBarplotComponent implements OnInit {
   constructor() { }
   
-  @ViewChild("plot1")
-  plot1: ElementRef;
-  @ViewChild("plot2")
-  plot2: ElementRef;
-  @ViewChild("plot3")
-  plot3: ElementRef;
+  @Input() public title: string = "";
+  @Input() public code: string = "";
+  public trainingValue: number = 0;
+  public validationValue: number = 0;
+  public testValue: number = 0;
+  public maxValue: number = 0;
   
-  public max: number = 0;
+  @ViewChild("trainingBarplot")
+  trainingBarplot: ElementRef;
   
-  public text1: string = "Training";
-  public text2: string = "Validation";
+  @ViewChild("validationBarplot")
+  validationBarplot: ElementRef;
   
-  public value1: number = 0;
-  public value2: number = 0;
+  @ViewChild("testBarplot")
+  testBarplot: ElementRef;
   
   ngOnInit(): void {
-    setTimeout(() => {
-      this.RefreshBarplot(0, 0);
-    }, 0);
+    this.ResetBarplot();
   }
   
-  public RefreshBarplot(v1: number, v2: number){
-    this.value1 = v1;
-    this.value2 = v2;
+  public ResetBarplot(){
+    this.trainingValue = 0;
+    this.validationValue = 0;
+    this.testValue = 0;
+    this.maxValue = 1;
+  }
+  
+  public UpdateBarplot(trainingValue: number, validationValue: number){
+    this.trainingValue = trainingValue;
+    this.validationValue = validationValue;
     
-    if(this.value1 > this.max)
-      this.max = this.value1;
-    if(this.value2 > this.max)
-      this.max = this.value2;
+    if(trainingValue > validationValue)
+      this.maxValue = (this.maxValue + trainingValue) / 2;
+    else
+      this.maxValue = (this.maxValue + validationValue) / 2;
     
     
-    this.plot1.nativeElement.setAttribute('style', 'width: ' + (this.value1 / this.max * 100) + '%');
-    this.plot2.nativeElement.setAttribute('style', 'width: ' + (this.value2 / this.max * 100) + '%');
+    this.trainingBarplot.nativeElement.setAttribute('style', 'width: ' + (this.trainingValue / this.maxValue * 100) + '%');
+    this.validationBarplot.nativeElement.setAttribute('style', 'width: ' + (this.validationValue / this.maxValue * 100) + '%');
+  }
+  
+  public FinishBarplot(testValue: number){
+    this.testValue = testValue;
+    
+    if(this.testValue > this.maxValue)
+      this.maxValue = this.testValue;
+    
+    this.trainingBarplot.nativeElement.setAttribute('style', 'width: ' + (this.trainingValue / this.maxValue * 100) + '%');
+    this.validationBarplot.nativeElement.setAttribute('style', 'width: ' + (this.validationValue / this.maxValue * 100) + '%');
+    this.testBarplot.nativeElement.setAttribute('style', 'width: ' + (this.testValue / this.maxValue * 100) + '%');
   }
   
   

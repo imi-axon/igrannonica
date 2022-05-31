@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, Query, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NeuralNetwork, Project } from 'src/app/_utilities/_data-types/models';
 import { TrainingApiService } from 'src/app/_utilities/_middleware/training-api.service';
@@ -17,7 +17,7 @@ import { NeuralNetworkDisplayComponent } from '../neural-network-display/neural-
   templateUrl: './experiment-network.component.html',
   styleUrls: ['./experiment-network.component.scss']
 })
-export class ExperimentNetworkComponent implements OnInit {
+export class ExperimentNetworkComponent implements OnInit, AfterViewInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private nnService: NnService,
@@ -62,26 +62,8 @@ export class ExperimentNetworkComponent implements OnInit {
   
   
   
-  @ViewChild("MSEbarplot")
-  private MSEbarplot: MetricsBarplotComponent;
-  @ViewChild("MAEbarplot")
-  private MAEbarplot: MetricsBarplotComponent;
-  
-  @ViewChild("testBarplot")
-  private testBarplot: MetricsBarplotComponent;
-  
-  
-  
-  @ViewChild("categoricalbarplot")
-  private categoricalbarplot: MetricsBarplotComponent;
-  @ViewChild("precisionbarplot")
-  private precisionbarplot: MetricsBarplotComponent;
-  
-  @ViewChild("recallbarplot")
-  private recallbarplot: MetricsBarplotComponent;
-  
-  @ViewChild("testbarplotdva")
-  private testbarplotdva: MetricsBarplotComponent;
+  @ViewChildren(MetricsBarplotComponent)
+  public metricComponents: QueryList<MetricsBarplotComponent>;
 
   
   // NEURAL NETWORK
@@ -98,23 +80,41 @@ export class ExperimentNetworkComponent implements OnInit {
   private metadata: any;
   private once: boolean = true;
 
-
   ngOnInit(): void {
-    this.networkService.GetNetwork(this.getProjectId(), this.getNetworkId(), this, this.successGetNetworkCallback);
-    this.statisticsService.GetStatistics(this.getProjectId(), true, this, this.successGetStatisticsCallback);
-
-    setTimeout(() => {
-    }, 0);
+    
   }
   
+  ngAfterViewInit(){
+    this.networkService.GetNetwork(this.getProjectId(), this.getNetworkId(), this, this.successGetNetworkCallback);
+    this.statisticsService.GetStatistics(this.getProjectId(), true, this, this.successGetStatisticsCallback);
+    
+    this.nnService.getTrainRez(this.getProjectId(), this.getNetworkId(), this, this.gotPreviousRez);
+  }
+  
+  private gotPreviousRez(self: any, response: any){
+    console.log(response)
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   private successGetNetworkCallback(self: any, response: any){
-    console.log("uspesno network");
+    // console.log("uspesno network");
     //self.unusedColumns = Object.keys(JSON.parse(JSON.parse(response.dataset).dataset)[0])
     self.networkName = response.name;
     self.neuralNetwork = new NeuralNetwork();
     self.neuralNetwork.conf = JSON.parse(response.conf);
     self.neuralNetwork.nn = JSON.parse(JSON.parse(response.nn).nn);
-    console.log(self.neuralNetwork);
+    // console.log(self.neuralNetwork);
     self.networkComponent.Refresh();
  
     
@@ -152,13 +152,30 @@ export class ExperimentNetworkComponent implements OnInit {
     
     self.neuralNetwork.conf.problemType = self.neuralNetwork.conf.problemType.toLowerCase();
     self.NetworkUpdated.emit(self.networkName);
-    console.log("zavrsio");
+    // console.log("zavrsio");
   }
   
   private successGetStatisticsCallback(self: any, metadata: any){
     self.metadata = metadata;
-    console.log(metadata)
+    // console.log(metadata)
   }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
@@ -180,33 +197,41 @@ export class ExperimentNetworkComponent implements OnInit {
   }
   
   
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   updateTrainData(self: ExperimentNetworkComponent, epochs: any) {
-    
     for (const epoch of epochs) {
       self.grafik.dataUpdate(epoch['epoch'], epoch['val_loss'], epoch['loss']);
       
-      if(self.neuralNetwork.conf.problemType == 'regression'){
-        if(self.testBarplot != undefined){
-          self.testBarplot.text1 = "MSE";
-          self.testBarplot.text2 = "MAE";
-        
-        self.MSEbarplot.RefreshBarplot(epoch['mean_squared_error'], epoch['val_mean_squared_error'])
-        self.MAEbarplot.RefreshBarplot(epoch['mean_absolute_error'], epoch['val_mean_absolute_error'])
-      }
-      }
-      else{
-        if(self.testbarplotdva != undefined){
-          self.testbarplotdva.text1 = "Precision";
-          self.testbarplotdva.text2 = "Recall";
-        
-        //self.categoricalbarplot.RefreshBarplot(epoch['categorical_accuracy'], epoch['val_categorical_accuracy'])
-        self.precisionbarplot.RefreshBarplot(epoch['precision'], epoch['val_precision'])
-        self.recallbarplot.RefreshBarplot(epoch['recall'], epoch['val_recall'])
-      }
-      }
+      self.metricComponents.forEach(component => {
+        component.UpdateBarplot(epoch[component.title], epoch['val_' + component.title]);
+      });
     }
-
   }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   public finishedCallback(self: ExperimentNetworkComponent){
     self.resetButton=false;
@@ -215,25 +240,31 @@ export class ExperimentNetworkComponent implements OnInit {
     //console.log("zavrseno");
   }
   
-  
   public gotTrainRez(self: ExperimentNetworkComponent, response: any){
-    if(self.neuralNetwork.conf.problemType == 'regression'){
-      if(self.testBarplot != undefined)
-        self.testBarplot.RefreshBarplot(response[0]['mean_squared_error'], response[0]['mean_absolute_error'])
-    }
-    else{
-      if(self.testbarplotdva != undefined)
-        self.testbarplotdva.RefreshBarplot(response[0]['precision'], response[0]['recall'])
-    }
+    self.metricComponents.forEach(component => {
+      component.FinishBarplot(response[0][component.title]);
+    });
   }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   public ChangeNetworkTitle(title: string){
-    console.log(JSON.stringify(title).slice(1, JSON.stringify(title).length - 1))
+    // console.log(JSON.stringify(title).slice(1, JSON.stringify(title).length - 1))
     this.nnService.changeNNTitle(this.getProjectId(), this.getNetworkId(), JSON.stringify(title).slice(1, JSON.stringify(title).length - 1));
   }
-  
-  
   
   // COLUMN SELECTION
   
@@ -292,6 +323,14 @@ export class ExperimentNetworkComponent implements OnInit {
   
   
   
+  
+  
+  
+  
+  
+  
+  
+  
   // Dragging controls =====================================================================
   private position = { top: 0, left: 0, x: 0, y: 0 };
   private dragging: boolean = false;
@@ -341,7 +380,7 @@ export class ExperimentNetworkComponent implements OnInit {
   }
 
   public prikaziMrezu(){
-    console.log("reset");
+    // console.log("reset");
     this.prikazGrafa=false;
   }
 
@@ -358,7 +397,7 @@ export class ExperimentNetworkComponent implements OnInit {
   }
 
   public stopCallback(self: any){
-    console.log("stop callback");
+    // console.log("stop callback");
   }
 
 }

@@ -48,6 +48,15 @@
                 </div>
             </div>
             
+            <div id="metricsDisplay" [class.hidden]="prikazGrafa == false">
+                
+                <metrics-barplot *ngFor="let metric of neuralNetwork.conf.metrics" [title]="metric"> </metrics-barplot>
+                    
+            </div>
+            
+            
+            
+            <!--
             <div *ngIf="neuralNetwork.conf.problemType == 'regression'" id="metricsContainer" [class.hidden]="prikazGrafa == false">
                 <span style="color: #375aa0; font-size: 14px;">MSE</span><br>
                 <app-metrics-barplot #MSEbarplot> </app-metrics-barplot>
@@ -63,10 +72,6 @@
             </div>
             
             <div *ngIf="neuralNetwork.conf.problemType == 'classification'" id="metricsContainer" [class.hidden]="prikazGrafa == false">
-                <!--<span style="color: #375aa0; font-size: 14px;">Categorical accuracy</span><br>
-                <app-metrics-barplot #categoricalbarplot> </app-metrics-barplot>
-                
-                <hr>-->
                 
                 <span style="color: #375aa0; font-size: 14px;">Precision</span><br>
                 <app-metrics-barplot #precisionbarplot> </app-metrics-barplot>
@@ -81,6 +86,7 @@
                 <app-metrics-barplot #testbarplotdva> </app-metrics-barplot>
                 
             </div>
+            -->
             
         </div>
         
