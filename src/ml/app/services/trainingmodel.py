@@ -17,6 +17,7 @@ from keras.layers.core import Dense, Activation
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import MinMaxScaler
 
+from .util import MCC
 
 
 class TrainingService():
@@ -66,51 +67,73 @@ class TrainingService():
         self.ACT_PER_LAYER = actPerLayer
         self.NB_PER_LAYER = nbperlayer
 
-        # Setovanje izabranih metrika
+
         self.METRICS = []
-        for metric in metrics:
-            if(metric == 'mse'):
-                self.METRICS.append(tf.keras.metrics.MeanSquaredError())
-            if(metric == 'mae'):
-                self.METRICS.append(tf.keras.metrics.MeanAbsoluteError())
-            if(metric == 'rmse'):
-                self.METRICS.append(tf.keras.metrics.RootMeanSquaredError())
-            if(metric == 'mape'):
-                self.METRICS.append(tf.keras.metrics.MeanAbsolutePercentageError())
-            if(metric == 'msle'):
-                self.METRICS.append(tf.keras.metrics.MeanSquaredLogarithmicError())
-            if(metric == 'tp'):
-                self.METRICS.append(tf.keras.metrics.TruePositives())
-            if(metric == 'tn'):
-                self.METRICS.append(tf.keras.metrics.TrueNegatives())
-            if(metric == 'fp'):
-                self.METRICS.append(tf.keras.metrics.FalsePositives())
-            if(metric == 'fn'):
-                self.METRICS.append(tf.keras.metrics.FalseNegatives())
-            if(metric == 'acc'):
-                self.METRICS.append(tf.keras.metrics.CategoricalAccuracy())
-            if(metric == 'rec'):
-                self.METRICS.append(tf.keras.metrics.Recall())
-            if(metric == 'prec'):
-                self.METRICS.append(tf.keras.metrics.Precision())
+        for m in metrics:
+            self.METRICS.append(MCC.id_to_name(m))
+
+        # # Setovanje izabranih metrika
+        # self.METRICS = []
+        # for metric in metrics:
+        #     if(metric == 'mse'):
+        #         self.METRICS.append(tf.keras.metrics.MeanSquaredError())
+        #     if(metric == 'mae'):
+        #         self.METRICS.append(tf.keras.metrics.MeanAbsoluteError())
+        #     if(metric == 'rmse'):
+        #         self.METRICS.append(tf.keras.metrics.RootMeanSquaredError())
+        #     if(metric == 'mape'):
+        #         self.METRICS.append(tf.keras.metrics.MeanAbsolutePercentageError())
+        #     if(metric == 'msle'):
+        #         self.METRICS.append(tf.keras.metrics.MeanSquaredLogarithmicError())
+        #     if(metric == 'tp'):
+        #         self.METRICS.append(tf.keras.metrics.TruePositives())
+        #     if(metric == 'tn'):
+        #         self.METRICS.append(tf.keras.metrics.TrueNegatives())
+        #     if(metric == 'fp'):
+        #         self.METRICS.append(tf.keras.metrics.FalsePositives())
+        #     if(metric == 'fn'):
+        #         self.METRICS.append(tf.keras.metrics.FalseNegatives())
+        #     if(metric == 'acc'):
+        #         self.METRICS.append(tf.keras.metrics.CategoricalAccuracy())
+        #     if(metric == 'rec'):
+        #         self.METRICS.append(tf.keras.metrics.Recall())
+        #     if(metric == 'prec'):
+        #         self.METRICS.append(tf.keras.metrics.Precision())
 
         # self.METRICS_REGRESSION = [
-        #     tf.keras.metrics.MeanSquaredError(),  #MSE - Mean Squared Error
-        #     tf.keras.metrics.MeanAbsoluteError() #MAE - Mean Absolute Error
-        #     # tf.keras.metrics.RootMeanSquaredError(), #RMSE - Root Mean Squared Error
-        #     # tf.keras.metrics.MeanAbsolutePercentageError(), #MAPE -  Mean Absolute Percentage Error
-        #     # tf.keras.metrics.MeanSquaredLogarithmicError() #MSLE - Mean Squared Logarithmic Error
+        #     # Regression
+        #     'mse',
+        #     # 'mae',
+        #     # 'RootMeanSquaredError',
+        #     # 'mape',
+        #     'MeanSquaredLogarithmicError',
         # ]
 
         # self.METRICS_CLASSIFICATION =  [ 
-        #     # tf.keras.metrics.AUC(), #AUC 
+        #     # Classification
+        #     'AUC',
+        #     'CategoricalCrossentropy',
+        #     'kullback_leibler_divergence',
+        #     'TruePositives',
+        # ]
+
+        # self.METRICS_REGRESSION = [
+        #     tf.keras.metrics.MeanSquaredError(),  #MSE - Mean Squared Error
+        #     tf.keras.metrics.MeanAbsoluteError(), #MAE - Mean Absolute Error
+        #     tf.keras.metrics.RootMeanSquaredError(), #RMSE - Root Mean Squared Error
+        #     tf.keras.metrics.MeanAbsolutePercentageError(), #MAPE -  Mean Absolute Percentage Error
+        #     tf.keras.metrics.MeanSquaredLogarithmicError(), #MSLE - Mean Squared Logarithmic Error
+        # ]
+
+        # self.METRICS_CLASSIFICATION =  [ 
+        #     tf.keras.metrics.AUC(), #AUC 
         #     tf.keras.metrics.CategoricalAccuracy(), #Categorical Accuracy
         #     tf.keras.metrics.Precision(), #Precision
-        #     tf.keras.metrics.Recall() #Recall
-        #     # tf.keras.metrics.TruePositives(), #True Positives
-        #     # tf.keras.metrics.TrueNegatives(), #True Negatives
-        #     # tf.keras.metrics.FalsePositives(), #False Positives
-        #     # tf.keras.metrics.FalseNegatives() #False Negatives
+        #     tf.keras.metrics.Recall(), #Recall
+        #     tf.keras.metrics.TruePositives(), #True Positives
+        #     tf.keras.metrics.TrueNegatives(), #True Negatives
+        #     tf.keras.metrics.FalsePositives(), #False Positives
+        #     tf.keras.metrics.FalseNegatives(), #False Negatives
         # ]
 
         # if(problem_type=="CLASSIFICATION"):
@@ -128,7 +151,7 @@ class TrainingService():
             elif (problem_type=="REGRESSION"):
                 self.ACT_OUTPUT = "linear"
         else:
-            self.ACT_OUTPUT = actOutput
+            self.ACT_OUTPUT = 'sigmoid'
 
         self.BATCH_SIZE = batchSize
         #self.PERCENTAGE_TRAINING = percentage_training
@@ -136,7 +159,7 @@ class TrainingService():
         self.PERCENTAGE_TRAINING_AND_VALIDATION = percentage_training + percentage_validation
 
         self.REGRESSION_LOSS = 'mse'
-        self.CLASSIFICATION_LOSS = 'categorical_crossentropy'
+        self.CLASSIFICATION_LOSS = 'CategoricalCrossentropy'
 
         if FULL_MODE:
             # Dataframe
@@ -320,3 +343,5 @@ class TrainingService():
         return results
 
         
+# Test
+

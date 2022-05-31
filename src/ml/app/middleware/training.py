@@ -38,6 +38,7 @@ class TrainingCallback(Callback):
         # data = { 'epoch' : epoch, 't_loss' : logs['loss'], 'v_loss' : logs['val_loss'] }
         logs['epoch'] = epoch
         data = logs
+        print(data)
         self.buff.append(bytes(json_encode(data), encoding='utf-8'))
 
         print(f'>>>> {epoch}. epoch end [ UNLOCK ]')

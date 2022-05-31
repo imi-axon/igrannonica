@@ -85,21 +85,29 @@ ls = [
 def fn():
     pass
 
-# for x in mt:
-#     if (type(fn))
-#     print(type())
+def conv(x):
+    a = get(x)
+    n = ''
+    if (type(fn) == type(a)):
+        n = serialize(a)
+    else:
+        n = serialize(a)['config']['name']
+    
+    print(n + (' '*(50-len(n))) + ' - ' + x)
 
-# for x in ls:
-#     print(type(get(x)))
+for x in mt:
+    conv(x)
+
+for x in ls:
+    conv(x)
 
 
 # print(serialize(TruePositives()))
 # print(serialize(MeanSquaredError()))
 
-# x = get(mt[0])
-# print(serialize(x()))
+# print(type(get(mt[0]))())
 
-print(serialize(mse))
-print(serialize(mean_squared_error))
-print(serialize(TruePositives()))
+# print(serialize(mse))
+# print(serialize(mean_squared_error))
+# print(serialize(TruePositives()))
 # print(serialize(MeanAbsoluteError()))
