@@ -67,9 +67,10 @@ class MetricsCodesConverter():
 
 
     def conv(self, x):
+        # print(x)
         metric = m_get(x)
         identifier = ''
-        if (is_function(x)):
+        if (is_function(metric)):
             identifier = m_srz(metric)
         else:
             identifier = m_srz(metric)['config']['name']
@@ -81,3 +82,7 @@ class MetricsCodesConverter():
 
 
 MCC = MetricsCodesConverter()
+
+# TEST
+# for key in MCC.mappings:
+#     print(MCC.id_to_name(key))
