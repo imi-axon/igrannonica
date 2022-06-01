@@ -213,35 +213,42 @@ namespace BackApi.Controllers
             if (!projsrv.projectExists(id)) return NotFound();
             if (!projsrv.projectOwnership(userid,id)) return BadRequest("user");
 
-            DatasetMLPost snd = new DatasetMLPost();
-            snd.dataset = datasrv.ProjIdToPath(id, false);
-            snd.actions = datasrv.RevertToLine(id, ln);
-            if (snd.actions == null || snd.dataset == null)
-                return BadRequest();
-
             GenerateMetadata data = new GenerateMetadata();
-            data.dataset = datasrv.ProjIdToPath(id, true);
+            data.dataset = storsrv.InitialFilePath(id);
             data.metamain = storsrv.MetaFilePath(id, true);
             data.metaedit = storsrv.MetaFilePath(id, false);
+            var temp = System.IO.File.ReadAllText(data.dataset);
+            Debug.WriteLine(temp);
             var metaresp = await MLconnection.generateMetaData(data);
 
-            snd.metapath = storsrv.MetaFilePath(id, false);
-            snd.metapath = snd.metapath.Replace("\\", "/");
-            var response = await MLconnection.editDataset(snd);
-
-            if (response.StatusCode == HttpStatusCode.OK)
+            if (metaresp.StatusCode == HttpStatusCode.OK)
             {
+                DatasetMLPost snd = new DatasetMLPost();
+                snd.dataset = datasrv.ProjIdToPath(id, false);
+                snd.actions = datasrv.RevertToLine(id, ln);
+                if (snd.actions == null || snd.dataset == null)
+                    return BadRequest();
+
+                snd.metapath = storsrv.MetaFilePath(id, false);
+                snd.metapath = snd.metapath.Replace("\\", "/");
+                var response = await MLconnection.editDataset(snd);
+
                 //var savestr = new DatasetGetPost();
                 //savestr.dataset = await response.Content.ReadAsStringAsync();
-                var file = await response.Content.ReadAsStreamAsync();
-                var path = datasrv.ProjIdToPath(id, false);
-                if (path == null) return NotFound();
 
-                storsrv.SaveStream(path, file);
-                storsrv.wipemainchanges(id);
-                datasrv.SaveChanges(id);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var file = await response.Content.ReadAsStreamAsync();
+                    var path = datasrv.ProjIdToPath(id, false);
+                    if (path == null) return NotFound();
 
-                return Ok();
+                    storsrv.SaveStream(path, file);
+                    storsrv.wipemainchanges(id);
+                    datasrv.SaveChanges(id);
+
+                    return Ok();
+                }
+
                 /*if (datasrv.EditHelperset(id, userid, savestr))
                 {
                     return Ok();
@@ -261,7 +268,7 @@ namespace BackApi.Controllers
             if (datasrv.RevertToInit(id))
             {
                 GenerateMetadata data = new GenerateMetadata();
-                data.dataset = datasrv.ProjIdToPath(id, true);
+                data.dataset = storsrv.InitialFilePath(id);
                 data.metamain = storsrv.MetaFilePath(id, true);
                 data.metaedit = storsrv.MetaFilePath(id, false);
                 var response = await MLconnection.generateMetaData(data);

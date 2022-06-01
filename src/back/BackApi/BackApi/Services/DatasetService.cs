@@ -442,13 +442,13 @@ namespace BackApi.Services
                     fs.SetLength(0);
                 }
             }
-            using (FileStream fs = File.Open(metaedit, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            /*using (FileStream fs = File.Open(metaedit, FileMode.OpenOrCreate, FileAccess.ReadWrite))
             {
                 lock (fs)
                 {
                     fs.SetLength(0);
                 }
-            }
+            }*/
             var actions = new StringBuilder();
             actions.Append("[");
             string[] lines = File.ReadAllLines(chmain);
