@@ -7,6 +7,9 @@ else:
 
 import json
 
+import tensorflow as tf
+from tensorflow import keras
+
 from keras.metrics import serialize as m_srz
 from keras.metrics import get as m_get
 
@@ -86,3 +89,52 @@ MCC = MetricsCodesConverter()
 # TEST
 # for key in MCC.mappings:
 #     print(MCC.id_to_name(key))
+
+
+
+class ActivationFunctionsCodeConverter():
+    
+
+    def get_activationFunction(self,code):
+        if(code=='lin'):
+            return keras.activations.serialize(keras.activations.linear)
+        elif(code=='elu'):
+            return keras.activations.serialize(keras.activations.elu)
+        elif(code=='relu'):
+            return keras.activations.serialize(keras.activations.relu)
+        elif(code=='gelu'):
+            return keras.activations.serialize(keras.activations.gelu)
+        elif(code=='selu'):
+            return keras.activations.serialize(keras.activations.selu)
+        elif(code=='exp'):
+            return keras.activations.serialize(keras.activations.exponential)
+        elif(code=='sig'):
+            return keras.activations.serialize(keras.activations.sigmoid)
+        elif(code=='hsig'):
+            return keras.activations.serialize(keras.activations.hard_sigmoid)
+        elif(code=='smax'):
+            return keras.activations.serialize(keras.activations.softmax)
+        elif(code=='splus'):
+            return keras.activations.serialize(keras.activations.softplus)
+        elif(code=='ssign'):
+            return keras.activations.serialize(keras.activations.softsign)
+        elif(code=='swish'):
+            return keras.activations.serialize(keras.activations.swish)
+        elif(code=='tanh'):
+            return keras.activations.serialize(keras.activations.linear)
+        else:
+            return keras.activations.serialize(keras.activations.relu)
+
+    #actFunc - lista aktivacionih funkcija (za svaki sloj)/ jedna aktivaciona funkcija
+    #isList - flag (da li je actFunc lista ili jedna vrednost)
+    def get_activationFunctions(self, actFunc, isList=True):
+        if(isList==True):
+            act_fun = []
+            for act in actFunc :
+                af = self.get_activationFunction(act)
+                act_fun.append(af)
+            return act_fun
+        else :
+            return self.get_activationFunction(actFunc)
+        return None
+
