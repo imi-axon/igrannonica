@@ -91,7 +91,7 @@ class DataEditorService:
                     valueMappings.append(pom)
                 
                 dict_valueMappings = {"valueMappings" : valueMappings}
-                dict_encoding = {"type" : "label", "onehot" : "None", "label" : dict_valueMappings}
+                dict_encoding = {"type" : "label", "onehot" : None, "label" : dict_valueMappings}
                 dict_column = {"type" : "enc", "trainReady" : True, "encoding" : dict_encoding}
                 new_column = column + '_code'
                 self.metadataDict["columns"].update({new_column : dict_column})
@@ -118,7 +118,7 @@ class DataEditorService:
                 
                 for i in range(len(nove_kolone)):    
                     dict_oneHot = {"originalHeader" : column, "catValue" : catValues[i]}
-                    dict_encoding = {"type" : "onehot", "onehot" : dict_oneHot, "label" : "None"}
+                    dict_encoding = {"type" : "onehot", "onehot" : dict_oneHot, "label" : None}
                     dict_column = {"type" : "enc", "trainReady" : True, "encoding" : dict_encoding}
                     new_column = nove_kolone[i]
                     self.metadataDict["columns"].update({new_column : dict_column})

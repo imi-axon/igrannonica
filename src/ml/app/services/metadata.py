@@ -5,7 +5,7 @@ class MetadataService :
         metadata = {}
         columns = {}
         metadata.update({"columns": columns})
-        metadata.update({"statistics": "None"})
+        metadata.update({"statistics": None})
 
         columns = dataframe.columns.to_list()
         numeric_columns = dataframe.select_dtypes(exclude=['object']).columns.tolist()

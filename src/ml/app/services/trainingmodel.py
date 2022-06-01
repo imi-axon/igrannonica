@@ -29,7 +29,7 @@ class TrainingService():
     #learning_rate = LEARING_RATE -> float
     #regularization_rate = REG_RATE -> float
     #regularization = REGULARIZATION -> string ('L1','L2')
-    #actOutput -> string ('relu', 'sigmoid', 'tanh') -> aktivaciona funkcija u output sloju => ukoliko nije navedena vrednost je "None"
+    #actOutput -> string ('relu', 'sigmoid', 'tanh') -> aktivaciona funkcija u output sloju => ukoliko nije navedena vrednost je None
     #actPerLayer -> lista stringova ('relu', 'sigmoid', 'tanh') -> aktivaciona funkcija za svaki sloj
     #nbperlayer -> lista int -> broj neurona za svaki sloj
     #metrics -> lista stringova ('mse', 'mae', 'rmse' -> za regresiju; 'precision', 'recall','accuracy')
