@@ -78,6 +78,16 @@ namespace BackApi.Controllers
             return File(bytes, "text/csv", Path.GetFileName(path));
         }
 
+        [HttpGet("Storage/proj{pid}/data/Initial.csv"), AllowAnonymous] //Host(backUrl, mlUrl)] //adresa ml mikroserivsa
+        public async Task<ActionResult> PassInitialDatasetToML(int pid)
+        {
+            //Debug.WriteLine();
+            var path = storsrv.InitialFilePath(pid);
+            var bytes = await System.IO.File.ReadAllBytesAsync(path);
+
+            return File(bytes, "text/csv", Path.GetFileName(path));
+        }
+
         [HttpGet("Storage/proj{pid}/data/meta{txt}.txt"), AllowAnonymous]
         public async Task<ActionResult> PassMetaToML(int pid, string txt)
         {
@@ -87,6 +97,7 @@ namespace BackApi.Controllers
             var path = storsrv.MetaFilePath(pid, main);
             var bytes = await System.IO.File.ReadAllBytesAsync(path);
 
+            Debug.WriteLine("--==| GET METADATA : " + txt);
             return File(bytes, "text/plain", Path.GetFileName(path));
         }
 
@@ -98,6 +109,7 @@ namespace BackApi.Controllers
             else main = false;
             var path = storsrv.MetaFilePath(pid, main);
 
+            Debug.WriteLine("--==| SET METADATA : " + txt + " : size " + file.Length);
             storsrv.SaveFile(path, file);
             return Ok();
         }
