@@ -18,7 +18,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import MinMaxScaler
 
 from .util import MCC
-
+from .util import ActivationFunctionsCodeConverter
 
 class TrainingService():
 
@@ -39,7 +39,7 @@ class TrainingService():
     #percentage_validation -> float - [0,1] -> koliki procenat celog skupa je validacioni skup
     # FULL_MODE - ako je False preskace se deo sa skupom podataka (sluzi samo ako ce se servis koristiti iskljucivo za kreiranje modela)
     def __init__(self, datasetAll, inputs, outputs, actPerLayer, nbperlayer, 
-                actOutput = None, metrics = ['mean_squared_error'], learning_rate = 0.1, regularization_rate = 0.1, regularization = 'L1', 
+                actOutput = None, metrics = ['mean_squared_error'], learning_rate = 0.1, optimizer = 'adam', regularization_rate = 0.1, regularization = 'L1', 
                 batchSize = 1, percentage_training = 0.6, percentage_validation = 0.2, problem_type = 'REGRESSION', callbacks = []
                 , FULL_MODE = True):
         
@@ -53,7 +53,27 @@ class TrainingService():
         self.CALLBACKS = callbacks
         
         self.LEARNING_RATE = learning_rate
-        self.OPTIMIZER = keras.optimizers.Adam(learning_rate = self.LEARNING_RATE)
+        #self.OPTIMIZER = keras.optimizers.Adam(learning_rate = self.LEARNING_RATE)
+        if(optimizer == 'adam'):
+            self.OPTIMIZER=keras.optimizers.Adam(learning_rate = self.LEARNING_RATE)
+        elif(optimizer == 'adamax'):
+            self.OPTIMIZER=keras.optimizers.Adamax(learning_rate = self.LEARNING_RATE)
+        elif(optimizer == 'adagrad'):
+            self.OPTIMIZER=keras.optimizers.Adagrad(learning_rate = self.LEARNING_RATE)
+        elif(optimizer == 'adadelta'):
+            self.OPTIMIZER=keras.optimizers.Adadelta(learning_rate = self.LEARNING_RATE)
+        elif(optimizer == 'nadam'):
+            self.OPTIMIZER=keras.optimizers.Nadam(learning_rate = self.LEARNING_RATE)
+        elif(optimizer == 'rmsprop'):
+            self.OPTIMIZER=keras.optimizers.RMSprop(learning_rate = self.LEARNING_RATE)
+        elif(optimizer == 'ftrl'):
+            self.OPTIMIZER=keras.optimizers.Ftrl(learning_rate = self.LEARNING_RATE)
+        elif(optimizer == 'sgd'):
+            self.OPTIMIZER=keras.optimizers.SGD(learning_rate = self.LEARNING_RATE)
+        else:
+            self.OPTIMIZER=keras.optimizers.Adam(learning_rate = self.LEARNING_RATE)
+
+
 
         self.REG_RATE = regularization_rate
         if(regularization == 'L1'):
@@ -64,9 +84,11 @@ class TrainingService():
             self.REGULARIZATION = None
 
         
-        self.ACT_PER_LAYER = actPerLayer
+        #self.ACT_PER_LAYER = actPerLayer
+        activationCodeConverter = ActivationFunctionsCodeConverter()
+        self.ACT_PER_LAYER = activationCodeConverter.get_activationFunctions(actPerLayer, True)
         self.NB_PER_LAYER = nbperlayer
-
+        
 
         self.METRICS = []
         for m in metrics:
@@ -150,8 +172,14 @@ class TrainingService():
                 self.ACT_OUTPUT = "softmax"
             elif (problem_type=="REGRESSION"):
                 self.ACT_OUTPUT = "linear"
+            else :
+                self.ACT_OUTPUT = 'sigmoid'
         else:
-            self.ACT_OUTPUT = 'sigmoid'
+            self.ACT_OUTPUT = activationCodeConverter.get_activationFunctions(actOutput, False)
+
+            
+
+
 
         self.BATCH_SIZE = batchSize
         #self.PERCENTAGE_TRAINING = percentage_training
