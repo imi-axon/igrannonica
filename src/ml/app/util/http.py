@@ -62,6 +62,6 @@ def train_stop(nnid: int):
 
     response = httpx.get(path, verify = sslVerify, headers = headers)
     
-    # debug_request(response)
+    debug_request(response)
 
     return response.read().decode()
