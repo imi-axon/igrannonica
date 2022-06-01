@@ -218,6 +218,13 @@ namespace BackApi.Controllers
             snd.actions = datasrv.RevertToLine(id, ln);
             if (snd.actions == null || snd.dataset == null)
                 return BadRequest();
+
+            GenerateMetadata data = new GenerateMetadata();
+            data.dataset = datasrv.ProjIdToPath(id, true);
+            data.metamain = storsrv.MetaFilePath(id, true);
+            data.metaedit = storsrv.MetaFilePath(id, false);
+            var metaresp = await MLconnection.generateMetaData(data);
+
             snd.metapath = storsrv.MetaFilePath(id, false);
             snd.metapath = snd.metapath.Replace("\\", "/");
             var response = await MLconnection.editDataset(snd);
