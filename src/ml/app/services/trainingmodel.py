@@ -39,7 +39,7 @@ class TrainingService():
     #percentage_validation -> float - [0,1] -> koliki procenat celog skupa je validacioni skup
     # FULL_MODE - ako je False preskace se deo sa skupom podataka (sluzi samo ako ce se servis koristiti iskljucivo za kreiranje modela)
     def __init__(self, datasetAll, inputs, outputs, actPerLayer, nbperlayer, 
-                actOutput = None, metrics = ['mean_squared_error'], learning_rate = 0.1, optimizer = 'adam', regularization_rate = 0.1, regularization = 'L1', 
+                actOutput = None, loss = 'mean_squared_error', metrics = ['mean_squared_error'], learning_rate = 0.1, optimizer = 'adam', regularization_rate = 0.1, regularization = 'L1', 
                 batchSize = 1, percentage_training = 0.6, percentage_validation = 0.2, problem_type = 'REGRESSION', callbacks = []
                 , FULL_MODE = True):
         
@@ -93,77 +93,8 @@ class TrainingService():
         self.METRICS = []
         for m in metrics:
             self.METRICS.append(MCC.id_to_name(m))
-
-        # # Setovanje izabranih metrika
-        # self.METRICS = []
-        # for metric in metrics:
-        #     if(metric == 'mse'):
-        #         self.METRICS.append(tf.keras.metrics.MeanSquaredError())
-        #     if(metric == 'mae'):
-        #         self.METRICS.append(tf.keras.metrics.MeanAbsoluteError())
-        #     if(metric == 'rmse'):
-        #         self.METRICS.append(tf.keras.metrics.RootMeanSquaredError())
-        #     if(metric == 'mape'):
-        #         self.METRICS.append(tf.keras.metrics.MeanAbsolutePercentageError())
-        #     if(metric == 'msle'):
-        #         self.METRICS.append(tf.keras.metrics.MeanSquaredLogarithmicError())
-        #     if(metric == 'tp'):
-        #         self.METRICS.append(tf.keras.metrics.TruePositives())
-        #     if(metric == 'tn'):
-        #         self.METRICS.append(tf.keras.metrics.TrueNegatives())
-        #     if(metric == 'fp'):
-        #         self.METRICS.append(tf.keras.metrics.FalsePositives())
-        #     if(metric == 'fn'):
-        #         self.METRICS.append(tf.keras.metrics.FalseNegatives())
-        #     if(metric == 'acc'):
-        #         self.METRICS.append(tf.keras.metrics.CategoricalAccuracy())
-        #     if(metric == 'rec'):
-        #         self.METRICS.append(tf.keras.metrics.Recall())
-        #     if(metric == 'prec'):
-        #         self.METRICS.append(tf.keras.metrics.Precision())
-
-        # self.METRICS_REGRESSION = [
-        #     # Regression
-        #     'mse',
-        #     # 'mae',
-        #     # 'RootMeanSquaredError',
-        #     # 'mape',
-        #     'MeanSquaredLogarithmicError',
-        # ]
-
-        # self.METRICS_CLASSIFICATION =  [ 
-        #     # Classification
-        #     'AUC',
-        #     'CategoricalCrossentropy',
-        #     'kullback_leibler_divergence',
-        #     'TruePositives',
-        # ]
-
-        # self.METRICS_REGRESSION = [
-        #     tf.keras.metrics.MeanSquaredError(),  #MSE - Mean Squared Error
-        #     tf.keras.metrics.MeanAbsoluteError(), #MAE - Mean Absolute Error
-        #     tf.keras.metrics.RootMeanSquaredError(), #RMSE - Root Mean Squared Error
-        #     tf.keras.metrics.MeanAbsolutePercentageError(), #MAPE -  Mean Absolute Percentage Error
-        #     tf.keras.metrics.MeanSquaredLogarithmicError(), #MSLE - Mean Squared Logarithmic Error
-        # ]
-
-        # self.METRICS_CLASSIFICATION =  [ 
-        #     tf.keras.metrics.AUC(), #AUC 
-        #     tf.keras.metrics.CategoricalAccuracy(), #Categorical Accuracy
-        #     tf.keras.metrics.Precision(), #Precision
-        #     tf.keras.metrics.Recall(), #Recall
-        #     tf.keras.metrics.TruePositives(), #True Positives
-        #     tf.keras.metrics.TrueNegatives(), #True Negatives
-        #     tf.keras.metrics.FalsePositives(), #False Positives
-        #     tf.keras.metrics.FalseNegatives(), #False Negatives
-        # ]
-
-        # if(problem_type=="CLASSIFICATION"):
-        #     self.METRICS = self.METRICS_CLASSIFICATION
-        # elif (problem_type=="REGRESSION"):
-        #     self.METRICS = self.METRICS_REGRESSION
-
-
+        
+        self.LOSS = MCC.id_to_name(loss)
 
         self.TYPE = problem_type
 
@@ -186,8 +117,9 @@ class TrainingService():
         #ukupni procenat za trening i validaciju
         self.PERCENTAGE_TRAINING_AND_VALIDATION = percentage_training + percentage_validation
 
-        self.REGRESSION_LOSS = 'mean_squared_error'
-        self.CLASSIFICATION_LOSS = 'CategoricalCrossentropy'
+        # self.REGRESSION_LOSS = 'mean_squared_error'
+        # self.CLASSIFICATION_LOSS = 'CategoricalCrossentropy'
+
 
         if FULL_MODE:
             # Dataframe
@@ -285,9 +217,12 @@ class TrainingService():
         elif(self.TYPE=="CLASSIFICATION"):
             model.add(Dense(len(self.outputs), activation=self.ACT_OUTPUT))
 
-        model_loss = self.REGRESSION_LOSS
-        if(self.TYPE=="CLASSIFICATION"):
-            model_loss = self.CLASSIFICATION_LOSS
+        # model_loss = self.REGRESSION_LOSS
+        # if(self.TYPE=="CLASSIFICATION"):
+        #     model_loss = self.CLASSIFICATION_LOSS
+
+        model_loss = self.LOSS
+
 
         model.compile(loss = model_loss,
                 optimizer = self.OPTIMIZER,
@@ -363,9 +298,9 @@ class TrainingService():
             results[nms[i]] = rez[i]
 
         # Izvlacenje informacije o loss-u modela
-        loss_metric = self.REGRESSION_LOSS
-        if(self.TYPE=="CLASSIFICATION"):
-            loss_metric = self.CLASSIFICATION_LOSS
+        # loss_metric = self.REGRESSION_LOSS
+        # if(self.TYPE=="CLASSIFICATION"):
+        #     loss_metric = self.CLASSIFICATION_LOSS
             
 
         return results

@@ -105,6 +105,9 @@ class TrainingInstance():
             , percentage_validation = trainConf['valSplit']
             , callbacks=[self.callback]
             , problem_type = trainConf['problemType']
+            , metrics = trainConf['metrics']
+            , loss = trainConf['loss']
+            , optimizer = trainConf['trainAlg']
         ) if self.service == None else self.service
 
 
@@ -114,7 +117,7 @@ class TrainingInstance():
             self.service.load_model(filepath)
 
 
-    def train(self, datasetUrl: str, nnUrl: str, confUrl: str, trainrezUrl: str, trainConf: Dict, nnid: int):
+    def train(self, datasetUrl: str, nnUrl: str, confUrl: str, trainrezUrl: str, newconf: Dict, nnid: int):
 
         try:
             print('Train Function : BEGIN')
@@ -122,12 +125,17 @@ class TrainingInstance():
             # -- Inicijalni setup --
             print('-- Inicijalni setup --')
 
-            oldconf = json_decode(httpc.get(confUrl))               # stara konfiguracija
-            dataframe = self.create_dataset(datasetUrl)             # dataframe
-            fm_model = self.create_model(nnUrl)                     # h5 FileMngr
-            self.create_service(dataframe, trainConf)               # service
-            self.load_model(fm_model.path(), oldconf, trainConf)    # load h5 model
-            self.lock.release()                                     # zbog lock-a u konstruktoru # [   ]
+            oldconf = json_decode(httpc.get(confUrl))                   # stara konfiguracija
+            updateConf = not compareConfigurations(oldconf, newconf)        # da li se nova konfiguracija razlikuje od stare
+            trainConf = newconf if updateConf else oldconf              # izbor konfiguracije za kreiranje servisa za treniranje
+            print(updateConf)
+            print(trainConf)
+            dataframe = self.create_dataset(datasetUrl)                 # dataframe
+            fm_model = self.create_model(nnUrl)                         # h5 FileMngr
+            self.create_service(dataframe, trainConf)                   # service
+            if not updateConf:                                              
+                self.service.load_model(fm_model.path())                # load h5 model (ako treba)
+            self.lock.release()                                         # zbog lock-a u konstruktoru # [   ]
             print('thread lock unlocked')
             print(self.lock.locked())
 

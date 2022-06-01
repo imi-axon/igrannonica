@@ -70,21 +70,25 @@ class NNModelMiddleware():
 
     def new_default_model_2(self, inputs, outputs):
 
+        isReg = len(outputs) == 1
+
         conf = {
-            'epochsDuration': 100,
             'inputs': inputs,
             'outputs': outputs,
             'neuronsPerLayer': [3,2],
             'actPerLayer': ['relu','relu'],
+            'metrics': ['mean_squared_error'] if isReg else ['categorical_crossentropy'],
+
+            'epochsDuration': 100,
             'actOut': None, # Ovo treba updateovati nakon kreiranja modela (vrednoscu koja se generise)
             'learningRate': 0.01,
             'reg': '',
             'regRate': 0,
             'batchSize': 8,
-            'problemType': 'REGRESSION' if len(outputs) == 1 else 'CLASSIFICATION',
-            'splitType': 'sequential',
             'trainSplit': 0.7,
-            'valSplit': 0.2
+            'valSplit': 0.2,
+            'loss': 'mean_squared_error' if isReg else 'categorical_crossentropy',
+            'problemType': 'REGRESSION' if isReg else 'CLASSIFICATION',
         }
 
         # Default konfiguracija
@@ -99,6 +103,9 @@ class NNModelMiddleware():
             , problem_type = conf['problemType']
             , percentage_training = conf['trainSplit']
             , percentage_validation = conf['valSplit']
+            , metrics = conf['metrics']
+            , loss = conf['loss']
+            , optimizer = conf['trainAlg']
             , FULL_MODE = False
         )
 
