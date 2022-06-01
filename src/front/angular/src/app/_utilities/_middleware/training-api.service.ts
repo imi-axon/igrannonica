@@ -64,4 +64,17 @@ export class TrainingApiService {
     });
     return response;
   }
+
+  public isTraining(projectId:number, nnId: number ){
+    
+    
+    let url=this.urlHttp+'/api/projects/'+projectId+'/nn/'+nnId+'/istraining';
+
+    let response = this.http.get(url,
+    {
+      observe:"response",
+      headers:HeaderUtil.jwtOnlyHeaders()
+    });
+    return response;
+  }
 }

@@ -30,4 +30,24 @@ export class TrainingService {
   
 
   }
+
+  public isTraining(projectId:number, nnId: number , self: any, successCallback: Function){
+    this.trainingApi.isTraining(projectId,nnId).subscribe(
+
+      (response: any) => {
+
+        if(response.status == HttpStatusCode.Ok)
+          if(self && successCallback) 
+            successCallback(self, response.body);
+        
+        if(response.status == HttpStatusCode.Unauthorized)
+            console.log("UNAUTHORIZED");
+
+        if(response.status==HttpStatusCode.Forbidden)
+          console.log("FORBIDDEN");
+        
+      }
+    );
+
+  }
 }

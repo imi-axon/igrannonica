@@ -81,7 +81,7 @@ export class ExperimentNetworkComponent implements OnInit, AfterViewInit {
   private once: boolean = true;
 
   ngOnInit(): void {
-    
+    this.trainingService.isTraining(this.getProjectId(), this.getNetworkId(), this,this.successCallbackIsTraining);
   }
   
   ngAfterViewInit(){
@@ -251,6 +251,12 @@ export class ExperimentNetworkComponent implements OnInit, AfterViewInit {
     self.metricComponents.forEach(component => {
       component.FinishBarplot(response[0][component.title]);
     });
+  }
+
+  public successCallbackIsTraining(self:any, res:any){
+    console.log(res.isTraining);
+    if(res.isTraining==true)
+      self.StartTraining();
   }
   
   
