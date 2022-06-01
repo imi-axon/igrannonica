@@ -88,7 +88,10 @@ def edit_dataset(body: DatasetEditActions, response: FileResponse):
     
     actions = [{'action':str.split(a['action']), 'column':(a['column'] if 'column' in a.keys() else '')} for a in json_decode(body.actions)]
     dataset = httpc.get(body.dataset)
-    metadata = json_decode(httpc.get(body.metapath))
+    metatxt = httpc.get(body.metapath)
+    print('PRINT METADATA')
+    print(metatxt)
+    metadata = json_decode(metatxt)
     
     dialect = get_csv_dialect(dataset)
 
@@ -207,6 +210,9 @@ def update_with_default_nn(body: NNCreate, response: Response):
 def generate_metadata(body: MetaGenRequest):
 
     dataset = httpc.get(body.dataset)
+    print('PRINT DATASET')
+    print(body.dataset)
+    print(dataset)
     dialect = get_csv_dialect(dataset)
     df = read_str_to_df(dataset, dialect.delimiter, dialect.quotechar)
 
