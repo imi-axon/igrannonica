@@ -163,7 +163,7 @@ namespace BackApi.Controllers
             return BadRequest();
         }
 
-        [HttpGet("nn/{nnid}/train/stop")]
+        [HttpGet("nn/{nnid}/train/stop"), AllowAnonymous]
         public async Task<ActionResult> TrainStopML(int nnid)
         {
                 wsq.DeleteFromDict(nnid);
