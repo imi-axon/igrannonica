@@ -87,6 +87,7 @@ class NNModelMiddleware():
             'batchSize': 8,
             'trainSplit': 0.7,
             'valSplit': 0.2,
+            'trainAlg': 'adam',
             'loss': 'mean_squared_error' if isReg else 'categorical_crossentropy',
             'problemType': 'REGRESSION' if isReg else 'CLASSIFICATION',
         }
