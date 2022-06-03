@@ -162,8 +162,8 @@ class TrainingInstance():
             print(testrez)
             self.lock.acquire(blocking=True)                            # [ X ]
             self.buff.append(b'end')                                    # indikator za kraj treniranja 
-            self.buff.append(bytes(str(tend-tbegin), 'utf-8'))          # vreme koliko je trajalo treniranje (u sekundama)
             self.buff.append(bytes(json_encode(testrez), 'utf-8'))      # rezultati testiranja ('end' i 'testrez' ce se uvek naci zajedno u baferu jer je ovaj blok atomican)
+            self.buff.append(bytes(str(tend-tbegin), 'utf-8'))          # vreme koliko je trajalo treniranje (u sekundama)
             self.lock.release()                                         # [   ]
 
             # -- Brisanje fajlova --
