@@ -44,6 +44,13 @@ then
     read sqlname
     echo "Deploying JS Server..."
     scp "src/back/BackApi/BackApi/obj/Debug/net6.0/$sqlname.sql" Axon@softeng.pmf.kg.ac.rs:/home/Axon/prod/latest.sql
+    echo "Done."; echo ""src\back\BackApi\BackApi\Storage
+fi
+
+if [ "$1" == "img" ]
+then
+    echo "Deploying profile image..."
+    scp "src/back/BackApi/BackApi/Storage/profilna.png" Axon@softeng.pmf.kg.ac.rs:/home/Axon/prod/back/app/Storage/
     echo "Done."; echo ""
 fi
 
