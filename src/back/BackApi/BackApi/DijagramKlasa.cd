@@ -1,0 +1,293 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="BackApi.Controllers.UsersController">
+    <Position X="0.5" Y="0.5" Width="10.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAABgEAABAAQIEAAAAAAAQEAChCAAQEAAQBAAIAgE=</HashCode>
+      <FileName>Controllers\UsersController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Models.UserLogin">
+    <Position X="11" Y="3" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>Models\ApiUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Models.UserPhoto">
+    <Position X="11" Y="4.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ApiUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Models.UserRegister">
+    <Position X="11" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAhAAAAgAAAAAAEAAAAAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>Models\ApiUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Models.UserEdit">
+    <Position X="14" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQIAhAAAAgAAAAAAEAAEAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ApiUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Controllers.ProjectController">
+    <Position X="0.5" Y="7.5" Width="7" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAABAAAACACAAEAAIgAAAIAgAEAQQEIAAAAAgQA=</HashCode>
+      <FileName>Controllers\ProjectController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Models.ProjectEdit">
+    <Position X="8" Y="9" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAAAAEAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ApiProject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Models.NotePut">
+    <Position X="8" Y="7.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ApiProject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Models.CommentPost">
+    <Position X="8" Y="11" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ApiProject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Controllers.DatasetController">
+    <Position X="0.5" Y="13.25" Width="9" />
+    <Members>
+      <Method Name="ReadDataset" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>gAAAAAgQAAQAAoAQAAAMAAAgAIAAAAAQAEAQAAAMAAA=</HashCode>
+      <FileName>Controllers\DatasetController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Models.DatasetGetPost">
+    <Position X="9.75" Y="15" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ApiDataset.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Models.DatasetMLPost">
+    <Position X="12.25" Y="13.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAACACAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ApiDataset.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Models.ActionsPut">
+    <Position X="9.75" Y="16.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ApiDataset.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Models.DatasetPages">
+    <Position X="9.75" Y="13.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ApiDataset.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Models.EditNN">
+    <Position X="14.75" Y="19.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ApiDataset.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Models.GenerateMetadata">
+    <Position X="12.25" Y="15" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAACAAAAAAAAAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ApiDataset.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Controllers.NNController">
+    <Position X="0.5" Y="19.5" Width="11.5" />
+    <Members>
+      <Method Name="WsTesting" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>CAAgAAgAEAAAAIAQAAAEAABAAABAAAASQSAAIAAEQAA=</HashCode>
+      <FileName>Controllers\NNController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Services.DatasetService">
+    <Position X="21.5" Y="14.75" Width="6.75" />
+    <Members>
+      <Method Name="EditHelperset" Hidden="true" />
+      <Method Name="IsExist" Hidden="true" />
+      <Method Name="ListDatasets" Hidden="true" />
+      <Method Name="Read" Hidden="true" />
+      <Method Name="UpdateMainDataset" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>gAAAAgAAAAAUACEAAQAACAAgAIGAAAAgAEAQAAAAACA=</HashCode>
+      <FileName>Services\DatasetService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BackApi.Services.UserService">
+    <Position X="21.5" Y="0.5" Width="11.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgEEAAIAgAAUASAQAAACFACBAAAAEAEQAAAgAsM=</HashCode>
+      <FileName>Services\UserService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BackApi.Services.JwtService">
+    <Position X="33.25" Y="6.75" Width="8" />
+    <TypeIdentifier>
+      <HashCode>IAAAAgAAAAAAAAAAAAAAgAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\JwtService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BackApi.Services.EmailService">
+    <Position X="33.25" Y="0.5" Width="8" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAgAAAAgCAACAAAAAAAAEAAAA=</HashCode>
+      <FileName>Services\EmailService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BackApi.Services.ProjectService">
+    <Position X="21.5" Y="7.75" Width="11.25" />
+    <Members>
+      <Method Name="getProjectId" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>BABCAAAIAAEAAIgAQRAEIiAAUACgAQBAAAgAAAAACAQ=</HashCode>
+      <FileName>Services\ProjectService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BackApi.MLconnection">
+    <Position X="33.25" Y="3.75" Width="8" />
+    <Members>
+      <Method Name="getStatistic" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAICAAIAEAAAAQAAAAAIAAAAAACAAAAAgAEAAAAAA=</HashCode>
+      <FileName>Services\MLconnection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Services.NNservice">
+    <Position X="21.5" Y="19.5" Width="6.75" />
+    <Members>
+      <Method Name="ListOfNNsInTraining" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAwAAEAAAAIgAAQgEJAAAEAGAAAAKgAAAIAAcAAA=</HashCode>
+      <FileName>Services\NNservice.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BackApi.Services.StorageService">
+    <Position X="33.25" Y="9.75" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>AgIASAAIAAEAAAAIAACoAqAAAABgAACABAAAIAAACAA=</HashCode>
+      <FileName>Services\StorageService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BackApi.Services.WSQueue">
+    <Position X="28.5" Y="19.5" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAEAAAAAAAAAAAAAAAAAJAAAAAAAA=</HashCode>
+      <FileName>Services\WSQueue.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BackApi.Models.ApiNNCfg">
+    <Position X="14.75" Y="22.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ApiNNTemp.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Models.ApiNNTrain">
+    <Position X="12.25" Y="23.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAIAABACAAAAAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ApiNNTemp.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Models.NNCreate">
+    <Position X="12.25" Y="19.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAABAAAAAIAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ApiNNTemp.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Models.ApiNNGet">
+    <Position X="12.25" Y="21.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAABAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ApiNNTemp.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Models.ApiNNPost">
+    <Position X="14.75" Y="24" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ApiNNTemp.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Models.ApiNNPutNote">
+    <Position X="14.75" Y="21" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ApiNNTemp.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Entities.Comments">
+    <Position X="11" Y="33.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>QAACIAAEAAAAAAAAAAAAAAAABAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>Entities\Comments.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Entities.Dataset">
+    <Position X="11" Y="27.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAIAAAAACAQABAAAAAAAAABABAAAAAA=</HashCode>
+      <FileName>Entities\Dataset.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Entities.NN">
+    <Position X="11" Y="30.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>QAAgAgBBAAAAAAAAAAAACAEABgAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Entities\NN.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Entities.Project">
+    <Position X="6.75" Y="27.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>SAAhAAAAAAAgAAAAAAAAAAwABAAAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>Entities\Project.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackApi.Entities.User">
+    <Position X="2.75" Y="27.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>EACIAAAAACAAAAQIAQAAAAwAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>Entities\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="10" />
+</ClassDiagram>

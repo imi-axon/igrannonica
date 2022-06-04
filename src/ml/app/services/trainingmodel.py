@@ -212,10 +212,11 @@ class TrainingService():
             model.add(Dense(self.NB_PER_LAYER[i], kernel_regularizer = self.REGULARIZATION, activation=self.ACT_PER_LAYER[i]))
             
         #izlazni sloj
-        if(self.TYPE=="REGRESSION"):
-            model.add(Dense(1, activation = self.ACT_OUTPUT))
-        elif(self.TYPE=="CLASSIFICATION"):
-            model.add(Dense(len(self.outputs), activation=self.ACT_OUTPUT))
+        # if(self.TYPE=="REGRESSION"):
+        #     model.add(Dense(1, activation = self.ACT_OUTPUT))
+        # elif(self.TYPE=="CLASSIFICATION"):
+        #     model.add(Dense(len(self.outputs), activation=self.ACT_OUTPUT))
+        model.add(Dense(len(self.outputs), activation = self.ACT_OUTPUT))
 
         # model_loss = self.REGRESSION_LOSS
         # if(self.TYPE=="CLASSIFICATION"):
@@ -297,6 +298,8 @@ class TrainingService():
         if type([]) == type(rez):
             for i in range(len(rez)):
                 results[nms[i]] = rez[i]
+        else:
+            results = {'loss': rez}
 
         # Izvlacenje informacije o loss-u modela
         # loss_metric = self.REGRESSION_LOSS
