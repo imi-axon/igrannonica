@@ -250,7 +250,8 @@ export class ExperimentEditComponent implements OnInit {
     self.datasetService.GetChanges(self.GetProjectId(), false, self, self.handleGetLocalChangesSuccess, () => {}, () => {}, self.handleGetLocalChangesEmpty);*/
     self.UpdateAllNotMain(self);
     self.datasetEditTable.DeselectAllSelectedColumns();
-    self.ChangeDatasetPage(self.pageControls.currentPage);
+    console.log(self.pageControls.currentPage);
+    //self.ChangeDatasetPage(self.pageControls.currentPage);
   }
   
   
@@ -334,7 +335,7 @@ export class ExperimentEditComponent implements OnInit {
     console.log(DataConverter.metaToHeaders(metadata))
 
     // Get: DatasetPage + Changes
-    self.datasetService.GetDatasetPage(self.GetProjectId(), false, 1, 20, self, self.handleDatasetGetSuccess);
+    self.datasetService.GetDatasetPage(self.GetProjectId(), false, self.pageControls.currentPage, 20, self, self.handleDatasetGetSuccess);
     self.UpdateChanges(self);
   }
   
