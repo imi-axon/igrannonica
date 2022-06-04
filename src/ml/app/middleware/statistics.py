@@ -211,7 +211,7 @@ class StatisticsMiddleware:
                 dict_col.add("count", stat_cat[column]['count'])
                 dict_col.add("unique", stat_cat[column]['unique'])
                 dict_col.add("top", stat_cat[column]['top'])
-                dict_col.add("freq", stat_cat[column]['count'])
+                dict_col.add("freq", stat_cat[column]['freq'])
                 lista.append(dict_col)    
         
         return lista
