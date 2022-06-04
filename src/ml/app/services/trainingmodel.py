@@ -298,6 +298,8 @@ class TrainingService():
         if type([]) == type(rez):
             for i in range(len(rez)):
                 results[nms[i]] = rez[i]
+        else:
+            results = {'loss': rez}
 
         # Izvlacenje informacije o loss-u modela
         # loss_metric = self.REGRESSION_LOSS
