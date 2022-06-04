@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, Query, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, Query, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NeuralNetwork, Project } from 'src/app/_utilities/_data-types/models';
 import { TrainingApiService } from 'src/app/_utilities/_middleware/training-api.service';
@@ -17,7 +17,7 @@ import { NeuralNetworkDisplayComponent } from '../neural-network-display/neural-
   templateUrl: './experiment-network.component.html',
   styleUrls: ['./experiment-network.component.scss']
 })
-export class ExperimentNetworkComponent implements OnInit, AfterViewInit {
+export class ExperimentNetworkComponent implements OnInit, AfterContentInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private nnService: NnService,
@@ -84,7 +84,7 @@ export class ExperimentNetworkComponent implements OnInit, AfterViewInit {
     this.trainingService.isTraining(this.getProjectId(), this.getNetworkId(), this,this.successCallbackIsTraining);
   }
   
-  ngAfterViewInit(){
+  ngAfterContentInit(){
     this.networkService.GetNetwork(this.getProjectId(), this.getNetworkId(), this, this.successGetNetworkCallback);
     this.statisticsService.GetStatistics(this.getProjectId(), true, this, this.successGetStatisticsCallback);
     
@@ -92,14 +92,24 @@ export class ExperimentNetworkComponent implements OnInit, AfterViewInit {
   }
   
   private gotPreviousRez(self: any, epochs: any){
-    
-    self.metricComponents.forEach((component: MetricsBarplotComponent) => {
-      component.UpdateBarplot(epochs[1][component.title], epochs[1]['val_' + component.title]);
-      component.FinishBarplot(epochs[0][component.title]);
-    });
-    
-    for(let i = epochs.length - 1; i > 0; i--)
-      self.grafik.dataUpdate(epochs[0]['epoch'], epochs[0]['val_loss'], epochs[0]['loss']);
+    self.metricComponents.changes.subscribe((component: any) => { self.MetricComponentsLoaded(self, epochs); }); 
+  }
+  
+  private MetricComponentsLoaded(self: any, epochs: any){
+    setTimeout(() => {
+      console.log(epochs)
+      
+      self.metricComponents.forEach((component: MetricsBarplotComponent) => {
+        component.UpdateBarplot(epochs[epochs.length - 1][component.title], epochs[epochs.length - 1]['val_' + component.title]);
+        component.FinishBarplot(epochs[0][component.title]);
+      });
+      
+      console.log(self.grafik)
+      for(let i = 2; i < epochs.length; i++)
+        self.grafik.dataUpdate(epochs[i]['epoch'], epochs[i]['val_loss'], epochs[i]['loss']);
+      
+      self.trenirana = true;
+    }, 0);
   }
   
   
@@ -244,6 +254,8 @@ export class ExperimentNetworkComponent implements OnInit, AfterViewInit {
     self.resetButton=false;
     self.runningTraining = false;
     self.nnService.getTrainRez(self.getProjectId(), self.getNetworkId(), self, self.gotTrainRez);
+    
+    self.networkService.GetNetwork(self.getProjectId(), self.getNetworkId(), self, self.successGetNetworkCallback);
     //console.log("zavrseno");
   }
   
