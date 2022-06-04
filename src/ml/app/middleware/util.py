@@ -30,6 +30,7 @@ def compareConfigurations(conf_a, conf_b) :
     
     try:
         if len(conf_a.keys()) != len(conf_a.keys()):
+            print('POREDJENJE CONF: Nemaju isti broj kljuceva')
             return False
 
         # Automatska provera atributa (trenutno podrzava samo liste i prote tipove)
@@ -37,23 +38,30 @@ def compareConfigurations(conf_a, conf_b) :
         for k in conf_a.keys():
             # ukoliko konfiguracije ne sadrse iste atribute
             if list(conf_b.keys()).count(k) == 0:
+                print(f'POREDJENJE CONF: Konfiguracije ne sadrze isti atribut ({k})')
                 return False
             
             ca = conf_a[k]
             cb = conf_b[k]
 
             # ukoliko je atribut lista
-            if isinstance(ca, list):
-                for i in range(ca):
+            if type(ca) == type([]):
+                print(ca)
+                for i in range(len(ca)):
                     if(ca[i] != cb[i]):
+                        print(f'POREDJENJE CONF: Nisu jednaki atirbuti {k} (lista)')
                         return False
 
             # ukoliko je atribut prost tip
             elif ca != cb:
+                print(f'POREDJENJE CONF: Nisu jednaki atirbuti {k}')
                 return False
 
+        print(f'POREDJENJE CONF: ISTI SU!!!!!!!!')
         return True
         
     except:
+        print(f'POREDJENJE CONF: EXCEPTION')
+        raise
         return False
 

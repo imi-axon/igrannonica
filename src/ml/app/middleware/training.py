@@ -133,7 +133,8 @@ class TrainingInstance():
             dataframe = self.create_dataset(datasetUrl)                 # dataframe
             fm_model = self.create_model(nnUrl)                         # h5 FileMngr
             self.create_service(dataframe, trainConf)                   # service
-            if not updateConf:                                              
+            if not updateConf:
+                print('<<<<< LOAD MODEL >>>>>')                                              
                 self.service.load_model(fm_model.path())                # load h5 model (ako treba)
             self.lock.release()                                         # zbog lock-a u konstruktoru # [   ]
             print('thread lock unlocked')
