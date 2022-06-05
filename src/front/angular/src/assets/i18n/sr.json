@@ -76,7 +76,7 @@
     
     "file-input":{
         "dodajFajl": "Dodaj Fajl",
-        "klikniIliPrevuci": "Kliknite ili prevucite fajl ovde",
+        "klikniIliPrevuci": "Kliknite ili prevucite CSV fajl ovde",
         "nemaFajla": "Fajl nije pronadjen!",
         "pogresanTipFajla": "Fajl je pogrešnog tipa!",
         "prazanFajl": "Fajl je prazan!"

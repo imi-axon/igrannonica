@@ -4,6 +4,32 @@ svg{
         fill: url(#blueGradient);
         stroke: #005ca2;
         stroke-width: 1px;
+        
+        /*
+        &::after{
+            content: attr(data-title);
+            display: inline-block;
+            position: absolute;
+            background-color: #154a9a;
+            color: #FFFFFF;
+            font-size: 14px;
+            left: 0;
+            top: 100%;
+            width: 20px;
+            height: 20px;
+            padding: 5px;
+            border-radius: 4px;
+            transition: 0.25s;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        &:hover::after{
+            
+            opacity: 1;
+            transform: translateY(30px);
+        }
+        */
     }
     
     .label{

@@ -123,7 +123,8 @@
             
             &:focus{
                 outline: none;
-                border: solid 1px var(--ExpOverviewDescriptionContDescriptionInputFocusBorder);
+                background-color: #00438f22;
+                outline: solid 1px #08438788;
             }
         }
     }

@@ -20,7 +20,10 @@
         color: var(--ExpPageTitleInput);
         
         &:focus{
+            padding: 4px;
             outline: none;
+            background-color: #00438f22;
+            border: solid 1px #08438788;
         }
     }
     
