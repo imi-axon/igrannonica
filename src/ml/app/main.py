@@ -247,7 +247,10 @@ def get_nn_list(uid: int):
         if tts != None:
             for (key,val) in tts.items():
                 nns.append( { str(key) : json_decode(val.buffer[-1].decode('utf-8')) } )
-        return json_encode(nns)
+        res = json_encode(nns)
+        print('NNS')
+        print(res)
+        return res
         
     finally:
         TTM.b_table_unlock() # TTM [  ]
@@ -327,7 +330,7 @@ async def nn_train_watch(ws: WebSocket, uid: int, nnid: int):
     lock: Lock = Lock()
 
     EP_PACK_SIZE_MAX = 100      # maximalan broj epoha koje se salju u jednoj poruci
-    EP_PACK_SIZE_MIN = 1        # minimalan broj epoha koje se salju u jednoj poruci
+    EP_PACK_SIZE_MIN = 3        # minimalan broj epoha koje se salju u jednoj poruci
     trainrez_buff: List[bytes] = []
 
     try:
