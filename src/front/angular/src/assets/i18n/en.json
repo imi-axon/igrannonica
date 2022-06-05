@@ -164,7 +164,8 @@
         "reg":"Regression",
         "class":"Classification",
         "goToNet":"Go to network",
-        "goToGraph":"Go to graphics"
+        "goToGraph":"Go to graphics",
+        "metricInfo": "If you don't select any metrics, none will be displayed in the sidebar during training."
     },
     
     "statistics-table":{
