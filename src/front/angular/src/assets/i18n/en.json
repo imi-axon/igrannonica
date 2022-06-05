@@ -145,6 +145,25 @@
         "kreiran": "Created on",
         "javni": "Public experiment"
     },
+    "network":{
+        "move":"Move to",
+        "input":"Input",
+        "output":"Output",
+        "eposch":"Epoch",
+        "train":"Train",
+        "validation":"Validation",
+        "test":"Test",
+        "batch":"Batch size",
+        "problemType":"Problem type",
+        "metrics":"Metrics",
+        "lossFun":"Loss Function",
+        "optimizerFun":"Optimizer Function",
+        "learningRate":"Learning rate",
+        "Regularization":"Regularization",
+        "RegularizationR":"Regularization Rate",
+        "reg":"Regression",
+        "class":"Classification"
+    },
     
     "statistics-table":{
         "min": "Minimum",

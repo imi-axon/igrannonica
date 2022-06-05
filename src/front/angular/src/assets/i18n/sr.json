@@ -273,6 +273,26 @@
         "auc": "Accuracy",
         "recall": "Recall",
         "precision": "Precision"
+    },
+    "network":{
+        "move":"Premesti u",
+        "input":"Ulaz",
+        "output":"Izlaz",
+        "epoch":"Epoha",
+        "train":"Trening",
+        "validation":"Validacija",
+        "test":"Test",
+        "batch":"Veličina serije",
+        "problemType":"Tip problema",
+        "metrics":"Metrika",
+        "lossFun":"Funkcija gubitka ",
+        "optimizerFun":"Funkcija optimizacije",
+        "learningRate":"Stopa učenja",
+        "Regularization":"Regularizacija",
+        "RegularizationR":"Stopa regularizacije ",
+        "reg":"Regresija",
+        "class":"Klasifikacija"
+
     }
     
 }
