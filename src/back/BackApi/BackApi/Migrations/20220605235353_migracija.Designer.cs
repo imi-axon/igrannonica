@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackApi.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20220517203643_lastdate")]
-    partial class lastdate
+    [Migration("20220605235353_migracija")]
+    partial class migracija
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
