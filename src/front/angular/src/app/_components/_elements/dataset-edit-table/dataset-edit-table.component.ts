@@ -61,8 +61,21 @@ export class DatasetEditTableComponent implements OnInit {
   }
   
   public SelectDeselectMeta(index: number, column: any){
+    var columnsToSelect = this.columns.filter(
+      (value: string) => {
+        if(value.includes(column.text))
+          return value;
+        return;
+      }
+    );
+    console.log(columnsToSelect)
+    
+    columnsToSelect.forEach((col) => {
+      this.SelectDeselectColumn(col, '')
+    })
+    /*
     for(let i = index; i < index + column.span; i++)
-      this.SelectDeselectColumn(this.columns[i], '');
+      this.SelectDeselectColumn(this.columns[i], '');*/
   }
   
   
@@ -77,37 +90,54 @@ export class DatasetEditTableComponent implements OnInit {
     // Kreiranje reda koji stoji iznad Headers reda u tabeli
     this.columnsTop = []
     let span: number = 0
+    
+    //console.log(this.columns)
+    
+    var currentHeader = "";
+    
     for (const col of this.columns) 
     {
-      console.log('>>> ' + col)
+      //console.log('>>> ' + col)
       if (!this.IsColEncOneHot(col)) {
         if (span == 0) {
           this.columnsTop.push({span: 1, text: ''})
+          currentHeader = ""
         }
         else {
           this.columnsTop[this.columnsTop.length-1].span = span
           span = 0
+          this.columnsTop.push({span: 1, text: ''})
+          currentHeader = ""
         }
       }
       else if (this.columnsMeta) {
-        if (span == 0) {
+        
+        if(currentHeader != this.columnsMeta[col].encoding?.onehot?.originalHeader){
+          this.columnsTop[this.columnsTop.length-1].span = span
+          span = 0
           let h = this.columnsMeta[col].encoding?.onehot?.originalHeader
           this.columnsTop.push({span: 1, text: h?h:''})
+          currentHeader = this.columnsMeta[col].encoding?.onehot?.originalHeader!;
+        }
+        else if (span == 0) {
+          let h = this.columnsMeta[col].encoding?.onehot?.originalHeader
+          this.columnsTop.push({span: 1, text: h?h:''})
+          currentHeader = this.columnsMeta[col].encoding?.onehot?.originalHeader!;
         }
         span += 1
       }
     }
-    console.log('>>>>>>>>>><<<<<<<<<')
+    //console.log('>>>>>>>>>><<<<<<<<<')
     if (span > 1) {
       this.columnsTop[this.columnsTop.length-1].span = span
       span = 0
     }
     //-----
 
-    console.log("[[[[[ ----- ]]]]]]")
-    console.log(this.columnsTop)
+    //console.log("[[[[[ ----- ]]]]]]")
+    //console.log(this.columnsTop)
     
-    console.log(this.columnsMeta);
+    //console.log(this.columnsMeta);
 
     this.LoadedEvent.emit();
   }
@@ -152,8 +182,14 @@ export class DatasetEditTableComponent implements OnInit {
 
   public IsColEncOneHot(col: string) {
     if (this.columnsMeta == null)
-      return false
+    return false
     let hdr: DatasetHeader = this.columnsMeta[col]
+    
+    /*
+    console.log("================================================")
+    console.log(this.columnsMeta[col])
+    console.log(hdr.type == "enc" && hdr.encoding?.type == "onehot")*/
+    
     return hdr.type == "enc" && hdr.encoding?.type == "onehot"
   }
 

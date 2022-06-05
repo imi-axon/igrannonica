@@ -7,7 +7,7 @@ export const RedirectRoutes = {
     ON_SESSION_EXPIRED: ['session-expired'],
     
     ON_LOGOUT: ['login'],
-    ON_LOGIN: ['my-projects'],
+    ON_LOGIN: ['home'],
     
     ON_REGISTER_SUCCESSFUL: ['registration-successful']
 }

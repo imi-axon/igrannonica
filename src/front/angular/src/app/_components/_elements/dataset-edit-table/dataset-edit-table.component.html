@@ -5,7 +5,7 @@
         <!-- RED ZA METAPODATKE -->
         <tr>
             <th scope="col" *ngFor="let i = index; let column of columnsTop" [attr.colspan]="column.span" [class.selectedColumnTH]="selectedColumns.includes(column.text)"
-            [class.oneHotCellTH]="column.text != '' && !topLevelHeaders.num.includes(column.text) && !topLevelHeaders.cat.includes(column.text)"
+            [class.oneHotCellTH]="column.text.trim() != '' && !topLevelHeaders.num.includes(column.text) && !topLevelHeaders.cat.includes(column.text)"
             (click)="SelectDeselectMeta(i, column);">
                 {{column.text}}
             </th>

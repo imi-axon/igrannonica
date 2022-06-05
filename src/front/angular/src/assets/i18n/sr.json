@@ -41,7 +41,9 @@
         "dugme":"Ulogujte se",
         "forgot1":"Zavboravili ste lozinku?",
         "forgot2":"Promenite je",
-        "login-greska":"Pogrešni podaci ili korisnik nije verifikovan!"
+        "login-greska":"Pogrešni podaci ili korisnik nije verifikovan!",
+        "text1" : "ULOGUJ SE I KREIRAJ SVOJ EKSPERIMENT",
+        "text2": "KREIRAJ EKSPERIMENT"
     },
     "csv":{
         "format":"Uneti fajl mora biti u .csv formatu!",
@@ -76,7 +78,7 @@
     
     "file-input":{
         "dodajFajl": "Dodaj Fajl",
-        "klikniIliPrevuci": "Kliknite ili prevucite fajl ovde",
+        "klikniIliPrevuci": "Kliknite ili prevucite CSV fajl ovde",
         "nemaFajla": "Fajl nije pronadjen!",
         "pogresanTipFajla": "Fajl je pogrešnog tipa!",
         "prazanFajl": "Fajl je prazan!"
