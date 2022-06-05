@@ -29,7 +29,8 @@
         "obavestenje1-2":"*The password must contain one number, one uppercase and one lowercase letter",
         "dugme":"Register",
         "login1":"Already have an account?",
-        "login2":"Log in here"
+        "login2":"Log in here",
+        "errorUsername" : "A user with this username is already registered"
     },
     "login":{
         "login":"LogIn",
@@ -197,7 +198,7 @@
     },
     "registration-successful":{
         "uspeh":"Registration successful",
-        "mail":"Check your email"
+        "mail":"We have sent you a verification link on your e-mail!"
     },
     "statistics-page":{
         "view":"Switch view",
