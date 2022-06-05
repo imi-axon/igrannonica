@@ -29,8 +29,10 @@ class NpEncoder(json.JSONEncoder):
 def compareConfigurations(conf_a, conf_b) :
     
     try:
+        print('<<< POREDJENJE CONF >>>')
+
         if len(conf_a.keys()) != len(conf_a.keys()):
-            print('POREDJENJE CONF: Nemaju isti broj kljuceva')
+            print('Nemaju isti broj kljuceva')
             return False
 
         # Automatska provera atributa (trenutno podrzava samo liste i prote tipove)
@@ -38,30 +40,40 @@ def compareConfigurations(conf_a, conf_b) :
         for k in conf_a.keys():
             # ukoliko konfiguracije ne sadrse iste atribute
             if list(conf_b.keys()).count(k) == 0:
-                print(f'POREDJENJE CONF: Konfiguracije ne sadrze isti atribut ({k})')
+                print(f'Konfiguracije ne sadrze isti atribut ({k})')
                 return False
             
             ca = conf_a[k]
             cb = conf_b[k]
+            print(ca)
+            print(cb)
+
+            # ukoliko atributi nisu istog tipa
+            if type(ca) != type(cb):
+                print(f'Atributi nisu istog tipa')
+                return False
 
             # ukoliko je atribut lista
             if type(ca) == type([]):
-                print(ca)
+                
+                if len(ca) != len(cb):
+                    print(f'Nisu jednaki atirbuti {k} (lista, nisu iste duzine)')
+                    return False
+
                 for i in range(len(ca)):
-                    if(ca[i] != cb[i]):
-                        print(f'POREDJENJE CONF: Nisu jednaki atirbuti {k} (lista)')
+                    if ca[i] != cb[i]:
+                        print(f'Nisu jednaki atirbuti {k} (lista, razlikuju im se elementi)')
                         return False
 
             # ukoliko je atribut prost tip
             elif ca != cb:
-                print(f'POREDJENJE CONF: Nisu jednaki atirbuti {k}')
+                print(f'Nisu jednaki atirbuti {k}')
                 return False
 
-        print(f'POREDJENJE CONF: ISTI SU!!!!!!!!')
+        print(f'ISTI SU !!!!!!!!')
         return True
         
     except:
-        print(f'POREDJENJE CONF: EXCEPTION')
+        print(f'EXCEPTION')
         raise
-        return False
 

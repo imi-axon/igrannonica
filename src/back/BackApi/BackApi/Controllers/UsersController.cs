@@ -196,7 +196,7 @@ namespace BackApi.Controllers
             return Ok();
         }
 
-        [HttpGet("/nns")]
+        [HttpGet("nns")]
         public async Task<ActionResult> NNsInTraining()
         {
             int userid = jwtsrv.GetUserId();
