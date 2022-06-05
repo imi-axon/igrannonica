@@ -293,7 +293,8 @@
         "reg":"Regresija",
         "class":"Klasifikacija",
         "goToNet":"Prikaz mreže",
-        "goToGraph":"Prikaz grafika"
+        "goToGraph":"Prikaz grafika",
+        "metricInfo": "Ukoliko ne izaberete ni jednu metriku, tokom treniranja u sidebar-u neće biti prkazana ni jedna."
 
     }
     
