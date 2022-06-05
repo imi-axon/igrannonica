@@ -26,7 +26,7 @@ export class ChartTrainingComponent implements OnInit {
       options: {
         events: [],
         animation:{
-          duration:0
+          duration:0.5
         },
         scales:{
           xAxes:{
@@ -71,7 +71,7 @@ export class ChartTrainingComponent implements OnInit {
             label: 'Training loss',
             data: [],
             // data: [1],
-            tension: 0.5,
+            tension: 0.1,
             borderWidth:2.5,
             borderColor:"#2C5D96",
             backgroundColor:"	#2C5D96"
@@ -81,7 +81,7 @@ export class ChartTrainingComponent implements OnInit {
             label: 'Validation loss',
             data: [],
             //data: [1],
-            tension: 0.5,
+            tension: 0.1,
             borderWidth:2.5,
             borderColor:"#dd6060",
             backgroundColor:"#dd6060"

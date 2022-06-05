@@ -93,6 +93,10 @@ class TrainingInstance():
 
 
     def create_service(self, dataframe, trainConf: Dict):
+        # check
+        if list(trainConf.keys()).count('metrics') == 0:
+            trainConf['metrics'] = []
+
         actpl = trainConf['actPerLayer']
         actpl = [a.lower() for a in actpl]
         self.service = TrainingService(dataframe, trainConf['inputs'], trainConf['outputs'], actpl, trainConf['neuronsPerLayer']
