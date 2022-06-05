@@ -26,9 +26,12 @@ export class CorrelationTableComponent implements OnInit {
     if(value >= 0.75)
       return {'color': 'rgb( 0, 150, 0)', 'font-weight': 'bold'}
     
-    if(value <= 0.25)
-      return {'color': 'rgb( 150, 0, 0)', 'font-weight': 'bold'}
-      
-    return {'color': 'rgb( 70, 70, 70)', 'font-weight': 'bold'};
+   else if(value <= 0.25)
+       return {'color': 'rgb( 150, 0, 0)', 'font-weight': 'bold'}
+  
+    else{
+    if(localStorage.getItem('theme')=="dark_theme") return {'color': '	rgb(65,105,225)', 'font-weight': 'bold'}
+    else  return {'color': 'rgb( 70, 70, 70)', 'font-weight': 'bold'};
+    }
   }
 }

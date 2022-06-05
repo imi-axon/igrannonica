@@ -5,8 +5,8 @@
     </div>
     
     <div id="changeView" class="d-flex justify-content-end">
-        <button *ngIf="prikazGrafa" [disabled]="runningTraining || resetButton" class="backButton" (click)="prikaziMrezu()"> <i class="bi bi-arrow-left fa-lg" style="color:white;"></i> Go to network  </button>
-        <button *ngIf="trenirana && !prikazGrafa"  class="backButton" (click)="prikaziGrafik()"> <i class="bi bi-arrow-right fa-lg" style="color:white;"></i> Go to graph  </button>
+        <button *ngIf="prikazGrafa" [disabled]="runningTraining || resetButton" class="backButton" (click)="prikaziMrezu()"> <i class="bi bi-arrow-left fa-lg" style="color:white;"></i> {{"network.goToNet"|translate}}  </button>
+        <button *ngIf="trenirana && !prikazGrafa"  class="backButton" (click)="prikaziGrafik()"> <i class="bi bi-arrow-right fa-lg" style="color:white;"></i> {{"network.goToGraph"|translate}} </button>
     </div>
 
     <div id="secondRow">
@@ -24,7 +24,7 @@
         <div id="side">
             <div class="header">
 
-                <button *ngIf="!resetButton" [disabled]="loaderService.isLoading | async" class="PlayStopButton" (click)="StartTraining()"> <i class="bi bi-play-fill fa-lg" style="color:white;"></i> </button>
+                <button id="play" *ngIf="!resetButton" [disabled]="loaderService.isLoading | async" class="PlayStopButton" (click)="StartTraining()"> <i class="bi bi-play-fill fa-lg" style="color:white;"></i> </button>
                 <button *ngIf="resetButton" [disabled]="loaderService.isLoading | async"  class="PlayStopButton" (click)="StopTraining()"> <i class="bi bi-pause-fill fa-lg" style="color:white;"></i>  </button>
                 <span id="epoch"> &nbsp; {{"network.epoch"|translate}}:&nbsp;</span>
 

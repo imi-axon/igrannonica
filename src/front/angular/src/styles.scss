@@ -133,6 +133,8 @@ $angular-theme: mat.define-light-theme((color: (primary: $angular-primary,
 
     //EXPERIMENT-EDIT
     --action: #212529;
+
+    --moveTo : #444444;
     
 }
 
@@ -232,6 +234,8 @@ $angular-theme: mat.define-light-theme((color: (primary: $angular-primary,
 
     //EXPERIMENT-EDIT
     --action: white;
+
+    --moveTo : white;
     
 }
 //////////////////////////////KRAJ TEME////////////////////////////////////////

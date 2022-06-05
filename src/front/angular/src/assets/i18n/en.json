@@ -149,7 +149,7 @@
         "move":"Move to",
         "input":"Input",
         "output":"Output",
-        "eposch":"Epoch",
+        "epoch":"Epoch",
         "train":"Train",
         "validation":"Validation",
         "test":"Test",
@@ -162,7 +162,9 @@
         "Regularization":"Regularization",
         "RegularizationR":"Regularization Rate",
         "reg":"Regression",
-        "class":"Classification"
+        "class":"Classification",
+        "goToNet":"Go to network",
+        "goToGraph":"Go to graphics"
     },
     
     "statistics-table":{

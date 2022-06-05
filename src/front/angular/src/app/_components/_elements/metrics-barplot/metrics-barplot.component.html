@@ -4,7 +4,7 @@
     
     <table>
         <tr>
-            <td>Training</td>
+            <td>{{"network.train"|translate}}</td>
             <td>{{trainingValue | number : '.4'}}</td>
             <td>
                 <div #trainingBarplot class="barplot"> </div>
@@ -12,7 +12,7 @@
         </tr>
         
         <tr>
-            <td>Validation</td>
+            <td>{{"network.validation"|translate}}</td>
             <td>{{validationValue | number : '.4'}}</td>
             <td>
                 <div #validationBarplot class="barplot"> </div>
@@ -20,7 +20,7 @@
         </tr>
         
         <tr>
-            <td>Test</td>
+            <td>{{"network.test"|translate}}</td>
             <td>{{testValue | number : '.4'}}</td>
             <td>
                 <div #testBarplot class="barplot"> </div>

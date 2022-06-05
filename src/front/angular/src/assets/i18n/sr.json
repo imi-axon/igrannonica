@@ -291,7 +291,9 @@
         "Regularization":"Regularizacija",
         "RegularizationR":"Stopa regularizacije ",
         "reg":"Regresija",
-        "class":"Klasifikacija"
+        "class":"Klasifikacija",
+        "goToNet":"Prikaz mreže",
+        "goToGraph":"Prikaz grafika"
 
     }
     
