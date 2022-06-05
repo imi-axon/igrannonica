@@ -8,6 +8,10 @@ import { LandingPageSelectorComponent } from '../../_elements/landing-page-selec
 import {MatDialog} from '@angular/material/dialog';
 import { PopupWindowComponent } from '../../_elements/popup-window/popup-window.component';
 import { TranslateService } from '@ngx-translate/core';
+import { AuthService } from 'src/app/_utilities/_services/auth.service';
+import { NewProjectService } from 'src/app/_utilities/_services/new-project.service';
+import { NewProject } from 'src/app/_utilities/_data-types/models';
+import { Router } from '@angular/router';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,11 +22,28 @@ gsap.registerPlugin(ScrollTrigger);
 })
 export class HomePageComponent implements OnInit, AfterViewInit {
   constructor(
-    private translate:TranslateService
+    private translate:TranslateService,
+    public auth:AuthService,
+    private newProjectService: NewProjectService,
+    private router:Router
   ) { document.body.className = "landing_page_theme"; }
 
   
   private subscription: Subscription;
+    //NEW EXPERIMENT
+
+    private newProject: NewProject = new NewProject();
+    public NewExperiment(){
+      console.log("uso exp");
+      this.newProjectService.newProject(this.newProject, this, this.successfulNewProjectCallback)
+    }
+    
+    private successfulNewProjectCallback(self: any, id: number){
+      self.router.navigate(['/project/' + id]);
+  
+    }
+
+
 
   @ViewChild("canvas")
   private canvasRef: ElementRef;
@@ -32,6 +53,7 @@ export class HomePageComponent implements OnInit, AfterViewInit {
     return this.canvas.clientWidth / this.canvas.clientHeight
   }
   
+
   // Camera
   private camera!: PerspectiveCamera;
   private cameraX: number = 0;
@@ -326,4 +348,6 @@ export class HomePageComponent implements OnInit, AfterViewInit {
     
     this.subscription.unsubscribe();
   }
+
+
 }

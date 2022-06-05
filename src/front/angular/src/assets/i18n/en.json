@@ -41,7 +41,9 @@
         "register2":"Register here",
         "forgot1":"Forgot password?",
         "forgot2":"Change it!",
-        "login-greska":"Wrong credentials or user is not verified!"
+        "login-greska":"Wrong credentials or user is not verified!",
+        "text1" : "LOGIN TO CREATE YOUR EXPERIMENT",
+        "text2": "CREATE EXPERIMENT"
     },
     "csv":{
         "format":"The file must be in .csv format!",

@@ -16,27 +16,35 @@
 
 
 <div class="page" id="page1" #page1>
-    <h1 id="title"> Igrannonica </h1>
+    <div style="height:50vh">
+        <h1 id="title"> Igrannonica </h1>
+    </div>
+    <div *ngIf="!auth.logovan" routerLink="/login"   class="d-flex justify-content-center mt-5">
+        <a id="buttonStart">{{"login.text1"|translate}}</a>
+    </div>
+    <div *ngIf="auth.logovan"  class="d-flex justify-content-center mt-5">
+        <a (click)="NewExperiment()" id="buttonStart">{{"login.text2"|translate}} </a>
+    </div>
 </div>
 
 <div class="page" id="page2" #page2>
-    
+
 </div>
 
 <div class="page" id="page3" #page3>
-    
+
 </div>
 
 <div class="page" id="page4" #page4>
-    
+
 </div>
 
 
 
 <svg viewBox="0 0 39 24" id="downScroller" (click)="selector.NextSelection()">
-    <path d="M1.939,1.939l17.5,7.317l17.5,-7.317"/>
-    <path d="M1.939,8.28l17.5,7.317l17.5,-7.317"/>
-    <path d="M1.939,14.622l17.5,7.317l17.5,-7.317"/>
+    <path d="M1.939,1.939l17.5,7.317l17.5,-7.317" />
+    <path d="M1.939,8.28l17.5,7.317l17.5,-7.317" />
+    <path d="M1.939,14.622l17.5,7.317l17.5,-7.317" />
 </svg>
 
 
