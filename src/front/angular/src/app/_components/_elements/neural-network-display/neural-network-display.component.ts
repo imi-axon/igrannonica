@@ -823,6 +823,7 @@ export class NeuralNetworkDisplayComponent implements OnInit {
           .attr("cx", (i + 1) * this.layerWidth + this.layerWidth / 2 )
           .attr("r", this.neuronWidth / 2)
           .attr("cursor", "pointer")
+          
           .on("mouseenter", (event : any, d : any) => {
               select(event.currentTarget)
                   .transition()
@@ -835,7 +836,9 @@ export class NeuralNetworkDisplayComponent implements OnInit {
                   .duration(250)
                   .attr("r", (this.neuronWidth / 2))
           })
-          
+          .append('title')
+            .text(this.parent.neuralNetwork.nn.layers[i].neurons[j].bias)
+            .attr("text-anchor", "middle")
     
     for(let i = 0; i < this.parent.neuralNetwork.nn.layers.length - 1; i++)
       for(let j = 0; j < this.parent.neuralNetwork.nn.layers[i].neurons.length; j++)
@@ -993,9 +996,9 @@ export class NeuralNetworkDisplayComponent implements OnInit {
             .attr('cursor', "pointer")
             .attr("stroke-linecap", "round") 
             
-            .on("click", (event : any) => {
+            /*.on("click", (event : any) => {
               this.ShowWeightChangeInput(event, i, j, k);
-            })  
+            }) */ 
             
             .on("mouseenter", (event : any) => {
               select(event.currentTarget)
@@ -1010,9 +1013,11 @@ export class NeuralNetworkDisplayComponent implements OnInit {
                   .attr("stroke-width", () => { return this.Clamp(this.parent.neuralNetwork.nn.layers[i].neurons[j].weights[k]); })
             })
             
-            .transition()
-              .duration(500)
-              .attr("stroke-width", () => { return this.Clamp(this.parent.neuralNetwork.nn.layers[i].neurons[j].weights[k]); })
+            
+            
+            .append('title')
+              .text(this.parent.neuralNetwork.nn.layers[i].neurons[j].weights[k])
+              .attr("text-anchor", "middle")
             
       }
     }  
@@ -1044,9 +1049,9 @@ export class NeuralNetworkDisplayComponent implements OnInit {
           .attr('cursor', "pointer")
           .attr("stroke-linecap", "round") 
           
-          .on("click", (event : any) => {
+          /*.on("click", (event : any) => {
             this.ShowWeightChangeInput(event, 0, i, j);
-          })
+          })*/
           
           .on("mouseenter", (event : any) => {
             select(event.currentTarget)
@@ -1061,9 +1066,14 @@ export class NeuralNetworkDisplayComponent implements OnInit {
                 .attr("stroke-width", () => { return this.Clamp(this.parent.neuralNetwork.nn.layers[0].neurons[i].weights[j]); })
           })
           
+          .append('title')
+            .text(this.parent.neuralNetwork.nn.layers[0].neurons[i].weights[j])
+            .attr("text-anchor", "middle")
+          
           .transition()
             .duration(500)
             .attr("stroke-width", () => { return this.Clamp(this.parent.neuralNetwork.nn.layers[0].neurons[i].weights[j]); })
+          
           
   }
   
@@ -1094,9 +1104,9 @@ export class NeuralNetworkDisplayComponent implements OnInit {
           .attr('cursor', "pointer")
           .attr("stroke-linecap", "round") 
           
-          .on("click", (event : any) => {
+          /*.on("click", (event : any) => {
             this.ShowWeightChangeInput(event, layerCount - 1, i, j);
-          })
+          })*/
           
           .on("mouseenter", (event : any) => {
             select(event.currentTarget)
@@ -1111,9 +1121,15 @@ export class NeuralNetworkDisplayComponent implements OnInit {
                 .attr("stroke-width", () => { return this.Clamp(this.parent.neuralNetwork.nn.layers[layerCount - 1].neurons[i].weights[j]); })
           })
           
+          .append('title')
+            .text(this.parent.neuralNetwork.nn.layers[layerCount - 1].neurons[i].weights[j])
+            .attr("text-anchor", "middle")
+          
           .transition()
             .duration(500)
             .attr("stroke-width", () => { return this.Clamp(this.parent.neuralNetwork.nn.layers[layerCount - 1].neurons[i].weights[j]); })
+          
+          
   }
   
   
