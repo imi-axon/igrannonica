@@ -236,6 +236,7 @@ export class ExperimentNetworkComponent implements OnInit, AfterContentInit {
         component.UpdateBarplot(epoch[component.title], epoch['val_' + component.title]);
       });
     }
+    self.grafik.chartUpdate()
   }
   
   

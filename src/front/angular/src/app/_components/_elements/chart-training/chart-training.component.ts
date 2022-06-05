@@ -24,6 +24,7 @@ export class ChartTrainingComponent implements OnInit {
     this.chart = new Chart('lineChart', {
       type: 'line',
       options: {
+        events: [],
         animation:{
           duration:0
         },
@@ -99,9 +100,14 @@ export class ChartTrainingComponent implements OnInit {
   //TESTNA F-JA
   public dataUpdate(epoch: number, tLoss: number, vLoss: number) {
 
-      this.chart.data.labels.push(epoch);
+    this.chart.data.labels.push(epoch);
     this.chart.data.datasets[0].data.push(vLoss);
     this.chart.data.datasets[1].data.push(tLoss);
+    
+
+  }
+  public chartUpdate() {
+
     this.chart.update();
 
   }
