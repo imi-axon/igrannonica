@@ -85,7 +85,6 @@ export class ExperimentNetworkComponent implements OnInit, AfterContentInit {
   }
   
   ngAfterContentInit(){
-    this.networkService.GetNetwork(this.getProjectId(), this.getNetworkId(), this, this.successGetNetworkCallback);
     this.statisticsService.GetStatistics(this.getProjectId(), true, this, this.successGetStatisticsCallback);
     
     this.nnService.getTrainRez(this.getProjectId(), this.getNetworkId(), this, this.gotPreviousRez);
@@ -174,6 +173,8 @@ export class ExperimentNetworkComponent implements OnInit, AfterContentInit {
   
   private successGetStatisticsCallback(self: any, metadata: any){
     self.metadata = metadata;
+
+    self.networkService.GetNetwork(self.getProjectId(), self.getNetworkId(), self, self.successGetNetworkCallback);
     // console.log(metadata)
   }
   
