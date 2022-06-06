@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, Query, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterContentInit, AfterViewInit, ApplicationRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, Query, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NeuralNetwork, OwnerInfo, Project } from 'src/app/_utilities/_data-types/models';
 import { TrainingApiService } from 'src/app/_utilities/_middleware/training-api.service';
@@ -26,6 +26,7 @@ export class ExperimentNetworkComponent implements OnInit, AfterContentInit {
     private networkService: NetworkService,
     private wsService: TrainingApiService,
     public loaderService:LoaderService,
+    public applicationRef: ApplicationRef,
     private trainingService:TrainingService
   ) { }
   
@@ -63,7 +64,8 @@ export class ExperimentNetworkComponent implements OnInit, AfterContentInit {
   @ViewChild("grafik") 
   private grafik: ChartTrainingComponent;
   
-  
+  @ViewChild("grafContainer")
+  private grafContainer: ElementRef;
   
   @ViewChildren(MetricsBarplotComponent)
   public metricComponents: QueryList<MetricsBarplotComponent>;
@@ -168,6 +170,11 @@ export class ExperimentNetworkComponent implements OnInit, AfterContentInit {
       
       self.once = false;
     }
+    
+    console.log(self.grafContainer.nativeElement)
+    
+    if(self.parent.authService.korisnickoIme != self.parent.owner.Username)
+      self.prikaziGrafik();
     
     self.neuralNetwork.conf.problemType = self.neuralNetwork.conf.problemType.toLowerCase();
     self.NetworkUpdated.emit(self.networkName);

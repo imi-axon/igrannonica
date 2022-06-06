@@ -14,12 +14,12 @@
 
     <div id="secondRow">
     
-        <div [class.hidden]="prikazGrafa == true || parent.authService.korisnickoIme != parent.owner.Username" #networkDisplay id="networkDisplay" (mousedown)="MouseDownHandler($event)" (mouseup)="MouseUpHandler($event)" (mousemove)="MouseMoveHandler($event)" (mouseleave)="MouseUpHandler($event)">
+        <div [class.hidden]="prikazGrafa == true" #networkDisplay id="networkDisplay" (mousedown)="MouseDownHandler($event)" (mouseup)="MouseUpHandler($event)" (mousemove)="MouseMoveHandler($event)" (mouseleave)="MouseUpHandler($event)">
             
             <neural-network-display [parent]="this" #networkComponent></neural-network-display>
              
         </div>
-        <div [class.hidden]="prikazGrafa == false && parent.authService.korisnickoIme == parent.owner.Username" class="trainContainer">
+        <div [class.hidden]="prikazGrafa == false" class="trainContainer" #grafContainer>
             <app-chart-training #grafik></app-chart-training>
         </div>
         
@@ -34,7 +34,7 @@
                 <input type="number" min="1" max="1000" [value]="neuralNetwork.conf.epochsDuration" (input)="ChangeEpochsDuration($event)">
             </div>
             
-            <div class="inputContainer" [class.hidden]="prikazGrafa == true || parent.authService.korisnickoIme != parent.owner.Username">
+            <div class="inputContainer" [class.hidden]="prikazGrafa == true">
                 <div id="columns">
                     <div class="column" *ngFor="let column of unusedColumns" (click)="SelectColumn(column)" [class.selectedColumn]="IsSelected(column)">
                         {{column}}

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NewNN } from 'src/app/_utilities/_data-types/models';
 import { NewNnService } from 'src/app/_utilities/_services/new-nn.service';
@@ -11,7 +11,7 @@ import { NetworkListComponent } from '../network-list/network-list.component';
   templateUrl: './experiment-all-networks.component.html',
   styleUrls: ['./experiment-all-networks.component.scss']
 })
-export class ExperimentAllNetworksComponent implements OnInit {
+export class ExperimentAllNetworksComponent implements OnInit, AfterViewInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -38,6 +38,9 @@ export class ExperimentAllNetworksComponent implements OnInit {
       
   }
   
+  ngAfterViewInit(): void {
+    this.networksList.parent = this.parent;
+  }
   
   public NewNetwork(){
     this.newNN.Name= "Unitled-Network";

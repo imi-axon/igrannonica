@@ -12,7 +12,7 @@
         </div>
     </div>
     
-    <div id="datasetInput" *ngIf="showsFileInput">
+    <div id="datasetInput" *ngIf="showsFileInput && parent.authService.korisnickoIme == parent.owner.Username">
         <app-file-input #fileInput (fileSubmited)="UploadDatasetFile($event)"></app-file-input>
     </div>
     
