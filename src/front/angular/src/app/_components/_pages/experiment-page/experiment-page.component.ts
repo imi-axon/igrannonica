@@ -1,26 +1,31 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Project } from 'src/app/_utilities/_data-types/models';
+import { OwnerInfo, Project } from 'src/app/_utilities/_data-types/models';
 import { ProjectsService } from 'src/app/_utilities/_services/projects.service';
+import { ExperimentEditComponent } from '../../_elements/experiment-edit/experiment-edit.component';
 import { ExperimentNetworkComponent } from '../../_elements/experiment-network/experiment-network.component';
 import { ExperimentOverviewComponent } from '../../_elements/experiment-overview/experiment-overview.component';
+import { ExperimentNetworksListComponent } from '../../_elements/experiments-networks-list/experiments-networks-list.component';
 
 @Component({
   selector: 'app-experiment-page',
   templateUrl: './experiment-page.component.html',
   styleUrls: ['./experiment-page.component.scss']
 })
-export class ExperimentPageComponent implements OnInit {
+export class ExperimentPageComponent implements OnInit, AfterViewInit {
   
   constructor(
     public projectsService: ProjectsService,
     public activatedRoute: ActivatedRoute,
+    public projectService: ProjectsService,
     public router:Router
   ) {
     this.router.routeReuseStrategy.shouldReuseRoute = function() {
       return false;
     };
    }
+   
+  public owner: OwnerInfo = new OwnerInfo();
   
   @ViewChild("titleInput")
   inputTitle: ElementRef;
@@ -35,7 +40,9 @@ export class ExperimentPageComponent implements OnInit {
   
   // ROUTER-OUTLET
   public overviewComponent: ExperimentOverviewComponent;
+  public editComponent: ExperimentEditComponent;
   public singleNetworkComponent: ExperimentNetworkComponent;
+  public networkListComponent: ExperimentNetworksListComponent;
   
   // Project
   public project: Project = new Project();
@@ -50,15 +57,23 @@ export class ExperimentPageComponent implements OnInit {
   // Cards
   public currentCard: string = ".";
   
-  
+  ngAfterViewInit(): void {
+    
+  }
   
   ngOnInit(): void {
     this.checkProjectId();
+    
+    this.projectService.getOwner(this.projectId, this, this.handleSuccesfulGetOwnerCallback);
     
     this.RefreshProject();
     
     if(this.activatedRoute.children[0].snapshot.routeConfig?.path)
       this.currentCard = this.activatedRoute.children[0].snapshot.routeConfig?.path;
+  }
+  
+  private handleSuccesfulGetOwnerCallback(self: any, response: any){
+    self.owner = response;
   }
   
   public RefreshProject(){
@@ -77,10 +92,12 @@ export class ExperimentPageComponent implements OnInit {
     
     // TRENUTNA KARTICA JE OVERVIEW
     if(component instanceof ExperimentOverviewComponent){
+      
       setTimeout(() => { this.inputTitle.nativeElement.setAttribute('contenteditable', '') }, 0);
       this.overviewComponent = component;
       this.overviewComponent.EditExperimentEvent.subscribe( (edits: any) => this.ChangeExperiment(edits) );
       this.overviewComponent.HasDatasetChanged.subscribe( (hasDataset: boolean) => this.project.hasDataset = hasDataset );
+      this.overviewComponent.parent = this;
     }
     else
       setTimeout(() => { this.inputTitle.nativeElement.removeAttribute('contenteditable', '') }, 0);
@@ -91,10 +108,22 @@ export class ExperimentPageComponent implements OnInit {
         this.singleNetworkComponent = component;
         this.singleNetworkComponent.NetworkUpdated.subscribe( (name: any) => { this.networkName = name; this.oldNetworkName = name; } );
         this.showsNetwork = true;
+        this.singleNetworkComponent.parent = this;
       }, 0);
     }
     else
       this.showsNetwork = false;
+      
+    if(component instanceof ExperimentNetworksListComponent){
+      this.networkListComponent = component;
+      this.networkListComponent.parent = this;
+      
+    }
+    
+    if(component instanceof ExperimentEditComponent){
+      this.editComponent = component;
+      this.editComponent.parent = this;
+    }
   }
   
 
