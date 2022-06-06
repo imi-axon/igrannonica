@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { NN } from 'src/app/_utilities/_data-types/models';
 import { AuthService } from 'src/app/_utilities/_services/auth.service';
 import { NnService } from 'src/app/_utilities/_services/nn.service';
+import { ExperimentPageComponent } from '../../_pages/experiment-page/experiment-page.component';
 import { PopupWindowComponent } from '../popup-window/popup-window.component';
 
 @Component({
@@ -41,6 +42,8 @@ export class NetworkListComponent implements OnInit {
     else if(this.key=='sortRev') this.sortRev();
   }
 
+  public parent: ExperimentPageComponent;
+  
   public SetSearchTerm(value:string){
     this.searchTerm = value;
   }

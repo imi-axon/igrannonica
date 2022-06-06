@@ -18,6 +18,8 @@
         background: transparent;
         border: none;
         color: var(--ExpPageTitleInput);
+        cursor: text;
+        display: block;
         
         &:focus{
             padding: 4px;
@@ -26,6 +28,20 @@
             border: solid 1px #08438788;
         }
     }
+    
+    .titleDisabled{
+        pointer-events: none !important;
+        cursor: default !important;
+        
+        &:focus{
+            padding: 0px !important;
+            outline: none !important;
+            background: transparent !important;
+            border: none !important;
+        }
+    }
+    
+    
     
     #cards{
         margin-left: 10px;
@@ -148,3 +164,4 @@
     }
     
 }
+

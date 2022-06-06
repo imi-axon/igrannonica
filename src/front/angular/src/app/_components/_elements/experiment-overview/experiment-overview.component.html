@@ -40,11 +40,11 @@
             <h2>{{"experiment.opis"|translate}}</h2>
             
             <!-- [value]="project.Description" -->
-            <textarea #descriptionTextArea class="descriptionInput" maxlength="250" (blur)="SendEditProject()" placeholder="{{'experiment-overview.description'|translate}}">{{project.Description.trim()}}</textarea>
+            <textarea [disabled]="parent.authService.korisnickoIme != parent.owner.Username" #descriptionTextArea class="descriptionInput" maxlength="250" (blur)="SendEditProject()" placeholder="{{'experiment-overview.description'|translate}}">{{project.Description.trim()}}</textarea>
         </div>
         
-        <label for="publicCheckbox"> {{"experiment.javni" |translate}} </label>
-        <input #publicCheckbox type="checkbox" id="publicCheckbox" (change)="SendEditProject()" [checked]="project.Public.toString() == 'True'">
+        <label for="publicCheckbox" *ngIf="parent.authService.korisnickoIme == parent.owner.Username"> {{"experiment.javni" |translate}} </label>
+        <input #publicCheckbox *ngIf="parent.authService.korisnickoIme == parent.owner.Username" type="checkbox" id="publicCheckbox" (change)="SendEditProject()" [checked]="project.Public.toString() == 'True'">
         
         <div id="descriptionFooter">
             <div><p>{{"experiment.kreiran"|translate}}: {{project.Creationdate}}</p> </div>

@@ -1,7 +1,10 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OwnerInfo, Project } from 'src/app/_utilities/_data-types/models';
+import { AuthService } from 'src/app/_utilities/_services/auth.service';
 import { ProjectsService } from 'src/app/_utilities/_services/projects.service';
+import { UserService } from 'src/app/_utilities/_services/user.service';
+import { ExperimentAllNetworksComponent } from '../../_elements/experiment-all-networks/experiment-all-networks.component';
 import { ExperimentEditComponent } from '../../_elements/experiment-edit/experiment-edit.component';
 import { ExperimentNetworkComponent } from '../../_elements/experiment-network/experiment-network.component';
 import { ExperimentOverviewComponent } from '../../_elements/experiment-overview/experiment-overview.component';
@@ -18,6 +21,8 @@ export class ExperimentPageComponent implements OnInit, AfterViewInit {
     public projectsService: ProjectsService,
     public activatedRoute: ActivatedRoute,
     public projectService: ProjectsService,
+    public authService: AuthService,
+    public userSerive: UserService,
     public router:Router
   ) {
     this.router.routeReuseStrategy.shouldReuseRoute = function() {
@@ -42,7 +47,7 @@ export class ExperimentPageComponent implements OnInit, AfterViewInit {
   public overviewComponent: ExperimentOverviewComponent;
   public editComponent: ExperimentEditComponent;
   public singleNetworkComponent: ExperimentNetworkComponent;
-  public networkListComponent: ExperimentNetworksListComponent;
+  public experimentAllNetworks: ExperimentAllNetworksComponent;
   
   // Project
   public project: Project = new Project();
@@ -114,10 +119,10 @@ export class ExperimentPageComponent implements OnInit, AfterViewInit {
     else
       this.showsNetwork = false;
       
-    if(component instanceof ExperimentNetworksListComponent){
-      this.networkListComponent = component;
-      this.networkListComponent.parent = this;
-      
+    if(component instanceof ExperimentAllNetworksComponent){
+      this.experimentAllNetworks = component;
+      this.experimentAllNetworks.parent = this;
+      this.experimentAllNetworks.networksList.parent = this;
     }
     
     if(component instanceof ExperimentEditComponent){

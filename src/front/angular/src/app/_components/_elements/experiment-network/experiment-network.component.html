@@ -1,28 +1,31 @@
 <div id="grid">
     
     <div id="confingContainer">
-        <app-konfiguracija [neuralNetwork]="this.neuralNetwork"></app-konfiguracija>
+        <app-konfiguracija [neuralNetwork]="this.neuralNetwork" [class.optionDisabled]="parent.authService.korisnickoIme != parent.owner.Username"></app-konfiguracija>
     </div>
     
-    <div id="changeView" class="d-flex justify-content-end">
+    <div id="changeView" class="d-flex justify-content-end" *ngIf="parent.authService.korisnickoIme == parent.owner.Username">
         <button *ngIf="prikazGrafa" [disabled]="runningTraining || resetButton" class="backButton" (click)="prikaziMrezu()"> <i class="bi bi-arrow-left fa-lg" style="color:white;"></i> {{"network.goToNet"|translate}}  </button>
         <button *ngIf="trenirana && !prikazGrafa"  class="backButton" (click)="prikaziGrafik()"> <i class="bi bi-arrow-right fa-lg" style="color:white;"></i> {{"network.goToGraph"|translate}} </button>
     </div>
+    
+    <br *ngIf="parent.authService.korisnickoIme != parent.owner.Username">
+    <br *ngIf="parent.authService.korisnickoIme != parent.owner.Username">
 
     <div id="secondRow">
     
-        <div [class.hidden]="prikazGrafa == true" #networkDisplay id="networkDisplay" (mousedown)="MouseDownHandler($event)" (mouseup)="MouseUpHandler($event)" (mousemove)="MouseMoveHandler($event)" (mouseleave)="MouseUpHandler($event)">
+        <div [class.hidden]="prikazGrafa == true || parent.authService.korisnickoIme != parent.owner.Username" #networkDisplay id="networkDisplay" (mousedown)="MouseDownHandler($event)" (mouseup)="MouseUpHandler($event)" (mousemove)="MouseMoveHandler($event)" (mouseleave)="MouseUpHandler($event)">
             
             <neural-network-display [parent]="this" #networkComponent></neural-network-display>
              
         </div>
-        <div [class.hidden]="prikazGrafa == false" class="trainContainer">
+        <div [class.hidden]="prikazGrafa == false && parent.authService.korisnickoIme == parent.owner.Username" class="trainContainer">
             <app-chart-training #grafik></app-chart-training>
         </div>
         
         
         <div id="side">
-            <div class="header">
+            <div class="header" *ngIf="parent.authService.korisnickoIme == parent.owner.Username">
 
                 <button id="play" *ngIf="!resetButton" [disabled]="loaderService.isLoading | async" class="PlayStopButton" (click)="StartTraining()"> <i class="bi bi-play-fill fa-lg" style="color:white;"></i> </button>
                 <button *ngIf="resetButton" [disabled]="loaderService.isLoading | async"  class="PlayStopButton" (click)="StopTraining()"> <i class="bi bi-pause-fill fa-lg" style="color:white;"></i>  </button>
@@ -31,7 +34,7 @@
                 <input type="number" min="1" max="1000" [value]="neuralNetwork.conf.epochsDuration" (input)="ChangeEpochsDuration($event)">
             </div>
             
-            <div class="inputContainer" [class.hidden]="prikazGrafa == true">
+            <div class="inputContainer" [class.hidden]="prikazGrafa == true || parent.authService.korisnickoIme != parent.owner.Username">
                 <div id="columns">
                     <div class="column" *ngFor="let column of unusedColumns" (click)="SelectColumn(column)" [class.selectedColumn]="IsSelected(column)">
                         {{column}}
@@ -48,7 +51,7 @@
                 </div>
             </div>
             
-            <div id="metricsDisplay" [class.hidden]="prikazGrafa == false">
+            <div id="metricsDisplay" [class.hidden]="prikazGrafa == false && parent.authService.korisnickoIme == parent.owner.Username">
                 
                 <metrics-barplot *ngFor="let metric of neuralNetwork.conf.metrics" [title]="metric"> </metrics-barplot>
                     

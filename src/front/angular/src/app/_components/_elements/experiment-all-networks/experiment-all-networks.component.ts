@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NewNN } from 'src/app/_utilities/_data-types/models';
 import { NewNnService } from 'src/app/_utilities/_services/new-nn.service';
+import { ExperimentPageComponent } from '../../_pages/experiment-page/experiment-page.component';
 import { ExperimentNetworksListComponent } from '../experiments-networks-list/experiments-networks-list.component';
 import { NetworkListComponent } from '../network-list/network-list.component';
 
@@ -18,7 +19,7 @@ export class ExperimentAllNetworksComponent implements OnInit {
   ) { }
   
   @ViewChild("networksList")
-  private networksList: NetworkListComponent;
+  public networksList: NetworkListComponent;
   
   public projectId : number;
   
@@ -30,6 +31,8 @@ export class ExperimentAllNetworksComponent implements OnInit {
   }
   
   private newNN : NewNN = new NewNN();
+  
+  public parent: ExperimentPageComponent;
 
   ngOnInit(): void {
       
