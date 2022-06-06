@@ -1,9 +1,10 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { LocalChange } from 'src/app/_utilities/_data-types/models';
+import { LocalChange, OwnerInfo } from 'src/app/_utilities/_data-types/models';
 import { DataConverter, DatasetMetadata } from 'src/app/_utilities/_helpers/data-converter';
 import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
 import { StatisticsService } from 'src/app/_utilities/_services/statistics.service';
+import { ExperimentPageComponent } from '../../_pages/experiment-page/experiment-page.component';
 import { CorrelationTableComponent } from '../correlation-table/correlation-table.component';
 import { DataSetTableComponent } from '../data-set-table/data-set-table.component';
 import { DatasetEditTableComponent } from '../dataset-edit-table/dataset-edit-table.component';
@@ -24,6 +25,7 @@ export class ExperimentEditComponent implements OnInit {
     private statisticsService: StatisticsService
   ) { }
   
+  public parent: ExperimentPageComponent;
   
   // KOMPONENTE ===============================================
   
@@ -143,7 +145,9 @@ export class ExperimentEditComponent implements OnInit {
     return editJSON;
   }
   
-  
+  public Log(){
+    console.log(this.parent.owner)
+  }
   
   
   // FILL

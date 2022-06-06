@@ -1,8 +1,9 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NN } from 'src/app/_utilities/_data-types/models';
+import { NN, OwnerInfo } from 'src/app/_utilities/_data-types/models';
 import { AuthService } from 'src/app/_utilities/_services/auth.service';
 import { NnService } from 'src/app/_utilities/_services/nn.service';
+import { ExperimentPageComponent } from '../../_pages/experiment-page/experiment-page.component';
 
 @Component({
   selector: 'app-experiments-networks-list',
@@ -14,6 +15,8 @@ export class ExperimentNetworksListComponent implements OnInit {
   constructor(private authService:AuthService,private nnService:NnService, private activatedRoute:ActivatedRoute, private router:Router) { }
   
   @Input() projectId: number;
+  
+  public parent: ExperimentPageComponent;
   
   public mreze:NN[]=[];
   public filtriraneMreze:NN[]=[];
