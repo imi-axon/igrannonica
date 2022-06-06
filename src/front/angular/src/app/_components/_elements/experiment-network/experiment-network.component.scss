@@ -13,6 +13,10 @@
         background-color: var(--configurationBg);
         backdrop-filter: blur(7px);
         border: solid 1px #0091ff;
+        
+        .optionDisabled{
+            pointer-events: none !important;
+        }
     }
 
     #changeView{

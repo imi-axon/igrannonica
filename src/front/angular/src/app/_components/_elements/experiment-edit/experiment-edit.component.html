@@ -19,7 +19,7 @@
     </div>
     
     
-    <div id="editSection">
+    <div id="editSection" *ngIf="parent.authService.korisnickoIme == parent.owner.Username">
         
         <!-- DATASET I KONTROLE ZA STRANU -->
         <div id="leftColumn">
@@ -82,19 +82,19 @@
             </div>
             
             <!-- DATASET -->
-            <div id="datasetContainer">
+            <div id="datasetContainer" *ngIf="parent.authService.korisnickoIme == parent.owner.Username">
                 <dataset-edit-table #datasetEditTable (ColumnSelected)="CheckNoColumns();CheckNumericalSelected();CheckCategoricalSelected();CheckEncodedSelected()"></dataset-edit-table>
             </div>
             
             <!-- KONTROLE ZA STRANU -->
-            <div id="controlsContainer">
+            <div id="controlsContainer" *ngIf="parent.authService.korisnickoIme == parent.owner.Username">
                 <page-controls #pageControls (ChangePageEvent)="ChangeDatasetPage($event)"></page-controls>
             </div>
             
         </div>
         
         <!-- VERZIJE -->
-        <div id="rightColumn">
+        <div id="rightColumn" *ngIf="parent.authService.korisnickoIme == parent.owner.Username">
             
             <div id="globalChangesContainer">
                 

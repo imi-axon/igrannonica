@@ -10,7 +10,7 @@
       
       <div class="networkRight">
         
-        <button type="button" class="remove-button d-flex align-items-center justify-content-center" (click)="openDialog($event, network.id)"> 
+        <button type="button" class="remove-button d-flex align-items-center justify-content-center" (click)="openDialog($event, network.id)" *ngIf="parent.authService.korisnickoIme == parent.owner.Username"> 
           <i class="bi bi-trash"></i> 
         </button>
         
