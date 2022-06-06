@@ -6,6 +6,7 @@ import { ProjectsService } from 'src/app/_utilities/_services/projects.service';
 import { EventEmitter } from '@angular/core';
 import { DataSetTableComponent } from '../data-set-table/data-set-table.component';
 import { PageControlsComponent } from '../page-controls/page-controls.component';
+import { ExperimentPageComponent } from '../../_pages/experiment-page/experiment-page.component';
 
 const ROW_COUNT = 20;
 
@@ -17,7 +18,8 @@ const ROW_COUNT = 20;
 export class ExperimentOverviewComponent implements OnInit{
   
   public project: Project = new Project();
-  public owner: OwnerInfo = new OwnerInfo();
+  
+  public parent: ExperimentPageComponent;
   
   private getProjectId(): number{
     let p = this.activatedRoute.snapshot.paramMap.get("ProjectId");
@@ -53,7 +55,7 @@ export class ExperimentOverviewComponent implements OnInit{
   
   ngOnInit(): void {
     this.projectService.getProject(this.getProjectId(), this, this.handleSuccesfulGetProjectCallback);
-    this.projectService.getOwner(this.getProjectId(), this, this.handleSuccesfulGetOwnerCallback);
+    
   }
   
   
@@ -61,9 +63,7 @@ export class ExperimentOverviewComponent implements OnInit{
   
   // CALLBACKS =======================================================================================
   
-  private handleSuccesfulGetOwnerCallback(self: any, response: any){
-    self.owner = response;
-  }
+  
   
   
   private handleSuccesfulGetProjectCallback(self: ExperimentOverviewComponent, response: any){

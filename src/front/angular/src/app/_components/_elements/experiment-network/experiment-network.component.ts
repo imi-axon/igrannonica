@@ -1,6 +1,6 @@
 import { AfterContentInit, AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, Query, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NeuralNetwork, Project } from 'src/app/_utilities/_data-types/models';
+import { NeuralNetwork, OwnerInfo, Project } from 'src/app/_utilities/_data-types/models';
 import { TrainingApiService } from 'src/app/_utilities/_middleware/training-api.service';
 import { DatasetService } from 'src/app/_utilities/_services/dataset.service';
 import { LoaderService } from 'src/app/_utilities/_services/loader.service';
@@ -8,6 +8,7 @@ import { NetworkService } from 'src/app/_utilities/_services/network.service';
 import { NnService } from 'src/app/_utilities/_services/nn.service';
 import { StatisticsService } from 'src/app/_utilities/_services/statistics.service';
 import { TrainingService } from 'src/app/_utilities/_services/training.service';
+import { ExperimentPageComponent } from '../../_pages/experiment-page/experiment-page.component';
 import { ChartTrainingComponent } from '../chart-training/chart-training.component';
 import { MetricsBarplotComponent } from '../metrics-barplot/metrics-barplot.component';
 import { NeuralNetworkDisplayComponent } from '../neural-network-display/neural-network-display.component';
@@ -27,6 +28,8 @@ export class ExperimentNetworkComponent implements OnInit, AfterContentInit {
     public loaderService:LoaderService,
     private trainingService:TrainingService
   ) { }
+  
+  public parent: ExperimentPageComponent;
   
   private getProjectId(): number{
     let p = this.activatedRoute.parent?.snapshot.paramMap.get("ProjectId");
