@@ -54,13 +54,16 @@ namespace BackApi.Controllers
         }
 
         [HttpGet("Storage/proj{projid}/mreze/trainrez{nnid}.txt")]
+        [AllowAnonymous]
         public async Task<ActionResult> DownloadTrainrez(int projid,int nnid)
         {
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized();
             if (!projsrv.projectExists(projid)) return NotFound();
             if (!projsrv.projectIsPublic(projid))
+            {
+                if (userid == -1) return Unauthorized();
                 if (!projsrv.projectOwnership(userid, projid)) return Forbid();
+            }
 
             var path = storsrv.CreateNNtrainrez(projid,nnid);
             var bytes = await System.IO.File.ReadAllBytesAsync(path);

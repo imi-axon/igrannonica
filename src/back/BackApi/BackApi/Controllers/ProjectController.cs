@@ -77,24 +77,32 @@ namespace BackApi.Controllers
             else return NotFound();
         }
         [HttpGet("{projid}/getuser")]
+        [AllowAnonymous]
         public async Task<ActionResult<string>> GetUserByProjectId(int projid)
         {
             bool ind = false;
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return "Uloguj se";//Unauthorized("Ulogujte se");
             var rez = service.GetUserByProj(projid, out ind);
             if (ind == false)
                 return NotFound(rez);
-            else return Ok(rez);
+            if (!service.projectIsPublic(projid))
+            {
+                if (userid == -1) return "Uloguj se";//Unauthorized("Ulogujte se");
+                if (!service.projectOwnership(userid, projid)) return BadRequest("user");
+            }
+            return Ok(rez);
         }
         [HttpGet("{projid}")]
+        [AllowAnonymous]
         public async Task<ActionResult<string>> GetProjectById(int projid)
         {
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized();
             if (!service.projectExists(projid)) return NotFound("project");
             if (!service.projectIsPublic(projid))
+            {
+                if (userid == -1) return Unauthorized();
                 if (!service.projectOwnership(userid, projid)) return BadRequest("user");
+            }
 
             var rez = service.GetProjById(projid, userid);
             if (rez != "")

@@ -192,14 +192,17 @@ namespace BackApi.Controllers
         }
 
         [HttpGet("{id}/nn")]
+        [AllowAnonymous]
         public async Task<ActionResult<string>> ListNN(int id)
         {
             bool ind = false;
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized();
             if (!projsrv.projectExists(id)) return NotFound();
             if (!projsrv.projectIsPublic(id))
+            {
+                if (userid == -1) return Unauthorized();
                 if (!projsrv.projectOwnership(userid, id)) BadRequest("user");
+            }
 
             string rez = nnsrv.ListNN(userid, id);
             if (rez == "[]")
@@ -208,13 +211,16 @@ namespace BackApi.Controllers
         }
 
         [HttpGet("{id}/nn/{nnid}")]
+        [AllowAnonymous]
         public async Task<ActionResult> GetNN(int id, int nnid)
         {
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized();
             if (!projsrv.projectExists(id)) return NotFound();
             if (!projsrv.projectIsPublic(id))
+            {
+                if (userid == -1) return Unauthorized();
                 if (!projsrv.projectOwnership(userid, id)) return BadRequest("user");
+            }
 
             var sent = new ApiNNPost();
             sent.nn = storsrv.CreateNNFile(id, nnid);
@@ -290,13 +296,16 @@ namespace BackApi.Controllers
             return BadRequest("nn");
         }
         [HttpGet("{id}/nn/{nnid}/istraining")]
+        [AllowAnonymous]
         public async Task<ActionResult> IsTraining(int id,int nnid)
         {
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized();
             if (!projsrv.projectExists(id)) return NotFound();
-            if (!projsrv.projectOwnership(userid, id)) return BadRequest("user");
-
+            if (!projsrv.projectIsPublic(id))
+            {
+                if (userid == -1) return Unauthorized();
+                if (!projsrv.projectOwnership(userid, id)) BadRequest("user");
+            }
             bool rez = wsq.CheckInDict(nnid);
             return Ok(new {isTraining=rez});
         }

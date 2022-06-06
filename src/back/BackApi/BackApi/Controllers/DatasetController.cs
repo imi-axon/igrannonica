@@ -96,13 +96,16 @@ namespace BackApi.Controllers
         }
 
         [HttpGet("{id}/dataset/{main}/statistics")]
+        [AllowAnonymous]
         public async Task<ActionResult<string>> GetStatistics(int id, Boolean main)
         {
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized();
             if (!projsrv.projectExists(id)) return NotFound();
             if (!projsrv.projectIsPublic(id))
+            {
+                if (userid == -1) return Unauthorized();
                 if (!projsrv.projectOwnership(userid, id)) return BadRequest("user");
+            }
 
             DatasetGetPost dataset = new DatasetGetPost();
             dataset.dataset= datasrv.ProjIdToPath(id,main);
@@ -182,13 +185,16 @@ namespace BackApi.Controllers
         }
 
         [HttpGet("{projid}/dataset/{main}/page/{p}/rows/{r}")] //p-broj strane, r-broj redova po strani
+        [AllowAnonymous]
         public async Task<ActionResult<dynamic>> Paging(int projid, Boolean main,int p, int r)
         {
             int userid = jwtsrv.GetUserId();
-            if (userid == -1) return Unauthorized();
             if (!projsrv.projectExists(projid)) return NotFound();
             if (!projsrv.projectIsPublic(projid))
+            {
+                if (userid == -1) return Unauthorized();
                 if (!projsrv.projectOwnership(userid, projid)) return BadRequest("user");
+            }
 
             var dataset = new DatasetPages();
             dataset =await datasrv.CreatePage(projid, main, p, r);
