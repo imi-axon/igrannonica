@@ -1,11 +1,11 @@
 # Igrannonica  
 
-Projekat _**Igrannonica**_ se sastoji iz nekoliko aplikacija koje zajedno čine softversko rešenje čija je namena olakša rad sa neuronskim mrežama i učenje o njima.
+The project _**Igrannonica**_ consists of several applications that together create a software solution designed to simplify working with neural networks and learning about them.
 
-Rešenje se sastoji iz 3 dela, odnosno 3 odvojene aplikacije, _**Angular** front end_, _**.NET** back end_ i _**Python** mikroservis_.
+The solution is made up of three parts, or three separate applications: _**Angular** front end_, _**.NET** back end_, and _**Python** microservice_.
 
 
-## Potrebno imati instalirano za pokretanje aplikacija u okruženju za razvoj
+## Required installations for running the applications in a development environment
 
 ### Angular app
 
@@ -17,7 +17,7 @@ Rešenje se sastoji iz 3 dela, odnosno 3 odvojene aplikacije, _**Angular** front
 - .NET 6.0
 - Visual Studio 2022
 
-### Python app (zajedno sa modulima)
+### Python app (along with modules)
 
 - Python `3.10`
     - fastapi (`pip install "fastapi[all]"`)
@@ -26,24 +26,24 @@ Rešenje se sastoji iz 3 dela, odnosno 3 odvojene aplikacije, _**Angular** front
     - numpy
     - httpx
 
-### Baza podataka
+### Database
 
 - MariaDB / MySQL
 
 
-## Postavljanje projekta za pokretanje u okruženju za razvoj
+## Setting up the project to run in a development environment
 
-- Preuzeti u zip formatu **.zip** ili klonirati **git** projekat na sledecem linku: https://gitlab.pmf.kg.ac.rs/igrannonica/axon
+- Download in .zip format or clone the **git** project from the following link: https://gitlab.pmf.kg.ac.rs/igrannonica/axon
 
-### Pokretanje aplikacija
+### Running the applications
 
-- **Angular**, u direktorijumu `/src/front/angular` pokrenuti pomocu _AngularCLI_ aplikacije, u terminalu otkucati `ng serve`
-- **.NET**, jedan nacin je pokretanje pomocu _Visual Studio_ (_VS_) IDE-a. Otvoriti projekat u _VS_-u i pokrenuti pomocu `Build and Run` opcije.
-- **Python**, u direktorijumu `/src/ml/app` pokrenuti pomocu komande u terminalu `uvicorn main:app --reload` (opcija `--reload` je opciona)
+- **Angular**: in the `/src/front/angular` directory, run the application using _AngularCLI_, by typing `ng serve` in the terminal.
+- **.NET**: one way to run it is using the _Visual Studio_ (_VS_) IDE. Open the project in _VS_ and run it using the `Build and Run` option.
+- **Python**: in the `/src/ml/app` directory, run it using the terminal command `uvicorn main:app --reload` (the `--reload` option is optional).
 
 
 
-## Portovi
+## Ports
 - 10015 - Frontend
 - 10016 - Backend
-- 10017 - Python mikroservis
+- 10017 - Python microservice
