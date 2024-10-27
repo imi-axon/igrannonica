@@ -1,4 +1,7 @@
-# Igrannonica  
+# Igrannonica
+
+[![English][readme-lang-en-img]][readme-lang-en]
+[![Српски][readme-lang-sr-img]][readme-lang-sr]
 
 The project _**Igrannonica**_ consists of several applications that together create a software solution designed to simplify working with neural networks and learning about them.
 
@@ -47,3 +50,12 @@ The solution is made up of three parts, or three separate applications: _**Angul
 - 10015 - Frontend
 - 10016 - Backend
 - 10017 - Python microservice
+
+
+[//]: # (-------------Section for references-------------)
+
+[readme-lang-en]: https://github.com/imi-axon/igrannonica/blob/master/README.md
+[readme-lang-en-img]: https://img.shields.io/badge/language-English-blue
+
+[readme-lang-sr]: https://github.com/imi-axon/igrannonica/blob/master/README.sr.md
+[readme-lang-sr-img]: https://img.shields.io/badge/language-%D0%A1%D1%80%D0%BF%D1%81%D0%BA%D0%B8%20-red
